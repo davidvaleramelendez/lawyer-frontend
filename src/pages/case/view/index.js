@@ -1,0 +1,853 @@
+// ** React Imports
+import { useEffect, useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+
+// ** Store & Actions
+import {
+  closeCase,
+  getCaseView,
+  getCaseLetters,
+  getCaseDocuments,
+  getNoteCaseRecords,
+  shareCaseRecord,
+  statusCaseLetter,
+  statusCaseDocument,
+  clearCaseMessage
+} from '../store'
+import { useDispatch, useSelector } from 'react-redux'
+
+// Constant
+import {
+  adminRoot
+} from '@constant/defaultValues'
+import {
+  recordItem,
+  letterItem,
+  caseDocItem
+} from '@constant/reduxConstant'
+
+// ** Reactstrap Imports
+import {
+  Col,
+  Row,
+  Card,
+  Label,
+  Input,
+  Table,
+  Button,
+  CardBody
+} from 'reactstrap'
+
+// Translation
+import { useTranslation } from 'react-i18next'
+
+// ** Icons Import
+import {
+  X,
+  Eye,
+  Flag,
+  Home,
+  Mail,
+  Star,
+  User,
+  Type,
+  Check,
+  Phone,
+  Calendar,
+  Paperclip
+} from 'react-feather'
+
+// ** Utils
+import {
+  isUserLoggedIn,
+  getTransformDate
+} from '@utils'
+
+// ** Custom Components
+import Notification from '@components/toast/notification'
+
+// ** Third Party Components
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+// Modals
+import ModalEditCaseClient from '../modals/ModalEditCaseClient'
+import ModalEditCaseOpponent from '../modals/ModalEditCaseOpponent'
+import ModalCaseNoteFile from '../modals/ModalCaseNoteFile'
+import ModalCaseRecordDetail from '../modals/ModalCaseRecordDetail'
+import ModalCaseDocument from '../modals/ModalCaseDocument'
+import ModalCaseLetter from '../modals/ModalCaseLetter'
+import ModalCaseTimeTracking from '../modals/ModalCaseTimeTracking'
+
+// ** Styles
+import '@styles/base/pages/app-invoice.scss'
+
+const CaseView = () => {
+  // ** Hooks
+  const { id } = useParams()
+  const { t } = useTranslation()
+
+  const MySwal = withReactContent(Swal)
+
+  // ** Store vars
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const store = useSelector((state) => state.cases)
+
+  /* Constant */
+  const [loadFirst, setLoadFirst] = useState(true)
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [opponentModalOpen, setOpponentModalOpen] = useState(false)
+  const [noteFileModalOpen, setNoteFileModalOpen] = useState(false)
+  const [recordDetailModalOpen, setRecordDetailModalOpen] = useState(false)
+  const [caseRecordRowData, setCaseRecordRowData] = useState(recordItem)
+  const [docUploadModalOpen, setDocUploadModalOpen] = useState(false)
+  const [documentRowData, setDocumentRowData] = useState(caseDocItem)
+  const [letterModalOpen, setLetterModalOpen] = useState(false)
+  const [letterRowData, setLetterRowData] = useState(letterItem)
+  const [timeTrackModalOpen, setTimeTrackModalOpen] = useState(false)
+
+  // ** Get contact on mount based on id
+  useEffect(() => {
+    /* If id not present then navigate */
+    if (!id) {
+      navigate(`${adminRoot}/case`)
+    }
+
+    /* if user not logged then navigate */
+    if (isUserLoggedIn() === null) {
+      navigate(root)
+    }
+
+    /* Calling first time */
+    if (loadFirst) {
+      dispatch(getCaseView(id))
+      dispatch(getCaseLetters({ case_id: id }))
+      dispatch(getCaseDocuments({ case_id: id }))
+      dispatch(getNoteCaseRecords({ CaseID: id }))
+      setLoadFirst(false)
+    }
+
+    /* For blank message api called inside */
+    if (store.success || store.error || store.actionFlag) {
+      dispatch(clearCaseMessage())
+    }
+
+    /* Succes toast notification */
+    if (store.success) {
+      Notification("Success", store.success, "success")
+    }
+
+    /* Error toast notification */
+    if (store.error) {
+      Notification("Error", store.error, "warning")
+    }
+
+    /* If contact deleted then redirected */
+    if (store.actionFlag && store.actionFlag === "DELETED") {
+      navigate(`${adminRoot}/case`)
+    }
+  }, [dispatch, store.success, store.error, store.actionFlag, loadFirst])
+  // console.log("store >>>> ", store)
+
+  /* Delete case */
+  const onDeleteFile = (caseId) => {
+    MySwal.fire({
+      title: 'Are you sure?',
+      text: "You want to Close this Case?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-danger ms-1'
+      },
+      buttonsStyling: false
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        dispatch(closeCase(caseId))
+      }
+    })
+  }
+
+  /* Change note history done status */
+  const onShareCaseRecord = (id) => {
+    MySwal.fire({
+      title: 'Are you sure?',
+      text: "You want to Share this case record?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-danger ms-1'
+      },
+      buttonsStyling: false
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        dispatch(shareCaseRecord(id))
+      }
+    })
+  }
+
+  /* Case record detail popup */
+  const onCaseRecordDetail = (record) => {
+    setCaseRecordRowData(record)
+    setRecordDetailModalOpen(true)
+  }
+
+  /* Change document done status */
+  const onDocumentDone = (id) => {
+    // console.log("onDocumentDone >>> ", id)
+    MySwal.fire({
+      title: 'Are you sure?',
+      text: "You want to Done this document?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-danger ms-1'
+      },
+      buttonsStyling: false
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        dispatch(statusCaseDocument(id))
+      }
+    })
+  }
+
+  /* Detail view of Case Document */
+  const onCaseDocumentDetail = (row) => {
+    setDocumentRowData({ ...row })
+    setDocUploadModalOpen(true)
+  }
+
+  /* Change letter done status */
+  const onLetterDone = (id) => {
+    // console.log("onLetterDone >>> ", id)
+    MySwal.fire({
+      title: 'Are you sure?',
+      text: "You want to Done this letter?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-danger ms-1'
+      },
+      buttonsStyling: false
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        dispatch(statusCaseLetter(id))
+      }
+    })
+  }
+
+  /* Detail view of Case Letter */
+  const onCaseLetterDetail = (row) => {
+    setLetterRowData({ ...row })
+    setLetterModalOpen(true)
+  }
+
+  return store ? (
+    <div className='invoice-preview-wrapper'>
+      {/* Header */}
+      <Row
+        className={`invoice-preview ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder-glow'}`}
+      >
+        <Col xl={12} md={12} sm={12}>
+          <Card className='invoice-preview-card'>
+            <CardBody className='invoice-padding'>
+              <Row>
+                <Col xl={6} md={6} sm={6} className='d-flex flex-column justify-content-between border-container-lg'>
+                  <div>
+                    <h4
+                      className={`mb-25 ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
+                    >
+                      Details on file {store.caseItem && store.caseItem.CaseID}
+                    </h4>
+                  </div>
+                </Col>
+
+                <Col xl={6} md={6} sm={6}>
+                  <div className='mt-md-0 mt-2'>
+                    <div className='invoice-date-wrapper'>
+                      <User size={14} />
+                      <p className="ms-1 invoice-date-title">{t("Lawyer")}</p>
+                      <p
+                        className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
+                      >
+                        {store.caseItem && store.caseItem.laywer && store.caseItem.laywer.name}
+                      </p>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+      {/* /Header */}
+
+      {/* Client detail */}
+      <Row className='invoice-preview'>
+        <Col xl={12} md={12} sm={12}>
+          <Card className='invoice-preview-card'>
+            <CardBody className='invoice-padding'>
+              <Row>
+                <Col
+                  xl={6}
+                  md={6}
+                  sm={6}
+                  className={`d-flex flex-column justify-content-between border-container-lg ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder-glow'}`}
+                >
+                  <div className="user-avatar-section">
+                    <div className="d-flex justify-content-start">
+                      <div className="d-flex flex-column ml-1">
+                        <div className="user-info">
+                          <h4 className='mb-10'>{t("Client")}</h4>
+                          <span
+                            className={`mb-10 ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
+                          >
+                            {store.caseItem && store.caseItem.user && store.caseItem.user.name}
+                          </span>
+                        </div>
+
+                        {/* Buttons */}
+                        <div className="d-flex flex-wrap mt-1">
+                          <Button
+                            color="primary"
+                            className={`me-1 mb-1 ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder'}`}
+                            onClick={() => setEditModalOpen(true)}
+                          >
+                            {t("Edit")}
+                          </Button>
+
+                          <Button
+                            outline
+                            color="danger"
+                            className={`me-1 mb-1 ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder'}`}
+                            onClick={() => onDeleteFile(id)}
+                          >
+                            {t("Delete")} {t("file")}
+                          </Button>
+
+                          <Button
+                            outline
+                            color="primary"
+                            className={`mb-1 ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder'}`}
+                          >
+                            Send E-Mail
+                          </Button>
+                        </div>
+                        {/* /Buttons */}
+
+                        <ModalEditCaseClient
+                          open={editModalOpen}
+                          toggleModal={() => setEditModalOpen(!editModalOpen)}
+                          lawyers={store.laywerItems}
+                          groups={store.typeItems}
+                          caseData={store.caseItem}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="d-flex align-items-center user-total-numbers">
+                    <div className="d-flex align-items-center mr-2">
+                      <div className="color-box bg-light-primary">
+                        <Home />
+                      </div>
+
+                      <div className="ml-1 ms-1">
+                        <h5 className="mb-0">{t("Address")}</h5>
+                        <small
+                          className={`${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-100'}`}
+                        >
+                          {store.caseItem && store.caseItem.user ? <>
+                            {store.caseItem.user.Address ? `${store.caseItem.user.Address}, ` : ''}
+                            {store.caseItem.user.Postcode ? `${store.caseItem.user.Postcode} ` : ''}
+                            {store.caseItem.user.City}
+                          </> : null}
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </Col>
+
+                <Col
+                  xl={6}
+                  md={6}
+                  sm={6}
+                  className={`${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder-glow'}`}
+                >
+                  <div className='mt-md-0 mt-2'>
+                    <div className='invoice-date-wrapper'>
+                      <User size={14} />
+                      <p className='invoice-date-title ms-1'>Name</p>
+                      <p
+                        className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
+                      >
+                        {store.caseItem && store.caseItem.user && store.caseItem.user.name}
+                      </p>
+                    </div>
+
+                    <div className='invoice-date-wrapper'>
+                      <Check size={14} />
+                      <p className='invoice-date-title ms-1'>Stadium</p>
+                      <p
+                        className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
+                      >
+                        {store.caseItem && store.caseItem.Status}
+                      </p>
+                    </div>
+
+                    <div className='invoice-date-wrapper'>
+                      <Star size={14} />
+                      <p className='invoice-date-title ms-1'>Group</p>
+                      <p
+                        className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
+                      >
+                        {store.caseItem && store.caseItem.type && store.caseItem.type.CaseTypeName}
+                      </p>
+                    </div>
+
+                    <div className='invoice-date-wrapper'>
+                      <Flag size={14} />
+                      <p className='invoice-date-title ms-1'>Land</p>
+                      <p
+                        className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
+                      >
+                        {store.caseItem && store.caseItem.user && store.caseItem.user.Country}
+                      </p>
+                    </div>
+
+                    <div className='invoice-date-wrapper'>
+                      <Phone size={14} />
+                      <p className='invoice-date-title ms-1'>Telephone</p>
+                      <p
+                        className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
+                      >
+                        {store.caseItem && store.caseItem.user && store.caseItem.user.Contact}
+                      </p>
+                    </div>
+
+                    <div className='invoice-date-wrapper'>
+                      <Mail size={14} />
+                      <p className='invoice-date-title ms-1'>E-Mail</p>
+                      <p
+                        className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
+                      >
+                        {store.caseItem && store.caseItem.user && store.caseItem.user.email}
+                      </p>
+                    </div>
+
+                    <div className='invoice-date-wrapper'>
+                      <Calendar size={14} />
+                      <p className='invoice-date-title ms-1'>Datum</p>
+                      <p
+                        className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
+                      >
+                        {store.caseItem && store.caseItem.Date && getTransformDate(store.caseItem.Date, "DD.MM.YYYY")}
+                      </p>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+      {/* /Client detail */}
+
+      {/* Opponent detail */}
+      <Row className='invoice-preview'>
+        <Col xl={12} md={12} sm={12}>
+          <Card className='invoice-preview-card'>
+            <CardBody className='invoice-padding pb-0'>
+              <Row className="mb-2">
+                <Col xl={6} md={6} sm={6} className='d-flex flex-column justify-content-between border-container-lg'>
+                  <div className="user-avatar-section">
+                    <div className="d-flex justify-content-start">
+                      <div className="d-flex flex-column ml-1">
+                        <div className="user-info">
+                          <h4 className='mb-10'>{t("Opponent")}</h4>
+                          <span className='mb-10'>
+                            {store.fighterItem && store.fighterItem.name ? (`${store.fighterItem.name} ${store.fighterItem.last_name}`) : null}
+                          </span>
+                        </div>
+
+                        {/* Buttons */}
+                        <div className="d-flex flex-wrap mt-1">
+                          <Button color='primary' className="mb-1" onClick={() => setOpponentModalOpen(true)}>
+                            {t("Edit")}
+                          </Button>
+
+                          <ModalEditCaseOpponent
+                            open={opponentModalOpen}
+                            toggleModal={() => setOpponentModalOpen(!opponentModalOpen)}
+                            caseId={store.caseItem.CaseID}
+                            fighterData={store.fighterItem}
+                          />
+                        </div>
+                        {/* /Buttons */}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="d-flex align-items-center user-total-numbers">
+                    <div className="d-flex align-items-center mr-2">
+                      <div className="color-box bg-light-primary">
+                        <Home />
+                      </div>
+
+                      <div className="ml-1 ms-1">
+                        <h5 className="mb-0">{t("Address")}</h5>
+                        <small>
+                          {store.fighterItem && store.fighterItem.id ? <>
+                            {store.fighterItem.address ? `${store.fighterItem.address}, ` : ''}
+                            {store.fighterItem.zip_code ? `${store.fighterItem.zip_code} ` : ''}
+                            {store.fighterItem.city}
+                          </> : null}
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </Col>
+
+                <Col xl={6} md={6} sm={6}>
+                  <div className='mt-md-0 mt-2'>
+                    <div className='invoice-date-wrapper'>
+                      <User size={14} />
+                      <p className='invoice-date-title ms-1'>Name</p>
+                      <p className='invoice-date'>{store.fighterItem && store.fighterItem.name}</p>
+                    </div>
+
+                    <div className='invoice-date-wrapper'>
+                      <User size={14} />
+                      <p className='invoice-date-title ms-1'>Surname</p>
+                      <p className='invoice-date'>{store.fighterItem && store.fighterItem.last_name}</p>
+                    </div>
+
+                    <div className='invoice-date-wrapper'>
+                      <Phone size={14} />
+                      <p className='invoice-date-title ms-1'>Telephone</p>
+                      <p className='invoice-date'>{store.fighterItem && store.fighterItem.telefone}</p>
+                    </div>
+
+                    <div className='invoice-date-wrapper'>
+                      <Mail size={14} />
+                      <p className='invoice-date-title ms-1'>E-Mail</p>
+                      <p className='invoice-date'>{store.fighterItem && store.fighterItem.email}</p>
+                    </div>
+
+                    <div className='invoice-date-wrapper'>
+                      <Calendar size={14} />
+                      <p className='invoice-date-title ms-1'>Date changed</p>
+                      <p className='invoice-date'>{store.fighterItem && store.fighterItem.created_at && getTransformDate(store.fighterItem.created_at, "DD.MM.YYYY")}</p>
+                    </div>
+
+                    <div className='invoice-date-wrapper'>
+                      <Flag size={14} />
+                      <p className='invoice-date-title ms-1'>Land</p>
+                      <p className='invoice-date'>{store.fighterItem && store.fighterItem.country}</p>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+      {/* /Opponent detail */}
+
+      {/* Notes History */}
+      <Row className='invoice-preview'>
+        <Col xl={12} md={12} sm={12}>
+          <Card className='invoice-preview-card'>
+            <CardBody className='invoice-padding pb-0'>
+              <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
+                <div className="d-flex flex-wrap">
+                  <Button color="primary" onClick={() => setNoteFileModalOpen(true)}>
+                    {t("Add a note")}
+                  </Button>
+
+                  <ModalCaseNoteFile
+                    open={noteFileModalOpen}
+                    toggleModal={() => setNoteFileModalOpen(!noteFileModalOpen)}
+                    caseId={store.caseItem.CaseID}
+                  />
+                </div>
+
+                <div className="d-flex flex-wrap">
+                  <h3 className="invoice-date">{t("Notes History")}</h3>
+                </div>
+              </div>
+
+              <Row className='mb-2'>
+                <Table responsive>
+                  <thead>
+                    <tr>
+                      <th />
+                      <th>Date</th>
+                      <th>Subject</th>
+                      <th>Done?</th>
+                    </tr>
+                  </thead>
+                  {store.caseRecords && store.caseRecords.length ? <>
+                    <tbody>
+                      {store.caseRecords.map((record, index) => (
+                        <tr key={`record_${index}`}>
+                          <td>
+                            {record.Type === "File" ? <>
+                              <Paperclip size={14} className="cursor-pointer" onClick={() => onCaseRecordDetail(record)} />
+                            </> : <>
+                              <Type size={14} className="cursor-pointer" onClick={() => onCaseRecordDetail(record)} />
+                            </>}
+                          </td>
+
+                          <td>{record.CreatedAt && getTransformDate(record.CreatedAt, "DD.MM.YYYY")}</td>
+
+                          <td>{record.Subject}</td>
+
+                          <td>
+                            <div className='form-switch form-check-primary'>
+                              <Input
+                                type='switch'
+                                checked={record.IsShare}
+                                id={`record_${index}_${record.IsShare}`}
+                                name={`record_${index}_${record.IsShare}`}
+                                className="cursor-pointer"
+                                onChange={() => onShareCaseRecord(record.RecordID)}
+                              />
+                              <Label className='form-check-label' htmlFor="icon-primary">
+                                <span className='switch-icon-left'>
+                                  <Check size={14} />
+                                </span>
+                                <span className='switch-icon-right'>
+                                  <X size={14} />
+                                </span>
+                              </Label>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </> : null}
+                </Table>
+
+                <ModalCaseRecordDetail
+                  open={recordDetailModalOpen}
+                  toggleModal={() => setRecordDetailModalOpen(!recordDetailModalOpen)}
+                  caseRecordRowData={caseRecordRowData}
+                  setCaseRecordRowData={setCaseRecordRowData}
+                />
+              </Row>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+      {/* /Notes History */}
+
+      {/* Time Recording History */}
+      <Row className='invoice-preview'>
+        <Col xl={12} md={12} sm={12}>
+          <Card className='invoice-preview-card'>
+            <CardBody className='invoice-padding pb-0'>
+              <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
+                <div className="d-flex flex-wrap">
+                  <Button color="primary" onClick={() => setTimeTrackModalOpen(true)}>
+                    {t("Add Time Tracking")}
+                  </Button>
+
+                  <ModalCaseTimeTracking
+                    open={timeTrackModalOpen}
+                    toggleModal={() => setTimeTrackModalOpen(!timeTrackModalOpen)}
+                    caseId={store.caseItem.CaseID}
+                  />
+                </div>
+
+                <div className="d-flex flex-wrap">
+                  <h3 className="invoice-date">{t("Time Recording History")}</h3>
+                </div>
+              </div>
+
+              <Row className='mb-2'>
+              </Row>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+      {/* /Time Recording History */}
+
+      {/* Letter history */}
+      <Row className='invoice-preview'>
+        <Col xl={12} md={12} sm={12}>
+          <Card className='invoice-preview-card'>
+            <CardBody className='invoice-padding pb-0'>
+              <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
+                <div className="d-flex flex-wrap">
+                  <Button color="primary" onClick={() => setLetterModalOpen(true)}>
+                    {t("Write a letter now")}
+                  </Button>
+
+                  <ModalCaseLetter
+                    open={letterModalOpen}
+                    toggleModal={() => setLetterModalOpen(!letterModalOpen)}
+                    caseData={store.caseItem}
+                    fighterData={store.fighterItem}
+                    letterRowData={letterRowData}
+                    setLetterRowData={setLetterRowData}
+                  />
+                </div>
+
+                <div className="d-flex flex-wrap">
+                  <h3 className="invoice-date">{t("Letter history")}</h3>
+                </div>
+              </div>
+
+              <Row className='mb-2'>
+                <Table responsive>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Subject</th>
+                      <th>Deadline Until</th>
+                      <th>Done?</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  {store.caseLetters && store.caseLetters.length ? <>
+                    <tbody>
+                      {store.caseLetters.map((letter, index) => (
+                        <tr key={`letters_${index}`}>
+                          <td>{letter.created_at && getTransformDate(letter.created_at, "DD.MM.YYYY")}</td>
+
+                          <td>{letter.subject}</td>
+                          <td>{letter.frist_date && getTransformDate(letter.frist_date, "DD.MM.YYYY")}</td>
+
+                          <td>
+                            <div className='form-switch form-check-primary'>
+                              <Input
+                                type='switch'
+                                // defaultChecked={letter.isErledigt}
+                                checked={letter.isErledigt}
+                                id={`letter_${index}_${letter.isErledigt}`}
+                                name={`letter_${index}_${letter.isErledigt}`}
+                                className="cursor-pointer"
+                                onChange={() => onLetterDone(letter.id)}
+                              />
+                              <Label className='form-check-label' htmlFor="icon-primary">
+                                <span className='switch-icon-left'>
+                                  <Check size={14} />
+                                </span>
+                                <span className='switch-icon-right'>
+                                  <X size={14} />
+                                </span>
+                              </Label>
+                            </div>
+                          </td>
+
+                          <td>
+                            <Eye size={18} className="cursor-pointer" onClick={() => onCaseLetterDetail(letter)} />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </> : null}
+                </Table>
+              </Row>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+      {/* /Letter history */}
+
+      {/* Document History */}
+      <Row className='invoice-preview'>
+        <Col xl={12} md={12} sm={12}>
+          <Card className='invoice-preview-card'>
+            <CardBody className='invoice-padding pb-0'>
+              <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
+                <div className="d-flex flex-wrap">
+                  <Button color="primary" onClick={() => setDocUploadModalOpen(true)}>
+                    {t("Upload document")}
+                  </Button>
+
+                  <ModalCaseDocument
+                    open={docUploadModalOpen}
+                    toggleModal={() => setDocUploadModalOpen(!docUploadModalOpen)}
+                    userId={store.caseItem && store.caseItem.UserID}
+                    caseId={store.caseItem && store.caseItem.CaseID}
+                    documentRowData={documentRowData}
+                    setDocumentRowData={setDocumentRowData}
+                  />
+                </div>
+
+                <div className="d-flex flex-wrap">
+                  <h3 className="invoice-date">{t("Document History")}</h3>
+                </div>
+              </div>
+
+              <Row className='mb-2'>
+                <Table responsive>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Subject</th>
+                      <th>Description</th>
+                      <th>Done?</th>
+                      <th>Look At</th>
+                    </tr>
+                  </thead>
+                  {store.caseDocs && store.caseDocs.length ? <>
+                    <tbody>
+                      {store.caseDocs.map((doc, index) => (
+                        <tr key={`docs_${index}`}>
+                          <td>{doc.created_at && getTransformDate(doc.created_at, "DD.MM.YYYY")}</td>
+
+                          <td>{doc.title}</td>
+                          <td>{doc.description}</td>
+
+                          <td>
+                            <div className='form-switch form-check-primary'>
+                              <Input
+                                type='switch'
+                                // defaultChecked={doc.isErledigt}
+                                checked={doc.isErledigt}
+                                id={`docs_${index}_${doc.isErledigt}`}
+                                name={`docs_${index}_${doc.isErledigt}`}
+                                className="cursor-pointer"
+                                onChange={() => onDocumentDone(doc.id)}
+                              />
+                              <Label className='form-check-label' htmlFor="icon-primary">
+                                <span className='switch-icon-left'>
+                                  <Check size={14} />
+                                </span>
+                                <span className='switch-icon-right'>
+                                  <X size={14} />
+                                </span>
+                              </Label>
+                            </div>
+                          </td>
+
+                          <td>
+                            <Eye size={18} className="cursor-pointer" onClick={() => onCaseDocumentDetail(doc)} />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </> : null}
+                </Table>
+              </Row>
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
+      {/* /Document History */}
+    </div>
+  ) : null
+}
+
+export default CaseView

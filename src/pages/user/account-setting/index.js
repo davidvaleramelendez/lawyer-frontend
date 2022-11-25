@@ -64,10 +64,10 @@ import '@styles/react/libs/editor/editor.scss'
 const AccountSettingApp = () => {
   /* Hooks */
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   // ** Store vars
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const store = useSelector((state) => state.user)
 
   /* acnt => account */

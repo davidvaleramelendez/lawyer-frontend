@@ -48,8 +48,22 @@ import avatarBlank from '@src/assets/images/avatars/avatar-blank.png'
 
 const SidebarLeft = (props) => {
   // ** Props & Store
-  const { store, sidebar, handleSidebar, userSidebarLeft, handleUserSidebarLeft } = props
-  const { chatItems, contacts, userProfile, loading } = store
+  const {
+    store,
+    sidebar,
+    handleSidebar,
+    userSidebarLeft,
+    placeholderChats,
+    placeholderContacts,
+    handleUserSidebarLeft
+  } = props
+
+  const {
+    loading,
+    contacts,
+    chatItems,
+    userProfile
+  } = store
 
   // ** Dispatch
   const dispatch = useDispatch()
@@ -78,45 +92,28 @@ const SidebarLeft = (props) => {
   const renderChats = () => {
     if (!loading) {
       return (<>
-        <li
-          className="placeholder-glow"
-        >
-          <Avatar
-            imgWidth='42'
-            imgHeight='42'
-            className="placeholder"
-            img={avatarBlank}
-          />
+        {Array.from(Array(placeholderChats).keys(), (row, index) => (
+          <li
+            key={`placeholder-chat-${index}`}
+            className="placeholder-glow"
+          >
+            <Avatar
+              imgWidth='42'
+              imgHeight='42'
+              className="placeholder"
+              img={avatarBlank}
+            />
 
-          <div className='chat-info flex-grow-1'>
-            <h5 className='placeholder w-50 mb-0'>{""}</h5>
-            <CardText className='text-truncate placeholder w-75' />
-          </div>
+            <div className='chat-info flex-grow-1'>
+              <h5 className='placeholder w-50 mb-0'>{""}</h5>
+              <CardText className='text-truncate placeholder w-75' />
+            </div>
 
-          <div className='chat-meta text-nowrap mt-50 w-25'>
-            <small className='float-end mb-25 chat-time ms-25 placeholder w-100'>{""}</small>
-          </div>
-        </li>
-
-        <li
-          className="placeholder-glow"
-        >
-          <Avatar
-            imgWidth='42'
-            imgHeight='42'
-            className="placeholder"
-            img={avatarBlank}
-          />
-
-          <div className='chat-info flex-grow-1'>
-            <h5 className='placeholder w-50 mb-0'>{""}</h5>
-            <CardText className='text-truncate placeholder w-75' />
-          </div>
-
-          <div className='chat-meta text-nowrap mt-50 w-25'>
-            <small className='float-end mb-25 chat-time ms-25 placeholder w-100'>{""}</small>
-          </div>
-        </li>
+            <div className='chat-meta text-nowrap mt-50 w-25'>
+              <small className='float-end mb-25 chat-time ms-25 placeholder w-100'>{""}</small>
+            </div>
+          </li>
+        ))}
       </>)
     }
 
@@ -167,50 +164,23 @@ const SidebarLeft = (props) => {
   const renderContacts = () => {
     if (!loading) {
       return (<>
-        <li
-          className="placeholder-glow"
-        >
-          <Avatar
-            imgHeight='42'
-            imgWidth='42'
-            className="placeholder"
-            img={avatarBlank}
-          />
+        {Array.from(Array(placeholderContacts).keys(), (row, index) => (
+          <li
+            key={`placeholder-contact-${index}`}
+            className="placeholder-glow"
+          >
+            <Avatar
+              imgHeight='42'
+              imgWidth='42'
+              className="placeholder"
+              img={avatarBlank}
+            />
 
-          <div className='chat-info flex-grow-1'>
-            <h5 className='mb-0 placeholder w-75'>{""}</h5>
-          </div>
-        </li>
-
-        <li
-          className="placeholder-glow"
-        >
-          <Avatar
-            imgHeight='42'
-            imgWidth='42'
-            className="placeholder"
-            img={avatarBlank}
-          />
-
-          <div className='chat-info flex-grow-1'>
-            <h5 className='mb-0 placeholder w-75'>{""}</h5>
-          </div>
-        </li>
-
-        <li
-          className="placeholder-glow"
-        >
-          <Avatar
-            imgHeight='42'
-            imgWidth='42'
-            className="placeholder"
-            img={avatarBlank}
-          />
-
-          <div className='chat-info flex-grow-1'>
-            <h5 className='mb-0 placeholder w-75'>{""}</h5>
-          </div>
-        </li>
+            <div className='chat-info flex-grow-1'>
+              <h5 className='mb-0 placeholder w-75'>{""}</h5>
+            </div>
+          </li>
+        ))}
       </>)
     }
 

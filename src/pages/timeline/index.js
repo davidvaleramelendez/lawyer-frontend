@@ -25,7 +25,7 @@ import {
 } from '@utils'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-spinner'
+import Spinner from '@components/spinner/Simple-grow-spinner'
 import Notification from '@components/toast/notification'
 
 // Constant
@@ -60,16 +60,17 @@ import pdfImage from '@src/assets/images/icons/pdf.png'
 const TimelineApp = () => {
   /* Hook */
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const MySwal = withReactContent(Swal)
+
+  // ** Store vars
+  const dispatch = useDispatch()
+  const store = useSelector((state) => state.timeline)
 
   // ** States
   const [loadFirst, setLoadFirst] = useState(true)
   const [searchLetterInput, setSearchLetterInput] = useState('')
   const [searchInvoiceInput, setSearchInvoiceInput] = useState('')
-
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const store = useSelector((state) => state.timeline)
 
   const handleTimelineLists = (letterSearch = searchLetterInput, invoiceSearch = searchInvoiceInput) => {
     // console.log("handleTimelineLists ", letterSearch, invoiceSearch)

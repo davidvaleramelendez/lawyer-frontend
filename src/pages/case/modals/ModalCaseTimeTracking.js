@@ -20,7 +20,8 @@ import {
   Modal,
   Button,
   ModalBody,
-  ModalHeader
+  ModalHeader,
+  FormFeedback
 } from 'reactstrap'
 
 import { useForm, Controller } from 'react-hook-form'
@@ -110,7 +111,7 @@ const ModalCaseTimeTracking = ({
                   rules={ValidationSchema.subject}
                   render={({ field }) => <Input {...field} placeholder={ValidationSchema.subject && ValidationSchema.subject.placeholder} invalid={errors.Subject && true} />}
                 />
-                <div className="invalid-feedback">{errors.Subject?.message}</div>
+                <FormFeedback>{errors.Subject?.message}</FormFeedback>
               </Col>
 
               <Col md={12} sm={12} className='mb-1'>
@@ -125,7 +126,7 @@ const ModalCaseTimeTracking = ({
                   rules={ValidationSchema.interval_time}
                   render={({ field }) => <Input {...field} type="number" placeholder={ValidationSchema.interval_time && ValidationSchema.interval_time.placeholder} invalid={errors.interval_time && true} />}
                 />
-                <div className="invalid-feedback">{errors.interval_time?.message}</div>
+                <FormFeedback>{errors.interval_time?.message}</FormFeedback>
               </Col>
             </Row>
 

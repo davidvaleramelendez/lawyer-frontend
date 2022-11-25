@@ -51,7 +51,7 @@ import {
 } from '../store'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-spinner'
+import Spinner from '@components/spinner/Simple-grow-spinner'
 
 // ** Utils
 import {

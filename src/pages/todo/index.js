@@ -37,7 +37,6 @@ import {
 } from '@utils'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-spinner'
 import Notification from '@components/toast/notification'
 
 // Constant
@@ -49,7 +48,16 @@ import {
 import '@styles/react/apps/app-todo.scss'
 
 const TodoApp = () => {
+  // ** Hooks
+  const navigate = useNavigate()
+  const MySwal = withReactContent(Swal)
+
+  // ** Store Vars
+  const dispatch = useDispatch()
+  const store = useSelector(state => state.todo)
+
   // ** States
+  const [placeholderTasks] = useState(8)
   const [loadFirst, setLoadFirst] = useState(true)
   const [sort, setSort] = useState('')
   const [searchInput, setSearchInput] = useState('')
@@ -58,14 +66,6 @@ const TodoApp = () => {
   const [mainSidebar, setMainSidebar] = useState(false)
   const [openTaskSidebar, setOpenTaskSidebar] = useState(false)
   const [userOptions, setuserOptions] = useState([])
-
-  // ** Store Vars
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const store = useSelector(state => state.todo)
-
-  // ** Hooks
-  const MySwal = withReactContent(Swal)
 
   // ** URL Params
   const paramsURL = useParams()
@@ -147,12 +147,6 @@ const TodoApp = () => {
 
   return (
     <Fragment>
-      {!store.loading ? (
-        <Spinner
-          className="d-flex justify-content-center position-absolute top-50 w-100 zindex-3"
-        />
-      ) : null}
-
       <Sidebar
         store={store}
         params={params}
@@ -194,6 +188,7 @@ const TodoApp = () => {
                 deleteTodoItem={deleteTodoItem}
                 restoreTodoItem={restoreTodoItem}
                 handleTodoLists={handleTodoLists}
+                placeholderTasks={placeholderTasks}
                 completeTodoItem={completeTodoItem}
                 handleMainSidebar={handleMainSidebar}
                 setOpenTaskSidebar={setOpenTaskSidebar}

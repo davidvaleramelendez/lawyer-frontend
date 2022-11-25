@@ -23,7 +23,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from "yup"
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-spinner'
+import Spinner from '@components/spinner/Simple-grow-spinner'
 
 const ModalCloudFolder = ({
     open,
@@ -40,7 +40,7 @@ const ModalCloudFolder = ({
     updateCloudStorageLoader,
     clearCloudStorageMessage
 }) => {
-    // ** Hooks for tanslation
+    // ** Hooks
     const { t } = useTranslation()
 
     /* Yup validation schema */

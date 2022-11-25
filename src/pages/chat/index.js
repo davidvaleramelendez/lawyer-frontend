@@ -37,6 +37,8 @@ const ChatApp = () => {
   const store = useSelector(state => state.chat)
 
   // ** States
+  const [placeholderChats] = useState(2)
+  const [placeholderContacts] = useState(3)
   const [loadFirst, setLoadFirst] = useState(true)
   const [user, setUser] = useState({})
   const [sidebar, setSidebar] = useState(false)
@@ -79,6 +81,8 @@ const ChatApp = () => {
         sidebar={sidebar}
         handleSidebar={handleSidebar}
         userSidebarLeft={userSidebarLeft}
+        placeholderChats={placeholderChats}
+        placeholderContacts={placeholderContacts}
         handleUserSidebarLeft={handleUserSidebarLeft}
       />
       <div className='content-right'>

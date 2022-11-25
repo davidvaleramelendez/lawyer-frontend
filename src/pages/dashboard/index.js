@@ -49,7 +49,7 @@ import {
 
 // ** Custom Components
 import Avatar from '@components/avatar'
-import Spinner from '@components/spinner/Simple-spinner'
+import Spinner from '@components/spinner/Simple-grow-spinner'
 
 // ** Demo Components
 import CardMedal from '@components/cards/advance/CardMedal'
@@ -65,10 +65,10 @@ import '@styles/base/pages/dashboard-ecommerce.scss'
 const EcommerceDashboard = () => {
   // ** Hooks
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   // ** Store Vars
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const store = useSelector((state) => state.dashboard)
 
   // ** State

@@ -56,10 +56,10 @@ import '@styles/react/apps/app-email.scss'
 const EmailDetailView = () => {
   // ** Hooks
   const { id } = useParams()
+  const navigate = useNavigate()
 
   // ** Store vars
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const store = useSelector((state) => state.email)
 
   // ** States

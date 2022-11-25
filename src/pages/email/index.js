@@ -45,6 +45,9 @@ import {
 import '@styles/react/apps/app-email.scss'
 
 const EmailApp = () => {
+  // ** Hooks
+  const navigate = useNavigate()
+
   // ** States
   const [loadFirst, setLoadFirst] = useState(true)
   const [searchInput, setSearchInput] = useState('')
@@ -60,7 +63,6 @@ const EmailApp = () => {
   const toggleCompose = () => setComposeOpen(!composeOpen)
 
   // ** Store Variables
-  const navigate = useNavigate()
   const dispatch = useDispatch()
   const store = useSelector(state => state.email)
 

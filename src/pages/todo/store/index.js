@@ -8,11 +8,16 @@ import {
   todoItem
 } from '@constant/reduxConstant'
 
+// ** Api endpoints
+import {
+  API_ENDPOINTS
+} from '@src/utility/ApiEndPoints'
+
 // ** Axios Imports
 import axios from 'axios'
 
 async function getUserListRequest(params) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/todo/get_users`, { params }).then((todo) => todo.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.todos.userList}`, { params }).then((todo) => todo.data).catch((error) => error)
 }
 
 export const getUserList = createAsyncThunk('appTodo/getUserList', async (params) => {
@@ -45,7 +50,7 @@ export const getUserList = createAsyncThunk('appTodo/getUserList', async (params
 })
 
 async function getTodoListRequest(params) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/todo/get_todos`, { params }).then((todo) => todo.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.todos.list}`, { params }).then((todo) => todo.data).catch((error) => error)
 }
 
 export const getTodoList = createAsyncThunk('appTodo/getTodoList', async (params) => {
@@ -87,7 +92,7 @@ export const getTodoList = createAsyncThunk('appTodo/getTodoList', async (params
 })
 
 async function createUpdateTodoRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/todo/create`, payload).then((todo) => todo.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.todos.create}`, payload).then((todo) => todo.data).catch((error) => error)
 }
 
 export const createUpdateTodo = createAsyncThunk('appTodo/createUpdateTodo', async (payload, { dispatch, getState }) => {
@@ -118,7 +123,7 @@ export const createUpdateTodo = createAsyncThunk('appTodo/createUpdateTodo', asy
 })
 
 async function completeTodoItemRequest(id) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/todo/complete/${id}`).then((todo) => todo.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.todos.complete}/${id}`).then((todo) => todo.data).catch((error) => error)
 }
 
 export const completeTodoItem = createAsyncThunk('appTodo/completeTodoItem', async (id, { dispatch, getState }) => {
@@ -149,7 +154,7 @@ export const completeTodoItem = createAsyncThunk('appTodo/completeTodoItem', asy
 })
 
 async function importantTodoItemRequest(id) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/todo/important/${id}`).then((todo) => todo.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.todos.important}/${id}`).then((todo) => todo.data).catch((error) => error)
 }
 
 export const importantTodoItem = createAsyncThunk('appTodo/importantTodoItem', async (id, { dispatch, getState }) => {
@@ -180,7 +185,7 @@ export const importantTodoItem = createAsyncThunk('appTodo/importantTodoItem', a
 })
 
 async function trashTodoItemRequest(id) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/todo/trash/${id}`).then((todo) => todo.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.todos.trash}/${id}`).then((todo) => todo.data).catch((error) => error)
 }
 
 export const trashTodoItem = createAsyncThunk('appTodo/trashTodoItem', async (id, { dispatch, getState }) => {
@@ -211,7 +216,7 @@ export const trashTodoItem = createAsyncThunk('appTodo/trashTodoItem', async (id
 })
 
 async function restoreTodoItemRequest(id) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/todo/restore/${id}`).then((todo) => todo.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.todos.restore}/${id}`).then((todo) => todo.data).catch((error) => error)
 }
 
 export const restoreTodoItem = createAsyncThunk('appTodo/restoreTodoItem', async (id, { dispatch, getState }) => {
@@ -242,7 +247,7 @@ export const restoreTodoItem = createAsyncThunk('appTodo/restoreTodoItem', async
 })
 
 async function deleteTodoItemRequest(id) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/todo/delete/${id}`).then((todo) => todo.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.todos.delete}/${id}`).then((todo) => todo.data).catch((error) => error)
 }
 
 export const deleteTodoItem = createAsyncThunk('appTodo/deleteTodoItem', async (id, { dispatch, getState }) => {

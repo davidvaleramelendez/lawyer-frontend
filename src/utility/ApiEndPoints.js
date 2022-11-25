@@ -117,6 +117,105 @@ export const API_ENDPOINTS = {
         create: `/api/admin/event/add_event`,
         update: `/api/admin/event/update`,
         delete: `/api/admin/event/delete`
-    }
+    },
     /* /Event calendar module */
+
+    /* Cloud storage module */
+    cloudStorage: {
+        list: `/api/admin/folders`,
+        treeList: `/api/admin/tree/folder`,
+        createFolder: `/api/admin/folder/create`,
+        updateFolder: `/api/admin/folder/update`,
+        trashFolder: `/api/admin/folder/trash`,
+        deleteFolder: `/api/admin/folder/delete`,
+        createFile: `/api/admin/file/create`,
+        updateFile: `/api/admin/file/update`,
+        trashFile: `/api/admin/file/trash`,
+        deleteFile: `/api/admin/file/delete`,
+        markImportant: `/api/admin/cloud/mark-important`,
+        markRestore: `/api/admin/cloud/mark-restore`
+    },
+    /* /Cloud storage module */
+
+    /* Contact module */
+    contacts: {
+        list: `/api/admin/get_contact_list`,
+        view: `/api/admin/contact/view`,
+        create: `/api/admin/add_contact`,
+        createNote: `/api/admin/contact/add_note`,
+        convertToCase: `/api/admin/convert_contact_to_case`,
+        delete: `/api/admin/contact/delete`
+    },
+    /* /Contact module */
+
+    /* Email module */
+    emails: {
+        imapList: `/api/email/imap`,
+        imapDetail: `/api/email/details-imap`,
+        send: `/api/email/send_mail`,
+        markTrash: `/api/email/mark_trash`,
+        markDelete: `/api/email/mark_delete`,
+        markRestore: `/api/email/mark_restore`,
+        markImportant: `/api/email/mark_important`,
+        createReply: `/api/email/reply`,
+        view: `/api/email`
+    },
+    /* /Email module */
+
+    /* Email Template module */
+    emailTemplates: {
+        list: `/api/admin/email-templates`,
+        create: `/api/admin/email-template/create`,
+        view: `/api/admin/email-template`,
+        update: `/api/admin/email-template/update`,
+        delete: `/api/admin/email-template/delete`,
+        viewTemplate: `/api/admin/view-email-template`,
+        attachmentList: `/api/admin/email-template-attachments`,
+        attachmentCreate: `/api/admin/email-template-attachment/create`,
+        attachmentView: `/api/admin/email-template-attachment`,
+        attachmentUpdate: `/api/admin/email-template-attachment/update`,
+        attachmentDelete: `/api/admin/email-template-attachment/delete`
+    },
+    /* /Email Template module */
+
+    /* Invoice module */
+    invoices: {
+        list: `/api/admin/invoice/list`,
+        info: `/api/admin/invoice/info`,
+        view: `/api/admin/invoice`,
+        save: `/api/admin/invoice/save`,
+        update: `/api/admin/invoice/update`,
+        delete: `/api/admin/invoice/delete`,
+        send: `/api/admin/invoice/send`,
+        pay: `/api/admin/invoice/pay`
+    },
+    /* /Invoice module */
+
+    /* Letter module */
+    letters: {
+        list: `/api/admin/letter/get_list`,
+        archive: `/api/admin/letter/update_archived`,
+        updateStatus: `/api/admin/letter/update_status`
+    },
+    /* /Letter module */
+
+    /* Timeline module */
+    timelines: {
+        list: `/api/admin/timeline/get_all`,
+        save: `/api/admin/timeline/save`
+    },
+    /* /Timeline module */
+
+    /* Todo module */
+    todos: {
+        userList: `/api/admin/todo/get_users`,
+        list: `/api/admin/todo/get_todos`,
+        create: `/api/admin/todo/create`,
+        complete: `/api/admin/todo/complete`,
+        important: `/api/admin/todo/important`,
+        trash: `/api/admin/todo/trash`,
+        restore: `/api/admin/todo/restore`,
+        delete: `/api/admin/todo/delete`
+    }
+    /* /Todo module */
 }

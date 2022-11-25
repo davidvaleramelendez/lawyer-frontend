@@ -8,16 +8,17 @@ import {
     cloudStorageItem
 } from '@constant/reduxConstant'
 
-// ** Utils
+// ** Api endpoints
 import {
-} from '@utils'
+    API_ENDPOINTS
+} from '@src/utility/ApiEndPoints'
 
 // ** Axios Imports
 import axios from 'axios'
 
 /* Common */
 async function getCloudStorageListRequest(params) {
-    return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/folders`, { params }).then((cloudStorage) => cloudStorage.data).catch((error) => error)
+    return axios.get(`${API_ENDPOINTS.cloudStorage.list}`, { params }).then((cloudStorage) => cloudStorage.data).catch((error) => error)
 }
 
 export const getCloudStorageList = createAsyncThunk('appCloudStorage/getCloudStorageList', async (params) => {
@@ -58,7 +59,7 @@ export const getCloudStorageList = createAsyncThunk('appCloudStorage/getCloudSto
 
 /* Cloud Storage Folder */
 async function getTreeFolderListRequest(params) {
-    return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/tree/folder`, { params }).then((cloudStorage) => cloudStorage.data).catch((error) => error)
+    return axios.get(`${API_ENDPOINTS.cloudStorage.treeList}`, { params }).then((cloudStorage) => cloudStorage.data).catch((error) => error)
 }
 
 export const getTreeFolderList = createAsyncThunk('appCloudStorage/getTreeFolderList', async (params) => {
@@ -91,7 +92,7 @@ export const getTreeFolderList = createAsyncThunk('appCloudStorage/getTreeFolder
 })
 
 async function createCloudStorageFolderRequest(payload) {
-    return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/folder/create`, payload).then((cloudStorage) => cloudStorage.data).catch((error) => error)
+    return axios.post(`${API_ENDPOINTS.cloudStorage.createFolder}`, payload).then((cloudStorage) => cloudStorage.data).catch((error) => error)
 }
 
 export const createCloudStorageFolder = createAsyncThunk('appCloudStorage/createCloudStorageFolder', async (payload, { dispatch, getState }) => {
@@ -123,7 +124,7 @@ export const createCloudStorageFolder = createAsyncThunk('appCloudStorage/create
 })
 
 async function updateCloudStorageFolderRequest(payload) {
-    return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/folder/update`, payload).then((cloudStorage) => cloudStorage.data).catch((error) => error)
+    return axios.post(`${API_ENDPOINTS.cloudStorage.updateFolder}`, payload).then((cloudStorage) => cloudStorage.data).catch((error) => error)
 }
 
 export const updateCloudStorageFolder = createAsyncThunk('appCloudStorage/updateCloudStorageFolder', async (payload, { dispatch, getState }) => {
@@ -155,7 +156,7 @@ export const updateCloudStorageFolder = createAsyncThunk('appCloudStorage/update
 })
 
 async function trashCloudStorageFolderRequest(id) {
-    return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/folder/trash/${id}`).then((cloudStorage) => cloudStorage.data).catch((error) => error)
+    return axios.get(`${API_ENDPOINTS.cloudStorage.trashFolder}/${id}`).then((cloudStorage) => cloudStorage.data).catch((error) => error)
 }
 
 export const trashCloudStorageFolder = createAsyncThunk('appCloudStorage/trashCloudStorageFolder', async (id, { dispatch, getState }) => {
@@ -187,7 +188,7 @@ export const trashCloudStorageFolder = createAsyncThunk('appCloudStorage/trashCl
 })
 
 async function deleteCloudStorageFolderRequest(id) {
-    return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/folder/delete/${id}`).then((cloudStorage) => cloudStorage.data).catch((error) => error)
+    return axios.get(`${API_ENDPOINTS.cloudStorage.deleteFolder}/${id}`).then((cloudStorage) => cloudStorage.data).catch((error) => error)
 }
 
 export const deleteCloudStorageFolder = createAsyncThunk('appCloudStorage/deleteCloudStorageFolder', async (id, { dispatch, getState }) => {
@@ -220,7 +221,7 @@ export const deleteCloudStorageFolder = createAsyncThunk('appCloudStorage/delete
 
 /* Cloud Storage File */
 async function createCloudStorageFileRequest(payload) {
-    return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/file/create`, payload).then((cloudStorage) => cloudStorage.data).catch((error) => error)
+    return axios.post(`${API_ENDPOINTS.cloudStorage.createFile}`, payload).then((cloudStorage) => cloudStorage.data).catch((error) => error)
 }
 
 export const createCloudStorageFile = createAsyncThunk('appCloudStorage/createCloudStorageFile', async (payload, { dispatch, getState }) => {
@@ -251,7 +252,7 @@ export const createCloudStorageFile = createAsyncThunk('appCloudStorage/createCl
 })
 
 async function updateCloudStorageFileRequest(payload) {
-    return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/file/update`, payload).then((cloudStorage) => cloudStorage.data).catch((error) => error)
+    return axios.post(`${API_ENDPOINTS.cloudStorage.updateFile}`, payload).then((cloudStorage) => cloudStorage.data).catch((error) => error)
 }
 
 export const updateCloudStorageFile = createAsyncThunk('appCloudStorage/updateCloudStorageFile', async (payload, { dispatch, getState }) => {
@@ -282,7 +283,7 @@ export const updateCloudStorageFile = createAsyncThunk('appCloudStorage/updateCl
 })
 
 async function trashCloudStorageFileRequest(id) {
-    return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/file/trash/${id}`).then((cloudStorage) => cloudStorage.data).catch((error) => error)
+    return axios.get(`${API_ENDPOINTS.cloudStorage.trashFile}/${id}`).then((cloudStorage) => cloudStorage.data).catch((error) => error)
 }
 
 export const trashCloudStorageFile = createAsyncThunk('appCloudStorage/trashCloudStorageFile', async (id, { dispatch, getState }) => {
@@ -313,7 +314,7 @@ export const trashCloudStorageFile = createAsyncThunk('appCloudStorage/trashClou
 })
 
 async function deleteCloudStorageFileRequest(id) {
-    return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/file/delete/${id}`).then((cloudStorage) => cloudStorage.data).catch((error) => error)
+    return axios.get(`${API_ENDPOINTS.cloudStorage.deleteFile}/${id}`).then((cloudStorage) => cloudStorage.data).catch((error) => error)
 }
 
 export const deleteCloudStorageFile = createAsyncThunk('appCloudStorage/deleteCloudStorageFile', async (id, { dispatch, getState }) => {
@@ -346,7 +347,7 @@ export const deleteCloudStorageFile = createAsyncThunk('appCloudStorage/deleteCl
 
 /* /Common */
 async function markImportantCloudItemRequest(params) {
-    return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/cloud/mark-important`, { params }).then((cloudStorage) => cloudStorage.data).catch((error) => error)
+    return axios.get(`${API_ENDPOINTS.cloudStorage.markImportant}`, { params }).then((cloudStorage) => cloudStorage.data).catch((error) => error)
 }
 
 export const markImportantCloudItem = createAsyncThunk('appCloudStorage/markImportantCloudItem', async (id, { dispatch, getState }) => {
@@ -377,7 +378,7 @@ export const markImportantCloudItem = createAsyncThunk('appCloudStorage/markImpo
 })
 
 async function markRestoreCloudItemRequest(params) {
-    return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/cloud/mark-restore`, { params }).then((cloudStorage) => cloudStorage.data).catch((error) => error)
+    return axios.get(`${API_ENDPOINTS.cloudStorage.markRestore}`, { params }).then((cloudStorage) => cloudStorage.data).catch((error) => error)
 }
 
 export const markRestoreCloudItem = createAsyncThunk('appCloudStorage/markRestoreCloudItem', async (id, { dispatch, getState }) => {

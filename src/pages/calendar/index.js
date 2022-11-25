@@ -52,8 +52,11 @@ import {
 import '@styles/react/apps/app-calendar.scss'
 
 const CalendarApp = () => {
-  // ** Variables
+  // ** Hooks
+  const [isRtl] = useRTL()
   const navigate = useNavigate()
+
+  // ** Store vars
   const dispatch = useDispatch()
   const store = useSelector(state => state.calendar)
 
@@ -67,8 +70,6 @@ const CalendarApp = () => {
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false)
   const [userOptions, setuserOptions] = useState([])
 
-  // ** Hooks
-  const [isRtl] = useRTL()
 
   // ** LeftSidebar Toggle Function
   const toggleSidebar = (val) => setLeftSidebarOpen(val)

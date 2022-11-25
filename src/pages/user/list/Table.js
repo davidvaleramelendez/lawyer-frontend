@@ -170,9 +170,11 @@ const CustomHeader = ({
 }
 
 const UsersList = () => {
+    // ** Hooks
+    const navigate = useNavigate()
+
     // ** Store Vars
     const dispatch = useDispatch()
-    const navigate = useNavigate()
     const store = useSelector((state) => state.user)
 
     // ** States
@@ -475,7 +477,7 @@ const UsersList = () => {
         <Fragment>
             <Card className="overflow-hidden">
                 <DatatablePagination
-                    customClass="invoice-list-dataTable"
+                    customClass="react-dataTable"
                     columns={columns}
                     data={store.userItems}
                     loading={store.loading}

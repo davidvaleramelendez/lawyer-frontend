@@ -65,12 +65,12 @@ const ContactView = () => {
   // ** Hooks
   const { id } = useParams()
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   const MySwal = withReactContent(Swal)
 
   // ** Store vars
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const store = useSelector((state) => state.contact)
 
   /* State */

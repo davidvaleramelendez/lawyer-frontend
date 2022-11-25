@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 // ** Custom Components
 import NavbarUser from './NavbarUser'
 import NavbarBookmarks from './NavbarBookmarks'
-import Spinner from '@components/spinner/Simple-spinner'
+import Spinner from '@components/spinner/Simple-grow-spinner'
 
 // ** Store & Actions
 import { useSelector } from 'react-redux'

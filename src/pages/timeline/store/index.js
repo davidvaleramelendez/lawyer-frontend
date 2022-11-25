@@ -3,11 +3,16 @@
 // ** Redux Imports
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
+// ** Api endpoints
+import {
+  API_ENDPOINTS
+} from '@src/utility/ApiEndPoints'
+
 // ** Axios Imports
 import axios from 'axios'
 
 async function getTimelineListRequest(params) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/timeline/get_all`, { params }).then((timeline) => timeline.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.timelines.list}`, { params }).then((timeline) => timeline.data).catch((error) => error)
 }
 
 export const getTimelineList = createAsyncThunk('appTimeline/getTimelineList', async (params) => {
@@ -46,7 +51,7 @@ export const getTimelineList = createAsyncThunk('appTimeline/getTimelineList', a
 })
 
 async function changeTimelineStatusRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/timeline/save`, payload).then((timeline) => timeline.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.timelines.save}`, payload).then((timeline) => timeline.data).catch((error) => error)
 }
 
 export const changeTimelineStatus = createAsyncThunk('appTimeline/changeTimelineStatus', async (payload, { dispatch, getState }) => {

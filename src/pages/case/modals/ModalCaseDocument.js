@@ -11,6 +11,7 @@ import {
   createCaseDocument,
   updateCaseDocument,
   deleteCaseDocument,
+  updateCaseLoader,
   clearCaseMessage
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -29,7 +30,8 @@ import {
   Button,
   ModalBody,
   InputGroup,
-  ModalHeader
+  ModalHeader,
+  FormFeedback
 } from 'reactstrap'
 
 import { useForm, Controller } from 'react-hook-form'
@@ -38,6 +40,9 @@ import { useForm, Controller } from 'react-hook-form'
 import {
   caseDocItem
 } from '@constant/reduxConstant'
+
+// ** Custom Components
+import Spinner from '@components/spinner/Simple-grow-spinner'
 
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
@@ -175,6 +180,7 @@ const ModalCaseDocument = ({
       }
 
       if (docsData && docsData.case_id) {
+        dispatch(updateCaseLoader(false))
         if (docsData.id) {
           dispatch(updateCaseDocument(docsData))
         } else {
@@ -213,6 +219,12 @@ const ModalCaseDocument = ({
         className='modal-dialog-centered modal-lg'
         backdrop="static"
       >
+        {!store.loading ? (
+          <Spinner
+            className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
+          />
+        ) : null}
+
         <ModalHeader toggle={handleReset}>{documentRowData.id ? t("View") : t("Upload")} {t("document")}</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
@@ -229,7 +241,7 @@ const ModalCaseDocument = ({
                   rules={ValidationSchema.title}
                   render={({ field }) => <Input {...field} placeholder={ValidationSchema.title && ValidationSchema.title.placeholder} invalid={errors.title && true} />}
                 />
-                <div className="invalid-feedback">{errors.title?.message}</div>
+                <FormFeedback>{errors.title?.message}</FormFeedback>
               </div>
 
               <div className='mb-1'>
@@ -244,7 +256,7 @@ const ModalCaseDocument = ({
                   rules={ValidationSchema.description}
                   render={({ field }) => <Input {...field} type="textarea" placeholder={ValidationSchema.description && ValidationSchema.description.placeholder} invalid={errors.description && true} />}
                 />
-                <div className="invalid-feedback">{errors.description?.message}</div>
+                <FormFeedback>{errors.description?.message}</FormFeedback>
               </div>
 
               {documentRowData && !documentRowData.id ? (
@@ -265,15 +277,29 @@ const ModalCaseDocument = ({
             <Row className='mb-2 mt-2'>
               <div className="d-flex justify-content-end">
                 {documentRowData && documentRowData.id ? (<>
-                  <Button type='submit' color="primary" className="me-1">
+                  <Button
+                    type="submit"
+                    color="primary"
+                    className="me-1"
+                    disabled={!store.loading}
+                  >
                     {t("Update")}
                   </Button>
 
-                  <Button type='button' color="danger" onClick={() => onDeleteDocument(documentRowData.id)}>
+                  <Button
+                    type="button"
+                    color="danger"
+                    disabled={!store.loading}
+                    onClick={() => onDeleteDocument(documentRowData.id)}
+                  >
                     {t("Delete")}
                   </Button>
                 </>) : (
-                  <Button type='submit' color="primary">
+                  <Button
+                    type="submit"
+                    color="primary"
+                    disabled={!store.loading}
+                  >
                     {t("Upload")}
                   </Button>
                 )}

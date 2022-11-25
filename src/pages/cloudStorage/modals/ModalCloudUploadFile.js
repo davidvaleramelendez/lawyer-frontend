@@ -35,7 +35,7 @@ const ModalCloudUploadFile = ({
     updateCloudStorageLoader,
     clearCloudStorageMessage
 }) => {
-    // ** Hooks for tanslation
+    // ** Hooks
     const { t } = useTranslation()
 
     // ** States

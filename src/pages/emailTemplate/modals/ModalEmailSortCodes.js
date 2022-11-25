@@ -20,7 +20,7 @@ const ModalEmailSortCodes = ({
     toggleModal,
     clearSortCode
 }) => {
-    // ** Hooks for tanslation
+    // ** Hooks
     const { t } = useTranslation()
 
     const handleReset = () => {

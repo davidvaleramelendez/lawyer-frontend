@@ -86,11 +86,11 @@ const CaseView = () => {
   // ** Hooks
   const { id } = useParams()
   const { t } = useTranslation()
+  const dispatch = useDispatch()
 
   const MySwal = withReactContent(Swal)
 
   // ** Store vars
-  const dispatch = useDispatch()
   const navigate = useNavigate()
   const store = useSelector((state) => state.cases)
 

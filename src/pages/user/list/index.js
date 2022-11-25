@@ -1,12 +1,13 @@
-// ** User List Component
-import Table from './Table'
-
 // ** Reactstrap Imports
 import {
     Row,
     Col
 } from 'reactstrap'
 
+// ** User List Component
+import Table from './Table'
+
+// ** Store
 import { useSelector } from 'react-redux'
 
 // ** Custom Components

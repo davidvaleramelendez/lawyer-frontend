@@ -30,7 +30,8 @@ import {
   Modal,
   Button,
   ModalBody,
-  ModalHeader
+  ModalHeader,
+  FormFeedback
 } from 'reactstrap'
 
 import { useForm, Controller } from 'react-hook-form'
@@ -41,7 +42,7 @@ import {
 } from '@constant/reduxConstant'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-spinner'
+import Spinner from '@components/spinner/Simple-grow-spinner'
 
 // ** Utils
 import {
@@ -192,7 +193,7 @@ const ModalCaseLetter = ({
                   rules={ValidationSchema.subject}
                   render={({ field }) => <Input {...field} placeholder={ValidationSchema.subject && ValidationSchema.subject.placeholder} invalid={errors.Subject && true} />}
                 />
-                <div className="invalid-feedback">{errors.Subject?.message}</div>
+                <FormFeedback>{errors.Subject?.message}</FormFeedback>
               </div>
 
               <div className='mb-1'>
@@ -207,7 +208,7 @@ const ModalCaseLetter = ({
                   rules={ValidationSchema.message}
                   render={({ field }) => <Input {...field} type="textarea" rows={6} placeholder={ValidationSchema.message && ValidationSchema.message.placeholder} invalid={errors.message && true} />}
                 />
-                <div className="invalid-feedback">{errors.message?.message}</div>
+                <FormFeedback>{errors.message?.message}</FormFeedback>
               </div>
 
               {letterRowData && !letterRowData.id ? (
@@ -230,7 +231,7 @@ const ModalCaseLetter = ({
                       }}
                     />}
                   />
-                  <div className="invalid-feedback">{errors.fristDate?.message}</div>
+                  <FormFeedback>{errors.fristDate?.message}</FormFeedback>
                 </div>
               ) : null}
             </Row>

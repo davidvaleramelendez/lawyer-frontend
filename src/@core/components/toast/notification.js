@@ -17,7 +17,7 @@ const Notification = (
                     <Avatar className='me-1' size='sm' color={type} icon={<Coffee size={12} />} />
                     <div>
                         <p className='mb-0'>{name}</p>
-                        <small className="text-wrap">{msg}</small>
+                        <small className="text-break">{msg}</small>
                     </div>
                 </div>
                 <X size='14' onClick={() => toast.dismiss(t.id)} />

@@ -20,11 +20,16 @@ import {
   increaseDaysDateFormat
 } from '@utils'
 
+// ** Api endpoints
+import {
+  API_ENDPOINTS
+} from '@src/utility/ApiEndPoints'
+
 // ** Axios Imports
 import axios from 'axios'
 
 async function getInvoiceListRequest(params) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/invoice/list`, { params }).then((invoice) => invoice.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.invoices.list}`, { params }).then((invoice) => invoice.data).catch((error) => error)
 }
 
 export const getInvoiceList = createAsyncThunk('appInvoice/getInvoiceList', async (params) => {
@@ -69,7 +74,7 @@ export const getInvoiceList = createAsyncThunk('appInvoice/getInvoiceList', asyn
 })
 
 async function deleteInvoiceRequest(id) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/invoice/delete/${id}`).then((invoice) => invoice.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.invoices.delete}/${id}`).then((invoice) => invoice.data).catch((error) => error)
 }
 
 export const deleteInvoice = createAsyncThunk('appInvoice/deleteInvoice', async (id, { dispatch, getState }) => {
@@ -100,7 +105,7 @@ export const deleteInvoice = createAsyncThunk('appInvoice/deleteInvoice', async 
 })
 
 async function invoiceInfoRequest() {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/invoice/info`).then((invoice) => invoice.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.invoices.info}`).then((invoice) => invoice.data).catch((error) => error)
 }
 
 export const invoiceInfo = createAsyncThunk('appInvoice/invoiceInfo', async (payload) => {
@@ -149,7 +154,7 @@ export const invoiceInfo = createAsyncThunk('appInvoice/invoiceInfo', async (pay
 })
 
 async function getInvoiceItemRequest(id) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/invoice/${id}`).then((invoice) => invoice.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.invoices.view}/${id}`).then((invoice) => invoice.data).catch((error) => error)
 }
 
 export const getInvoiceItem = createAsyncThunk('appInvoice/getInvoiceItem', async (id) => {
@@ -185,7 +190,7 @@ export const getInvoiceItem = createAsyncThunk('appInvoice/getInvoiceItem', asyn
 })
 
 async function saveInvoiceItemRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/invoice/save`, payload).then((invoice) => invoice.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.invoices.save}`, payload).then((invoice) => invoice.data).catch((error) => error)
 }
 
 export const saveInvoiceItem = createAsyncThunk('appInvoice/saveInvoiceItem', async (payload) => {
@@ -218,7 +223,7 @@ export const saveInvoiceItem = createAsyncThunk('appInvoice/saveInvoiceItem', as
 })
 
 async function updateInvoiceItemRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/invoice/update`, payload).then((invoice) => invoice.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.invoices.update}`, payload).then((invoice) => invoice.data).catch((error) => error)
 }
 
 export const updateInvoiceItem = createAsyncThunk('appInvoice/updateInvoiceItem', async (payload) => {
@@ -248,7 +253,7 @@ export const updateInvoiceItem = createAsyncThunk('appInvoice/updateInvoiceItem'
 })
 
 async function sendInvoiceItemRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/invoice/send`, payload).then((invoice) => invoice.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.invoices.send}`, payload).then((invoice) => invoice.data).catch((error) => error)
 }
 
 export const sendInvoiceItem = createAsyncThunk('appInvoice/sendInvoiceItem', async (payload) => {
@@ -278,7 +283,7 @@ export const sendInvoiceItem = createAsyncThunk('appInvoice/sendInvoiceItem', as
 })
 
 async function payInvoiceItemRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/invoice/pay`, payload).then((invoice) => invoice.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.invoices.pay}`, payload).then((invoice) => invoice.data).catch((error) => error)
 }
 
 export const payInvoiceItem = createAsyncThunk('appInvoice/payInvoiceItem', async (payload, { dispatch, getState }) => {

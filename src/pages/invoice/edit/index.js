@@ -56,7 +56,7 @@ import {
 } from '@utils'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-spinner'
+import Spinner from '@components/spinner/Simple-grow-spinner'
 import Notification from '@components/toast/notification'
 
 // Constant
@@ -76,15 +76,16 @@ const InvoiceEdit = () => {
   // ** HooksVars
   const { id } = useParams()
   const { t } = useTranslation()
+  const navigate = useNavigate()
+
+  // ** Store vars
+  const dispatch = useDispatch()
+  const store = useSelector((state) => state.invoice)
 
   // ** States
   const [loadFirst, setLoadFirst] = useState(true)
   const [caseOptions, setCaseOptions] = useState([])
   const [customerOptions, setCustomerOptions] = useState([])
-
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const store = useSelector((state) => state.invoice)
 
   /* Status options */
   const status = [

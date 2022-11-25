@@ -57,7 +57,7 @@ import {
 } from '@utils'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-spinner'
+import Spinner from '@components/spinner/Simple-grow-spinner'
 import Notification from '@components/toast/notification'
 
 // Constant

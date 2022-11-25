@@ -8,11 +8,16 @@ import {
   contactItem
 } from '@constant/reduxConstant'
 
+// ** Api endpoints
+import {
+  API_ENDPOINTS
+} from '@src/utility/ApiEndPoints'
+
 // ** Axios Imports
 import axios from 'axios'
 
 async function getContactListRequest(params) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/get_contact_list`, { params }).then((contact) => contact.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.contacts.list}`, { params }).then((contact) => contact.data).catch((error) => error)
 }
 
 export const getContactList = createAsyncThunk('appContact/getContactList', async (params) => {
@@ -57,7 +62,7 @@ export const getContactList = createAsyncThunk('appContact/getContactList', asyn
 })
 
 async function getContactViewRequest(id) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/contact/view/${id}`).then((contact) => contact.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.contacts.view}/${id}`).then((contact) => contact.data).catch((error) => error)
 }
 
 export const getContactView = createAsyncThunk('appContact/getContactView', async (id) => {
@@ -102,7 +107,7 @@ export const getContactView = createAsyncThunk('appContact/getContactView', asyn
 })
 
 async function addContactRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/add_contact`, payload).then((contact) => contact.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.contacts.create}`, payload).then((contact) => contact.data).catch((error) => error)
 }
 
 export const addContact = createAsyncThunk('appContact/addContact', async (payload, { dispatch, getState }) => {
@@ -133,7 +138,7 @@ export const addContact = createAsyncThunk('appContact/addContact', async (paylo
 })
 
 async function addContactNoteRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/contact/add_note`, payload).then((contact) => contact.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.contacts.createNote}`, payload).then((contact) => contact.data).catch((error) => error)
 }
 
 export const addContactNote = createAsyncThunk('appContact/addContactNote', async (payload, { dispatch }) => {
@@ -164,7 +169,7 @@ export const addContactNote = createAsyncThunk('appContact/addContactNote', asyn
 })
 
 async function convertContactToCaseRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/convert_contact_to_case`, payload).then((contact) => contact.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.contacts.convertToCase}`, payload).then((contact) => contact.data).catch((error) => error)
 }
 
 export const convertContactToCase = createAsyncThunk('appContact/convertContactToCase', async (payload, { dispatch }) => {
@@ -195,7 +200,7 @@ export const convertContactToCase = createAsyncThunk('appContact/convertContactT
 })
 
 async function deleteContactRequest(id) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/contact/delete/${id}`).then((contact) => contact.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.contacts.delete}/${id}`).then((contact) => contact.data).catch((error) => error)
 }
 
 export const deleteContact = createAsyncThunk('appContact/deleteContact', async (id, { dispatch, getState }) => {

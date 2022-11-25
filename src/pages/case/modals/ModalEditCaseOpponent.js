@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 // ** Store & Actions
 import {
   createFighter,
+  updateCaseLoader,
   clearCaseMessage
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -23,10 +24,16 @@ import {
   Input,
   Button,
   ModalBody,
-  ModalHeader
+  ModalHeader,
+  FormFeedback
 } from 'reactstrap'
 
 import { useForm, Controller } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+
+// ** Custom Components
+import Spinner from '@components/spinner/Simple-grow-spinner'
 
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
@@ -44,47 +51,23 @@ const ModalEditCaseOpponent = ({
   const dispatch = useDispatch()
   const store = useSelector((state) => state.cases)
 
-  const ValidationSchema = {
-    name: {
-      placeholder: "Name",
-      required: "Name is required!"
-    },
-    lastName: {
-      placeholder: "Last Name",
-      required: "Last Name is required!"
-    },
-    contact: {
-      placeholder: "+4915901766553",
-      required: `${t("Telephone")} is required!`,
-      minLength: {
-        value: 10,
-        message: `${t("Telephone")} Must be 10 digit!`
-      }
-    },
-    email: {
-      placeholder: "john.doe@example.com",
-      required: "Email is required!",
-      pattern: {
-        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-        message: "Invalid email address!"
-      }
-    },
-    address: {
-      placeholder: "Address",
-      required: false
-    },
-    city: {
-      placeholder: `${t("City")}`,
-      required: false
-    },
-    pincode: {
-      placeholder: "Postal code",
-      required: false
-    },
-    country: {
-      placeholder: "Country",
-      required: false
-    }
+  /* Yup validation schema */
+  const FighterSchema = yup.object({
+    name: yup.string().required('Name is required!'),
+    last_name: yup.string().required('Last Name is required!'),
+    email: yup.string().required('Email is required!').email('Invalid email address!'),
+    telefone: yup.string().required(`${t("Telephone")} is required!`).min(10, `${t("Telephone")} Must be 10 digit!`).max(10, `${t("Telephone")} Must be 10 digit!`)
+  }).required()
+
+  const PlaceholderSchema = {
+    name: "Name",
+    lastName: "Last Name",
+    contact: "+4915901766553",
+    email: "john.doe@example.com",
+    address: "Address",
+    city: `${t("City")}`,
+    pincode: "Postal code",
+    country: "Country"
   }
 
   const {
@@ -92,11 +75,25 @@ const ModalEditCaseOpponent = ({
     control,
     handleSubmit,
     formState: { errors }
-  } = useForm({ defaultValues: fighterData, mode: 'all' })
+  } = useForm({
+    mode: 'all',
+    defaultValues: fighterData,
+    resolver: yupResolver(FighterSchema)
+  })
 
   const handleReset = () => {
     reset(fighterData)
     toggleModal()
+  }
+
+  const handleModalOpened = () => {
+    const caseFighterData = { ...fighterData }
+    reset(caseFighterData)
+  }
+
+  // ** Set Modal fields
+  const handleModalClosed = () => {
+    // console.log("handleModalClosed >>> ")
   }
 
   useEffect(() => {
@@ -130,6 +127,7 @@ const ModalEditCaseOpponent = ({
 
       /* Calling api */
       if (opponentData && opponentData.CaseID) {
+        dispatch(updateCaseLoader(false))
         dispatch(createFighter(opponentData))
       }
       // console.log("onSubmit >>> ", opponentData)
@@ -137,151 +135,158 @@ const ModalEditCaseOpponent = ({
   }
 
   return (
-    <div className='disabled-backdrop-modal'>
+    <div className="disabled-backdrop-modal">
       <Modal
         isOpen={open}
-        toggle={handleReset}
-        className='modal-dialog-centered modal-lg'
         backdrop="static"
+        toggle={handleReset}
+        onOpened={handleModalOpened}
+        onClosed={handleModalClosed}
+        className="modal-dialog-centered modal-lg"
       >
+        {!store.loading ? (
+          <Spinner
+            className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
+          />
+        ) : null}
+
         <ModalHeader toggle={handleReset}>{t("Opponent")}</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <Row>
-              <Col md={6} sm={12} className='mb-1'>
-                <Label className='form-label' for='name'>
+              <Col md={6} sm={12} className="mb-1">
+                <Label className="form-label" for="name">
                   Name
                 </Label>
                 <Controller
                   defaultValue=""
-                  id='name'
-                  name='name'
+                  id="name"
+                  name="name"
                   control={control}
-                  rules={ValidationSchema.name}
-                  render={({ field }) => <Input {...field} placeholder={ValidationSchema && ValidationSchema.name.placeholder} invalid={errors.name && true} />}
+                  render={({ field }) => <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.name} invalid={errors.name && true} />}
                 />
-                <div className="invalid-feedback">{errors.name?.message}</div>
+                <FormFeedback>{errors.name?.message}</FormFeedback>
               </Col>
 
-              <Col md={6} sm={12} className='mb-1'>
-                <Label className='form-label' for='last_name'>
+              <Col md={6} sm={12} className="mb-1">
+                <Label className="form-label" for="last_name">
                   Surname
                 </Label>
                 <Controller
                   defaultValue=""
-                  id='last_name'
-                  name='last_name'
+                  id="last_name"
+                  name="last_name"
                   control={control}
-                  rules={ValidationSchema.lastName}
-                  render={({ field }) => <Input {...field} placeholder={ValidationSchema && ValidationSchema.lastName.placeholder} invalid={errors.last_name && true} />}
+                  render={({ field }) => <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.lastName} invalid={errors.last_name && true} />}
                 />
-                <div className="invalid-feedback">{errors.last_name?.message}</div>
+                <FormFeedback>{errors.last_name?.message}</FormFeedback>
               </Col>
 
-              <Col md={6} sm={12} className='mb-1'>
-                <Label className='form-label' for='email'>
+              <Col md={6} sm={12} className="mb-1">
+                <Label className="form-label" for="email">
                   {t("Email")}
                 </Label>
                 <Controller
                   defaultValue=""
-                  name='email'
-                  id='email'
+                  name="email"
+                  id="email"
                   control={control}
-                  rules={ValidationSchema.email}
                   render={({ field }) => (
-                    <Input {...field} type='email' placeholder={ValidationSchema.email && ValidationSchema.email.placeholder} invalid={errors.email && true} />
+                    <Input {...field} type="email" placeholder={PlaceholderSchema && PlaceholderSchema.email} invalid={errors.email && true} />
                   )}
                 />
-                <div className="invalid-feedback">{errors.email?.message}</div>
+                <FormFeedback>{errors.email?.message}</FormFeedback>
               </Col>
 
-              <Col md={6} sm={12} className='mb-1'>
-                <Label className='form-label' for='telefone'>
+              <Col md={6} sm={12} className="mb-1">
+                <Label className="form-label" for="telefone">
                   {t("Telephone")}
                 </Label>
                 <Controller
                   defaultValue=""
-                  id='telefone'
-                  name='telefone'
+                  id="telefone"
+                  name="telefone"
                   control={control}
-                  rules={ValidationSchema.contact}
-                  render={({ field }) => <Input {...field} type="number" placeholder={ValidationSchema.contact && ValidationSchema.contact.placeholder} invalid={errors.telefone && true} />}
+                  render={({ field }) => <Input {...field} type="number" placeholder={PlaceholderSchema && PlaceholderSchema.contact} invalid={errors.telefone && true} />}
                 />
-                <div className="invalid-feedback">{errors.telefone?.message}</div>
+                <FormFeedback>{errors.telefone?.message}</FormFeedback>
               </Col>
 
-              <Col md={6} sm={12} className='mb-1'>
-                <Label className='form-label' for='address'>
+              <Col md={6} sm={12} className="mb-1">
+                <Label className="form-label" for="address">
                   Address
                 </Label>
                 <Controller
                   defaultValue=""
-                  id='address'
-                  name='address'
+                  id="address"
+                  name="address"
                   control={control}
-                  rules={ValidationSchema.address}
-                  render={({ field }) => <Input {...field} placeholder={ValidationSchema.address && ValidationSchema.address.placeholder} invalid={errors.address && true} />}
+                  render={({ field }) => <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.address} invalid={errors.address && true} />}
                 />
-                <div className="invalid-feedback">{errors.address?.message}</div>
+                <FormFeedback>{errors.address?.message}</FormFeedback>
               </Col>
 
-              <Col md={6} sm={12} className='mb-1'>
-                <Label className='form-label' for='city'>
+              <Col md={6} sm={12} className="mb-1">
+                <Label className="form-label" for="city">
                   {t("City")}
                 </Label>
                 <Controller
                   defaultValue=""
-                  id='city'
-                  name='city'
+                  id="city"
+                  name="city"
                   control={control}
-                  rules={ValidationSchema.city}
-                  render={({ field }) => <Input {...field} placeholder={ValidationSchema.city && ValidationSchema.city.placeholder} invalid={errors.city && true} />}
+                  render={({ field }) => <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.city} invalid={errors.city && true} />}
                 />
-                <div className="invalid-feedback">{errors.city?.message}</div>
+                <FormFeedback>{errors.city?.message}</FormFeedback>
               </Col>
 
-              <Col md={6} sm={12} className='mb-1'>
-                <Label className='form-label' for='zip_code'>
+              <Col md={6} sm={12} className="mb-1">
+                <Label className="form-label" for="zip_code">
                   Postal code
                 </Label>
                 <Controller
                   defaultValue=""
-                  id='zip_code'
-                  name='zip_code'
+                  id="zip_code"
+                  name="zip_code"
                   control={control}
-                  rules={ValidationSchema.pincode}
-                  render={({ field }) => <Input {...field} placeholder={ValidationSchema.pincode && ValidationSchema.pincode.placeholder} invalid={errors.zip_code && true} />}
+                  render={({ field }) => <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.pincode} invalid={errors.zip_code && true} />}
                 />
-                <div className="invalid-feedback">{errors.zip_code?.message}</div>
+                <FormFeedback>{errors.zip_code?.message}</FormFeedback>
               </Col>
 
-              <Col md={6} sm={12} className='mb-1'>
-                <Label className='form-label' for='country'>
+              <Col md={6} sm={12} className="mb-1">
+                <Label className="form-label" for="country">
                   {t("Country")}
                 </Label>
                 <Controller
                   defaultValue=""
-                  name='country'
-                  id='country'
+                  name="country"
+                  id="country"
                   control={control}
-                  rules={ValidationSchema.country}
                   render={({ field }) => (
-                    <Input {...field} placeholder={ValidationSchema.country && ValidationSchema.country.placeholder} invalid={errors.country && true} />
+                    <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.country} invalid={errors.country && true} />
                   )}
                 />
-                <div className="invalid-feedback">{errors.country?.message}</div>
+                <FormFeedback>{errors.country?.message}</FormFeedback>
               </Col>
             </Row>
 
-            <div className='d-flex flex-wrap mb-2 mt-2'>
+            <div className="d-flex flex-wrap mb-2 mt-2">
               <Button
-                type='submit'
-                className='me-1'
-                color='primary'
+                type="submit"
+                color="primary"
+                className="me-1"
+                disabled={!store.loading}
               >
                 {t("Submit")}
               </Button>
-              <Button color='secondary' outline onClick={handleReset}>
+
+              <Button
+                outline
+                color="secondary"
+                disabled={!store.loading}
+                onClick={handleReset}
+              >
                 {t("Cancel")}
               </Button>
             </div>

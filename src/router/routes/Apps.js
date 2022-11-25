@@ -7,7 +7,7 @@ import {
 } from '@constant/defaultValues'
 
 // Contact
-const ContactList = lazy(() => import('@src/pages/contact'))
+const ContactList = lazy(() => import('@src/pages/contact/list'))
 const ContactView = lazy(() => import('@src/pages/contact/view'))
 
 // User
@@ -24,7 +24,7 @@ const EmailView = lazy(() => import('@src/pages/email/view'))
 const Chat = lazy(() => import('@src/pages/chat'))
 
 // Case
-const CaseList = lazy(() => import('@src/pages/case'))
+const CaseList = lazy(() => import('@src/pages/case/list'))
 const CaseView = lazy(() => import('@src/pages/case/view'))
 
 // Todo
@@ -37,16 +37,16 @@ const Calendar = lazy(() => import('@src/pages/calendar'))
 const Timeline = lazy(() => import('@src/pages/timeline'))
 
 // Letter
-const Letter = lazy(() => import('@src/pages/letter'))
+const LetterList = lazy(() => import('@src/pages/letter/list'))
 
 // Invoice
-const Invoice = lazy(() => import('@src/pages/invoice'))
+const InvoiceList = lazy(() => import('@src/pages/invoice/list'))
 const InvoiceAdd = lazy(() => import('@src/pages/invoice/add'))
 const InvoiceView = lazy(() => import('@src/pages/invoice/view'))
 const InvoiceEdit = lazy(() => import('@src/pages/invoice/edit'))
 
 // EmailTemplate
-const EmailTemplate = lazy(() => import('@src/pages/emailTemplate'))
+const EmailTemplateList = lazy(() => import('@src/pages/emailTemplate/list'))
 const EmailTemplateAdd = lazy(() => import('@src/pages/emailTemplate/add'))
 const EmailTemplateEdit = lazy(() => import('@src/pages/emailTemplate/edit'))
 const EmailTemplateView = lazy(() => import('@src/pages/emailTemplate/view'))
@@ -161,12 +161,12 @@ const AppRoutes = [
   /* Letter */
   {
     path: `${adminRoot}/letter`,
-    element: <Letter />
+    element: <LetterList />
   },
   /* Invoice */
   {
     path: `${adminRoot}/invoice`,
-    element: <Invoice />
+    element: <InvoiceList />
   },
   {
     path: `${adminRoot}/invoice/add`,
@@ -183,7 +183,7 @@ const AppRoutes = [
   /* EmailTemplate */
   {
     path: `${adminRoot}/email-template`,
-    element: <EmailTemplate />
+    element: <EmailTemplateList />
   },
   {
     path: `${adminRoot}/email-template/add`,

@@ -11,6 +11,7 @@ import {
   createCaseAttachment,
   deleteCaseAttachment,
   createNoteCaseRecord,
+  updateCaseLoader,
   clearCaseMessage
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -32,11 +33,15 @@ import {
   Modal,
   Button,
   ModalBody,
+  InputGroup,
   ModalHeader,
-  InputGroup
+  FormFeedback
 } from 'reactstrap'
 
 import { useForm, Controller } from 'react-hook-form'
+
+// ** Custom Components
+import Spinner from '@components/spinner/Simple-grow-spinner'
 
 // Constant
 import {
@@ -79,7 +84,10 @@ const ModalCaseAddNoteFile = ({
     control,
     handleSubmit,
     formState: { errors }
-  } = useForm({ defaultValues: recordRowData, mode: 'all' })
+  } = useForm({
+    mode: 'all',
+    defaultValues: recordRowData
+  })
 
   const handleReset = () => {
     reset(recordRowData)
@@ -162,6 +170,7 @@ const ModalCaseAddNoteFile = ({
           }
 
           if (fileFlag) {
+            dispatch(updateCaseLoader(false))
             dispatch(createCaseAttachment({ attachment: fileArray, type: 'case_record', ids: ids }))
           }
         }
@@ -209,6 +218,7 @@ const ModalCaseAddNoteFile = ({
       }
 
       if (recordData && recordData.CaseID) {
+        dispatch(updateCaseLoader(false))
         dispatch(createNoteCaseRecord(recordData))
       }
       // console.log("onSubmit File >>> ", recordData)
@@ -219,10 +229,16 @@ const ModalCaseAddNoteFile = ({
     <div className='disabled-backdrop-modal'>
       <Modal
         isOpen={open}
+        backdrop="static"
         toggle={handleReset}
         className='modal-dialog-centered modal-lg'
-        backdrop="static"
       >
+        {!store.loading ? (
+          <Spinner
+            className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
+          />
+        ) : null}
+
         <ModalHeader toggle={handleReset}>{t("Add")} {t("Record")}</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
@@ -239,7 +255,7 @@ const ModalCaseAddNoteFile = ({
                   rules={ValidationSchema.subject}
                   render={({ field }) => <Input {...field} placeholder={ValidationSchema.subject && ValidationSchema.subject.placeholder} invalid={errors.Subject && true} />}
                 />
-                <div className="invalid-feedback">{errors.Subject?.message}</div>
+                <FormFeedback>{errors.Subject?.message}</FormFeedback>
               </div>
 
               <div className='mb-1'>
@@ -254,7 +270,7 @@ const ModalCaseAddNoteFile = ({
                   rules={ValidationSchema.content}
                   render={({ field }) => <Input {...field} type="textarea" placeholder={ValidationSchema.content && ValidationSchema.content.placeholder} invalid={errors.Content && true} />}
                 />
-                <div className="invalid-feedback">{errors.Content?.message}</div>
+                <FormFeedback>{errors.Content?.message}</FormFeedback>
               </div>
 
               <div className='mb-1'>
@@ -301,7 +317,11 @@ const ModalCaseAddNoteFile = ({
 
             <Row className='mb-2 mt-2'>
               <div className="d-flex justify-content-end">
-                <Button type='submit' color='primary'>
+                <Button
+                  type='submit'
+                  color='primary'
+                  disabled={!store.loading}
+                >
                   {t("Add")}
                 </Button>
               </div>

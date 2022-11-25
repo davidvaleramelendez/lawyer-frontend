@@ -54,6 +54,7 @@ const Tasks = (props) => {
     deleteTodoItem,
     restoreTodoItem,
     handleTodoLists,
+    placeholderTasks,
     completeTodoItem,
     handleMainSidebar,
     setOpenTaskSidebar
@@ -158,9 +159,46 @@ const Tasks = (props) => {
   }
 
   const renderTasks = () => {
+    if (!store.loading) {
+      return (
+        <div className="list-group todo-task-list-wrapper">
+          <ul className="todo-task-list media-list">
+            {Array.from(Array(placeholderTasks).keys(), (row, index) => (
+              <li
+                key={`placeholder-todo-${index}`}
+                className="todo-item placeholder-glow"
+              >
+                <div className="todo-title-wrapper w-100">
+                  <div className="todo-title-area w-75">
+                    <MoreVertical className="drag-icon" />
+                    <div className="form-check placeholder" />
+
+                    <span className="todo-title placeholder w-75" />
+                  </div>
+
+                  <div className="todo-item-action mt-lg-0 mt-50 w-25">
+                    <div className="badge-wrapper me-1 placeholder w-25" />
+
+                    <small className="text-nowrap text-muted me-1 placeholder w-25" />
+
+                    <Avatar
+                      imgClassName="placeholder"
+                      img={blankAvatar}
+                      imgHeight='32'
+                      imgWidth='32'
+                    />
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+
     return (
       <PerfectScrollbar
-        className='list-group todo-task-list-wrapper'
+        className="list-group todo-task-list-wrapper"
         options={{ wheelPropagation: false }}
         containerRef={ref => {
           if (ref) {
@@ -175,10 +213,10 @@ const Tasks = (props) => {
       >
         {taskItems.length ? (
           <ReactSortable
-            tag='ul'
+            tag="ul"
             list={taskItems}
-            handle='.drag-icon'
-            className='todo-task-list media-list'
+            handle=".drag-icon"
+            className="todo-task-list media-list"
             setList={(newState) => dispatch(reOrderTasks(newState))}
           >
             {taskItems.map((item, index) => {
@@ -186,18 +224,18 @@ const Tasks = (props) => {
                 <li
                   key={`${item.id}-${index}`}
                   onClick={() => handleTaskClick(item)}
-                  className={classnames('todo-item', {
+                  className={classnames("todo-item", {
                     completed: item.is_completed
                   })}
                 >
-                  <div className='todo-title-wrapper'>
-                    <div className='todo-title-area'>
-                      <MoreVertical className='drag-icon' />
-                      {paramsURL && paramsURL.filter === 'deleted' ? (
+                  <div className="todo-title-wrapper">
+                    <div className="todo-title-area">
+                      <MoreVertical className="drag-icon" />
+                      {paramsURL && paramsURL.filter === "deleted" ? (
                         <div className="trash-action">
                           <RefreshCw
                             size={16}
-                            className='cursor-pointer mt-25 ms-1 me-1'
+                            className="cursor-pointer mt-25 ms-1 me-1"
                             onClick={(event) => {
                               event.stopPropagation()
                               handleRestoreTask(item.id)
@@ -206,7 +244,7 @@ const Tasks = (props) => {
 
                           <Trash
                             size={16}
-                            className='cursor-pointer mt-25'
+                            className="cursor-pointer mt-25"
                             onClick={(event) => {
                               event.stopPropagation()
                               handleDeleteTask(item.id)
@@ -214,9 +252,9 @@ const Tasks = (props) => {
                           />
                         </div>
                       ) : (
-                        <div className='form-check'>
+                        <div className="form-check">
                           <Input
-                            type='checkbox'
+                            type="checkbox"
                             id={`${index}_${item.id}`}
                             checked={item.is_completed}
                             onClick={(event) => event.stopPropagation()}
@@ -227,17 +265,17 @@ const Tasks = (props) => {
                           />
                         </div>
                       )}
-                      <span className='todo-title'>{item.title}</span>
+                      <span className="todo-title">{item.title}</span>
                     </div>
-                    <div className='todo-item-action mt-lg-0 mt-50'>
+                    <div className="todo-item-action mt-lg-0 mt-50">
                       {item && item.tag ? (
-                        <div className='badge-wrapper me-1'>{renderTags(item.tag.split(','))}</div>
+                        <div className="badge-wrapper me-1">{renderTags(item.tag.split(","))}</div>
                       ) : null}
 
                       {item && item.due_date ? (
-                        <small className='text-nowrap text-muted me-1'>
-                          {new Date(item.due_date).toLocaleString('default', { month: 'short' })}{' '}
-                          {new Date(item.due_date).getDate().toString().padStart(2, '0')}
+                        <small className="text-nowrap text-muted me-1">
+                          {new Date(item.due_date).toLocaleString("default", { month: "short" })}{" "}
+                          {new Date(item.due_date).getDate().toString().padStart(2, "0")}
                         </small>
                       ) : null}
                       {item && renderAssignee(item)}
@@ -248,7 +286,7 @@ const Tasks = (props) => {
             })}
           </ReactSortable>
         ) : (
-          <div className='no-results show'>
+          <div className="no-results show">
             <h5>No Items Found</h5>
           </div>
         )}
@@ -276,46 +314,46 @@ const Tasks = (props) => {
   }
 
   return (
-    <div className='todo-app-list'>
-      <div className='app-fixed-search d-flex align-items-center'>
-        <div className='sidebar-toggle cursor-pointer d-block d-lg-none ms-1' onClick={handleMainSidebar}>
+    <div className="todo-app-list">
+      <div className="app-fixed-search d-flex align-items-center">
+        <div className="sidebar-toggle cursor-pointer d-block d-lg-none ms-1" onClick={handleMainSidebar}>
           <Menu size={21} />
         </div>
 
-        <div className='d-flex align-content-center justify-content-between w-100'>
-          <InputGroup className='input-group-merge'>
+        <div className="d-flex align-content-center justify-content-between w-100">
+          <InputGroup className="input-group-merge">
             <InputGroupText>
-              <Search className='text-muted' size={14} />
+              <Search className="text-muted" size={14} />
             </InputGroupText>
 
-            <Input id="search-todo" placeholder='Search task' value={searchInput} onChange={(event) => handleSearchFilter(event.target.value)} />
+            <Input id="search-todo" placeholder="Search task" value={searchInput} onChange={(event) => handleSearchFilter(event.target.value)} />
 
             <Input id="date-todo" type="date" placeholder="YYYY-MM-DD" value={dateInput} onChange={(event) => handleDateFilter(event.target.value)} />
           </InputGroup>
         </div>
 
         <UncontrolledDropdown>
-          <DropdownToggle className='hide-arrow me-1' tag='a' href='/' onClick={(event) => event.preventDefault()}>
-            <MoreVertical className='text-body' size={16} />
+          <DropdownToggle className="hide-arrow me-1" tag="a" href="/" onClick={(event) => event.preventDefault()}>
+            <MoreVertical className="text-body" size={16} />
           </DropdownToggle>
           <DropdownMenu end>
-            <DropdownItem tag={Link} to='/' onClick={(event) => handleSort(event, 'title-asc')}>
+            <DropdownItem tag={Link} to="/" onClick={(event) => handleSort(event, "title-asc")}>
               Sort A-Z
             </DropdownItem>
 
-            <DropdownItem tag={Link} to='/' onClick={(event) => handleSort((event), 'title-desc')}>
+            <DropdownItem tag={Link} to="/" onClick={(event) => handleSort((event), "title-desc")}>
               Sort Z-A
             </DropdownItem>
 
-            <DropdownItem tag={Link} to='/' onClick={(event) => handleSort(event, 'Assign-asc')}>
+            <DropdownItem tag={Link} to="/" onClick={(event) => handleSort(event, "Assign-asc")}>
               Sort Assignee
             </DropdownItem>
 
-            <DropdownItem tag={Link} to='/' onClick={(event) => handleSort(event, 'due_date-desc')}>
+            <DropdownItem tag={Link} to="/" onClick={(event) => handleSort(event, "due_date-desc")}>
               Sort Due Date
             </DropdownItem>
 
-            <DropdownItem tag={Link} to='/' onClick={(event) => handleSort(event, '')}>
+            <DropdownItem tag={Link} to="/" onClick={(event) => handleSort(event, "")}>
               Reset Sort
             </DropdownItem>
           </DropdownMenu>

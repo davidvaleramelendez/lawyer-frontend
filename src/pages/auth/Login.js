@@ -20,7 +20,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { AbilityContext } from '@src/utility/context/Can'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-spinner'
+import Spinner from '@components/spinner/Simple-grow-spinner'
 import Notification from '@components/toast/notification'
 import InputPasswordToggle from '@components/input-password-toggle'
 
@@ -42,7 +42,8 @@ import {
   Label,
   Button,
   CardText,
-  CardTitle
+  CardTitle,
+  FormFeedback
 } from 'reactstrap'
 
 // ** Styles
@@ -56,13 +57,13 @@ const defaultValues = {
 const LoginApp = () => {
   // ** Hooks
   const { skin } = useSkin()
-  const dispatch = useDispatch()
+  const { t } = useTranslation()
   const navigate = useNavigate()
-  const store = useSelector((state) => state.auth)
   const ability = useContext(AbilityContext)
 
-  // ** Hooks for tanslation
-  const { t } = useTranslation()
+  // ** Store vars
+  const dispatch = useDispatch()
+  const store = useSelector((state) => state.auth)
 
   const {
     control,
@@ -76,7 +77,6 @@ const LoginApp = () => {
   useEffect(() => {
     /* if user logged then navigate */
     if (isUserLoggedIn() !== null) {
-      // const user = getCurrentUser()
       navigate(`/dashboard`)
     }
 
@@ -170,7 +170,7 @@ const LoginApp = () => {
                     />
                   )}
                 />
-                <div className="invalid-feedback">{errors.email?.message}</div>
+                <FormFeedback>{errors.email?.message}</FormFeedback>
               </div>
 
               <div className='mb-1'>
@@ -201,7 +201,7 @@ const LoginApp = () => {
                     />
                   )}
                 />
-                <div className="invalid-feedback">{errors.password?.message}</div>
+                <FormFeedback>{errors.password?.message}</FormFeedback>
               </div>
 
               <div className='form-check mb-1'>

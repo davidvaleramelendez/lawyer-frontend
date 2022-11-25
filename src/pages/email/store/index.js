@@ -9,11 +9,16 @@ import {
   emailsMeta
 } from '@constant/reduxConstant'
 
+// ** Api endpoints
+import {
+  API_ENDPOINTS
+} from '@src/utility/ApiEndPoints'
+
 // ** Axios Imports
 import axios from 'axios'
 
 async function getMailsRequest(folder, params) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/email/imap/${folder}`, { params }).then((email) => email.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.emails.imapList}/${folder}`, { params }).then((email) => email.data).catch((error) => error)
 }
 
 export const getMails = createAsyncThunk('appEmail/getMails', async (params) => {
@@ -61,7 +66,7 @@ export const getMails = createAsyncThunk('appEmail/getMails', async (params) => 
 })
 
 async function getMailDetailRequest(id, params) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/email/details-imap/${id}`, { params }).then((email) => email.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.emails.imapDetail}/${id}`, { params }).then((email) => email.data).catch((error) => error)
 }
 
 export const getMailDetail = createAsyncThunk('appEmail/getMailDetail', async (params, { dispatch, getState }) => {
@@ -98,7 +103,7 @@ export const getMailDetail = createAsyncThunk('appEmail/getMailDetail', async (p
 })
 
 async function sendEmailRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/email/send_mail`, payload).then((email) => email.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.emails.send}`, payload).then((email) => email.data).catch((error) => error)
 }
 
 export const sendEmail = createAsyncThunk('appContact/sendEmail', async (payload, { dispatch, getState }) => {
@@ -129,7 +134,7 @@ export const sendEmail = createAsyncThunk('appContact/sendEmail', async (payload
 })
 
 async function markEmailTrashRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/email/mark_trash`, payload).then((email) => email.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.emails.markTrash}`, payload).then((email) => email.data).catch((error) => error)
 }
 
 export const markEmailTrash = createAsyncThunk('appContact/markEmailTrash', async (payload, { dispatch, getState }) => {
@@ -160,7 +165,7 @@ export const markEmailTrash = createAsyncThunk('appContact/markEmailTrash', asyn
 })
 
 async function markEmailDeleteRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/email/mark_delete`, payload).then((email) => email.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.emails.markDelete}`, payload).then((email) => email.data).catch((error) => error)
 }
 
 export const markEmailDelete = createAsyncThunk('appContact/markEmailDelete', async (payload, { dispatch, getState }) => {
@@ -191,7 +196,7 @@ export const markEmailDelete = createAsyncThunk('appContact/markEmailDelete', as
 })
 
 async function markEmailRestoreRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/email/mark_restore`, payload).then((email) => email.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.emails.markRestore}`, payload).then((email) => email.data).catch((error) => error)
 }
 
 export const markEmailRestore = createAsyncThunk('appContact/markEmailRestore', async (payload, { dispatch, getState }) => {
@@ -222,7 +227,7 @@ export const markEmailRestore = createAsyncThunk('appContact/markEmailRestore', 
 })
 
 async function markEmailImportantRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/email/mark_important`, payload).then((email) => email.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.emails.markImportant}`, payload).then((email) => email.data).catch((error) => error)
 }
 
 export const markEmailImportant = createAsyncThunk('appContact/markEmailImportant', async (payload, { dispatch, getState }) => {
@@ -253,7 +258,7 @@ export const markEmailImportant = createAsyncThunk('appContact/markEmailImportan
 })
 
 async function createEmailReplyRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/email/reply`, payload).then((email) => email.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.emails.createReply}`, payload).then((email) => email.data).catch((error) => error)
 }
 
 export const createEmailReply = createAsyncThunk('appContact/createEmailReply', async (payload, { dispatch }) => {
@@ -287,7 +292,7 @@ export const createEmailReply = createAsyncThunk('appContact/createEmailReply', 
 })
 
 async function getMailItemRequest(id) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/email/${id}`).then((email) => email.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.emails.view}/${id}`).then((email) => email.data).catch((error) => error)
 }
 
 export const getMailItem = createAsyncThunk('appEmail/getMailItem', async (id) => {
@@ -321,7 +326,7 @@ export const getMailItem = createAsyncThunk('appEmail/getMailItem', async (id) =
 
 /* Mail attachment */
 async function createEmailAttachmentRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/attachment/create`, payload).then((email) => email.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.attachments.create}`, payload).then((email) => email.data).catch((error) => error)
 }
 
 export const createEmailAttachment = createAsyncThunk('appContact/createEmailAttachment', async (payload) => {
@@ -354,7 +359,7 @@ export const createEmailAttachment = createAsyncThunk('appContact/createEmailAtt
 })
 
 async function deleteEmailAttachmentRequest(id) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/attachment/delete/${id}`).then((email) => email.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.attachments.delete}/${id}`).then((email) => email.data).catch((error) => error)
 }
 
 export const deleteEmailAttachment = createAsyncThunk('appEmail/deleteEmailAttachment', async (params) => {

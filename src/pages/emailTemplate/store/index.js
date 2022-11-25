@@ -9,11 +9,16 @@ import {
   emailTemplateAttachmentItem
 } from '@constant/reduxConstant'
 
+// ** Api endpoints
+import {
+  API_ENDPOINTS
+} from '@src/utility/ApiEndPoints'
+
 // ** Axios Imports
 import axios from 'axios'
 
 async function getEmailTemplateListRequest(params) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/email-templates`, { params }).then((emailTemplate) => emailTemplate.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.emailTemplates.list}`, { params }).then((emailTemplate) => emailTemplate.data).catch((error) => error)
 }
 
 export const getEmailTemplateList = createAsyncThunk('appEmailTemplate/getEmailTemplateList', async (params) => {
@@ -55,7 +60,7 @@ export const getEmailTemplateList = createAsyncThunk('appEmailTemplate/getEmailT
 })
 
 async function createEmailTemplateRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/email-template/create`, payload).then((emailTemplate) => emailTemplate.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.emailTemplates.create}`, payload).then((emailTemplate) => emailTemplate.data).catch((error) => error)
 }
 
 export const createEmailTemplate = createAsyncThunk('appEmailTemplate/createEmailTemplate', async (payload) => {
@@ -85,7 +90,7 @@ export const createEmailTemplate = createAsyncThunk('appEmailTemplate/createEmai
 })
 
 async function getEmailTemplateRequest(id) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/email-template/${id}`).then((emailTemplate) => emailTemplate.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.emailTemplates.view}/${id}`).then((emailTemplate) => emailTemplate.data).catch((error) => error)
 }
 
 export const getEmailTemplate = createAsyncThunk('appEmailTemplate/getEmailTemplate', async (id) => {
@@ -121,7 +126,7 @@ export const getEmailTemplate = createAsyncThunk('appEmailTemplate/getEmailTempl
 })
 
 async function updateEmailTemplateRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/email-template/update`, payload).then((emailTemplate) => emailTemplate.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.emailTemplates.update}`, payload).then((emailTemplate) => emailTemplate.data).catch((error) => error)
 }
 
 export const updateEmailTemplate = createAsyncThunk('appEmailTemplate/updateEmailTemplate', async (payload) => {
@@ -151,7 +156,7 @@ export const updateEmailTemplate = createAsyncThunk('appEmailTemplate/updateEmai
 })
 
 async function deleteEmailTemplateRequest(id) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/email-template/delete/${id}`).then((emailTemplate) => emailTemplate.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.emailTemplates.delete}/${id}`).then((emailTemplate) => emailTemplate.data).catch((error) => error)
 }
 
 export const deleteEmailTemplate = createAsyncThunk('appEmailTemplate/deleteEmailTemplate', async (id, { dispatch, getState }) => {
@@ -182,7 +187,7 @@ export const deleteEmailTemplate = createAsyncThunk('appEmailTemplate/deleteEmai
 })
 
 async function viewEmailTemplateRequest(id) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/view-email-template/${id}`).then((emailTemplate) => emailTemplate.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.emailTemplates.viewTemplate}/${id}`).then((emailTemplate) => emailTemplate.data).catch((error) => error)
 }
 
 export const viewEmailTemplate = createAsyncThunk('appEmailTemplate/viewEmailTemplate', async (id) => {
@@ -219,7 +224,7 @@ export const viewEmailTemplate = createAsyncThunk('appEmailTemplate/viewEmailTem
 
 /* Email Template Attachment */
 async function getEmailTemplateAttachmentListRequest(params) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/email-template-attachments`, { params }).then((emailTemplate) => emailTemplate.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.emailTemplates.attachmentList}`, { params }).then((emailTemplate) => emailTemplate.data).catch((error) => error)
 }
 
 export const getEmailTemplateAttachmentList = createAsyncThunk('appEmailTemplate/getEmailTemplateAttachmentList', async (params) => {
@@ -258,7 +263,7 @@ export const getEmailTemplateAttachmentList = createAsyncThunk('appEmailTemplate
 })
 
 async function createEmailTemplateAttachmentRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/email-template-attachment/create`, payload).then((emailTemplate) => emailTemplate.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.emailTemplates.attachmentCreate}`, payload).then((emailTemplate) => emailTemplate.data).catch((error) => error)
 }
 
 export const createEmailTemplateAttachment = createAsyncThunk('appEmailTemplate/createEmailTemplateAttachment', async (payload) => {
@@ -288,7 +293,7 @@ export const createEmailTemplateAttachment = createAsyncThunk('appEmailTemplate/
 })
 
 async function getEmailTemplateAttachmentRequest(id) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/email-template-attachment/${id}`).then((emailTemplate) => emailTemplate.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.emailTemplates.attachmentView}/${id}`).then((emailTemplate) => emailTemplate.data).catch((error) => error)
 }
 
 export const getEmailTemplateAttachment = createAsyncThunk('appEmailTemplate/getEmailTemplateAttachment', async (id) => {
@@ -321,7 +326,7 @@ export const getEmailTemplateAttachment = createAsyncThunk('appEmailTemplate/get
 })
 
 async function updateEmailTemplateAttachmentRequest(payload) {
-  return axios.post(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/email-template-attachment/update`, payload).then((emailTemplate) => emailTemplate.data).catch((error) => error)
+  return axios.post(`${API_ENDPOINTS.emailTemplates.attachmentUpdate}`, payload).then((emailTemplate) => emailTemplate.data).catch((error) => error)
 }
 
 export const updateEmailTemplateAttachment = createAsyncThunk('appEmailTemplate/updateEmailTemplateAttachment', async (payload) => {
@@ -351,7 +356,7 @@ export const updateEmailTemplateAttachment = createAsyncThunk('appEmailTemplate/
 })
 
 async function deleteEmailTemplateAttachmentRequest(id) {
-  return axios.get(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/api/admin/email-template-attachment/delete/${id}`).then((emailTemplate) => emailTemplate.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.emailTemplates.attachmentDelete}/${id}`).then((emailTemplate) => emailTemplate.data).catch((error) => error)
 }
 
 export const deleteEmailTemplateAttachment = createAsyncThunk('appEmailTemplate/deleteEmailTemplateAttachment', async (id, { dispatch, getState }) => {

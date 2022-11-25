@@ -47,7 +47,7 @@ import withReactContent from 'sweetalert2-react-content'
 // ** Custom Components
 import Sidebar from './Sidebar'
 import Storages from './Storages'
-import Spinner from '@components/spinner/Simple-spinner'
+import Spinner from '@components/spinner/Simple-grow-spinner'
 import Notification from '@components/toast/notification'
 
 // Constant
@@ -67,6 +67,7 @@ import '@styles/base/pages/app-file-manager.scss'
 const CloudStorageApp = () => {
     // ** Hooks
     const { t } = useTranslation()
+    const navigate = useNavigate()
     const MySwal = withReactContent(Swal)
 
     // ** Vars
@@ -85,7 +86,7 @@ const CloudStorageApp = () => {
     // ** Function to handle Left sidebar & cloud sidebar
     const handleMainSidebar = () => setMainSidebar(!mainSidebar)
 
-    const navigate = useNavigate()
+    // ** Store vars
     const dispatch = useDispatch()
     const store = useSelector((state) => state.cloudStorage)
 

@@ -48,6 +48,9 @@ import {
   todoItem
 } from '@constant/reduxConstant'
 
+// ** Custom Components
+import Spinner from '@components/spinner/Simple-grow-spinner'
+
 // ** Styles Imports
 import '@styles/react/libs/editor/editor.scss'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
@@ -349,6 +352,12 @@ const TaskSidebar = (props) => {
       onClosed={handleSidebarClosed}
       modalClassName='modal-slide-in sidebar-todo-modal'
     >
+      {!store.loading ? (
+        <Spinner
+          className="d-flex justify-content-center position-absolute top-50 w-100 zindex-3"
+        />
+      ) : null}
+
       <Form id='form-modal-todo' className='todo-modal' onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <ModalHeader
           store={store}

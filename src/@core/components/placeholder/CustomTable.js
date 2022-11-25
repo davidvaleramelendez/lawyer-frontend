@@ -38,7 +38,7 @@ const CustomTable = ({
                     <tbody
                         className={`${bodyClassName}`}
                     >
-                        {Array.from(Array(bodyRows), (row, index) => (
+                        {Array.from(Array(bodyRows).keys(), (row, index) => (
                             <tr
                                 key={`place-holder-body-${index}`}
                                 style={

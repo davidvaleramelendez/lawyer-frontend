@@ -26,6 +26,9 @@ import {
   recordItem
 } from '@constant/reduxConstant'
 
+// ** Custom Components
+import Spinner from '@components/spinner/Simple-grow-spinner'
+
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
@@ -57,10 +60,16 @@ const ModalCaseRecordDetail = ({
     <div className='disabled-backdrop-modal'>
       <Modal
         isOpen={open}
+        backdrop="static"
         toggle={handleReset}
         className='modal-dialog-centered modal-lg'
-        backdrop="static"
       >
+        {!store.loading ? (
+          <Spinner
+            className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
+          />
+        ) : null}
+
         <ModalHeader toggle={handleReset}>Email</ModalHeader>
         <ModalBody>
           <Row>
@@ -90,7 +99,11 @@ const ModalCaseRecordDetail = ({
 
           <Row className='mb-2 mt-2'>
             <div className="d-flex justify-content-end">
-              <Button type='button' color='primary'>
+              <Button
+                type="button"
+                color="primary"
+                disabled={!store.loading}
+              >
                 Send E-Mail
               </Button>
             </div>

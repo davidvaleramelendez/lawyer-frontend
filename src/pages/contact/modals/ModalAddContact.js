@@ -28,7 +28,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from "yup"
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-spinner'
+import Spinner from '@components/spinner/Simple-grow-spinner'
 
 // ** Third Party Components
 import { Editor } from 'react-draft-wysiwyg'
@@ -44,7 +44,7 @@ import {
 import '@styles/react/libs/editor/editor.scss'
 
 const ModalAddContact = ({ open, toggleModal }) => {
-  // ** Hooks for tanslation
+  // ** Hooks
   const { t } = useTranslation()
 
   // ** Store vars

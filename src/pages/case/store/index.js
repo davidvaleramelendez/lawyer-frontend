@@ -17,6 +17,8 @@ import {
 
 // ** Axios Imports
 import axios from 'axios'
+import { setTotalNumber } from '../../../utility/Utils'
+import { TN_CASES } from '../../../constants/defaultValues'
 
 async function getCaseListRequest(params) {
   return axios.get(`${API_ENDPOINTS.cases.list}`, { params }).then((cases) => cases.data).catch((error) => error)
@@ -25,6 +27,7 @@ async function getCaseListRequest(params) {
 export const getCaseList = createAsyncThunk('appCase/getCaseList', async (params) => {
   try {
     const response = await getCaseListRequest(params)
+    setTotalNumber(TN_CASES, response.pagination.totalRecord)
     if (response && response.flag) {
       return {
         params,

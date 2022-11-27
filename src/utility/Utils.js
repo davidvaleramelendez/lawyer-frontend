@@ -8,7 +8,8 @@ import {
   storageTokenKeyName,
   storageLoggedAtKeyName,
   storageRefreshTokenKeyName,
-  storageTokenExpiresKeyName
+  storageTokenExpiresKeyName,
+  storageTotalNumberName
 } from '@constant/defaultValues'
 
 import {
@@ -344,5 +345,39 @@ export const increaseCustomDateFormat = (type, value, format = 'MM-DD-YYYY', dat
   } catch (error) {
     console.log('>>>>: src/utility/Utils.js  : increaseCustomDateFormat -> error', error)
     return new Date()
+  }
+}
+
+// Get current total number
+export const getTotalNumber = (title) => {
+  try {
+    const total_numbers = JSON.parse(localStorage.getItem(storageTotalNumberName) ?? '{}')
+    return total_numbers[title]
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js : setCurrentUser -> error', error)
+  }
+}
+
+// Set current total number
+export const setTotalNumber = (title, number) => {
+  try {
+    let total_numbers = JSON.parse(localStorage.getItem(storageTotalNumberName) ?? '{}')
+    total_numbers = {
+      ...total_numbers,
+      [title]: number
+    }
+    localStorage.setItem(storageTotalNumberName, JSON.stringify(total_numbers))
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js : getCurrentUser -> error', error)
+  }
+}
+
+// Get current total number
+export const getCurrentPageNumber = (title, rowsPerPage, currentPage) => {
+  try {
+    const total_numbers = JSON.parse(localStorage.getItem(storageTotalNumberName) ?? '{}')[title]
+    return Math.min(total_numbers, rowsPerPage * currentPage) - (rowsPerPage * (currentPage - 1))
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js : setCurrentUser -> error', error)
   }
 }

@@ -7,6 +7,7 @@ export const storageTokenKeyName = 'accessToken'
 export const storageRefreshTokenKeyName = 'refreshToken'
 export const storageTokenExpiresKeyName = 'tokenExpires'
 export const storageLoggedAtKeyName = 'loggedAt'
+export const storageTotalNumberName = "totalNubmer"
 
 /* Hexadecimal key for encryption */
 export const cryptoKey = '731fc6d09baf51f8361fa6408f306ca9'
@@ -68,3 +69,7 @@ export const paymentMethod = [
     { value: "bank_account", label: "IBAN" },
     { value: "paypal", label: "Bar" }
 ]
+
+
+/* Total Number Titles */
+export const TN_CASES = "cases"

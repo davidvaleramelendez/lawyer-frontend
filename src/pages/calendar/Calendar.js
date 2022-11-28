@@ -49,10 +49,33 @@ const Calendar = (props) => {
       setCalendarApi(calendarRef.current.getApi())
     }
   }, [calendarApi])
-
+  // Set Background Color in time grid
+  const lessons = [
+    {
+      groupId: "schedule",
+      startTime: "6:00:00",
+      endTime: "8:00:00",
+      display: "background",
+      color: "black"
+    },
+    {
+      groupId: "schedule",
+      startTime: "8:00:00",
+      endTime: "17:00:00",
+      display: "background",
+      color: "white"
+    },
+    {
+      groupId: "schedule",
+      startTime: "17:00:00",
+      endTime: "24:00:00",
+      display: "background",
+      color: "black"
+    }
+  ]
   // ** calendarOptions(Props)
   const calendarOptions = {
-    events: store.eventItems.length ? store.eventItems : [],
+    events: store.eventItems.length ? [...store.eventItems, ...lessons] : [],
     plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
     initialView: 'dayGridMonth',
     selectable: true,
@@ -60,6 +83,10 @@ const Calendar = (props) => {
       start: 'sidebarToggle, prev,next, title',
       end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
     },
+    firstDay: 1,
+    slotMinTime: '6:00:00',
+    slotMaxTime: '24:00:00',
+    selectConstraint: "schedule",
     /*
       Enable dragging and resizing event
       ? Docs: https://fullcalendar.io/docs/editable

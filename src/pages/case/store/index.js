@@ -17,8 +17,8 @@ import {
 
 // ** Axios Imports
 import axios from 'axios'
-import { setTotalNumber } from '../../../utility/Utils'
-import { TN_CASES } from '../../../constants/defaultValues'
+import { setTotalNumber } from '@src/utility/Utils'
+import { TN_CASES } from '@constant/defaultValues'
 
 async function getCaseListRequest(params) {
   return axios.get(`${API_ENDPOINTS.cases.list}`, { params }).then((cases) => cases.data).catch((error) => error)

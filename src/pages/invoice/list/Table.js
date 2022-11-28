@@ -27,7 +27,9 @@ import {
     getDecimalFormat,
     getTransformDate,
     getRandColorClass,
-    capitalizeWordFirstLetter
+    capitalizeWordFirstLetter,
+    getCurrentPageNumber, 
+    getTotalNumber
 } from '@utils'
 
 // Constant
@@ -35,7 +37,8 @@ import {
     root,
     adminRoot,
     perPageRowItems,
-    defaultPerPageRow
+    defaultPerPageRow,
+    TN_INVOICE
 } from '@constant/defaultValues'
 import {
     invoiceItem
@@ -75,6 +78,7 @@ import withReactContent from 'sweetalert2-react-content'
 import Avatar from '@components/avatar'
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
+import DotPulse from '@components/dotpulse'
 
 // Modal
 import ModalSendInvoice from '../modals/ModalSendInvoice'
@@ -524,26 +528,35 @@ const InvoiceList = () => {
     return store ? (<>
         <div className='invoice-list-wrapper'>
             <Card className="overflow-hidden">
-                <DatatablePagination
-                    customClass="invoice-list-dataTable"
-                    columns={columns}
-                    loading={store.loading}
-                    data={store.invoiceItems}
-                    pagination={store.pagination}
-                    handleSort={handleSort}
-                    handlePagination={handlePagination}
-                    subHeaderComponent={
-                        <CustomHeader
-                            navigate={navigate}
-                            searchInput={searchInput}
-                            rowsPerPage={rowsPerPage}
-                            handleSearch={handleSearch}
-                            handlePerPage={handlePerPage}
-                            statusFilter={statusFilter}
-                            handleStatusFilter={handleStatusFilter}
-                        />
-                    }
-                />
+            {(!store.loading && !getTotalNumber(TN_INVOICE)) ? (
+                    <DotPulse />
+                ) : (
+                    <DatatablePagination
+                        customClass="invoice-list-dataTable"
+                        columns={columns}
+                        loading={store.loading}
+                        data={store.invoiceItems}
+                        pagination={store.loading ? store.pagination : {
+                                ...store.pagination, 
+                                perPage: getCurrentPageNumber(TN_INVOICE, rowsPerPage, currentPage)
+                            }
+                        }
+                        handleSort={handleSort}
+                        handlePagination={handlePagination}
+                        subHeaderComponent={
+                            <CustomHeader
+                                navigate={navigate}
+                                searchInput={searchInput}
+                                rowsPerPage={rowsPerPage}
+                                handleSearch={handleSearch}
+                                handlePerPage={handlePerPage}
+                                statusFilter={statusFilter}
+                                handleStatusFilter={handleStatusFilter}
+                            />
+                        }
+                    />
+                )
+            }
 
                 <ModalInvoiceDetail
                     toggleModal={() => setDetailModalOpen(!detailModalOpen)}

@@ -17,6 +17,9 @@ import {
 // ** Axios Imports
 import axios from 'axios'
 
+import { setTotalNumber } from '@utils'
+import { TN_EMAIL_TEMPLATE } from '@constant/defaultValues'
+
 async function getEmailTemplateListRequest(params) {
   return axios.get(`${API_ENDPOINTS.emailTemplates.list}`, { params }).then((emailTemplate) => emailTemplate.data).catch((error) => error)
 }
@@ -24,6 +27,7 @@ async function getEmailTemplateListRequest(params) {
 export const getEmailTemplateList = createAsyncThunk('appEmailTemplate/getEmailTemplateList', async (params) => {
   try {
     const response = await getEmailTemplateListRequest(params)
+    setTotalNumber(TN_EMAIL_TEMPLATE, response.pagination.totalRecord)
     if (response && response.flag) {
       return {
         params,

@@ -18,12 +18,15 @@ import {
 
 // ** Utils
 import {
-    isUserLoggedIn
+    isUserLoggedIn,
+    getCurrentPageNumber, 
+    getTotalNumber
 } from '@utils'
 
 // Constant
 import {
-    root
+    root,
+    TN_OUTBOX
 } from '@constant/defaultValues'
 
 // ** Store & Actions
@@ -49,6 +52,7 @@ import withReactContent from 'sweetalert2-react-content'
 // ** Custom Components
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
+import DotPulse from '@components/dotpulse'
 
 const CustomHeader = ({
     searchInput,
@@ -280,24 +284,32 @@ const LetterList = () => {
             <CardHeader className="border-bottom">
                 <CardTitle tag="h4">Outbox</CardTitle>
             </CardHeader>
-
-            <DatatablePagination
-                customClass="react-dataTable"
-                columns={columns}
-                loading={store.loading}
-                data={store.letterItems}
-                pagination={store.pagination}
-                handleSort={handleSort}
-                handlePagination={handlePagination}
-                subHeaderComponent={
-                    <CustomHeader
-                        searchInput={searchInput}
-                        rowsPerPage={rowsPerPage}
-                        handleSearch={handleSearch}
-                        handlePerPage={handlePerPage}
+            {(!store.loading && !getTotalNumber(TN_OUTBOX)) ? (
+                    <DotPulse />
+                ) : (
+                    <DatatablePagination
+                        customClass="react-dataTable"
+                        columns={columns}
+                        loading={store.loading}
+                        data={store.letterItems}
+                        pagination={store.loading ? store.pagination : {
+                                ...store.pagination, 
+                                perPage: getCurrentPageNumber(TN_OUTBOX, rowsPerPage, currentPage)
+                            }
+                        }
+                        handleSort={handleSort}
+                        handlePagination={handlePagination}
+                        subHeaderComponent={
+                            <CustomHeader
+                                searchInput={searchInput}
+                                rowsPerPage={rowsPerPage}
+                                handleSearch={handleSearch}
+                                handlePerPage={handlePerPage}
+                            />
+                        }
                     />
-                }
-            />
+                )
+            }
         </Card>
     </Fragment>) : null
 }

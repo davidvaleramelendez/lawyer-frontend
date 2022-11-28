@@ -72,4 +72,12 @@ export const paymentMethod = [
 
 
 /* Total Number Titles */
-export const TN_CASES = "cases"
+export const TN_CASES = "case"
+export const TN_OUTBOX = "outbox"
+export const TN_INVOICE = "invoice"
+export const TN_CONTACT = "contact"
+export const TN_USER = "user"
+export const TN_EMAIL_TEMPLATE = "email_template"
+export const TN_CHAT = "chat"
+export const TN_CHAT_CONTACT = "chat_contact"
+export const TN_TASK = "task"

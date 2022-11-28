@@ -21,7 +21,9 @@ import Select from "react-select"
 import {
     isUserLoggedIn,
     getTransformDate,
-    getRandColorClass
+    getRandColorClass,
+    getCurrentPageNumber, 
+    getTotalNumber
 } from "@utils"
 
 // Constant
@@ -29,7 +31,8 @@ import {
     root,
     adminRoot,
     perPageRowItems,
-    defaultPerPageRow
+    defaultPerPageRow,
+    TN_CASES
 } from "@constant/defaultValues"
 import {
     caseItem
@@ -55,9 +58,7 @@ import {
 import Avatar from "@components/avatar"
 import Notification from '@components/toast/notification'
 import DatatablePagination from "@components/datatable/DatatablePagination"
-import DotPulse from "../../../@core/components/dotpulse"
-import { getCurrentPageNumber, getTotalNumber } from "../../../utility/Utils"
-import { TN_CASES } from "../../../constants/defaultValues"
+import DotPulse from "@components/dotpulse"
 
 /* Get windows size */
 function getWindowSize() {

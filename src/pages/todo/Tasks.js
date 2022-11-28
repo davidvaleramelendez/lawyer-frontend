@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 // ** Custom Components
 import Avatar from '@components/avatar'
+import DotPulse from '@components/dotpulse'
 
 // ** Blank Avatar Image
 import blankAvatar from '@src/assets/images/avatars/avatar-blank.png'
@@ -159,6 +160,9 @@ const Tasks = (props) => {
   }
 
   const renderTasks = () => {
+    if (!store.loading && placeholderTasks === 0) {
+      return <DotPulse />
+    }
     if (!store.loading) {
       return (
         <div className="list-group todo-task-list-wrapper">

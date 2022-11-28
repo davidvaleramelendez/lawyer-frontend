@@ -11,6 +11,9 @@ import {
 // ** Axios Imports
 import axios from 'axios'
 
+import { setTotalNumber } from '@utils'
+import { TN_OUTBOX } from '@constant/defaultValues'
+
 async function getLetterListRequest(params) {
   return axios.get(`${API_ENDPOINTS.letters.list}`, { params }).then((letter) => letter.data).catch((error) => error)
 }
@@ -18,6 +21,7 @@ async function getLetterListRequest(params) {
 export const getLetterList = createAsyncThunk('appLetter/getLetterList', async (params) => {
   try {
     const response = await getLetterListRequest(params)
+    setTotalNumber(TN_OUTBOX, response.pagination.totalRecord)
     if (response && response.flag) {
       return {
         params,

@@ -15,7 +15,9 @@ import {
 // ** Utils
 import {
     isUserLoggedIn,
-    getRandColorClass
+    getRandColorClass,
+    getTotalNumber,
+    getCurrentPageNumber
 } from '@utils'
 
 // Constant
@@ -23,7 +25,8 @@ import {
     root,
     adminRoot,
     perPageRowItems,
-    defaultPerPageRow
+    defaultPerPageRow,
+    TN_CONTACT
 } from '@constant/defaultValues'
 
 // ** Store & Actions
@@ -45,6 +48,7 @@ import ModalAddContact from '../modals/ModalAddContact'
 import Avatar from '@components/avatar'
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
+import DotPulse from '@components/dotpulse'
 
 const CustomHeader = ({
     searchInput,
@@ -262,25 +266,33 @@ const ContactList = () => {
 
     return store ? (<>
         <Card className="overflow-hidden">
-            <DatatablePagination
-                customClass="react-dataTable"
-                columns={columns}
-                loading={store.loading}
-                data={store.contactItems}
-                pagination={store.pagination}
-                handleSort={handleSort}
-                handlePagination={handlePagination}
-                subHeaderComponent={
-                    <CustomHeader
-                        searchInput={searchInput}
-                        rowsPerPage={rowsPerPage}
-                        handleSearch={handleSearch}
-                        handlePerPage={handlePerPage}
-                        setModalOpen={setModalOpen}
+            {(!store.loading && !getTotalNumber(TN_CONTACT)) ? (
+                    <DotPulse />
+                ) : (
+                    <DatatablePagination
+                        customClass="react-dataTable"
+                        columns={columns}
+                        loading={store.loading}
+                        data={store.contactItems}
+                        pagination={store.loading ? store.pagination : {
+                                ...store.pagination, 
+                                perPage: getCurrentPageNumber(TN_CONTACT, rowsPerPage, currentPage)
+                            }
+                        }
+                        handleSort={handleSort}
+                        handlePagination={handlePagination}
+                        subHeaderComponent={
+                            <CustomHeader
+                                searchInput={searchInput}
+                                rowsPerPage={rowsPerPage}
+                                handleSearch={handleSearch}
+                                handlePerPage={handlePerPage}
+                                setModalOpen={setModalOpen}
+                            />
+                        }
                     />
-                }
-            />
-
+                )
+            }
             <ModalAddContact
                 toggleModal={() => setModalOpen(!modalOpen)}
                 open={modalOpen}

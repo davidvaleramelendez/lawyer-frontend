@@ -16,6 +16,9 @@ import {
 // ** Axios Imports
 import axios from 'axios'
 
+import { setTotalNumber } from '@utils'
+import { TN_TASK } from '@constant/defaultValues'
+
 async function getUserListRequest(params) {
   return axios.get(`${API_ENDPOINTS.todos.userList}`, { params }).then((todo) => todo.data).catch((error) => error)
 }
@@ -56,6 +59,7 @@ async function getTodoListRequest(params) {
 export const getTodoList = createAsyncThunk('appTodo/getTodoList', async (params) => {
   try {
     const response = await getTodoListRequest(params)
+    setTotalNumber(TN_TASK, response.pagination.totalRecord)
     if (response && response.flag) {
       return {
         params,

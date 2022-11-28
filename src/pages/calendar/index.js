@@ -41,6 +41,7 @@ import {
 
 // ** Custom Components
 import Notification from '@components/toast/notification'
+import DotPulse from '@components/dotpulse'
 
 // Constant
 import {
@@ -132,7 +133,7 @@ const CalendarApp = () => {
   return store ? (
     <Fragment>
       <div
-        className={`app-calendar overflow-hidden border ${!store.loading ? 'calendar-placeholder-img' : ''}`}
+        className={`app-calendar overflow-hidden border`}
       >
         <Row className="g-0">
           <Col
@@ -152,22 +153,27 @@ const CalendarApp = () => {
           </Col>
 
           <Col className="position-relative">
-            <Calendar
-              isRtl={isRtl}
-              store={store}
-              dispatch={dispatch}
-              calendarApi={calendarApi}
-              updateEvent={updateEvent}
-              getEventItem={getEventItem}
-              toggleSidebar={toggleSidebar}
-              setCalendarApi={setCalendarApi}
-              loadingCalendar={loadingCalendar}
-              getTransformDate={getTransformDate}
-              calendarsColor={calendarFilterColor}
-              setLoadingCalendar={setLoadingCalendar}
-              setAddEventModalOpen={setAddEventModalOpen}
-              increaseCustomDateFormat={increaseCustomDateFormat}
-            />
+            {!store.loading ? (
+                <DotPulse />
+              ) : (
+                <Calendar
+                  isRtl={isRtl}
+                  store={store}
+                  dispatch={dispatch}
+                  calendarApi={calendarApi}
+                  updateEvent={updateEvent}
+                  getEventItem={getEventItem}
+                  toggleSidebar={toggleSidebar}
+                  setCalendarApi={setCalendarApi}
+                  loadingCalendar={loadingCalendar}
+                  getTransformDate={getTransformDate}
+                  calendarsColor={calendarFilterColor}
+                  setLoadingCalendar={setLoadingCalendar}
+                  setAddEventModalOpen={setAddEventModalOpen}
+                  increaseCustomDateFormat={increaseCustomDateFormat}
+                />
+              )
+            }
           </Col>
 
           <div

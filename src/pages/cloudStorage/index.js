@@ -386,7 +386,7 @@ const CloudStorageApp = () => {
                 </div>
             </div>
         </div>
-    </Fragment>) : <div>123123123</div>
+    </Fragment>) : null
 }
 
 export default CloudStorageApp

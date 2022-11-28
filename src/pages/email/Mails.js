@@ -6,7 +6,6 @@ import { Fragment } from 'react'
 // ** Mail Components Imports
 import MailCard from './MailCard'
 import MailDetails from './MailDetails'
-import ModalComposeMail from './modal/ModalComposeMail'
 
 // ** Utils
 import {
@@ -44,10 +43,8 @@ const Mails = (props) => {
     searchInput,
     rowsPerPage,
     setOpenMail,
-    composeOpen,
     selectAllMail,
     getMailDetail,
-    toggleCompose,
     uploadedFiles,
     setSearchInput,
     setRowsPerPage,
@@ -245,12 +242,6 @@ const Mails = (props) => {
         setEditorStateContent={setEditorStateContent}
         createEmailAttachment={createEmailAttachment}
         deleteEmailAttachment={deleteEmailAttachment}
-      />
-
-      <ModalComposeMail
-        store={store}
-        composeOpen={composeOpen}
-        toggleCompose={toggleCompose}
       />
     </Fragment>
   )

@@ -39,6 +39,7 @@
     "react-data-table-component": "^7.5.2",
     "react-dom": "^18.1.0",
     "react-draft-wysiwyg": "^1.14.7",
+    "react-draggable": "^4.4.5",
     "react-feather": "~2.0.3",
     "react-flatpickr": "^3.10.12",
     "react-hook-form": "^7.31.1",

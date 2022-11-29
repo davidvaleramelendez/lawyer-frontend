@@ -132,9 +132,7 @@ const CalendarApp = () => {
 
   return store ? (
     <Fragment>
-      <div
-        className={`app-calendar overflow-hidden border`}
-      >
+      <div className="app-calendar overflow-hidden border">
         <Row className="g-0">
           <Col
             id="app-calendar-sidebar"

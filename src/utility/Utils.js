@@ -9,7 +9,8 @@ import {
   storageLoggedAtKeyName,
   storageRefreshTokenKeyName,
   storageTokenExpiresKeyName,
-  storageTotalNumberName
+  storageTotalNumberName,
+  storageSiteSetting
 } from '@constant/defaultValues'
 
 import {
@@ -380,4 +381,29 @@ export const getCurrentPageNumber = (title, rowsPerPage, currentPage) => {
   } catch (error) {
     console.log('>>>>: src/utility/Utils.js : setCurrentUser -> error', error)
   }
+}
+
+//Set Site layout Setting
+export const setSiteLayoutSetting = (siteSetting) => {
+  try {
+    if (siteSetting) {
+      localStorage.setItem(storageSiteSetting, JSON.stringify(siteSetting))
+    } else {
+      localStorage.removeItem(storageSiteSetting)
+    }
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js : setSiteLayoutSetting -> error', error)
+  }
+}
+
+// Get current Site Setting value
+export const getSiteLayoutSetting = () => {
+  let _sitesetting = null
+  try {
+    _sitesetting = localStorage.getItem(storageSiteSetting) !== null ? JSON.parse(localStorage.getItem(storageSiteSetting)) : null
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js  : getSiteLayoutSetting -> error', error)
+    _sitesetting = null
+  }
+  return _sitesetting
 }

@@ -133,19 +133,42 @@ const Calendar = (props) => {
       ]
     },
 
-    eventClick({ event: clickedEvent }) {
-      let evntData = { ...store.eventItem }
-      if (clickedEvent && clickedEvent.id) {
-        if (store.eventItems && store.eventItems.length) {
-          const index = store.eventItems.findIndex(x => JSON.stringify(x.id) === clickedEvent.id)
-          if (index !== -1) {
-            evntData = { ...store.eventItems[index] }
+    eventClick({ event: clickedEvent, jsEvent: jsEvent }) {
+      const days_in_one_month = document.querySelectorAll('[role="gridcell"]')
+
+      let index = 0
+      for (index = 0; index < days_in_one_month.length; index++) {
+        const rect = days_in_one_month[index].getBoundingClientRect()
+        if (jsEvent.x > rect.left && jsEvent.y > rect.top && jsEvent.x < rect.right && jsEvent.y < rect.bottom) {
+          break
+        }        
+      }
+      const selected_date = days_in_one_month[index].getAttribute('data-date')
+
+      const start_clicked_time = `${selected_date} 00:00`
+      const end_clicked_time = `${selected_date} 23:59`
+
+      const events_in_clicked_day = store.eventItems.filter(item => {
+        return item.start <= end_clicked_time && item.end >= start_clicked_time
+      })
+ 
+      if (events_in_clicked_day.length >= 2 && clickedEvent._context.calendarApi.view.type === 'dayGridMonth') {
+        calendarRef.current.getApi().changeView('timeGridDay', selected_date)
+      } else {
+        let evntData = { ...store.eventItem }
+        if (clickedEvent && clickedEvent.id) {
+          if (store.eventItems && store.eventItems.length) {
+            const index = store.eventItems.findIndex(x => JSON.stringify(x.id) === clickedEvent.id)
+            if (index !== -1) {
+              evntData = { ...store.eventItems[index] }
+            }
           }
         }
+
+        dispatch(getEventItem(evntData))
+        setAddEventModalOpen(true)
       }
 
-      dispatch(getEventItem(evntData))
-      setAddEventModalOpen(true)
 
       // * Only grab required field otherwise it goes in infinity loop
       // ! Always grab all fields rendered by form (even if it get `undefined`) otherwise due to Vue3/Composition API you might get: "object is not extensible"
@@ -165,25 +188,35 @@ const Calendar = (props) => {
     },
 
     dateClick(info) {
-      // console.log("dateClick >>> ", info)
-      const evntData = { ...store.eventItem }
-      evntData.start_date = info.date
-      evntData.end_date = info.date
-      if (info.allDay) {
-        evntData.allDay = info.allDay
+      const start_clicked_time = `${info.dateStr} 00:00`
+      const end_clicked_time = `${info.dateStr} 23:59`
+
+      const events_in_clicked_day = store.eventItems.filter(item => {
+        return item.start <= end_clicked_time && item.end >= start_clicked_time
+      })
+      if (events_in_clicked_day.length >= 2 && info.view.type === 'dayGridMonth') {
+        calendarRef.current.getApi().changeView('timeGridDay', info.dateStr)
+      } else {
+        const evntData = { ...store.eventItem }
+        evntData.start_date = info.date
+        evntData.end_date = info.date
+        if (info.allDay) {
+          evntData.allDay = info.allDay
+        }
+  
+        if (!info.allDay) {
+          evntData.end_date = increaseCustomDateFormat(
+            'minutes',
+            30,
+            "YYYY-MM-DD HH:mm",
+            info.date
+          )
+        }
+  
+        dispatch(getEventItem(evntData))
+        setAddEventModalOpen(true)
       }
 
-      if (!info.allDay) {
-        evntData.end_date = increaseCustomDateFormat(
-          'minutes',
-          30,
-          "YYYY-MM-DD HH:mm",
-          info.date
-        )
-      }
-
-      dispatch(getEventItem(evntData))
-      setAddEventModalOpen(true)
     },
 
     /*

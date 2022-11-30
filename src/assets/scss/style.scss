@@ -23,3 +23,26 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 .fc-not-allowed .fc-event { /* override events' custom cursors */
   cursor: auto!important;
 }
+
+$calendar-night-color: rgb(215 215 215 / 34%);
+
+.fc-timegrid-slot.fc-timegrid-slot-lane{
+	&[data-time^="06:"]{
+		background-color: $calendar-night-color;
+	}
+	&[data-time^="07:"]{
+		background-color: $calendar-night-color;
+	}
+	&[data-time^="17:"]{
+		background-color: $calendar-night-color;
+	}
+	&[data-time^="18:"]{
+		background-color: $calendar-night-color;
+	}
+	&[data-time^="19:"]{
+		background-color: $calendar-night-color;
+	}
+	&[data-time^="2"]{
+		background-color: $calendar-night-color;
+	}
+}

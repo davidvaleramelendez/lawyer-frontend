@@ -49,33 +49,10 @@ const Calendar = (props) => {
       setCalendarApi(calendarRef.current.getApi())
     }
   }, [calendarApi])
-  // Set Background Color in time grid
-  const lessons = [
-    {
-      groupId: "schedule",
-      startTime: "6:00:00",
-      endTime: "8:00:00",
-      display: "background",
-      color: "black"
-    },
-    {
-      groupId: "schedule",
-      startTime: "8:00:00",
-      endTime: "17:00:00",
-      display: "background",
-      color: "white"
-    },
-    {
-      groupId: "schedule",
-      startTime: "17:00:00",
-      endTime: "24:00:00",
-      display: "background",
-      color: "black"
-    }
-  ]
+  
   // ** calendarOptions(Props)
   const calendarOptions = {
-    events: store.eventItems.length ? [...store.eventItems, ...lessons] : [],
+    events: store.eventItems.length ? [...store.eventItems] : [],
     plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
     initialView: 'dayGridMonth',
     selectable: true,

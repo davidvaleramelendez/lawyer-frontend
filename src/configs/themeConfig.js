@@ -1,6 +1,12 @@
 // You can customize the template with the help of this file
 
 //Template config options
+import {
+  storageSiteSetting
+} from '@constant/defaultValues'
+
+const _siteSettingLayout = localStorage.getItem(storageSiteSetting) !== null ? JSON.parse(localStorage.getItem(storageSiteSetting)) : null
+
 const themeConfig = {
   app: {
     appName: 'Lawyer',
@@ -8,20 +14,20 @@ const themeConfig = {
   },
   layout: {
     isRTL: false,
-    skin: 'light', // light, dark, bordered, semi-dark
+    skin: _siteSettingLayout ? _siteSettingLayout.skin : 'semi-dark', // light, dark, bordered, semi-dark
     type: 'vertical', // vertical, horizontal
-    contentWidth: 'boxed', // full, boxed
+    contentWidth: _siteSettingLayout ? _siteSettingLayout.contentWidth : 'boxed', // full, boxed
     menu: {
-      isHidden: false,
-      isCollapsed: false
+      isHidden: _siteSettingLayout ? _siteSettingLayout.menuHidden : false,
+      isCollapsed: _siteSettingLayout ? _siteSettingLayout.menuCollapsed : false
     },
     navbar: {
       // ? For horizontal menu, navbar type will work for navMenu type
-      type: 'floating', // static , sticky , floating, hidden
-      backgroundColor: 'white' // BS color options [primary, success, etc]
+      type: _siteSettingLayout ? _siteSettingLayout.navbarType : 'floating', // static , sticky , floating, hidden
+      backgroundColor: _siteSettingLayout ? _siteSettingLayout.navbarColor : 'white' // BS color options [primary, success, etc]
     },
     footer: {
-      type: 'hidden' // static, sticky, hidden
+      type: _siteSettingLayout ? _siteSettingLayout.footerType : 'hidden' // static, sticky, hidden
     },
     customizer: true,
     scrollTop: true, // Enable scroll to top button

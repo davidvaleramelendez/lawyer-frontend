@@ -38,6 +38,12 @@ import {
   UncontrolledButtonDropdown
 } from 'reactstrap'
 
+// import ModalDialog from 'react-bootstrap/ModalDialog'
+
+// ** React draggable Import
+import Draggable from 'react-draggable'
+
+
 import { useForm, Controller } from 'react-hook-form'
 
 // ** Store & Actions
@@ -318,282 +324,284 @@ const ModalComposeMail = (props) => {
   }
 
   return store ? (
-    <Modal
-      scrollable
-      fade={false}
-      keyboard={false}
-      backdrop="static"
-      id='compose-mail'
-      container='.content-body'
-      className={modalMaximize ? 'modal-xl' : 'modal-lg'}
-      isOpen={composeOpen}
-      contentClassName='p-0'
-      toggle={toggleCompose}
-      modalClassName='modal-sticky'
-    >
-      {!store.loading ? (
-        <Spinner
-          className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
-        />
-      ) : null}
+    <Draggable handle='.modal-header'>
+      <Modal
+        scrollable
+        fade={false}
+        keyboard={true}
+        backdrop={false}
+        id='compose-mail'
+        container='.content-body'
+        className={`compose-modal ${  modalMaximize ? 'modal-xl' : 'modal-lg'}`}
+        isOpen={composeOpen}
+        contentClassName='p-0'
+        toggle={toggleCompose}
+        modalClassName='compose-mask-modal'
+      >
+        {!store.loading ? (
+          <Spinner
+            className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
+          />
+        ) : null}
 
-      <div className='modal-header'>
-        <h5 className='modal-title'>Compose Mail</h5>
-        <div className='modal-actions'>
-          <a
-            href='/'
-            className='text-body me-75'
-            onClick={togglePopUp}
-          >
-            <Minus size={14} />
-          </a>
+        <div className='modal-header'>
+          <h5 className='modal-title'>Compose Mail</h5>
+          <div className='modal-actions'>
+            <a
+              href='/'
+              className='text-body me-75'
+              onClick={togglePopUp}
+            >
+              <Minus size={14} />
+            </a>
 
-          <a
-            href='/'
-            className='text-body me-75'
-            onClick={onToggleMinMaxSize}
-          >
-            {!modalMaximize ? <>
-              <Maximize2 size={14} />
-            </> : <>
-              <Minimize2 size={14} />
-            </>}
-          </a>
+            <a
+              href='/'
+              className='text-body me-75'
+              onClick={onToggleMinMaxSize}
+            >
+              {!modalMaximize ? <>
+                <Maximize2 size={14} />
+              </> : <>
+                <Minimize2 size={14} />
+              </>}
+            </a>
 
-          <a
-            href='/'
-            className='text-body'
-            onClick={togglePopUp}
-          >
-            <X size={14} />
-          </a>
+            <a
+              href='/'
+              className='text-body'
+              onClick={togglePopUp}
+            >
+              <X size={14} />
+            </a>
+          </div>
         </div>
-      </div>
 
-      <ModalBody className='flex-grow-1 p-0'>
-        <Form className='compose-form' onSubmit={handleSubmit(onSubmit)}>
-          <div className='compose-mail-form-field'>
-            <Label for='email_to' className='form-label'>To:</Label>
-            <div className='flex-grow-1 w-100'>
+        <ModalBody className='flex-grow-1 p-0'>
+          <Form className='compose-form' onSubmit={handleSubmit(onSubmit)}>
+            <div className='compose-mail-form-field'>
+              <Label for='email_to' className='form-label'>To:</Label>
+              <div className='flex-grow-1 w-100'>
+                <Controller
+                  defaultValue={emailItem.email_to}
+                  name='email_to'
+                  id='email_to'
+                  control={control}
+                  rules={ValidationSchema.email_to}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      isMulti
+                      id='email_to'
+                      isClearable={false}
+                      closeMenuOnSelect={false}
+                      theme={selectThemeColors}
+                      options={userOptions}
+                      placeholder={ValidationSchema.email_to && ValidationSchema.email_to.placeholder}
+                      className='react-select select-borderless'
+                      classNamePrefix='select'
+                      components={{ Option: SelectComponent }}
+                    />
+                  )}
+                />
+              </div>
+              {errors && errors.email_to ? (
+                <div className="invalid-feedback d-block">{errors.email_to?.message}</div>
+              ) : null}
+              <div>
+                <a href='/' className='toggle-cc text-body me-1' onClick={toggleCC}>Cc</a>
+                <a href='/' className='toggle-cc text-body' onClick={toggleBCC}>Bcc</a>
+              </div>
+            </div>
+
+            {ccOpen === true ? (
+              <div className='compose-mail-form-field cc-wrapper'>
+                <Label for='email_cc' className='form-label'>Cc:</Label>
+                <div className='flex-grow-1 w-100'>
+                  <Controller
+                    defaultValue={emailItem.email_cc}
+                    name='email_cc'
+                    id='email_cc'
+                    control={control}
+                    rules={ValidationSchema.email_cc}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        isMulti
+                        id='email_cc'
+                        isClearable={false}
+                        closeMenuOnSelect={false}
+                        theme={selectThemeColors}
+                        options={userOptions}
+                        placeholder={ValidationSchema.email_cc && ValidationSchema.email_cc.placeholder}
+                        className='react-select select-borderless'
+                        classNamePrefix='select'
+                        components={{ Option: SelectComponent }}
+                      />
+                    )}
+                  />
+                </div>
+                {errors && errors.email_cc ? (
+                  <div className="invalid-feedback d-block">{errors.email_cc?.message}</div>
+                ) : null}
+                <div>
+                  <a href='/' className='toggle-cc text-body' onClick={toggleCC}>
+                    <X size={14} />
+                  </a>
+                </div>
+              </div>
+            ) : null}
+
+            {bccOpen === true ? (
+              <div className='compose-mail-form-field cc-wrapper'>
+                <Label for='email_bcc' className='form-label'>Bcc:</Label>
+                <div className='flex-grow-1 w-100'>
+                  <Controller
+                    defaultValue={emailItem.email_bcc}
+                    name='email_bcc'
+                    id='email_bcc'
+                    control={control}
+                    rules={ValidationSchema.email_bcc}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        isMulti
+                        id='email_bcc'
+                        isClearable={false}
+                        closeMenuOnSelect={false}
+                        theme={selectThemeColors}
+                        options={userOptions}
+                        placeholder={ValidationSchema.email_bcc && ValidationSchema.email_bcc.placeholder}
+                        className='react-select select-borderless'
+                        classNamePrefix='select'
+                        components={{ Option: SelectComponent }}
+                      />
+                    )}
+                  />
+                </div>
+                {errors && errors.email_bcc ? (
+                  <div className="invalid-feedback d-block">{errors.email_bcc?.message}</div>
+                ) : null}
+                <div>
+                  <a href='/' className='toggle-cc text-body' onClick={toggleBCC}>
+                    <X size={14} />
+                  </a>
+                </div>
+              </div>
+            ) : null}
+
+            <div className='compose-mail-form-field'>
+              <Label for='subject' className='form-label'>Subject:</Label>
               <Controller
-                defaultValue={emailItem.email_to}
-                name='email_to'
-                id='email_to'
+                defaultValue=""
+                id='subject'
+                name='subject'
                 control={control}
-                rules={ValidationSchema.email_to}
+                rules={ValidationSchema.subject}
+                render={({ field }) => <Input
+                  {...field}
+                  placeholder={ValidationSchema.subject && ValidationSchema.subject.placeholder}
+                  invalid={errors.subject && true}
+                />}
+              />
+              {errors && errors.subject ? (
+                <div className="invalid-feedback d-block">{errors.subject?.message}</div>
+              ) : null}
+            </div>
+
+            <div id='message-editor'>
+              <Controller
+                defaultValue=""
+                control={control}
+                id='body'
+                name='body'
+                rules={ValidationSchema.body}
                 render={({ field }) => (
-                  <Select
+                  <Editor
                     {...field}
-                    isMulti
-                    id='email_to'
-                    isClearable={false}
-                    closeMenuOnSelect={false}
-                    theme={selectThemeColors}
-                    options={userOptions}
-                    placeholder={ValidationSchema.email_to && ValidationSchema.email_to.placeholder}
-                    className='react-select select-borderless'
-                    classNamePrefix='select'
-                    components={{ Option: SelectComponent }}
+                    placeholder={ValidationSchema.body && ValidationSchema.body.placeholder}
+                    toolbarClassName='rounded-0'
+                    wrapperClassName='toolbar-bottom'
+                    editorClassName='rounded-0 border-0'
+                    toolbar={{
+                      options: ['inline', 'textAlign'],
+                      inline: {
+                        inDropdown: false,
+                        options: ['bold', 'italic', 'underline', 'strikethrough']
+                      }
+                    }}
+                    onEditorStateChange={handleEditorStateChange}
                   />
                 )}
               />
-            </div>
-            {errors && errors.email_to ? (
-              <div className="invalid-feedback d-block">{errors.email_to?.message}</div>
-            ) : null}
-            <div>
-              <a href='/' className='toggle-cc text-body me-1' onClick={toggleCC}>Cc</a>
-              <a href='/' className='toggle-cc text-body' onClick={toggleBCC}>Bcc</a>
-            </div>
-          </div>
-
-          {ccOpen === true ? (
-            <div className='compose-mail-form-field cc-wrapper'>
-              <Label for='email_cc' className='form-label'>Cc:</Label>
-              <div className='flex-grow-1 w-100'>
-                <Controller
-                  defaultValue={emailItem.email_cc}
-                  name='email_cc'
-                  id='email_cc'
-                  control={control}
-                  rules={ValidationSchema.email_cc}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      isMulti
-                      id='email_cc'
-                      isClearable={false}
-                      closeMenuOnSelect={false}
-                      theme={selectThemeColors}
-                      options={userOptions}
-                      placeholder={ValidationSchema.email_cc && ValidationSchema.email_cc.placeholder}
-                      className='react-select select-borderless'
-                      classNamePrefix='select'
-                      components={{ Option: SelectComponent }}
-                    />
-                  )}
-                />
-              </div>
-              {errors && errors.email_cc ? (
-                <div className="invalid-feedback d-block">{errors.email_cc?.message}</div>
+              {errors && errors.body ? (
+                <div className="invalid-feedback d-block">{errors.body?.message}</div>
               ) : null}
-              <div>
-                <a href='/' className='toggle-cc text-body' onClick={toggleCC}>
-                  <X size={14} />
-                </a>
-              </div>
             </div>
-          ) : null}
 
-          {bccOpen === true ? (
-            <div className='compose-mail-form-field cc-wrapper'>
-              <Label for='email_bcc' className='form-label'>Bcc:</Label>
-              <div className='flex-grow-1 w-100'>
-                <Controller
-                  defaultValue={emailItem.email_bcc}
-                  name='email_bcc'
-                  id='email_bcc'
-                  control={control}
-                  rules={ValidationSchema.email_bcc}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      isMulti
-                      id='email_bcc'
-                      isClearable={false}
-                      closeMenuOnSelect={false}
-                      theme={selectThemeColors}
-                      options={userOptions}
-                      placeholder={ValidationSchema.email_bcc && ValidationSchema.email_bcc.placeholder}
-                      className='react-select select-borderless'
-                      classNamePrefix='select'
-                      components={{ Option: SelectComponent }}
-                    />
-                  )}
-                />
-              </div>
-              {errors && errors.email_bcc ? (
-                <div className="invalid-feedback d-block">{errors.email_bcc?.message}</div>
-              ) : null}
-              <div>
-                <a href='/' className='toggle-cc text-body' onClick={toggleBCC}>
-                  <X size={14} />
-                </a>
-              </div>
-            </div>
-          ) : null}
-
-          <div className='compose-mail-form-field'>
-            <Label for='subject' className='form-label'>Subject:</Label>
-            <Controller
-              defaultValue=""
-              id='subject'
-              name='subject'
-              control={control}
-              rules={ValidationSchema.subject}
-              render={({ field }) => <Input
-                {...field}
-                placeholder={ValidationSchema.subject && ValidationSchema.subject.placeholder}
-                invalid={errors.subject && true}
-              />}
-            />
-            {errors && errors.subject ? (
-              <div className="invalid-feedback d-block">{errors.subject?.message}</div>
-            ) : null}
-          </div>
-
-          <div id='message-editor'>
-            <Controller
-              defaultValue=""
-              control={control}
-              id='body'
-              name='body'
-              rules={ValidationSchema.body}
-              render={({ field }) => (
-                <Editor
-                  {...field}
-                  placeholder={ValidationSchema.body && ValidationSchema.body.placeholder}
-                  toolbarClassName='rounded-0'
-                  wrapperClassName='toolbar-bottom'
-                  editorClassName='rounded-0 border-0'
-                  toolbar={{
-                    options: ['inline', 'textAlign'],
-                    inline: {
-                      inDropdown: false,
-                      options: ['bold', 'italic', 'underline', 'strikethrough']
-                    }
-                  }}
-                  onEditorStateChange={handleEditorStateChange}
-                />
-              )}
-            />
-            {errors && errors.body ? (
-              <div className="invalid-feedback d-block">{errors.body?.message}</div>
-            ) : null}
-          </div>
-
-          {uploadedFiles && uploadedFiles.length ? <>
-            <div className="email-attachments mt-1 mb-1">
-              {uploadedFiles.map((item, index) => {
-                return (
-                  <div className="inline" key={`attachment_${index}`}>
-                    <Paperclip
-                      size={17}
-                      className="cursor-pointer ms-1 me-1"
-                    />
-
-                    {item && item.path ? (<a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>) : null}
-
-                    <a
-                      href={`${adminRoot}/email`}
-                      onClick={(event) => onFileRemove(event, item.id)}
-                    >
-                      <X
+            {uploadedFiles && uploadedFiles.length ? <>
+              <div className="email-attachments mt-1 mb-1">
+                {uploadedFiles.map((item, index) => {
+                  return (
+                    <div className="inline" key={`attachment_${index}`}>
+                      <Paperclip
                         size={17}
-                        color="#FF0000"
-                        className="cursor-pointer"
+                        className="cursor-pointer ms-1 me-1"
                       />
-                    </a>
-                  </div>
-                )
-              })}
-            </div>
-          </> : null}
 
-          <div className='compose-footer-wrapper'>
-            <div className='btn-wrapper d-flex align-items-center'>
-              <UncontrolledButtonDropdown direction='up' className='me-1'>
-                <Button
-                  type="submit"
-                  color='primary'
-                  disabled={!store.loading}
-                >
-                  Send
-                </Button>
-              </UncontrolledButtonDropdown>
+                      {item && item.path ? (<a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>) : null}
 
-              <div className='email-attachement'>
-                <Label className='mb-0' for='attach-email-item'>
-                  <Paperclip className='cursor-pointer ms-50' size={18} />
-                  <input
-                    hidden
-                    multiple
-                    type='file'
-                    name='attach-email-item'
-                    id='attach-email-item'
-                    onChange={(event) => onFileChange(event)}
-                  />
-                </Label>
+                      <a
+                        href={`${adminRoot}/email`}
+                        onClick={(event) => onFileRemove(event, item.id)}
+                      >
+                        <X
+                          size={17}
+                          color="#FF0000"
+                          className="cursor-pointer"
+                        />
+                      </a>
+                    </div>
+                  )
+                })}
+              </div>
+            </> : null}
+
+            <div className='compose-footer-wrapper'>
+              <div className='btn-wrapper d-flex align-items-center'>
+                <UncontrolledButtonDropdown direction='up' className='me-1'>
+                  <Button
+                    type="submit"
+                    color='primary'
+                    disabled={!store.loading}
+                  >
+                    Send
+                  </Button>
+                </UncontrolledButtonDropdown>
+
+                <div className='email-attachement'>
+                  <Label className='mb-0' for='attach-email-item'>
+                    <Paperclip className='cursor-pointer ms-50' size={18} />
+                    <input
+                      hidden
+                      multiple
+                      type='file'
+                      name='attach-email-item'
+                      id='attach-email-item'
+                      onChange={(event) => onFileChange(event)}
+                    />
+                  </Label>
+                </div>
+              </div>
+
+              <div className='footer-action d-flex align-items-center'>
+                <Trash className='cursor-pointer' size={18} onClick={toggleCompose} />
               </div>
             </div>
-
-            <div className='footer-action d-flex align-items-center'>
-              <Trash className='cursor-pointer' size={18} onClick={toggleCompose} />
-            </div>
-          </div>
-        </Form>
-      </ModalBody>
-    </Modal>
+          </Form>
+        </ModalBody>
+      </Modal>
+    </Draggable>
   ) : null
 }
 

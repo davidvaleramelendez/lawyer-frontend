@@ -48,3 +48,10 @@ Thumbs.db
 *.mov
 *.wmv
 
+# NPM lock fils
+package-lock*.json
+yarn.lock
+
+# Environment file
+.env
+

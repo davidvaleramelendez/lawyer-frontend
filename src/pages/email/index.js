@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 // ** Email App Component Imports
 import Mails from './Mails'
 import Sidebar from './Sidebar'
+import ModalComposeMail from './modal/ModalComposeMail'
 
 // ** Third Party Components
 import classnames from 'classnames'
@@ -59,6 +60,7 @@ const EmailApp = () => {
   const [editorHtmlContent, setEditorHtmlContent] = useState("")
   const [editorStateContent, setEditorStateContent] = useState(null)
 
+  
   // ** Toggle Compose Function
   const toggleCompose = () => setComposeOpen(!composeOpen)
 
@@ -174,6 +176,12 @@ const EmailApp = () => {
           />
         </div>
       </div>
+
+      <ModalComposeMail
+        store={store}
+        composeOpen={composeOpen}
+        toggleCompose={toggleCompose}
+      />
     </Fragment>
   )
 }

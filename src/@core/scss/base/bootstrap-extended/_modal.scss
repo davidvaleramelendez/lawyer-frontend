@@ -50,7 +50,7 @@
   &.modal-sticky {
     bottom: 0;
     right: 0;
-    top: auto;
+    top: 0;
     left: auto;
     height: auto;
     position: fixed;
@@ -70,6 +70,24 @@
       line-height: 0;
     }
   }
+}
+
+// dragging for mail compose modal
+.compose-modal {
+    position: absolute;
+    bottom: 20px;
+    right: 40px;
+    height: auto;
+    width: -webkit-fill-available;
+
+  &.modal-xl {
+    margin-right: 0px;
+  }
+}
+
+// none pointer event for mail compose modal
+.compose-mask-modal {
+  pointer-events: none;
 }
 
 // Modal XS

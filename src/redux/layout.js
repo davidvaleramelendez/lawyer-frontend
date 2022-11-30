@@ -26,7 +26,6 @@ import {
 import axios from 'axios'
 
 async function getSiteSettingRequest(params) {
-  console.log(params)
   return axios.get(`${API_ENDPOINTS.layout.siteSetting}`, { params }).then((layout) => layout.data).catch((error) => error)
 }
 

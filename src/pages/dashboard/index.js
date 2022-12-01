@@ -36,6 +36,9 @@ import {
   cleanDashboardMessage
 } from './store'
 
+// ** MenuConfig Import
+import menuConfig from '@configs/menuConfig'
+
 // Translation
 import { useTranslation } from 'react-i18next'
 
@@ -238,7 +241,9 @@ const EcommerceDashboard = () => {
       })
     }
   }
-
+  const checkDashboardComponent = (role, component) => {
+    return menuConfig[role][component]
+  }
   return store ? (
     <div id="dashboard-ecommerce">
       {!store.loading ? (
@@ -248,6 +253,7 @@ const EcommerceDashboard = () => {
       ) : null}
 
       <Row className="match-height">
+      { checkDashboardComponent(userData.role.RoleName, 'Documents') ? <>
         <Col xl={4} md={6} xs={12}>
           <CardMedal
             t={t}
@@ -255,6 +261,7 @@ const EcommerceDashboard = () => {
             caseCount={(store.dashboardItems && store.dashboardItems.open_cases_count) || 0}
           />
         </Col>
+        </> : null }
 
         <Col xl={8} md={6} xs={12}>
           <StatsCard
@@ -269,10 +276,12 @@ const EcommerceDashboard = () => {
       </Row>
 
       <Row className="match-height">
+        { (checkDashboardComponent(userData.role.RoleName, 'Inquiry') || checkDashboardComponent(userData.role.RoleName, 'Task')) ? <>
         <Col lg={4} md={12}>
           <Row className="match-height">
             <Col lg={12} md={6} xs={12}>
               {/* Todos */}
+              { checkDashboardComponent(userData.role.RoleName, 'Task') ? <>
               <Card className='card-transaction'>
                 <CardHeader>
                   <CardTitle tag='h4'>{t("Todo List")}</CardTitle>
@@ -294,9 +303,11 @@ const EcommerceDashboard = () => {
                   </div>
                 </CardBody>
               </Card>
+              </> : null }
               {/* /Todos */}
 
               {/* Contacts */}
+              { checkDashboardComponent(userData.role.RoleName, 'Inquiry') ? <>
               <Card className='card-transaction'>
                 <CardHeader>
                   <CardTitle tag='h4'>{t("New inquiry")}</CardTitle>
@@ -318,13 +329,15 @@ const EcommerceDashboard = () => {
                   </div>
                 </CardBody>
               </Card>
+              </> : null }
               {/* /Contacts */}
             </Col>
           </Row>
         </Col>
-
+        </> : null }
         <Col lg={8} md={12}>
           {/* Last open cases */}
+          { checkDashboardComponent(userData.role.RoleName, 'Documents') ? <>
           <Card className='card-company-table'>
             <CardHeader>
               <CardTitle tag='h4'>{t("Open cases")}</CardTitle>
@@ -345,11 +358,13 @@ const EcommerceDashboard = () => {
               </> : null}
             </Table>
           </Card>
+          </> : null }
           {/* /Last open cases */}
         </Col>
       </Row>
 
       <Row className="match-height">
+        { checkDashboardComponent(userData.role.RoleName, 'Invoice') ? <>
         <Col lg={8} md={12}>
           {/* Invoices */}
           <Card className='card-company-table'>
@@ -375,7 +390,9 @@ const EcommerceDashboard = () => {
           </Card>
           {/* /Invoices */}
         </Col>
+         </> : null }
 
+        { checkDashboardComponent(userData.role.RoleName, 'Chat') ? <>
         <Col lg={4} md={6} xs={12}>
           {/* Chats */}
           <Card className='card-developer-meetup'>
@@ -405,6 +422,7 @@ const EcommerceDashboard = () => {
           </Card>
           {/* /Chats */}
         </Col>
+        </> : null }
       </Row>
     </div>
   ) : null

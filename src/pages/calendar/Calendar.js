@@ -137,21 +137,21 @@ const Calendar = (props) => {
         })
         if (events_in_clicked_day.length >= 2) {
           calendarRef.current.getApi().changeView('timeGridDay', selected_date)
-        }
-      } else {
-        let evntData = { ...store.eventItem }
-        if (clickedEvent && clickedEvent.id) {
-          if (store.eventItems && store.eventItems.length) {
-            const index = store.eventItems.findIndex(x => JSON.stringify(x.id) === clickedEvent.id)
-            if (index !== -1) {
-              evntData = { ...store.eventItems[index] }
+        } else {
+          let evntData = { ...store.eventItem }
+          if (clickedEvent && clickedEvent.id) {
+            if (store.eventItems && store.eventItems.length) {
+              const index = store.eventItems.findIndex(x => JSON.stringify(x.id) === clickedEvent.id)
+              if (index !== -1) {
+                evntData = { ...store.eventItems[index] }
+              }
             }
           }
+  
+          dispatch(getEventItem(evntData))
+          setAddEventModalOpen(true)
         }
-
-        dispatch(getEventItem(evntData))
-        setAddEventModalOpen(true)
-      }
+      } 
 
 
       // * Only grab required field otherwise it goes in infinity loop

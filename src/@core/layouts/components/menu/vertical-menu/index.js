@@ -27,7 +27,7 @@ const Sidebar = props => {
 
   // ** Function to handle Mouse Enter
   const onMouseEnter = () => {
-    setMenuHover(true)
+    setMenuHover(false)
   }
 
   // ** Scroll Menu

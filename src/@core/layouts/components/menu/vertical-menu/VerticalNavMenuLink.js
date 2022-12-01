@@ -6,7 +6,9 @@ import classnames from 'classnames'
 import { useTranslation } from 'react-i18next'
 
 // ** Reactstrap Imports
-import { Badge } from 'reactstrap'
+import { Badge, UncontrolledTooltip  } from 'reactstrap'
+
+import { useSelector } from 'react-redux'
 
 const VerticalNavMenuLink = ({ item, activeItem }) => {
   // ** Conditional Link Tag, if item has newTab or externalLink props use <a> tag else use NavLink
@@ -14,9 +16,10 @@ const VerticalNavMenuLink = ({ item, activeItem }) => {
 
   // ** Hooks
   const { t } = useTranslation()
-
+  const layoutStore = useSelector(state => state.layout)
   return (
     <li
+      id={item.title.split(' ').join('-')}
       className={classnames({
         'nav-item': !item.children,
         disabled: item.disabled,
@@ -54,6 +57,12 @@ const VerticalNavMenuLink = ({ item, activeItem }) => {
           </Badge>
         ) : null}
       </LinkTag>
+      { layoutStore.menuCollapsed === true ? (
+          <UncontrolledTooltip placement='left' target={item.title.split(' ').join('-')}>
+            {item.title}
+          </UncontrolledTooltip> 
+        ) : ''
+      }
     </li>
   )
 }

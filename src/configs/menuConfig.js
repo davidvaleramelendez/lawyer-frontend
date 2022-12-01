@@ -2,32 +2,64 @@
 
 const menuConfig = {
   Admin: {
-    Inquiry: false,
-    Chat: true,
-    Invoice: false,
+    Email: true,
     Documents: true,
-    Task: true
+    Chat: true,
+    Task: true,
+    Calendar: true,
+    Respites: true,
+    Outbox: true,
+    Bill: true,
+    Inquiry: true,
+    User: true,
+    Account: true,
+    Email_Template: true,
+    Cloud_Server: true
   },
   Lawyer: {
-    Inquiry: true,
-    Chat: true,
-    Invoice: true,
+    Email: true,
     Documents: true,
-    Task: true
+    Chat: true,
+    Task: true,
+    Calendar: true,
+    Respites: true,
+    Outbox: true,
+    Bill: true,
+    Inquiry: true,
+    User: true,
+    Account: true,
+    Email_Template: true,
+    Cloud_Server: true
   },
   Partner: {
-    Inquiry: true,
-    Chat: true,
-    Invoice: true,
+    Email: true,
     Documents: true,
-    Task: true
+    Chat: true,
+    Task: true,
+    Calendar: true,
+    Respites: true,
+    Outbox: true,
+    Bill: true,
+    Inquiry: true,
+    User: true,
+    Account: true,
+    Email_Template: true,
+    Cloud_Server: true
   },
   Customer: {
-    Inquiry: true,
-    Chat: true,
-    Invoice: true,
+    Email: true,
     Documents: true,
-    Task: true
+    Chat: true,
+    Task: true,
+    Calendar: true,
+    Respites: true,
+    Outbox: true,
+    Bill: true,
+    Inquiry: true,
+    User: true,
+    Account: true,
+    Email_Template: true,
+    Cloud_Server: true
   }
 }
 

@@ -405,7 +405,17 @@ export const appEmailSlice = createSlice({
     actionFlag: "",
     loading: false,
     success: "",
-    error: ""
+    error: "",
+
+    // compose modal 
+    composeOpen: false,
+    ccOpen: false,
+    bccOpen: false,
+    modalMaximize: false,
+    userOptions: [],
+    editorHtmlContent: "",
+    modalSizeStyle: "",
+    modalPositionStyle: ""
   },
   reducers: {
     selectMail: (state, action) => {
@@ -456,6 +466,54 @@ export const appEmailSlice = createSlice({
       state.actionFlag = ""
       state.success = ""
       state.error = ""
+    },
+
+    /** Compose related reducers */
+    toggleCompose: (state) => {
+      state.composeOpen = !state.composeOpen
+    },
+
+    closeCompose: (state) => {
+      state.composeOpen = false
+    },
+
+    setCCOpen: (state, action) => {
+      state.ccOpen = action.payload || false
+    },
+
+    setBCCOpen: (state, action) => {
+      state.bccOpen = action.payload || false
+    },
+
+    setModalMaximize: (state, action) => {
+      state.modalMaximize = action.payload || false
+    },
+
+    setEditorHtmlContent: (state, action) => {
+      state.editorHtmlContent = action.payload || ""
+    }, 
+
+    setUserOptions: (state, action) => {
+      state.userOptions = action.payload || []
+    },
+
+    setModalSizeStyle: (state, action) => {
+      state.modalSizeStyle = action.payload || ""
+    },
+
+    setModalPositionStyle: (state, action) => {
+      state.modalPositionStyle = action.payload || ""
+    },
+
+    resetComposeModal: (state) => {
+      state.composeOpen = false
+      state.ccOpen = false
+      state.bccOpen = false
+      state.modalMaximize = false
+      state.userOptions = []
+      state.editorHtmlContent = ""
+      state.modalSizeStyle = ""
+      state.modalPositionStyle = ""
     }
   },
   extraReducers: (builder) => {
@@ -547,7 +605,17 @@ export const {
   updateEmailLoader,
   resetSelectedMail,
   resetMailDetailItem,
-  clearEmailMessage
+  clearEmailMessage,
+  toggleCompose,
+  closeCompose,
+  setCCOpen,
+  setBCCOpen,
+  setModalMaximize,
+  setUserOptions,
+  setEditorHtmlContent,
+  setModalSizeStyle,
+  setModalPositionStyle,
+  resetComposeModal
 } = appEmailSlice.actions
 
 export default appEmailSlice.reducer

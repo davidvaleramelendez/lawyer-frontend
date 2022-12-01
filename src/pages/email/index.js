@@ -26,7 +26,8 @@ import {
   resetMailDetailItem,
   createEmailAttachment,
   deleteEmailAttachment,
-  clearEmailMessage
+  clearEmailMessage,
+  toggleCompose
 } from './store'
 
 // ** Utils
@@ -55,17 +56,14 @@ const EmailApp = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [openMail, setOpenMail] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [composeOpen, setComposeOpen] = useState(false)
+  // const [composeOpen, setComposeOpen] = useState(false)
   const [uploadedFiles, setUploadedFiles] = useState([])
   const [editorHtmlContent, setEditorHtmlContent] = useState("")
   const [editorStateContent, setEditorStateContent] = useState(null)
 
-  
-  // ** Toggle Compose Function
-  const toggleCompose = () => setComposeOpen(!composeOpen)
-
   // ** Store Variables
   const dispatch = useDispatch()
+
   const store = useSelector(state => state.email)
 
   // ** Vars
@@ -124,13 +122,9 @@ const EmailApp = () => {
     <Fragment>
       <Sidebar
         store={store}
-        dispatch={dispatch}
-        getMails={getMails}
         setOpenMail={setOpenMail}
         sidebarOpen={sidebarOpen}
-        toggleCompose={toggleCompose}
         setSidebarOpen={setSidebarOpen}
-        resetSelectedMail={resetSelectedMail}
       />
       <div className='content-right'>
         <div className='content-body'>
@@ -149,7 +143,6 @@ const EmailApp = () => {
             selectMail={selectMail}
             searchInput={searchInput}
             rowsPerPage={rowsPerPage}
-            composeOpen={composeOpen}
             setOpenMail={setOpenMail}
             uploadedFiles={uploadedFiles}
             getMailDetail={getMailDetail}
@@ -177,11 +170,7 @@ const EmailApp = () => {
         </div>
       </div>
 
-      <ModalComposeMail
-        store={store}
-        composeOpen={composeOpen}
-        toggleCompose={toggleCompose}
-      />
+      <ModalComposeMail/>
     </Fragment>
   )
 }

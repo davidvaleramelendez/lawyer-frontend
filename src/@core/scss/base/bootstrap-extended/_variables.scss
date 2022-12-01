@@ -622,6 +622,19 @@ $code-font-size: 90% !default;
 
 $kbd-bg: #eee !default;
 
+// compose modal sizes
+$modal-height: 480px;
+$modal-min-md-width: 350px;
+$modal-min-lg-width: 500px;
+$modal-md-width-for-768: 500px;
+$modal-lg-width-for-768: 650px;
+$modal-md-width-for-992: 600px;
+$modal-lg-width-for-992: 800px;
+$modal-md-width-for-1280: 700px;
+$modal-lg-width-for-1280: 900px;
+$modal-md-width-for-1600: 800px;
+$modal-lg-width-for-1600: 1100px;
+
 //svg color
 // $svg-color-light: #626262 !default;
 

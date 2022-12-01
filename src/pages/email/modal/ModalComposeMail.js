@@ -1,7 +1,7 @@
 /* eslint-disable object-shorthand */
 
 // ** React Imports
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 // ** Custom Components
 import Avatar from '@components/avatar'
@@ -16,6 +16,7 @@ import draftToHtml from 'draftjs-to-html'
 import Select, { components } from 'react-select'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import ResizeObserver from 'resize-observer-polyfill'
 
 // ** Icons Import
 import {
@@ -24,7 +25,8 @@ import {
   Trash,
   Paperclip,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Disc
 } from 'react-feather'
 
 // ** Reactstrap Imports
@@ -37,8 +39,6 @@ import {
   ModalBody,
   UncontrolledButtonDropdown
 } from 'reactstrap'
-
-// import ModalDialog from 'react-bootstrap/ModalDialog'
 
 // ** React draggable Import
 import Draggable from 'react-draggable'
@@ -53,8 +53,16 @@ import {
   updateEmailLoader,
   createEmailAttachment,
   deleteEmailAttachment,
-  clearEmailMessage
+  clearEmailMessage,
+  toggleCompose,
+  setCCOpen,
+  setBCCOpen,
+  setModalMaximize,
+  setUserOptions,
+  setEditorHtmlContent
 } from '../store'
+
+// import {navbarColor} from '../../../redux/layout'
 
 // ** Custom Components
 import Spinner from '@components/spinner/Simple-grow-spinner'
@@ -76,8 +84,19 @@ import {
 // ** Styles
 import '@styles/react/libs/editor/editor.scss'
 import '@styles/react/libs/react-select/_react-select.scss'
+import { 
+  MODAL_LG_WIDTH_FOR_1600, 
+  MODAL_MD_WIDTH_FOR_1600, 
+  MODAL_LG_WIDTH_FOR_1280, 
+  MODAL_MD_WIDTH_FOR_1280, 
+  MODAL_LG_WIDTH_FOR_992, 
+  MODAL_MD_WIDTH_FOR_992, 
+  MODAL_LG_WIDTH_FOR_768, 
+  MODAL_MD_WIDTH_FOR_768, 
+  MODAL_MIN_MD_WIDTH,
+  MODAL_MIN_LG_WIDTH } from '../Constants'
 
-const ModalComposeMail = (props) => {
+const ModalComposeMail = () => {
   // ** Hooks
   const { t } = useTranslation()
   const MySwal = withReactContent(Swal)
@@ -85,9 +104,6 @@ const ModalComposeMail = (props) => {
   // ** Store vars
   const dispatch = useDispatch()
   const store = useSelector((state) => state.email)
-
-  // ** Props & Custom Hooks
-  const { composeOpen, toggleCompose } = props
 
   const {
     reset,
@@ -120,23 +136,19 @@ const ModalComposeMail = (props) => {
   }
 
   // ** States
-  const [ccOpen, setCCOpen] = useState(false)
-  const [bccOpen, setBCCOpen] = useState(false)
-  const [modalMaximize, setModalMaximize] = useState(false)
-  const [userOptions, setUserOptions] = useState([])
-  const [editorHtmlContent, setEditorHtmlContent] = useState("")
   const [uploadedFiles, setUploadedFiles] = useState([])
+  const [resized, setResized] = useState(false)
 
   // ** CC Toggle Function
   const toggleCC = (event) => {
     event.preventDefault()
-    setCCOpen(!ccOpen)
+    dispatch(setCCOpen(!store.ccOpen))
   }
 
   // ** BCC Toggle Function
   const toggleBCC = (event) => {
     event.preventDefault()
-    setBCCOpen(!bccOpen)
+    dispatch(setBCCOpen(!store.bccOpen))
   }
 
   // ** Toggles Compose POPUP
@@ -144,16 +156,23 @@ const ModalComposeMail = (props) => {
     if (event) {
       event.preventDefault()
     }
-    setModalMaximize(false)
-    setEditorHtmlContent('')
+    dispatch(setModalMaximize(false))
+    dispatch(setEditorHtmlContent(''))
     reset(emailItem)
-    toggleCompose()
+    dispatch(toggleCompose())
   }
 
   // ** Minimize and maximize size of modal
   const onToggleMinMaxSize = (event) => {
     event.preventDefault()
-    setModalMaximize(!modalMaximize)
+
+    const modalContents = document.getElementsByClassName('modal-content')
+    if (modalContents.length > 0 && modalContents[0].getAttribute('style') && modalContents[0].getAttribute('style') !== "") {
+      modalContents[0].setAttribute('style', '')
+      setResized(false)
+    } else {
+      dispatch(setModalMaximize(!store.modalMaximize))
+    }
   }
 
   /* Swal Alert */
@@ -242,7 +261,33 @@ const ModalComposeMail = (props) => {
 
   const handleEditorStateChange = (state) => {
     // console.log("handleEditorStateChange >>>> ", state)
-    setEditorHtmlContent(draftToHtml(convertToRaw(state.getCurrentContent())))
+    dispatch(setEditorHtmlContent(draftToHtml(convertToRaw(state.getCurrentContent()))))
+  }
+
+  // ** Compose Modal Resize Observer
+  const ro = new ResizeObserver((entries) => {
+    console.log('------ resize --------')
+    for (const entry of entries) {
+        const {left, top, width, height} = entry.contentRect
+        console.log('Element:', entry.target)
+        console.log(`Element's size: ${ width }px x ${ height }px`)
+        console.log(`Element's paddings: ${ top }px ; ${ left }px`)   
+        
+          console.log(' set store modal maximize: ', store.modalMaximize)
+        const modalContents = document.getElementsByClassName('modal-content')
+        if (modalContents.length > 0 && modalContents[0].getAttribute('style') && modalContents[0].getAttribute('style') !== "") {
+          setResized(true)
+        } else {
+          setResized(false)
+        }
+    }
+  })
+ 
+  const onModalOpened = () => {
+    const modalContents = document.getElementsByClassName('modal-content')
+    if (modalContents.length > 0) {
+      ro.observe(modalContents[0])
+    }
   }
 
   // ** UseEffect: GET initial data on Mount
@@ -257,7 +302,7 @@ const ModalComposeMail = (props) => {
         }
       })
     }
-    setUserOptions(list1)
+    dispatch(setUserOptions(list1))
 
     /* For blank message api called inside */
     if (store && (store.success || store.error || store.actionFlag)) {
@@ -273,8 +318,8 @@ const ModalComposeMail = (props) => {
     if (store && store.actionFlag && store.actionFlag === "ATTACHMENT_ADDED") {
       setUploadedFiles(store.attachments)
     }
+
   }, [dispatch, store.userItems, store.success, store.error, store.actionFlag])
-  // console.log("uploadedFiles >>> ", uploadedFiles)
 
   const SelectComponent = ({ data, ...props }) => {
     return (
@@ -297,8 +342,8 @@ const ModalComposeMail = (props) => {
         subject: values.subject
       }
 
-      if (editorHtmlContent) {
-        mailData.message = editorHtmlContent
+      if (store.editorHtmlContent) {
+        mailData.message = store.editorHtmlContent
       }
 
       if (values.email_to && values.email_to.length) {
@@ -332,11 +377,12 @@ const ModalComposeMail = (props) => {
         backdrop={false}
         id='compose-mail'
         container='.content-body'
-        className={`compose-modal ${  modalMaximize ? 'modal-xl' : 'modal-lg'}`}
-        isOpen={composeOpen}
+        className={`compose-modal ${  store.modalMaximize ? 'modal-large' : 'modal-medium'}`}
+        isOpen={store.composeOpen}
         contentClassName='p-0'
         toggle={toggleCompose}
         modalClassName='compose-mask-modal'
+        onOpened={onModalOpened}
       >
         {!store.loading ? (
           <Spinner
@@ -344,7 +390,7 @@ const ModalComposeMail = (props) => {
           />
         ) : null}
 
-        <div className='modal-header'>
+        <div className='modal-header modal-movable'>
           <h5 className='modal-title'>Compose Mail</h5>
           <div className='modal-actions'>
             <a
@@ -360,7 +406,9 @@ const ModalComposeMail = (props) => {
               className='text-body me-75'
               onClick={onToggleMinMaxSize}
             >
-              {!modalMaximize ? <>
+              {resized ? <>
+                <Disc size={12} />
+              </> : !store.modalMaximize ? <>
                 <Maximize2 size={14} />
               </> : <>
                 <Minimize2 size={14} />
@@ -396,7 +444,7 @@ const ModalComposeMail = (props) => {
                       isClearable={false}
                       closeMenuOnSelect={false}
                       theme={selectThemeColors}
-                      options={userOptions}
+                      options={store.userOptions}
                       placeholder={ValidationSchema.email_to && ValidationSchema.email_to.placeholder}
                       className='react-select select-borderless'
                       classNamePrefix='select'
@@ -414,7 +462,7 @@ const ModalComposeMail = (props) => {
               </div>
             </div>
 
-            {ccOpen === true ? (
+            {store.ccOpen === true ? (
               <div className='compose-mail-form-field cc-wrapper'>
                 <Label for='email_cc' className='form-label'>Cc:</Label>
                 <div className='flex-grow-1 w-100'>
@@ -432,7 +480,7 @@ const ModalComposeMail = (props) => {
                         isClearable={false}
                         closeMenuOnSelect={false}
                         theme={selectThemeColors}
-                        options={userOptions}
+                        options={store.userOptions}
                         placeholder={ValidationSchema.email_cc && ValidationSchema.email_cc.placeholder}
                         className='react-select select-borderless'
                         classNamePrefix='select'
@@ -452,7 +500,7 @@ const ModalComposeMail = (props) => {
               </div>
             ) : null}
 
-            {bccOpen === true ? (
+            {store.bccOpen === true ? (
               <div className='compose-mail-form-field cc-wrapper'>
                 <Label for='email_bcc' className='form-label'>Bcc:</Label>
                 <div className='flex-grow-1 w-100'>
@@ -470,7 +518,7 @@ const ModalComposeMail = (props) => {
                         isClearable={false}
                         closeMenuOnSelect={false}
                         theme={selectThemeColors}
-                        options={userOptions}
+                        options={store.userOptions}
                         placeholder={ValidationSchema.email_bcc && ValidationSchema.email_bcc.placeholder}
                         className='react-select select-borderless'
                         classNamePrefix='select'
@@ -509,7 +557,7 @@ const ModalComposeMail = (props) => {
               ) : null}
             </div>
 
-            <div id='message-editor'>
+            <div id='message-editor' className='message-editor'>
               <Controller
                 defaultValue=""
                 control={control}
@@ -595,7 +643,7 @@ const ModalComposeMail = (props) => {
               </div>
 
               <div className='footer-action d-flex align-items-center'>
-                <Trash className='cursor-pointer' size={18} onClick={toggleCompose} />
+                <Trash className='cursor-pointer' size={18} onClick={() => dispatch(toggleCompose())} />
               </div>
             </div>
           </Form>
@@ -605,4 +653,4 @@ const ModalComposeMail = (props) => {
   ) : null
 }
 
-export default ModalComposeMail
+export default React.memo(ModalComposeMail)

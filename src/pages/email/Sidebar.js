@@ -22,6 +22,10 @@ import {
   ListGroupItem
 } from 'reactstrap'
 
+// ** Store & Actions
+import { useDispatch } from 'react-redux'
+import {  toggleCompose, getMails, resetSelectedMail } from './store'
+
 // Translation
 import { useTranslation } from 'react-i18next'
 
@@ -29,14 +33,13 @@ const Sidebar = (props) => {
   // ** Props
   const {
     store,
-    getMails,
-    dispatch,
     setOpenMail,
     sidebarOpen,
-    toggleCompose,
-    setSidebarOpen,
-    resetSelectedMail
+    setSidebarOpen
   } = props
+
+  // ** Store Variables
+  const dispatch = useDispatch()
 
   // ** Vars
   const params = useParams()
@@ -52,7 +55,8 @@ const Sidebar = (props) => {
   }
 
   const handleComposeClick = () => {
-    toggleCompose()
+    console.log(' compose click ')
+    dispatch(toggleCompose())
     setSidebarOpen(false)
   }
 

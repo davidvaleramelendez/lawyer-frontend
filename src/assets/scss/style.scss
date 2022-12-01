@@ -46,3 +46,7 @@ $calendar-night-color: rgb(215 215 215 / 34%);
 		background-color: $calendar-night-color;
 	}
 }
+
+.main-menu:not(.expanded) .navigation li.nav-item a:hover > * {
+	transform: none;
+}

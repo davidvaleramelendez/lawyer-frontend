@@ -7,13 +7,15 @@ import classnames from 'classnames'
 import { useTranslation } from 'react-i18next'
 
 // ** Reactstrap Imports
-import { Collapse, Badge } from 'reactstrap'
+import { Collapse, Badge, UncontrolledTooltip  } from 'reactstrap'
 
 // ** Vertical Menu Items Component
 import VerticalNavMenuItems from './VerticalNavMenuItems'
 
 // ** Utils
 import { hasActiveChild, removeChildren } from '@layouts/utils'
+
+import { useSelector } from 'react-redux'
 
 const VerticalNavMenuGroup = ({
   item,
@@ -35,6 +37,9 @@ const VerticalNavMenuGroup = ({
 
   // ** Current Val
   const currentURL = useLocation().pathname
+
+  // ** Layout State
+  const layoutStore = useSelector(state => state.layout)
 
   // ** Toggle Open Group
   const toggleOpenGroup = (item, parent) => {
@@ -120,6 +125,7 @@ const VerticalNavMenuGroup = ({
 
   return (
     <li
+      id={item.title.split(' ').join('-')}
       className={classnames('nav-item has-sub', {
         open: openClassCondition(item.id),
         'menu-collapsed-open': groupActive.includes(item.id),
@@ -137,6 +143,12 @@ const VerticalNavMenuGroup = ({
           </Badge>
         ) : null}
       </Link>
+      { layoutStore.menuCollapsed === true ? (
+        <UncontrolledTooltip placement='left' target={item.title.split(' ').join('-')}>
+          {item.title}
+        </UncontrolledTooltip>
+        ) : ''
+      }
 
       {/* Render Child Recursively Through VerticalNavMenuItems Component */}
       <ul className='menu-content'>

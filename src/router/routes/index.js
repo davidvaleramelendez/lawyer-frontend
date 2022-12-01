@@ -1,9 +1,5 @@
 // ** React Imports
 import { Fragment } from 'react'
-import { Navigate } from 'react-router-dom'
-
-// ** Store
-import { useSelector } from 'react-redux'
 
 // ** Routes Imports
 import AppRoutes from './Apps'
@@ -21,9 +17,7 @@ import PrivateRoute from '@components/routes/PrivateRoute'
 
 // ** Utils
 import { isObjEmpty } from '@utils'
-
-// ** Configs
-import menuConfig from '@configs/menuConfig'
+import RoleWrapper from '../../@core/components/routes/RoleWrapper'
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -56,12 +50,10 @@ const getRouteMeta = route => {
 // ** Return Filtered Array of Routes & Paths
 const MergeLayoutRoutes = (layout, defaultLayout) => {
   const LayoutRoutes = []
-  const RoleName = useSelector(state => state.auth.userItem.role.RoleName)
 
   if (Routes) {
     Routes.filter(route => {
       let isBlank = false
-      let isAuthenticate = true
 
       // ** Checks if Route layout or Default layout matches current layout
       if (
@@ -74,10 +66,8 @@ const MergeLayoutRoutes = (layout, defaultLayout) => {
         if (route.meta) {
           route.meta.layout === 'blank' ? (isBlank = true) : (isBlank = false)
           RouteTag = route.meta.publicRoute ? PublicRoute : PrivateRoute
-
-          // Check if user can access this route
-          isAuthenticate = menuConfig[RoleName][route.meta.id] !== false
         }
+
         if (route.element) {
           const Wrapper =
             // eslint-disable-next-line multiline-ternary
@@ -88,14 +78,11 @@ const MergeLayoutRoutes = (layout, defaultLayout) => {
 
           route.element = (
             <Wrapper {...(isBlank === false ? getRouteMeta(route) : {})}>
-              
-                {isAuthenticate ? (
-                  <RouteTag route={route}>
-                    {route.element}
-                  </RouteTag>
-                ) : (
-                  <Navigate to="/error-page" />
-                )}
+              <RouteTag route={route}>
+                <RoleWrapper route={route}>
+                  {route.element}
+                </RoleWrapper>
+              </RouteTag>
             </Wrapper>
           )
         }

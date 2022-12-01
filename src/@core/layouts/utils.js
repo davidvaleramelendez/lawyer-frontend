@@ -109,8 +109,8 @@ export const canViewMenuGroup = item => {
 
 export const canViewMenuItem = item => {
   const ability = useContext(AbilityContext)
-  const userRole = useSelector(state => state.auth.userItem.role.RoleName)
-  const hasRole = menuConfig[userRole][item.id] !== false
+  const userRole = useSelector(state => state.auth.userItem.role?.RoleName || null)
+  const hasRole = userRole ? menuConfig[userRole][item.id] !== false : false
 
   return hasRole && ability.can(item.action, item.resource)
 }

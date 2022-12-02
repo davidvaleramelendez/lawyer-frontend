@@ -2,7 +2,7 @@
 
 const menuConfig = {
   Admin: {
-    emailApp: false,
+    emailApp: true,
     documentApp: true,
     chatApp: true,
     taskApp: true,

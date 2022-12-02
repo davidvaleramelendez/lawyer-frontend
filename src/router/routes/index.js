@@ -14,10 +14,10 @@ import LayoutWrapper from '@src/@core/layouts/components/layout-wrapper'
 // ** Route Components
 import PublicRoute from '@components/routes/PublicRoute'
 import PrivateRoute from '@components/routes/PrivateRoute'
+import RoleWrapper from '@components/routes/RoleWrapper'
 
 // ** Utils
 import { isObjEmpty } from '@utils'
-import RoleWrapper from '../../@core/components/routes/RoleWrapper'
 
 const getLayout = {
   blank: <BlankLayout />,

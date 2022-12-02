@@ -1,7 +1,9 @@
 /* eslint-disable implicit-arrow-linebreak */
 // ** React Imports
 import { useContext } from 'react'
+import { useSelector } from 'react-redux'
 import { AbilityContext } from '@src/utility/context/Can'
+import menuConfig from '@configs/menuConfig'
 
 /**
  * Return which component to render based on it's data/context
@@ -107,5 +109,8 @@ export const canViewMenuGroup = item => {
 
 export const canViewMenuItem = item => {
   const ability = useContext(AbilityContext)
-  return ability.can(item.action, item.resource)
+  const userRole = useSelector(state => state.auth.userItem.role?.RoleName || null)
+  const hasRole = userRole ? menuConfig[userRole][item.id] !== false : false
+
+  return hasRole && ability.can(item.action, item.resource)
 }

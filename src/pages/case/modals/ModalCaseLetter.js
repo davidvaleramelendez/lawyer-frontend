@@ -1,7 +1,7 @@
 /* eslint-disable object-shorthand */
 
 // ** React Imports
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 // Translation
 import { useTranslation } from 'react-i18next'
@@ -49,9 +49,17 @@ import {
   getTransformDate
 } from '@utils'
 
+// ** Office Editor Component
+import { Editor } from 'react-draft-wysiwyg'
+import draftToHtml from 'draftjs-to-html'
+import htmlToDraft from 'html-to-draftjs'
+import { EditorState, ContentState, convertToRaw } from 'draft-js'
+
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
+import '@styles/react/libs/editor/editor.scss'
+
 
 const ModalCaseLetter = ({
   open,
@@ -68,6 +76,21 @@ const ModalCaseLetter = ({
   // ** Store vars
   const dispatch = useDispatch()
   const store = useSelector((state) => state.cases)
+
+  // ** States
+  const [editorStateContent, setEditorStateContent] = useState(letterRowData.message)
+  const [editorHtmlContent, setEditorHtmlContent] = useState(letterRowData.message)
+
+  const getInitialHTML = (value) => {
+    const contentBlock = htmlToDraft(value)
+    if (contentBlock) {
+      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks)
+      const editorState = EditorState.createWithContent(contentState)
+      setEditorStateContent(editorState)
+      return editorState
+    }
+    return value
+  }
 
   const ValidationSchema = {
     subject: {
@@ -90,15 +113,24 @@ const ModalCaseLetter = ({
     defaultValues: letterRowData
   })
 
-  const handleReset = () => {
+  const handleReset = async () => {
+    setEditorHtmlContent('')
+    if (letterItem && letterItem.message) {
+      letterItem.message = await getInitialHTML(letterItem.message)
+    }
     reset(letterItem)
     setLetterRowData(letterItem)
     toggleModal()
   }
 
-
+  const handleEditorStateChange = (state) => {
+    // console.log("handleEditorStateChange >>> ", state)
+    setEditorStateContent(state)
+    setEditorHtmlContent(draftToHtml(convertToRaw(state.getCurrentContent())))
+  }
   // ** Get contact on mount based on id
   useEffect(() => {
+    
     /* For blank message api called inside */
     if (store && (store.success || store.error || store.actionFlag)) {
       dispatch(clearCaseMessage())
@@ -112,6 +144,7 @@ const ModalCaseLetter = ({
     if (letterRowData && letterRowData.id) {
       reset(letterRowData)
     }
+    getInitialHTML(letterRowData.message)
   }, [dispatch, letterRowData, store.success, store.error, store.actionFlag])
   // console.log("store >>> ", store)
 
@@ -123,6 +156,10 @@ const ModalCaseLetter = ({
         case_id: caseData.CaseID,
         subject: values.Subject,
         message: values.message
+      }
+
+      if (editorHtmlContent) {
+          letterData.message = editorHtmlContent
       }
 
       if (values.fristDate && values.fristDate.length) {
@@ -206,7 +243,13 @@ const ModalCaseLetter = ({
                   name='message'
                   control={control}
                   rules={ValidationSchema.message}
-                  render={({ field }) => <Input {...field} type="textarea" rows={6} placeholder={ValidationSchema.message && ValidationSchema.message.placeholder} invalid={errors.message && true} />}
+                  render={({ field }) => <Editor
+                    {...field}
+                    editorState={editorStateContent}
+                    onEditorStateChange={handleEditorStateChange}
+                    placeholder={ValidationSchema.message && ValidationSchema.message.placeholder}
+                />
+                }
                 />
                 <FormFeedback>{errors.message?.message}</FormFeedback>
               </div>

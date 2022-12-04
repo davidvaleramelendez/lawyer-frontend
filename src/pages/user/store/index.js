@@ -12,7 +12,8 @@ import {
 
 // ** Utils
 import {
-  setCurrentUser
+  setCurrentUser,
+  setTotalNumber
 } from '@utils'
 
 // ** Api endpoints
@@ -22,6 +23,8 @@ import {
 
 // ** Axios Imports
 import axios from 'axios'
+
+import { TN_USER } from '@constant/defaultValues'
 
 /* User */
 async function getUserStatsListRequest(params) {
@@ -64,6 +67,7 @@ async function getUserListRequest(params) {
 export const getUserList = createAsyncThunk('appUser/getUserList', async (params) => {
   try {
     const response = await getUserListRequest(params)
+    setTotalNumber(TN_USER, response.pagination.totalRecord)
     if (response && response.flag) {
       return {
         params,

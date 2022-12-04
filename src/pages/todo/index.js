@@ -33,7 +33,8 @@ import {
 
 // ** Utils
 import {
-  isUserLoggedIn
+  isUserLoggedIn,
+  getTotalNumber
 } from '@utils'
 
 // ** Custom Components
@@ -41,7 +42,8 @@ import Notification from '@components/toast/notification'
 
 // Constant
 import {
-  root
+  root,
+  TN_TASK
 } from '@constant/defaultValues'
 
 // ** Styles
@@ -57,7 +59,7 @@ const TodoApp = () => {
   const store = useSelector(state => state.todo)
 
   // ** States
-  const [placeholderTasks] = useState(8)
+  const [placeholderTasks] = useState(getTotalNumber(TN_TASK) ?? 0)
   const [loadFirst, setLoadFirst] = useState(true)
   const [sort, setSort] = useState('')
   const [searchInput, setSearchInput] = useState('')

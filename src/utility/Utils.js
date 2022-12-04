@@ -8,7 +8,9 @@ import {
   storageTokenKeyName,
   storageLoggedAtKeyName,
   storageRefreshTokenKeyName,
-  storageTokenExpiresKeyName
+  storageTokenExpiresKeyName,
+  storageTotalNumberName,
+  storageSiteSetting
 } from '@constant/defaultValues'
 
 import {
@@ -345,4 +347,63 @@ export const increaseCustomDateFormat = (type, value, format = 'MM-DD-YYYY', dat
     console.log('>>>>: src/utility/Utils.js  : increaseCustomDateFormat -> error', error)
     return new Date()
   }
+}
+
+// Get current total number
+export const getTotalNumber = (title) => {
+  try {
+    const total_numbers = JSON.parse(localStorage.getItem(storageTotalNumberName) ?? '{}')
+    return total_numbers[title]
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js : setCurrentUser -> error', error)
+  }
+}
+
+// Set current total number
+export const setTotalNumber = (title, number) => {
+  try {
+    let total_numbers = JSON.parse(localStorage.getItem(storageTotalNumberName) ?? '{}')
+    total_numbers = {
+      ...total_numbers,
+      [title]: number
+    }
+    localStorage.setItem(storageTotalNumberName, JSON.stringify(total_numbers))
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js : getCurrentUser -> error', error)
+  }
+}
+
+// Get current total number
+export const getCurrentPageNumber = (title, rowsPerPage, currentPage) => {
+  try {
+    const total_numbers = JSON.parse(localStorage.getItem(storageTotalNumberName) ?? '{}')[title]
+    return Math.min(total_numbers, rowsPerPage * currentPage) - (rowsPerPage * (currentPage - 1))
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js : setCurrentUser -> error', error)
+  }
+}
+
+//Set Site layout Setting
+export const setSiteLayoutSetting = (siteSetting) => {
+  try {
+    if (siteSetting) {
+      localStorage.setItem(storageSiteSetting, JSON.stringify(siteSetting))
+    } else {
+      localStorage.removeItem(storageSiteSetting)
+    }
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js : setSiteLayoutSetting -> error', error)
+  }
+}
+
+// Get current Site Setting value
+export const getSiteLayoutSetting = () => {
+  let _sitesetting = null
+  try {
+    _sitesetting = localStorage.getItem(storageSiteSetting) !== null ? JSON.parse(localStorage.getItem(storageSiteSetting)) : null
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js  : getSiteLayoutSetting -> error', error)
+    _sitesetting = null
+  }
+  return _sitesetting
 }

@@ -94,7 +94,7 @@ const SidebarLeft = props => {
           </div>
         </CardBody>
       </div>
-      <div className='mt-auto'>
+      <div>
         <img className='img-fluid' src={illustration} alt='illustration' />
       </div>
     </Fragment>

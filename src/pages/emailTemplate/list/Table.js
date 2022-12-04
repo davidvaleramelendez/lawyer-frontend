@@ -17,7 +17,9 @@ import {
 
 // ** Utils
 import {
-    isUserLoggedIn
+    isUserLoggedIn,
+    getTotalNumber,
+    getCurrentPageNumber
 } from '@utils'
 
 // Constant
@@ -25,7 +27,8 @@ import {
     root,
     adminRoot,
     perPageRowItems,
-    defaultPerPageRow
+    defaultPerPageRow,
+    TN_EMAIL_TEMPLATE
 } from '@constant/defaultValues'
 
 // ** Store & Actions
@@ -51,6 +54,7 @@ import withReactContent from 'sweetalert2-react-content'
 // ** Custom Components
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
+import DotPulse from '@components/dotpulse'
 
 const CustomHeader = ({
     searchInput,
@@ -296,23 +300,32 @@ const EmailTemplateList = () => {
 
     return store ? (<Fragment>
         <Card className="overflow-hidden">
-            <DatatablePagination
-                customClass="react-dataTable"
-                columns={columns}
-                loading={store.loading}
-                data={store.emailTemplateItems}
-                pagination={store.pagination}
-                handleSort={handleSort}
-                handlePagination={handlePagination}
-                subHeaderComponent={
-                    <CustomHeader
-                        searchInput={searchInput}
-                        rowsPerPage={rowsPerPage}
-                        handleSearch={handleSearch}
-                        handlePerPage={handlePerPage}
+            {(!store.loading && !getTotalNumber(TN_EMAIL_TEMPLATE)) ? (
+                    <DotPulse />
+                ) : (
+                    <DatatablePagination
+                        customClass="react-dataTable"
+                        columns={columns}
+                        loading={store.loading}
+                        data={store.emailTemplateItems}
+                        pagination={store.loading ? store.pagination : {
+                                ...store.pagination, 
+                                perPage: getCurrentPageNumber(TN_EMAIL_TEMPLATE, rowsPerPage, currentPage)
+                            }
+                        }
+                        handleSort={handleSort}
+                        handlePagination={handlePagination}
+                        subHeaderComponent={
+                            <CustomHeader
+                                searchInput={searchInput}
+                                rowsPerPage={rowsPerPage}
+                                handleSearch={handleSearch}
+                                handlePerPage={handlePerPage}
+                            />
+                        }
                     />
-                }
-            />
+                )
+            }
         </Card>
     </Fragment>) : null
 }

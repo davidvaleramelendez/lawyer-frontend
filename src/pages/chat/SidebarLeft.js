@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 
 // ** Custom Components
 import Avatar from '@components/avatar'
+import DotPulse from '@components/dotpulse'
 
 // ** Store & Actions
 import {
@@ -90,7 +91,10 @@ const SidebarLeft = (props) => {
 
   // ** Renders Chat
   const renderChats = () => {
-    if (!loading) {
+    if (!loading && placeholderChats === 0) {
+      return <DotPulse />
+    }
+    if (!loading && placeholderChats > 0) {
       return (<>
         {Array.from(Array(placeholderChats).keys(), (row, index) => (
           <li
@@ -162,7 +166,10 @@ const SidebarLeft = (props) => {
 
   // ** Renders Contact
   const renderContacts = () => {
-    if (!loading) {
+    if (!loading && placeholderContacts === 0) {
+      return <DotPulse />
+    }
+    if (!loading && placeholderContacts > 0) {
       return (<>
         {Array.from(Array(placeholderContacts).keys(), (row, index) => (
           <li

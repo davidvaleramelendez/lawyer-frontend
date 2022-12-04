@@ -7,6 +7,8 @@ export const storageTokenKeyName = 'accessToken'
 export const storageRefreshTokenKeyName = 'refreshToken'
 export const storageTokenExpiresKeyName = 'tokenExpires'
 export const storageLoggedAtKeyName = 'loggedAt'
+export const storageTotalNumberName = "totalNubmer"
+export const storageSiteSetting = "siteSetting"
 
 /* Hexadecimal key for encryption */
 export const cryptoKey = '731fc6d09baf51f8361fa6408f306ca9'
@@ -68,3 +70,15 @@ export const paymentMethod = [
     { value: "bank_account", label: "IBAN" },
     { value: "paypal", label: "Bar" }
 ]
+
+
+/* Total Number Titles */
+export const TN_CASES = "case"
+export const TN_OUTBOX = "outbox"
+export const TN_INVOICE = "invoice"
+export const TN_CONTACT = "contact"
+export const TN_USER = "user"
+export const TN_EMAIL_TEMPLATE = "email_template"
+export const TN_CHAT = "chat"
+export const TN_CHAT_CONTACT = "chat_contact"
+export const TN_TASK = "task"

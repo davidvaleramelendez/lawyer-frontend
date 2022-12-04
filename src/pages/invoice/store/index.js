@@ -5,7 +5,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 // Constant
 import {
-  paymentMethod
+  paymentMethod,
+  TN_INVOICE
 } from '@constant/defaultValues'
 import {
   userItem,
@@ -17,7 +18,8 @@ import {
 // ** Utils
 import {
   getTransformDate,
-  increaseDaysDateFormat
+  increaseDaysDateFormat,
+  setTotalNumber
 } from '@utils'
 
 // ** Api endpoints
@@ -35,6 +37,7 @@ async function getInvoiceListRequest(params) {
 export const getInvoiceList = createAsyncThunk('appInvoice/getInvoiceList', async (params) => {
   try {
     const response = await getInvoiceListRequest(params)
+    setTotalNumber(TN_INVOICE, response.pagination.totalRecord)
     if (response && response.flag) {
       return {
         params,

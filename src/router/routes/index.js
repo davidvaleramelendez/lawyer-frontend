@@ -14,6 +14,7 @@ import LayoutWrapper from '@src/@core/layouts/components/layout-wrapper'
 // ** Route Components
 import PublicRoute from '@components/routes/PublicRoute'
 import PrivateRoute from '@components/routes/PrivateRoute'
+import RoleWrapper from '@components/routes/RoleWrapper'
 
 // ** Utils
 import { isObjEmpty } from '@utils'
@@ -53,6 +54,7 @@ const MergeLayoutRoutes = (layout, defaultLayout) => {
   if (Routes) {
     Routes.filter(route => {
       let isBlank = false
+
       // ** Checks if Route layout or Default layout matches current layout
       if (
         (route.meta && route.meta.layout && route.meta.layout === layout) ||
@@ -65,6 +67,7 @@ const MergeLayoutRoutes = (layout, defaultLayout) => {
           route.meta.layout === 'blank' ? (isBlank = true) : (isBlank = false)
           RouteTag = route.meta.publicRoute ? PublicRoute : PrivateRoute
         }
+
         if (route.element) {
           const Wrapper =
             // eslint-disable-next-line multiline-ternary
@@ -75,7 +78,11 @@ const MergeLayoutRoutes = (layout, defaultLayout) => {
 
           route.element = (
             <Wrapper {...(isBlank === false ? getRouteMeta(route) : {})}>
-              <RouteTag route={route}>{route.element}</RouteTag>
+              <RouteTag route={route}>
+                <RoleWrapper route={route}>
+                  {route.element}
+                </RoleWrapper>
+              </RouteTag>
             </Wrapper>
           )
         }
@@ -104,6 +111,7 @@ const getRoutes = (layout) => {
       children: LayoutRoutes
     })
   })
+  
   return AllRoutes
 }
 

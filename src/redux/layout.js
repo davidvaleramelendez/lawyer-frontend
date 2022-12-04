@@ -16,6 +16,12 @@ import {
   API_ENDPOINTS
 } from '@src/utility/ApiEndPoints'
 
+// ** SiteSetting in utils
+import {
+  getSiteLayoutSetting,
+  setSiteLayoutSetting
+} from '@utils'
+
 // ** Axios Imports
 import axios from 'axios'
 
@@ -26,19 +32,21 @@ async function getSiteSettingRequest(params) {
 export const getSiteSetting = createAsyncThunk('layout/getSiteSetting', async (params) => {
   const isRTL = themeConfig.layout.isRTL
   const layout = themeConfig.layout.type
-  let skin = themeConfig.layout.skin
-  let footerType = themeConfig.layout.footer.type
-  let navbarType = themeConfig.layout.navbar.type
-  let menuHidden = themeConfig.layout.menu.isHidden
-  let navbarColor = themeConfig.layout.navbar.backgroundColor
-  let contentWidth = themeConfig.layout.contentWidth
-  let menuCollapsed = themeConfig.layout.menu.isCollapsed
+  const _siteSettingLayout = getSiteLayoutSetting()
+  let skin = _siteSettingLayout ? _siteSettingLayout.skin : themeConfig.layout.skin
+  let footerType = _siteSettingLayout ? _siteSettingLayout.footerType : themeConfig.layout.footer.type
+  let navbarType = _siteSettingLayout ? _siteSettingLayout.navbarType : themeConfig.layout.navbar.type
+  let menuHidden = _siteSettingLayout ? _siteSettingLayout.menuHidden : themeConfig.layout.menu.isHidden
+  let navbarColor = _siteSettingLayout ? _siteSettingLayout.navbarColor : themeConfig.layout.navbar.backgroundColor
+  let contentWidth = _siteSettingLayout ? _siteSettingLayout.contentWidth : themeConfig.layout.contentWidth
+  let menuCollapsed = _siteSettingLayout ? _siteSettingLayout.menuCollapsed : themeConfig.layout.menu.isCollapsed
   try {
     const response = await getSiteSettingRequest(params)
     if (response && response.flag) {
 
       if (response.data) {
         if (response.data.value) {
+          await setSiteLayoutSetting(response.data.value)
           if (response.data.value.skin) {
             skin = response.data.value.skin
           }
@@ -128,6 +136,8 @@ async function createSiteSettingRequest(payload) {
 export const createSiteSetting = createAsyncThunk('layout/createSiteSetting', async (payload) => {
   try {
     const response = await createSiteSettingRequest(payload)
+    console.log(JSON.parse(response.data.value))
+    await setSiteLayoutSetting(JSON.parse(response.data.value))
     if (response && response.flag) {
       return {
         siteSettingItem: response.data,

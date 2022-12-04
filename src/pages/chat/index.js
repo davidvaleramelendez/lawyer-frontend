@@ -9,12 +9,15 @@ import UserProfileSidebar from './UserProfileSidebar'
 
 // ** Utils
 import {
-  isUserLoggedIn
+  isUserLoggedIn,
+  getTotalNumber
 } from '@utils'
 
 // Constant
 import {
-  root
+  root,
+  TN_CHAT,
+  TN_CHAT_CONTACT
 } from '@constant/defaultValues'
 
 // ** Third Party Components
@@ -37,8 +40,8 @@ const ChatApp = () => {
   const store = useSelector(state => state.chat)
 
   // ** States
-  const [placeholderChats] = useState(2)
-  const [placeholderContacts] = useState(3)
+  const [placeholderChats] = useState(getTotalNumber(TN_CHAT) ?? 0)
+  const [placeholderContacts] = useState(getTotalNumber(TN_CHAT_CONTACT) ?? 0)
   const [loadFirst, setLoadFirst] = useState(true)
   const [user, setUser] = useState({})
   const [sidebar, setSidebar] = useState(false)

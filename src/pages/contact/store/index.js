@@ -16,6 +16,9 @@ import {
 // ** Axios Imports
 import axios from 'axios'
 
+import { setTotalNumber } from '@utils'
+import { TN_CONTACT } from '@constant/defaultValues'
+
 async function getContactListRequest(params) {
   return axios.get(`${API_ENDPOINTS.contacts.list}`, { params }).then((contact) => contact.data).catch((error) => error)
 }
@@ -23,6 +26,7 @@ async function getContactListRequest(params) {
 export const getContactList = createAsyncThunk('appContact/getContactList', async (params) => {
   try {
     const response = await getContactListRequest(params)
+    setTotalNumber(TN_CONTACT, response.pagination.totalRecord)
     if (response && response.flag) {
       return {
         params,

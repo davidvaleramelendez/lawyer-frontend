@@ -21,7 +21,9 @@ import Select from "react-select"
 import {
     isUserLoggedIn,
     getTransformDate,
-    getRandColorClass
+    getRandColorClass,
+    getCurrentPageNumber, 
+    getTotalNumber
 } from "@utils"
 
 // Constant
@@ -29,7 +31,8 @@ import {
     root,
     adminRoot,
     perPageRowItems,
-    defaultPerPageRow
+    defaultPerPageRow,
+    TN_CASES
 } from "@constant/defaultValues"
 import {
     caseItem
@@ -55,6 +58,7 @@ import {
 import Avatar from "@components/avatar"
 import Notification from '@components/toast/notification'
 import DatatablePagination from "@components/datatable/DatatablePagination"
+import DotPulse from "@components/dotpulse"
 
 /* Get windows size */
 function getWindowSize() {
@@ -376,29 +380,37 @@ const CaseList = () => {
             )
         }
     ]
-
+    
     return (<>
         <Card className="overflow-hidden">
-            <DatatablePagination
-                customClass="react-dataTable"
-                columns={columns}
-                data={store.caseItems}
-                loading={store.loading}
-                pagination={store.pagination}
-                handleSort={handleSort}
-                handlePagination={handlePagination}
-                subHeaderComponent={
-                    <CustomHeader
-                        searchInput={searchInput}
-                        rowsPerPage={rowsPerPage}
-                        handleSearch={handleSearch}
-                        handlePerPage={handlePerPage}
-                        statusFilter={statusFilter}
-                        handleStatusFilter={handleStatusFilter}
+            {(!store.loading && !getTotalNumber(TN_CASES)) ? (
+                    <DotPulse />
+                ) : (
+                    <DatatablePagination
+                        customClass="react-dataTable"
+                        columns={columns}
+                        data={store.caseItems}
+                        loading={store.loading}
+                        pagination={store.loading ? store.pagination : {
+                                ...store.pagination, 
+                                perPage: getCurrentPageNumber(TN_CASES, rowsPerPage, currentPage)
+                            }
+                        }
+                        handleSort={handleSort}
+                        handlePagination={handlePagination}
+                        subHeaderComponent={
+                            <CustomHeader
+                                searchInput={searchInput}
+                                rowsPerPage={rowsPerPage}
+                                handleSearch={handleSearch}
+                                handlePerPage={handlePerPage}
+                                statusFilter={statusFilter}
+                                handleStatusFilter={handleStatusFilter}
+                            />
+                        }
                     />
-                }
-            />
-
+                )
+            }
             <ModalCaseDetail
                 toggleModal={() => setDetailModalOpen(!detailModalOpen)}
                 open={detailModalOpen}

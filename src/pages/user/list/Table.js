@@ -8,6 +8,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import Avatar from '@components/avatar'
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
+import DotPulse from '@components/dotpulse'
 
 // ** Reactstrap Imports
 import {
@@ -39,7 +40,9 @@ import {
 // ** Utils
 import {
     isUserLoggedIn,
-    getRandColorClass
+    getRandColorClass,
+    getTotalNumber,
+    getCurrentPageNumber
 } from '@utils'
 
 // ** Store & Actions
@@ -57,7 +60,8 @@ import {
     root,
     adminRoot,
     perPageRowItems,
-    defaultPerPageRow
+    defaultPerPageRow,
+    TN_USER
 } from '@constant/defaultValues'
 import {
     userItem
@@ -472,31 +476,40 @@ const UsersList = () => {
             )
         }
     ]
-
+    console.log(getCurrentPageNumber(TN_USER, rowsPerPage, currentPage))
     return (
         <Fragment>
             <Card className="overflow-hidden">
-                <DatatablePagination
-                    customClass="react-dataTable"
-                    columns={columns}
-                    data={store.userItems}
-                    loading={store.loading}
-                    pagination={store.pagination}
-                    handleSort={handleSort}
-                    handlePagination={handlePagination}
-                    subHeaderComponent={
-                        <CustomHeader
-                            roleFilter={roleFilter}
-                            roleOptions={roleOptions}
-                            searchInput={searchInput}
-                            rowsPerPage={rowsPerPage}
-                            handleSearch={handleSearch}
-                            setModalOpen={setModalOpen}
-                            handlePerPage={handlePerPage}
-                            handleRoleFilter={handleRoleFilter}
-                        />
-                    }
-                />
+            {(!store.loading && !getTotalNumber(TN_USER)) ? (
+                    <DotPulse />
+                ) : (
+                    <DatatablePagination
+                        customClass="react-dataTable"
+                        columns={columns}
+                        data={store.userItems}
+                        loading={store.loading}
+                        pagination={store.loading ? store.pagination : {
+                                ...store.pagination, 
+                                perPage: getCurrentPageNumber(TN_USER, rowsPerPage, currentPage)
+                            }
+                        }
+                        handleSort={handleSort}
+                        handlePagination={handlePagination}
+                        subHeaderComponent={
+                            <CustomHeader
+                                roleFilter={roleFilter}
+                                roleOptions={roleOptions}
+                                searchInput={searchInput}
+                                rowsPerPage={rowsPerPage}
+                                handleSearch={handleSearch}
+                                setModalOpen={setModalOpen}
+                                handlePerPage={handlePerPage}
+                                handleRoleFilter={handleRoleFilter}
+                            />
+                        }
+                    />
+                )
+            }
             </Card>
 
             <ModalAddUser

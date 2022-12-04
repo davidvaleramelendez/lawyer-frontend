@@ -54,7 +54,10 @@ import {
   Check,
   Phone,
   Calendar,
-  Paperclip
+  Paperclip,
+  Edit,
+  Trash2,
+  Send
 } from 'react-feather'
 
 // ** Utils
@@ -290,92 +293,13 @@ const CaseView = () => {
       </Row>
       {/* /Header */}
 
-      {/* Client detail */}
+      {/* Client && Opponent detail */}
       <Row className='invoice-preview'>
         <Col xl={12} md={12} sm={12}>
           <Card className='invoice-preview-card'>
             <CardBody className='invoice-padding'>
               <Row>
-                <Col
-                  xl={6}
-                  md={6}
-                  sm={6}
-                  className={`d-flex flex-column justify-content-between border-container-lg ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder-glow'}`}
-                >
-                  <div className="user-avatar-section">
-                    <div className="d-flex justify-content-start">
-                      <div className="d-flex flex-column ml-1">
-                        <div className="user-info">
-                          <h4 className='mb-10'>{t("Client")}</h4>
-                          <span
-                            className={`mb-10 ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
-                          >
-                            {store.caseItem && store.caseItem.user && store.caseItem.user.name}
-                          </span>
-                        </div>
-
-                        {/* Buttons */}
-                        <div className="d-flex flex-wrap mt-1">
-                          <Button
-                            color="primary"
-                            className={`me-1 mb-1 ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder'}`}
-                            onClick={() => setEditModalOpen(true)}
-                          >
-                            {t("Edit")}
-                          </Button>
-
-                          <Button
-                            outline
-                            color="danger"
-                            className={`me-1 mb-1 ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder'}`}
-                            onClick={() => onDeleteFile(id)}
-                          >
-                            {t("Delete")} {t("file")}
-                          </Button>
-
-                          <Button
-                            outline
-                            color="primary"
-                            className={`mb-1 ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder'}`}
-                          >
-                            Send E-Mail
-                          </Button>
-                        </div>
-                        {/* /Buttons */}
-
-                        <ModalEditCaseClient
-                          open={editModalOpen}
-                          toggleModal={() => setEditModalOpen(!editModalOpen)}
-                          lawyers={store.laywerItems}
-                          groups={store.typeItems}
-                          caseData={store.caseItem}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="d-flex align-items-center user-total-numbers">
-                    <div className="d-flex align-items-center mr-2">
-                      <div className="color-box bg-light-primary">
-                        <Home />
-                      </div>
-
-                      <div className="ml-1 ms-1">
-                        <h5 className="mb-0">{t("Address")}</h5>
-                        <small
-                          className={`${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-100'}`}
-                        >
-                          {store.caseItem && store.caseItem.user ? <>
-                            {store.caseItem.user.Address ? `${store.caseItem.user.Address}, ` : ''}
-                            {store.caseItem.user.Postcode ? `${store.caseItem.user.Postcode} ` : ''}
-                            {store.caseItem.user.City}
-                          </> : null}
-                        </small>
-                      </div>
-                    </div>
-                  </div>
-                </Col>
-
+                {/* Client detail */}
                 <Col
                   xl={6}
                   md={6}
@@ -383,14 +307,32 @@ const CaseView = () => {
                   className={`${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder-glow'}`}
                 >
                   <div className='mt-md-0 mt-2'>
+                    <div className="user-info">
+                      <h4 className='mb-10'>{t("Client")}</h4>
+                    </div>
+
                     <div className='invoice-date-wrapper'>
                       <User size={14} />
                       <p className='invoice-date-title ms-1'>Name</p>
                       <p
-                        className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
+                        className={`me-2 invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                       >
                         {store.caseItem && store.caseItem.user && store.caseItem.user.name}
                       </p>
+                      <Button.Ripple
+                            color="flat-primary"
+                            className={`btn-icon rounded-circle ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder'}`}
+                            onClick={() => setEditModalOpen(true)}
+                          >
+                        <Edit size={16} />
+                      </Button.Ripple>
+                      <ModalEditCaseClient
+                          open={editModalOpen}
+                          toggleModal={() => setEditModalOpen(!editModalOpen)}
+                          lawyers={store.laywerItems}
+                          groups={store.typeItems}
+                          caseData={store.caseItem}
+                      />
                     </div>
 
                     <div className='invoice-date-wrapper'>
@@ -452,63 +394,42 @@ const CaseView = () => {
                         {store.caseItem && store.caseItem.Date && getTransformDate(store.caseItem.Date, "DD.MM.YYYY")}
                       </p>
                     </div>
-                  </div>
-                </Col>
-              </Row>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-      {/* /Client detail */}
 
-      {/* Opponent detail */}
-      <Row className='invoice-preview'>
-        <Col xl={12} md={12} sm={12}>
-          <Card className='invoice-preview-card'>
-            <CardBody className='invoice-padding pb-0'>
-              <Row className="mb-2">
-                <Col xl={6} md={6} sm={6} className='d-flex flex-column justify-content-between border-container-lg'>
-                  <div className="user-avatar-section">
-                    <div className="d-flex justify-content-start">
-                      <div className="d-flex flex-column ml-1">
-                        <div className="user-info">
-                          <h4 className='mb-10'>{t("Opponent")}</h4>
-                          <span className='mb-10'>
-                            {store.fighterItem && store.fighterItem.name ? (`${store.fighterItem.name} ${store.fighterItem.last_name}`) : null}
-                          </span>
-                        </div>
+                    <div className="d-flex flex-wrap mt-1">
+                      <Button.Ripple
+                        outline
+                        color="danger"
+                        className={`btn-icon rounded-circle me-1 mb-1 ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder'}`}
+                        onClick={() => onDeleteFile(id)}
+                      >
+                        <Trash2 size={16} />
+                      </Button.Ripple>
 
-                        {/* Buttons */}
-                        <div className="d-flex flex-wrap mt-1">
-                          <Button color='primary' className="mb-1" onClick={() => setOpponentModalOpen(true)}>
-                            {t("Edit")}
-                          </Button>
+                      <Button.Ripple
+                        outline
+                        color="primary"
+                        className={`btn-icon rounded-circle mb-1 ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder'}`}
+                      >
+                        <Send size={16} />
+                      </Button.Ripple>
 
-                          <ModalEditCaseOpponent
-                            open={opponentModalOpen}
-                            toggleModal={() => setOpponentModalOpen(!opponentModalOpen)}
-                            caseId={store.caseItem.CaseID}
-                            fighterData={store.fighterItem}
-                          />
-                        </div>
-                        {/* /Buttons */}
-                      </div>
                     </div>
                   </div>
-
                   <div className="d-flex align-items-center user-total-numbers">
                     <div className="d-flex align-items-center mr-2">
-                      <div className="color-box bg-light-primary">
-                        <Home />
+                      <div className="color-box bg-light-primary rounded-circle">
+                        <Home size={32} />
                       </div>
 
                       <div className="ml-1 ms-1">
                         <h5 className="mb-0">{t("Address")}</h5>
-                        <small>
-                          {store.fighterItem && store.fighterItem.id ? <>
-                            {store.fighterItem.address ? `${store.fighterItem.address}, ` : ''}
-                            {store.fighterItem.zip_code ? `${store.fighterItem.zip_code} ` : ''}
-                            {store.fighterItem.city}
+                        <small
+                          className={`${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-100'}`}
+                        >
+                          {store.caseItem && store.caseItem.user ? <>
+                            {store.caseItem.user.Address ? `${store.caseItem.user.Address}, ` : ''}
+                            {store.caseItem.user.Postcode ? `${store.caseItem.user.Postcode} ` : ''}
+                            {store.caseItem.user.City}
                           </> : null}
                         </small>
                       </div>
@@ -516,12 +437,29 @@ const CaseView = () => {
                   </div>
                 </Col>
 
-                <Col xl={6} md={6} sm={6}>
+                {/* Opponent detail */}
+                <Col xl={3} md={3} sm={3}>
                   <div className='mt-md-0 mt-2'>
+                    <div className="user-info">
+                      <h4 className='mb-10'>{t("Opponent")}</h4>
+                    </div>
                     <div className='invoice-date-wrapper'>
                       <User size={14} />
                       <p className='invoice-date-title ms-1'>Name</p>
                       <p className='invoice-date'>{store.fighterItem && store.fighterItem.name}</p>
+                      <Button.Ripple
+                            color="flat-primary"
+                            className={`btn-icon rounded-circle ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder'}`}
+                            onClick={() => setOpponentModalOpen(true)}
+                          >
+                        <Edit size={16} />
+                      </Button.Ripple>
+                      <ModalEditCaseOpponent
+                        open={opponentModalOpen}
+                        toggleModal={() => setOpponentModalOpen(!opponentModalOpen)}
+                        caseId={store.caseItem.CaseID}
+                        fighterData={store.fighterItem}
+                      />
                     </div>
 
                     <div className='invoice-date-wrapper'>
@@ -554,22 +492,40 @@ const CaseView = () => {
                       <p className='invoice-date'>{store.fighterItem && store.fighterItem.country}</p>
                     </div>
                   </div>
+                  <div className="d-flex align-items-center user-total-numbers mt-1">
+                    <div className="d-flex align-items-center mr-2">
+                      <div className="color-box bg-light-primary rounded-circle">
+                        <Home size={32} />
+                      </div>
+
+                      <div className="ml-1 ms-1">
+                        <h5 className="mb-0">{t("Address")}</h5>
+                        <small>
+                          {store.fighterItem && store.fighterItem.id ? <>
+                            {store.fighterItem.address ? `${store.fighterItem.address}, ` : ''}
+                            {store.fighterItem.zip_code ? `${store.fighterItem.zip_code} ` : ''}
+                            {store.fighterItem.city}
+                          </> : null}
+                        </small>
+                      </div>
+                    </div>
+                  </div>
                 </Col>
               </Row>
             </CardBody>
           </Card>
         </Col>
       </Row>
-      {/* /Opponent detail */}
+      {/* /Client && Opponent detail */}
 
-      {/* Notes History */}
+      {/* Notes && Time Recording && Letter && Document History */}
       <Row className='invoice-preview'>
         <Col xl={12} md={12} sm={12}>
           <Card className='invoice-preview-card'>
             <CardBody className='invoice-padding pb-0'>
               <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
                 <div className="d-flex flex-wrap">
-                  <Button color="primary" onClick={() => setNoteFileModalOpen(true)}>
+                  <Button className="mt-1" color="primary" onClick={() => setNoteFileModalOpen(true)}>
                     {t("Add a note")}
                   </Button>
 
@@ -578,10 +534,46 @@ const CaseView = () => {
                     toggleModal={() => setNoteFileModalOpen(!noteFileModalOpen)}
                     caseId={store.caseItem.CaseID}
                   />
+
+                  <Button className="ms-2 mt-1" color="primary" onClick={() => setTimeTrackModalOpen(true)}>
+                    {t("Add Time Tracking")}
+                  </Button>
+
+                  <ModalCaseTimeTracking
+                    open={timeTrackModalOpen}
+                    toggleModal={() => setTimeTrackModalOpen(!timeTrackModalOpen)}
+                    caseId={store.caseItem.CaseID}
+                  />
+
+                  <Button className="ms-2 mt-1" color="primary" onClick={() => setLetterModalOpen(true)}>
+                    {t("Write a letter now")}
+                  </Button>
+
+                  <ModalCaseLetter
+                    open={letterModalOpen}
+                    toggleModal={() => setLetterModalOpen(!letterModalOpen)}
+                    caseData={store.caseItem}
+                    fighterData={store.fighterItem}
+                    letterRowData={letterRowData}
+                    setLetterRowData={setLetterRowData}
+                  />
+
+                  <Button className="ms-2 mt-1" color="primary" onClick={() => setDocUploadModalOpen(true)}>
+                    {t("Upload document")}
+                  </Button>
+
+                  <ModalCaseDocument
+                    open={docUploadModalOpen}
+                    toggleModal={() => setDocUploadModalOpen(!docUploadModalOpen)}
+                    userId={store.caseItem && store.caseItem.UserID}
+                    caseId={store.caseItem && store.caseItem.CaseID}
+                    documentRowData={documentRowData}
+                    setDocumentRowData={setDocumentRowData}
+                  />
                 </div>
 
-                <div className="d-flex flex-wrap">
-                  <h3 className="invoice-date">{t("Notes History")}</h3>
+                <div className="d-flex flex-wrap mt-1">
+                  <h3 className="invoice-date">{t("History")}</h3>
                 </div>
               </div>
 
@@ -593,9 +585,9 @@ const CaseView = () => {
                       <th>Date</th>
                       <th>Subject</th>
                       <th>Done?</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
-                  {store.caseRecords && store.caseRecords.length ? <>
                     <tbody>
                       {store.caseRecords.map((record, index) => (
                         <tr key={`record_${index}`}>
@@ -631,101 +623,15 @@ const CaseView = () => {
                               </Label>
                             </div>
                           </td>
+                          <td/>
                         </tr>
                       ))}
-                    </tbody>
-                  </> : null}
-                </Table>
-
-                <ModalCaseRecordDetail
-                  open={recordDetailModalOpen}
-                  toggleModal={() => setRecordDetailModalOpen(!recordDetailModalOpen)}
-                  caseRecordRowData={caseRecordRowData}
-                  setCaseRecordRowData={setCaseRecordRowData}
-                />
-              </Row>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-      {/* /Notes History */}
-
-      {/* Time Recording History */}
-      <Row className='invoice-preview'>
-        <Col xl={12} md={12} sm={12}>
-          <Card className='invoice-preview-card'>
-            <CardBody className='invoice-padding pb-0'>
-              <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
-                <div className="d-flex flex-wrap">
-                  <Button color="primary" onClick={() => setTimeTrackModalOpen(true)}>
-                    {t("Add Time Tracking")}
-                  </Button>
-
-                  <ModalCaseTimeTracking
-                    open={timeTrackModalOpen}
-                    toggleModal={() => setTimeTrackModalOpen(!timeTrackModalOpen)}
-                    caseId={store.caseItem.CaseID}
-                  />
-                </div>
-
-                <div className="d-flex flex-wrap">
-                  <h3 className="invoice-date">{t("Time Recording History")}</h3>
-                </div>
-              </div>
-
-              <Row className='mb-2'>
-              </Row>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-      {/* /Time Recording History */}
-
-      {/* Letter history */}
-      <Row className='invoice-preview'>
-        <Col xl={12} md={12} sm={12}>
-          <Card className='invoice-preview-card'>
-            <CardBody className='invoice-padding pb-0'>
-              <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
-                <div className="d-flex flex-wrap">
-                  <Button color="primary" onClick={() => setLetterModalOpen(true)}>
-                    {t("Write a letter now")}
-                  </Button>
-
-                  <ModalCaseLetter
-                    open={letterModalOpen}
-                    toggleModal={() => setLetterModalOpen(!letterModalOpen)}
-                    caseData={store.caseItem}
-                    fighterData={store.fighterItem}
-                    letterRowData={letterRowData}
-                    setLetterRowData={setLetterRowData}
-                  />
-                </div>
-
-                <div className="d-flex flex-wrap">
-                  <h3 className="invoice-date">{t("Letter history")}</h3>
-                </div>
-              </div>
-
-              <Row className='mb-2'>
-                <Table responsive>
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Subject</th>
-                      <th>Deadline Until</th>
-                      <th>Done?</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  {store.caseLetters && store.caseLetters.length ? <>
-                    <tbody>
                       {store.caseLetters.map((letter, index) => (
                         <tr key={`letters_${index}`}>
+                          <td/>
                           <td>{letter.created_at && getTransformDate(letter.created_at, "DD.MM.YYYY")}</td>
 
                           <td>{letter.subject}</td>
-                          <td>{letter.frist_date && getTransformDate(letter.frist_date, "DD.MM.YYYY")}</td>
 
                           <td>
                             <div className='form-switch form-check-primary'>
@@ -754,61 +660,12 @@ const CaseView = () => {
                           </td>
                         </tr>
                       ))}
-                    </tbody>
-                  </> : null}
-                </Table>
-              </Row>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-      {/* /Letter history */}
-
-      {/* Document History */}
-      <Row className='invoice-preview'>
-        <Col xl={12} md={12} sm={12}>
-          <Card className='invoice-preview-card'>
-            <CardBody className='invoice-padding pb-0'>
-              <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
-                <div className="d-flex flex-wrap">
-                  <Button color="primary" onClick={() => setDocUploadModalOpen(true)}>
-                    {t("Upload document")}
-                  </Button>
-
-                  <ModalCaseDocument
-                    open={docUploadModalOpen}
-                    toggleModal={() => setDocUploadModalOpen(!docUploadModalOpen)}
-                    userId={store.caseItem && store.caseItem.UserID}
-                    caseId={store.caseItem && store.caseItem.CaseID}
-                    documentRowData={documentRowData}
-                    setDocumentRowData={setDocumentRowData}
-                  />
-                </div>
-
-                <div className="d-flex flex-wrap">
-                  <h3 className="invoice-date">{t("Document History")}</h3>
-                </div>
-              </div>
-
-              <Row className='mb-2'>
-                <Table responsive>
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Subject</th>
-                      <th>Description</th>
-                      <th>Done?</th>
-                      <th>Look At</th>
-                    </tr>
-                  </thead>
-                  {store.caseDocs && store.caseDocs.length ? <>
-                    <tbody>
                       {store.caseDocs.map((doc, index) => (
                         <tr key={`docs_${index}`}>
+                          <td/>
                           <td>{doc.created_at && getTransformDate(doc.created_at, "DD.MM.YYYY")}</td>
 
                           <td>{doc.title}</td>
-                          <td>{doc.description}</td>
 
                           <td>
                             <div className='form-switch form-check-primary'>
@@ -838,14 +695,20 @@ const CaseView = () => {
                         </tr>
                       ))}
                     </tbody>
-                  </> : null}
                 </Table>
+
+                <ModalCaseRecordDetail
+                  open={recordDetailModalOpen}
+                  toggleModal={() => setRecordDetailModalOpen(!recordDetailModalOpen)}
+                  caseRecordRowData={caseRecordRowData}
+                  setCaseRecordRowData={setCaseRecordRowData}
+                />
               </Row>
             </CardBody>
           </Card>
         </Col>
       </Row>
-      {/* /Document History */}
+      {/* /Notes && Time Recording && Letter && Document History */}
     </div>
   ) : null
 }

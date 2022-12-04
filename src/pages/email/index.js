@@ -1,6 +1,6 @@
 // ** React Imports
 import { Fragment, useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 // ** Email App Component Imports
 import Mails from './Mails'
@@ -14,8 +14,6 @@ import classnames from 'classnames'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   getMails,
-  selectMail,
-  selectAllMail,
   getMailDetail,
   markEmailTrash,
   markEmailDelete,
@@ -26,7 +24,8 @@ import {
   resetMailDetailItem,
   createEmailAttachment,
   deleteEmailAttachment,
-  clearEmailMessage
+  clearEmailMessage,
+  toggleCompose
 } from './store'
 
 // ** Utils
@@ -55,27 +54,26 @@ const EmailApp = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [openMail, setOpenMail] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [composeOpen, setComposeOpen] = useState(false)
+  // const [composeOpen, setComposeOpen] = useState(false)
   const [uploadedFiles, setUploadedFiles] = useState([])
   const [editorHtmlContent, setEditorHtmlContent] = useState("")
   const [editorStateContent, setEditorStateContent] = useState(null)
-
-  
-  // ** Toggle Compose Function
-  const toggleCompose = () => setComposeOpen(!composeOpen)
+  const [folder, setFolder] = useState('inbox')
 
   // ** Store Variables
   const dispatch = useDispatch()
+
   const store = useSelector(state => state.email)
 
-  // ** Vars
-  const params = useParams()
-
-  const handleGetMails = (param = params, search = searchInput, perPage = rowsPerPage) => {
+  const handleGetMails = (search = searchInput, perPage = rowsPerPage) => {
     dispatch(getMails({
       payload: { search: search || "", perPage: perPage || 10 },
-      folder: param.folder || 'inbox'
+      folder: folder || 'inbox'
     }))
+  }
+
+  const goToOtherFolder = (newFolder) => {
+    setFolder(newFolder)
   }
 
   // ** UseEffect: GET initial data on Mount
@@ -87,7 +85,7 @@ const EmailApp = () => {
 
     if (loadFirst) {
       setRowsPerPage(10)
-      handleGetMails(params, searchInput, 10)
+      handleGetMails(searchInput, 10)
       setLoadFirst(false)
     }
 
@@ -117,20 +115,17 @@ const EmailApp = () => {
       setUploadedFiles(store.attachments)
       setEditorStateContent(null)
     }
-  }, [dispatch, store.attachments, store.success, store.error, store.actionFlag, params.folder, searchInput, loadFirst])
-  // console.log("store >>> ", store)
-
+  }, [dispatch, store.attachments, store.success, store.error, store.actionFlag, searchInput, loadFirst])
+  
   return (
     <Fragment>
       <Sidebar
         store={store}
-        dispatch={dispatch}
-        getMails={getMails}
         setOpenMail={setOpenMail}
         sidebarOpen={sidebarOpen}
-        toggleCompose={toggleCompose}
         setSidebarOpen={setSidebarOpen}
-        resetSelectedMail={resetSelectedMail}
+        folder={folder}
+        goToOtherFolder={goToOtherFolder}
       />
       <div className='content-right'>
         <div className='content-body'>
@@ -142,18 +137,15 @@ const EmailApp = () => {
           ></div>
           <Mails
             store={store}
-            params={params}
+            folder={folder}
             dispatch={dispatch}
             openMail={openMail}
             getMails={getMails}
-            selectMail={selectMail}
             searchInput={searchInput}
             rowsPerPage={rowsPerPage}
-            composeOpen={composeOpen}
             setOpenMail={setOpenMail}
             uploadedFiles={uploadedFiles}
             getMailDetail={getMailDetail}
-            selectAllMail={selectAllMail}
             toggleCompose={toggleCompose}
             setSidebarOpen={setSidebarOpen}
             setSearchInput={setSearchInput}
@@ -177,11 +169,7 @@ const EmailApp = () => {
         </div>
       </div>
 
-      <ModalComposeMail
-        store={store}
-        composeOpen={composeOpen}
-        toggleCompose={toggleCompose}
-      />
+      <ModalComposeMail/>
     </Fragment>
   )
 }

@@ -31,19 +31,28 @@ import {
   InputGroup,
   InputGroupText
 } from 'reactstrap'
+import DraftCard from './DraftCard'
+import { 
+  selectMail,
+  selectAllMail,
+  selectDraft,
+  selectAllDraft, 
+  getDraftMail, 
+  deleteDrafts,
+  resetSelectedDraft,
+  resetComposeModal
+} from './store'
 
 const Mails = (props) => {
   // ** Props
   const {
     store,
-    params,
+    folder,
     openMail,
     dispatch,
-    selectMail,
     searchInput,
     rowsPerPage,
     setOpenMail,
-    selectAllMail,
     getMailDetail,
     uploadedFiles,
     setSearchInput,
@@ -66,7 +75,12 @@ const Mails = (props) => {
     resetSelectedMail
   } = props
 
-  const { mails, selectedMails } = store
+  const { 
+    mails, 
+    drafts, 
+    selectedMails, 
+    selectedDrafts 
+  } = store
 
   // ** States
 
@@ -92,12 +106,16 @@ const Mails = (props) => {
 
   // ** Handles SelectAll
   const handleSelectAll = (event) => {
-    dispatch(selectAllMail(event.target.checked))
+    if (folder === 'draft') {
+      dispatch(selectAllDraft(event.target.checked))
+    } else {
+      dispatch(selectAllMail(event.target.checked))
+    }
   }
 
   // ** Handles Move to Trash
   const handleMailToTrash = (ids) => {
-    if (params && params.folder === "trash") {
+    if (folder === "trash") {
       dispatch(markEmailDelete({ emailIds: ids }))
     } else {
       dispatch(markEmailTrash({ emailIds: ids }))
@@ -107,7 +125,7 @@ const Mails = (props) => {
 
   // ** Handles Restore mail
   const handleMailToRestore = (ids) => {
-    if (params && params.folder === "trash") {
+    if (folder === "trash") {
       dispatch(markEmailRestore({ emailIds: ids }))
     }
     dispatch(resetSelectedMail())
@@ -115,7 +133,7 @@ const Mails = (props) => {
 
   const handleSearch = (value) => {
     setSearchInput(value)
-    handleGetMails(params, value, rowsPerPage)
+    handleGetMails(value, rowsPerPage)
   }
 
   const onScrollDown = (container, value) => {
@@ -125,7 +143,7 @@ const Mails = (props) => {
     if ((scrollTop + clientHeight) === (scrollHeight - 1) || (scrollTop + clientHeight) === (scrollHeight)) {
       if (value < totalRecord) {
         setRowsPerPage(value + 10)
-        handleGetMails(params, searchInput, value + 10)
+        handleGetMails(searchInput, value + 10)
       }
     }
   }
@@ -145,6 +163,49 @@ const Mails = (props) => {
             handleMailClick={handleMailClick}
             getTransformDate={getTransformDate}
             markEmailImportant={markEmailImportant}
+          />
+        )
+      })
+    }
+  }
+
+  // ** Handles Draft click Functions
+  const handleDraftClick = (draft) => {
+    dispatch(getDraftMail(draft.id))
+  }
+
+  // ** Handles Draft removing
+  const handleRemoveDrafts = () => {
+    const ids = selectedDrafts.map(t => t.id).join(',')
+    
+    if (selectedDrafts.filter(t => t.id === store.composeModal.draftId).length) {
+      dispatch(resetComposeModal())
+    }
+
+    dispatch(deleteDrafts(ids))
+    dispatch(resetSelectedDraft())
+  }
+
+  const getCheckedAllStatus = () => {
+    if (folder === 'draft') {
+      return selectedDrafts.length && selectedDrafts.length === drafts.length
+    }
+    return selectedMails.length && selectedMails.length === mails.length
+  }
+
+  // ** Renders Draft
+  const renderDrafts = () => {
+    if (drafts && drafts.length) {
+      return drafts.map((draft, index) => {
+        return (
+          <DraftCard
+            key={index}
+            draftItem={draft}
+            dispatch={dispatch}
+            selectDraft={selectDraft}
+            selectedDrafts={selectedDrafts}
+            handleDraftClick={handleDraftClick}
+            getTransformDate={getTransformDate}
           />
         )
       })
@@ -181,17 +242,17 @@ const Mails = (props) => {
               type='checkbox'
               id='select-all'
               onChange={handleSelectAll}
-              checked={selectedMails.length && selectedMails.length === mails.length}
+              checked={getCheckedAllStatus()}
             />
             <Label className='form-check-label fw-bolder ps-25 mb-0' for='select-all'>
               Select All
             </Label>
           </div>
 
-          {selectedMails && selectedMails.length ? (
+          {folder !== 'draft' && selectedMails && selectedMails.length ? (
             <div className='action-right'>
               <ul className='list-inline m-0'>
-                {params && params.folder === "trash" ? (<li className='list-inline-item'>
+                {folder === "trash" ? (<li className='list-inline-item'>
                   <span className='action-icon' onClick={() => handleMailToRestore(selectedMails)}>
                     <RefreshCw size={18} />
                   </span>
@@ -205,6 +266,18 @@ const Mails = (props) => {
               </ul>
             </div>
           ) : null}
+
+          {folder === 'draft' && selectedDrafts && selectedDrafts.length ? (
+            <div className='action-right'>
+              <ul className='list-inline m-0'>
+                <li className='list-inline-item'>
+                  <span className='action-icon' onClick={() => handleRemoveDrafts()}>
+                    <Trash size={18} />
+                  </span>
+                </li>
+              </ul>
+            </div>
+          ) : null}
         </div>
 
         <PerfectScrollbar
@@ -212,8 +285,11 @@ const Mails = (props) => {
           options={{ wheelPropagation: false }}
           onScrollDown={(container) => onScrollDown(container, rowsPerPage)}
         >
-          {mails && mails.length ? (
+          {folder !== 'draft' && mails && mails.length ? (
             <ul className='email-media-list'>{renderMails()}</ul>
+
+          ) : folder === 'draft' && drafts && drafts.length ? (
+            <ul className='email-media-list'>{renderDrafts()}</ul>
           ) : (
             <div className='no-results d-block'>
               <h5>No Items Found</h5>
@@ -223,7 +299,7 @@ const Mails = (props) => {
       </div>
 
       <MailDetails
-        params={params}
+        folder={folder}
         openMail={openMail}
         dispatch={dispatch}
         setOpenMail={setOpenMail}

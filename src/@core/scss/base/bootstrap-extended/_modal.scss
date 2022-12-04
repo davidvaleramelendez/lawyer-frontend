@@ -27,6 +27,11 @@
         box-shadow: none;
       }
     }
+
+    // modal movable
+    &.modal-movable {
+      cursor: move;
+    }
   }
   .modal-fullscreen {
     .modal-header {
@@ -74,16 +79,76 @@
 
 // dragging for mail compose modal
 .compose-modal {
-    position: absolute;
-    bottom: 20px;
-    right: 40px;
-    height: auto;
-    width: -webkit-fill-available;
+  position: absolute;
+  top: calc(100% - 530px);
+  right: 40px;
+  height: auto;
+  width: -webkit-fill-available;
 
   &.modal-xl {
     margin-right: 0px;
   }
+
+  .modal-content {
+    resize: both;
+    overflow: auto;
+    min-width: 350px !important;
+    min-height: 350px !important;
+    height: 480px;
+  }
+
+  @media (min-width: 768px) {
+    .modal-content {
+      min-width: 380px !important;
+      min-height: 360px !important;
+    }    
+  }
+
+  @media (min-width: 992px) {
+    .modal-content {
+      min-width: 400px !important;
+      min-height: 370px !important;
+    }    
+  }
+
+  @media (min-width: 1280px) {
+    .modal-content {
+      min-width: 450px !important;
+      min-height: 380px !important;
+    }    
+  }
+
+  @media (min-width: 1600px) {
+    .modal-content {
+      min-width: 500px !important;
+      min-height: 400px !important;
+    }    
+  }
 }
+
+// compose form flexible
+.compose-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .message-editor {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    z-index: 0;
+
+    .rdw-editor-wrapper {
+      flex: 1;
+
+      .rdw-editor-main {
+        min-height: auto !important;
+        overflow: hidden !important;
+      }
+    }
+  }
+}
+
 
 // none pointer event for mail compose modal
 .compose-mask-modal {
@@ -216,7 +281,6 @@
 // --- refer and earn end ----- //
 
 // --- share project start ----- //
-
 @include media-breakpoint-down(lg) {
   #shareProject {
     .list-group {
@@ -229,5 +293,59 @@
     }
   }
 }
-
 // --- share project end ----- //
+
+// --- define modal-medium and modal-large for mail compose modal start ---- //
+
+.modal-medium {
+  width: $modal-min-md-width;
+}
+
+.modal-large {
+  width: $modal-min-lg-width;
+}
+
+@media (min-width: 768px) {
+  .modal-medium {
+    max-width: $modal-md-width-for-768;
+    width: $modal-md-width-for-768;
+  }
+  .modal-large {
+    max-width: $modal-lg-width-for-768;
+    width: $modal-lg-width-for-768;
+  }
+}
+
+@media (min-width: 992px) {
+  .modal-medium {
+    max-width: $modal-md-width-for-992;
+    width: $modal-md-width-for-992;
+  }
+  .modal-large {
+    max-width: $modal-lg-width-for-992;
+    width: $modal-lg-width-for-992;
+  }
+}
+
+@media (min-width: 1280px) {
+  .modal-medium {
+    max-width: $modal-md-width-for-1280;
+    width: $modal-md-width-for-1280;
+  }
+  .modal-large {
+    max-width: $modal-lg-width-for-1280;
+    width: $modal-lg-width-for-1280;
+  }
+}
+
+@media (min-width: 1600px) {
+  .modal-medium {
+    max-width: $modal-md-width-for-1600;
+    width: $modal-md-width-for-1600;
+  }
+  .modal-large {
+    max-width: $modal-lg-width-for-1600;
+    width: $modal-lg-width-for-1600;
+  }
+}
+// --- define modal-medium and modal-large for mail compose modal end ----

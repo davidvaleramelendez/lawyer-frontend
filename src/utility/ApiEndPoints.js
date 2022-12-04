@@ -82,8 +82,8 @@ export const API_ENDPOINTS = {
 
     /* Attachments */
     attachments: {
-        create: `/api/attachment/create`,
-        delete: `/api/attachment/delete`
+        create: `/api/admin/attachment/create`,
+        delete: `/api/admin/attachment/delete`
     },
     /* /Attachments */
 
@@ -150,15 +150,16 @@ export const API_ENDPOINTS = {
 
     /* Email module */
     emails: {
-        imapList: `/api/email/imap`,
-        imapDetail: `/api/email/details-imap`,
-        send: `/api/email/send_mail`,
-        markTrash: `/api/email/mark_trash`,
-        markDelete: `/api/email/mark_delete`,
-        markRestore: `/api/email/mark_restore`,
-        markImportant: `/api/email/mark_important`,
-        createReply: `/api/email/reply`,
-        view: `/api/email`
+        imapList: `/api/admin/email/imap`,
+        imapDetail: `/api/admin/email/details-imap`,
+        send: `/api/admin/email/send_mail`,
+        markTrash: `/api/admin/email/mark_trash`,
+        markDelete: `/api/admin/email/mark_delete`,
+        markRestore: `/api/admin/email/mark_restore`,
+        markImportant: `/api/admin/email/mark_important`,
+        createReply: `/api/admin/email/reply`,
+        view: `/api/admin/email`,
+        draft: `/api/admin/draft`
     },
     /* /Email module */
 

@@ -518,14 +518,14 @@ const CaseView = () => {
       </Row>
       {/* /Client && Opponent detail */}
 
-      {/* Notes History */}
+      {/* Notes && Time Recording && Letter && Document History */}
       <Row className='invoice-preview'>
         <Col xl={12} md={12} sm={12}>
           <Card className='invoice-preview-card'>
             <CardBody className='invoice-padding pb-0'>
               <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
                 <div className="d-flex flex-wrap">
-                  <Button color="primary" onClick={() => setNoteFileModalOpen(true)}>
+                  <Button className="mt-1" color="primary" onClick={() => setNoteFileModalOpen(true)}>
                     {t("Add a note")}
                   </Button>
 
@@ -534,10 +534,46 @@ const CaseView = () => {
                     toggleModal={() => setNoteFileModalOpen(!noteFileModalOpen)}
                     caseId={store.caseItem.CaseID}
                   />
+
+                  <Button className="ms-2 mt-1" color="primary" onClick={() => setTimeTrackModalOpen(true)}>
+                    {t("Add Time Tracking")}
+                  </Button>
+
+                  <ModalCaseTimeTracking
+                    open={timeTrackModalOpen}
+                    toggleModal={() => setTimeTrackModalOpen(!timeTrackModalOpen)}
+                    caseId={store.caseItem.CaseID}
+                  />
+
+                  <Button className="ms-2 mt-1" color="primary" onClick={() => setLetterModalOpen(true)}>
+                    {t("Write a letter now")}
+                  </Button>
+
+                  <ModalCaseLetter
+                    open={letterModalOpen}
+                    toggleModal={() => setLetterModalOpen(!letterModalOpen)}
+                    caseData={store.caseItem}
+                    fighterData={store.fighterItem}
+                    letterRowData={letterRowData}
+                    setLetterRowData={setLetterRowData}
+                  />
+
+                  <Button className="ms-2 mt-1" color="primary" onClick={() => setDocUploadModalOpen(true)}>
+                    {t("Upload document")}
+                  </Button>
+
+                  <ModalCaseDocument
+                    open={docUploadModalOpen}
+                    toggleModal={() => setDocUploadModalOpen(!docUploadModalOpen)}
+                    userId={store.caseItem && store.caseItem.UserID}
+                    caseId={store.caseItem && store.caseItem.CaseID}
+                    documentRowData={documentRowData}
+                    setDocumentRowData={setDocumentRowData}
+                  />
                 </div>
 
-                <div className="d-flex flex-wrap">
-                  <h3 className="invoice-date">{t("Notes History")}</h3>
+                <div className="d-flex flex-wrap mt-1">
+                  <h3 className="invoice-date">{t("History")}</h3>
                 </div>
               </div>
 
@@ -549,9 +585,9 @@ const CaseView = () => {
                       <th>Date</th>
                       <th>Subject</th>
                       <th>Done?</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
-                  {store.caseRecords && store.caseRecords.length ? <>
                     <tbody>
                       {store.caseRecords.map((record, index) => (
                         <tr key={`record_${index}`}>
@@ -587,101 +623,15 @@ const CaseView = () => {
                               </Label>
                             </div>
                           </td>
+                          <td/>
                         </tr>
                       ))}
-                    </tbody>
-                  </> : null}
-                </Table>
-
-                <ModalCaseRecordDetail
-                  open={recordDetailModalOpen}
-                  toggleModal={() => setRecordDetailModalOpen(!recordDetailModalOpen)}
-                  caseRecordRowData={caseRecordRowData}
-                  setCaseRecordRowData={setCaseRecordRowData}
-                />
-              </Row>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-      {/* /Notes History */}
-
-      {/* Time Recording History */}
-      <Row className='invoice-preview'>
-        <Col xl={12} md={12} sm={12}>
-          <Card className='invoice-preview-card'>
-            <CardBody className='invoice-padding pb-0'>
-              <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
-                <div className="d-flex flex-wrap">
-                  <Button color="primary" onClick={() => setTimeTrackModalOpen(true)}>
-                    {t("Add Time Tracking")}
-                  </Button>
-
-                  <ModalCaseTimeTracking
-                    open={timeTrackModalOpen}
-                    toggleModal={() => setTimeTrackModalOpen(!timeTrackModalOpen)}
-                    caseId={store.caseItem.CaseID}
-                  />
-                </div>
-
-                <div className="d-flex flex-wrap">
-                  <h3 className="invoice-date">{t("Time Recording History")}</h3>
-                </div>
-              </div>
-
-              <Row className='mb-2'>
-              </Row>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-      {/* /Time Recording History */}
-
-      {/* Letter history */}
-      <Row className='invoice-preview'>
-        <Col xl={12} md={12} sm={12}>
-          <Card className='invoice-preview-card'>
-            <CardBody className='invoice-padding pb-0'>
-              <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
-                <div className="d-flex flex-wrap">
-                  <Button color="primary" onClick={() => setLetterModalOpen(true)}>
-                    {t("Write a letter now")}
-                  </Button>
-
-                  <ModalCaseLetter
-                    open={letterModalOpen}
-                    toggleModal={() => setLetterModalOpen(!letterModalOpen)}
-                    caseData={store.caseItem}
-                    fighterData={store.fighterItem}
-                    letterRowData={letterRowData}
-                    setLetterRowData={setLetterRowData}
-                  />
-                </div>
-
-                <div className="d-flex flex-wrap">
-                  <h3 className="invoice-date">{t("Letter history")}</h3>
-                </div>
-              </div>
-
-              <Row className='mb-2'>
-                <Table responsive>
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Subject</th>
-                      <th>Deadline Until</th>
-                      <th>Done?</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  {store.caseLetters && store.caseLetters.length ? <>
-                    <tbody>
                       {store.caseLetters.map((letter, index) => (
                         <tr key={`letters_${index}`}>
+                          <td/>
                           <td>{letter.created_at && getTransformDate(letter.created_at, "DD.MM.YYYY")}</td>
 
                           <td>{letter.subject}</td>
-                          <td>{letter.frist_date && getTransformDate(letter.frist_date, "DD.MM.YYYY")}</td>
 
                           <td>
                             <div className='form-switch form-check-primary'>
@@ -710,61 +660,12 @@ const CaseView = () => {
                           </td>
                         </tr>
                       ))}
-                    </tbody>
-                  </> : null}
-                </Table>
-              </Row>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-      {/* /Letter history */}
-
-      {/* Document History */}
-      <Row className='invoice-preview'>
-        <Col xl={12} md={12} sm={12}>
-          <Card className='invoice-preview-card'>
-            <CardBody className='invoice-padding pb-0'>
-              <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
-                <div className="d-flex flex-wrap">
-                  <Button color="primary" onClick={() => setDocUploadModalOpen(true)}>
-                    {t("Upload document")}
-                  </Button>
-
-                  <ModalCaseDocument
-                    open={docUploadModalOpen}
-                    toggleModal={() => setDocUploadModalOpen(!docUploadModalOpen)}
-                    userId={store.caseItem && store.caseItem.UserID}
-                    caseId={store.caseItem && store.caseItem.CaseID}
-                    documentRowData={documentRowData}
-                    setDocumentRowData={setDocumentRowData}
-                  />
-                </div>
-
-                <div className="d-flex flex-wrap">
-                  <h3 className="invoice-date">{t("Document History")}</h3>
-                </div>
-              </div>
-
-              <Row className='mb-2'>
-                <Table responsive>
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Subject</th>
-                      <th>Description</th>
-                      <th>Done?</th>
-                      <th>Look At</th>
-                    </tr>
-                  </thead>
-                  {store.caseDocs && store.caseDocs.length ? <>
-                    <tbody>
                       {store.caseDocs.map((doc, index) => (
                         <tr key={`docs_${index}`}>
+                          <td/>
                           <td>{doc.created_at && getTransformDate(doc.created_at, "DD.MM.YYYY")}</td>
 
                           <td>{doc.title}</td>
-                          <td>{doc.description}</td>
 
                           <td>
                             <div className='form-switch form-check-primary'>
@@ -794,14 +695,20 @@ const CaseView = () => {
                         </tr>
                       ))}
                     </tbody>
-                  </> : null}
                 </Table>
+
+                <ModalCaseRecordDetail
+                  open={recordDetailModalOpen}
+                  toggleModal={() => setRecordDetailModalOpen(!recordDetailModalOpen)}
+                  caseRecordRowData={caseRecordRowData}
+                  setCaseRecordRowData={setCaseRecordRowData}
+                />
               </Row>
             </CardBody>
           </Card>
         </Col>
       </Row>
-      {/* /Document History */}
+      {/* /Notes && Time Recording && Letter && Document History */}
     </div>
   ) : null
 }

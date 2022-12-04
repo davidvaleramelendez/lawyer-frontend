@@ -135,7 +135,6 @@ const EmailDetailView = () => {
       Notification("Error", store.error, "warning")
     }
   }, [dispatch, store.success, store.error, store.actionFlag, loadFirst])
-  // console.log("EmailDetailView >>>> ", store)
 
   return store ? (
     <div className="d-flex justify-content-center p-4">

@@ -91,14 +91,6 @@ const AppRoutes = [
     }
   },
   {
-    path: `${adminRoot}/email/:folder`,
-    element: <Email />,
-    meta: {
-      appLayout: true,
-      className: 'email-application'
-    }
-  },
-  {
     path: `${adminRoot}/email/view/:id`,
     element: <EmailView />,
     meta: {

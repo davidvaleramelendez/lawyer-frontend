@@ -1,6 +1,6 @@
 // ** React Imports
 import { Fragment, useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 // ** Email App Component Imports
 import Mails from './Mails'
@@ -14,8 +14,6 @@ import classnames from 'classnames'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   getMails,
-  selectMail,
-  selectAllMail,
   getMailDetail,
   markEmailTrash,
   markEmailDelete,
@@ -60,20 +58,22 @@ const EmailApp = () => {
   const [uploadedFiles, setUploadedFiles] = useState([])
   const [editorHtmlContent, setEditorHtmlContent] = useState("")
   const [editorStateContent, setEditorStateContent] = useState(null)
+  const [folder, setFolder] = useState('inbox')
 
   // ** Store Variables
   const dispatch = useDispatch()
 
   const store = useSelector(state => state.email)
 
-  // ** Vars
-  const params = useParams()
-
-  const handleGetMails = (param = params, search = searchInput, perPage = rowsPerPage) => {
+  const handleGetMails = (search = searchInput, perPage = rowsPerPage) => {
     dispatch(getMails({
       payload: { search: search || "", perPage: perPage || 10 },
-      folder: param.folder || 'inbox'
+      folder: folder || 'inbox'
     }))
+  }
+
+  const goToOtherFolder = (newFolder) => {
+    setFolder(newFolder)
   }
 
   // ** UseEffect: GET initial data on Mount
@@ -85,7 +85,7 @@ const EmailApp = () => {
 
     if (loadFirst) {
       setRowsPerPage(10)
-      handleGetMails(params, searchInput, 10)
+      handleGetMails(searchInput, 10)
       setLoadFirst(false)
     }
 
@@ -115,9 +115,8 @@ const EmailApp = () => {
       setUploadedFiles(store.attachments)
       setEditorStateContent(null)
     }
-  }, [dispatch, store.attachments, store.success, store.error, store.actionFlag, params.folder, searchInput, loadFirst])
-  // console.log("store >>> ", store)
-
+  }, [dispatch, store.attachments, store.success, store.error, store.actionFlag, searchInput, loadFirst])
+  
   return (
     <Fragment>
       <Sidebar
@@ -125,6 +124,8 @@ const EmailApp = () => {
         setOpenMail={setOpenMail}
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
+        folder={folder}
+        goToOtherFolder={goToOtherFolder}
       />
       <div className='content-right'>
         <div className='content-body'>
@@ -136,17 +137,15 @@ const EmailApp = () => {
           ></div>
           <Mails
             store={store}
-            params={params}
+            folder={folder}
             dispatch={dispatch}
             openMail={openMail}
             getMails={getMails}
-            selectMail={selectMail}
             searchInput={searchInput}
             rowsPerPage={rowsPerPage}
             setOpenMail={setOpenMail}
             uploadedFiles={uploadedFiles}
             getMailDetail={getMailDetail}
-            selectAllMail={selectAllMail}
             toggleCompose={toggleCompose}
             setSidebarOpen={setSidebarOpen}
             setSearchInput={setSearchInput}

@@ -49,7 +49,7 @@ import '@styles/react/libs/editor/editor.scss'
 const MailDetails = (props) => {
   // ** Props
   const {
-    params,
+    folder,
     mailItem,
     openMail,
     dispatch,
@@ -165,7 +165,6 @@ const MailDetails = (props) => {
   }
 
   const handleEditorStateChange = (state) => {
-    // console.log("handleEditorStateChange >>>> ", state)
     setEditorStateContent(state)
     setEditorHtmlContent(draftToHtml(convertToRaw(state.getCurrentContent())))
   }
@@ -201,7 +200,6 @@ const MailDetails = (props) => {
 
   // ** Renders Messages
   const renderMessage = (obj) => {
-    // console.log("renderMessage >>> ", obj)
     return (<Card>
       <CardHeader className='email-detail-head'>
         <div className='user-details d-flex justify-content-between align-items-center flex-wrap'>
@@ -422,7 +420,7 @@ const MailDetails = (props) => {
                     <div className="d-flex justify-content-between">
                       <h5 className='mb-0'>
                         <Button type='button' color='primary' className='me-1' onClick={handleReplySection}>Reply</Button>
-                        {params && params.folder !== "trash" ? (<Button type='button' color='danger' onClick={handleDeleteMail}>Delete</Button>) : null}
+                        {folder !== "trash" ? (<Button type='button' color='danger' onClick={handleDeleteMail}>Delete</Button>) : null}
                       </h5>
                     </div>
                   </CardBody>

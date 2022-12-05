@@ -63,8 +63,8 @@ const ModalAddUser = ({
   const UserSchema = yup.object({
     name: yup.string().required('Name is required!'),
     email: yup.string().required('Email is required!').email('Invalid email address!'),
-    Contact: yup.string().required('Mobile is required!').min(10, "Mobile Must be 10 digit!").max(10, "Mobile Must be 10 digit!"),
-    password: yup.string().required('Password is required!').matches('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$', "Min. 8 characters,At least one uppercase letter,One lowercase letter,One number and one special character"),
+    Contact: yup.string().required('Mobile is required!').min(6, "Mobile Must be 6 digit!").max(16, "Mobile Must be 16 digit!"),
+    password: yup.string().required('Password is required!').min(6, "Password Must be 6 digit!"),
     role_id: yup.object().required(`${t("Role")} is required!`).nullable()
   }).required()
 

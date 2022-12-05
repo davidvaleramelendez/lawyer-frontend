@@ -69,7 +69,7 @@ const AccountTab = ({
         status: yup.object().required(`${t("Status")} is required!`).nullable(),
         roleId: yup.object().required(`${t("Role")} is required!`).nullable(),
         DOB: yup.date().required("Birth date is required!").max(new Date(Date.now() - 86400000), "Date cannot be in the future!").nullable(),
-        contact: yup.string().required('Mobile is required!').min(10, "Mobile Must be 10 digit!").max(10, "Mobile Must be 10 digit!"),
+        contact: yup.string().required('Mobile is required!').min(6, "Mobile Must be 6 digit!").max(16, "Mobile Must be 16 digit!"),
         gender: yup.string().required('Gender is required!'),
         address: yup.string().required('Address line 1 is required!'),
         postcode: yup.string().required('Postcode is required!').max(6, "Postcode no more than 6 characters!"),

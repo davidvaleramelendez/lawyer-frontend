@@ -368,8 +368,8 @@ const UsersList = () => {
 
     const columns = [
         {
-            minWidth: '60px',
-            maxWidth: '60px',
+            minWidth: '40px',
+            maxWidth: '40px',
             omit: plusIconAction,
             cell: (row) => (
                 <div className='d-flex align-items-center'>
@@ -383,22 +383,23 @@ const UsersList = () => {
             )
         },
         {
-            name: 'User',
+            name: 'Name',
             sortable: true,
-            cellClass: 'text-uppercase',
-            minWidth: '250px',
+            minWidth: '190px',
+            maxWidth: '190px',
+            customLoaderCellClass: 'p-0 px-2',
+            customLoaderContentClass: 'w-100',
             sortField: 'name',
             cell: (row) => (
                 <div className='d-flex justify-content-left align-items-center'>
-                    {renderUser(row)}
+                    {row && row.role && row.role.role_id !== 11 ? (renderUser(row)) : null}
                     <div className='d-flex flex-column'>
                         <Link
                             to={`${adminRoot}/user/view/${row.id}`}
                             className='user_name text-truncate text-body'
                         >
-                            <span className='fw-bolder text-primary'>{row.name}</span>
+                            <span className='fw-bolder text-primary text-wrap'>{row.name}</span>
                         </Link>
-                        <small className='text-truncate text-muted mb-0'>{row.email}</small>
                     </div>
                 </div>
             )
@@ -406,17 +407,22 @@ const UsersList = () => {
         {
             name: 'Email',
             sortable: true,
-            cellClass: 'text-uppercase',
-            minWidth: '300px',
             sortField: 'email',
-            cell: (row) => row.email
+            minWidth: '210px',
+            maxWidth: '210px',
+            customLoaderCellClass: 'p-0 px-2',
+            customLoaderContentClass: 'w-75',
+            cell: (row) => (<div className=''>{row.email}</div>)
         },
         {
             name: 'Role',
             sortable: true,
-            cellClass: 'text-uppercase',
-            minWidth: '150px',
             sortField: 'role_id',
+            minWidth: '150px',
+            maxWidth: '150px',
+            customLoadingWithIcon: "User",
+            customLoaderCellClass: 'p-0 px-2 w-100',
+            customLoaderContentClass: 'w-50',
             cell: (row) => (
                 <div className='d-flex justify-content-left align-items-center'>
                     {row.role && row.role.role_id ? <>
@@ -429,16 +435,21 @@ const UsersList = () => {
         {
             name: 'Contact',
             sortable: true,
-            cellClass: 'text-uppercase',
-            minWidth: '130px',
             sortField: 'Contact',
+            minWidth: '150px',
+            maxWidth: '150px',
+            customLoaderCellClass: 'p-0 pe-3',
+            customLoaderContentClass: 'w-100',
             cell: (row) => row.Contact
         },
         {
             name: 'Status',
-            minWidth: '108px',
             sortable: true,
             sortField: 'Status',
+            minWidth: '130px',
+            maxWidth: '130px',
+            customLoaderCellClass: 'p-0 pe-2',
+            customLoaderContentClass: 'w-50 rounded-circle',
             selector: (row) => row.Status,
             cell: (row) => (
                 <Badge className='text-capitalize' color="light-success" pill>
@@ -448,8 +459,11 @@ const UsersList = () => {
         },
         {
             name: 'Action',
-            minWidth: '108px',
             omit: dotIconAction,
+            minWidth: '110px',
+            maxWidth: '110px',
+            customLoaderCellClass: 'p-0 pe-2',
+            customLoaderContentClass: 'width-10-per',
             cell: (row) => (
                 <UncontrolledButtonDropdown>
                     <DropdownToggle color="#FFFFFF">
@@ -476,11 +490,11 @@ const UsersList = () => {
             )
         }
     ]
-    console.log(getCurrentPageNumber(TN_USER, rowsPerPage, currentPage))
+
     return (
         <Fragment>
             <Card className="overflow-hidden">
-            {(!store.loading && !getTotalNumber(TN_USER)) ? (
+                {(!store.loading && !getTotalNumber(TN_USER)) ? (
                     <DotPulse />
                 ) : (
                     <DatatablePagination
@@ -489,9 +503,9 @@ const UsersList = () => {
                         data={store.userItems}
                         loading={store.loading}
                         pagination={store.loading ? store.pagination : {
-                                ...store.pagination, 
-                                perPage: getCurrentPageNumber(TN_USER, rowsPerPage, currentPage)
-                            }
+                            ...store.pagination,
+                            perPage: getCurrentPageNumber(TN_USER, rowsPerPage, currentPage)
+                        }
                         }
                         handleSort={handleSort}
                         handlePagination={handlePagination}
@@ -509,7 +523,7 @@ const UsersList = () => {
                         }
                     />
                 )
-            }
+                }
             </Card>
 
             <ModalAddUser

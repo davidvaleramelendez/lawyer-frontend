@@ -1,10 +1,23 @@
 /* eslint-disable object-shorthand */
 
-// ** Reactstrap Imports
+// ** React Imports
 import { Fragment } from 'react'
+
+// ** Reactstrap Imports
 import {
     Table
 } from 'reactstrap'
+
+// ** Utils
+import {
+    // setInnerHtml
+} from '@utils'
+
+// ** Icons Import
+import * as Icon from 'react-feather'
+
+// ** Custom Components
+import Avatar from '@components/avatar'
 
 const CustomTable = ({
     responsive = true,
@@ -26,11 +39,29 @@ const CustomTable = ({
                     className={`${headerClassName}`}
                 >
                     <tr>
-                        {columns.map((col, index) => (
-                            !col.omit ? (
-                                <th key={`place-holder-head-${index}`}>{col.name || ""}</th>
-                            ) : null
-                        ))}
+                        {columns.map((col, index) => {
+                            const minWidth = col.minWidth
+                            const maxWidth = col.maxWidth
+                            const style = {}
+                            if (minWidth) {
+                                style.minWidth = minWidth
+                            }
+
+                            if (maxWidth) {
+                                style.maxWidth = maxWidth
+                            }
+
+                            return (
+                                !col.omit ? (
+                                    <th
+                                        style={style}
+                                        key={`place-holder-head-${index}`}
+                                    >
+                                        {col.name || ""}
+                                    </th>
+                                ) : null
+                            )
+                        })}
                     </tr>
                 </thead>
 
@@ -57,6 +88,11 @@ const CustomTable = ({
                                         style.maxWidth = maxWidth
                                     }
 
+                                    let IconTag = ""
+                                    if (col && col.customLoadingWithIcon) {
+                                        IconTag = Icon[col.customLoadingWithIcon]
+                                    }
+
                                     return (
                                         <Fragment
                                             key={`place-holder-body-content-${bodyIndex}`}
@@ -64,9 +100,21 @@ const CustomTable = ({
                                             {!col.omit ? (
                                                 <td
                                                     style={style}
-                                                    className="placeholder-glow"
+                                                    className={`placeholder-glow ${col && col.customLoaderCellClass ? col.customLoaderCellClass : ''}`}
                                                 >
-                                                    <div className="placeholder w-100" />
+                                                    {IconTag ? (
+                                                        <Avatar
+                                                            size={"sm"}
+                                                            imgWidth='30'
+                                                            imgHeight='30'
+                                                            className="placeholder me-1"
+                                                            icon={<IconTag size={17} />}
+                                                        />
+                                                    ) : null}
+
+                                                    <div
+                                                        className={`placeholder ${col && col.customLoaderContentClass ? col.customLoaderContentClass : 'w-100'}`}
+                                                    />
                                                 </td>
                                             ) : null}
                                         </Fragment>)

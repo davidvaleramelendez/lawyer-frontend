@@ -68,6 +68,7 @@ import {
 
 // ** Custom Components
 import Notification from '@components/toast/notification'
+import CardDetails from './CaseDetails'
 
 // ** Third Party Components
 import Swal from 'sweetalert2'
@@ -92,6 +93,9 @@ const CaseView = () => {
   const dispatch = useDispatch()
 
   const MySwal = withReactContent(Swal)
+
+  // ** State
+  const [recordDetails, SetRecordDetails] = useState(null)
 
   // ** Store vars
   const navigate = useNavigate()
@@ -251,6 +255,12 @@ const CaseView = () => {
   const onCaseLetterDetail = (row) => {
     setLetterRowData({ ...row })
     setLetterModalOpen(true)
+  }
+
+  /* Details of record at the right side */
+  const onRecordClick = (details) => () => {
+    SetRecordDetails(details)
+    console.log(details)
   }
 
   return store ? (
@@ -519,8 +529,8 @@ const CaseView = () => {
       {/* /Client && Opponent detail */}
 
       {/* Notes && Time Recording && Letter && Document History */}
-      <Row className='invoice-preview'>
-        <Col xl={12} md={12} sm={12}>
+      <Row className='invoice-preview match-height'>
+        <Col xl={8} md={12} sm={12}>
           <Card className='invoice-preview-card'>
             <CardBody className='invoice-padding pb-0'>
               <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
@@ -578,124 +588,124 @@ const CaseView = () => {
               </div>
 
               <Row className='mb-2'>
-                <Table responsive>
-                  <thead>
-                    <tr>
-                      <th />
-                      <th>Date</th>
-                      <th>Subject</th>
-                      <th>Done?</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                    <tbody>
-                      {store.caseRecords.map((record, index) => (
-                        <tr key={`record_${index}`}>
-                          <td>
-                            {record.Type === "File" ? <>
-                              <Paperclip size={14} className="cursor-pointer" onClick={() => onCaseRecordDetail(record)} />
-                            </> : <>
-                              <Type size={14} className="cursor-pointer" onClick={() => onCaseRecordDetail(record)} />
-                            </>}
-                          </td>
+                <Col xl={12} md={12} sm={12}>
+                  <Table responsive>
+                    <thead>
+                      <tr>
+                        <th />
+                        <th>Date</th>
+                        <th>Subject</th>
+                        <th>Done?</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                      <tbody>
+                        {store.caseRecords.map((record, index) => (
+                          <tr key={`record_${index}`} onClick={onRecordClick(record)} className="cursor-pointer">
+                            <td>
+                              {record.Type === "File" ? <>
+                                <Paperclip size={14} className="cursor-pointer" onClick={() => onCaseRecordDetail(record)} />
+                              </> : <>
+                                <Type size={14} className="cursor-pointer" onClick={() => onCaseRecordDetail(record)} />
+                              </>}
+                            </td>
 
-                          <td>{record.CreatedAt && getTransformDate(record.CreatedAt, "DD.MM.YYYY")}</td>
+                            <td>{record.CreatedAt && getTransformDate(record.CreatedAt, "DD.MM.YYYY")}</td>
 
-                          <td>{record.Subject}</td>
+                            <td>{record.Subject}</td>
 
-                          <td>
-                            <div className='form-switch form-check-primary'>
-                              <Input
-                                type='switch'
-                                checked={record.IsShare}
-                                id={`record_${index}_${record.IsShare}`}
-                                name={`record_${index}_${record.IsShare}`}
-                                className="cursor-pointer"
-                                onChange={() => onShareCaseRecord(record.RecordID)}
-                              />
-                              <Label className='form-check-label' htmlFor="icon-primary">
-                                <span className='switch-icon-left'>
-                                  <Check size={14} />
-                                </span>
-                                <span className='switch-icon-right'>
-                                  <X size={14} />
-                                </span>
-                              </Label>
-                            </div>
-                          </td>
-                          <td/>
-                        </tr>
-                      ))}
-                      {store.caseLetters.map((letter, index) => (
-                        <tr key={`letters_${index}`}>
-                          <td/>
-                          <td>{letter.created_at && getTransformDate(letter.created_at, "DD.MM.YYYY")}</td>
+                            <td>
+                              <div className='form-switch form-check-primary'>
+                                <Input
+                                  type='switch'
+                                  checked={record.IsShare}
+                                  id={`record_${index}_${record.IsShare}`}
+                                  name={`record_${index}_${record.IsShare}`}
+                                  className="cursor-pointer"
+                                  onChange={() => onShareCaseRecord(record.RecordID)}
+                                />
+                                <Label className='form-check-label' htmlFor="icon-primary">
+                                  <span className='switch-icon-left'>
+                                    <Check size={14} />
+                                  </span>
+                                  <span className='switch-icon-right'>
+                                    <X size={14} />
+                                  </span>
+                                </Label>
+                              </div>
+                            </td>
+                            <td/>
+                          </tr>
+                        ))}
+                        {store.caseLetters.map((letter, index) => (
+                          <tr key={`letters_${index}`} onClick={onRecordClick(letter)} className="cursor-pointer">
+                            <td/>
+                            <td>{letter.created_at && getTransformDate(letter.created_at, "DD.MM.YYYY")}</td>
 
-                          <td>{letter.subject}</td>
+                            <td>{letter.subject}</td>
 
-                          <td>
-                            <div className='form-switch form-check-primary'>
-                              <Input
-                                type='switch'
-                                // defaultChecked={letter.isErledigt}
-                                checked={letter.isErledigt}
-                                id={`letter_${index}_${letter.isErledigt}`}
-                                name={`letter_${index}_${letter.isErledigt}`}
-                                className="cursor-pointer"
-                                onChange={() => onLetterDone(letter.id)}
-                              />
-                              <Label className='form-check-label' htmlFor="icon-primary">
-                                <span className='switch-icon-left'>
-                                  <Check size={14} />
-                                </span>
-                                <span className='switch-icon-right'>
-                                  <X size={14} />
-                                </span>
-                              </Label>
-                            </div>
-                          </td>
+                            <td>
+                              <div className='form-switch form-check-primary'>
+                                <Input
+                                  type='switch'
+                                  checked={letter.isErledigt}
+                                  id={`letter_${index}_${letter.isErledigt}`}
+                                  name={`letter_${index}_${letter.isErledigt}`}
+                                  className="cursor-pointer"
+                                  onChange={() => onLetterDone(letter.id)}
+                                />
+                                <Label className='form-check-label' htmlFor="icon-primary">
+                                  <span className='switch-icon-left'>
+                                    <Check size={14} />
+                                  </span>
+                                  <span className='switch-icon-right'>
+                                    <X size={14} />
+                                  </span>
+                                </Label>
+                              </div>
+                            </td>
 
-                          <td>
-                            <Eye size={18} className="cursor-pointer" onClick={() => onCaseLetterDetail(letter)} />
-                          </td>
-                        </tr>
-                      ))}
-                      {store.caseDocs.map((doc, index) => (
-                        <tr key={`docs_${index}`}>
-                          <td/>
-                          <td>{doc.created_at && getTransformDate(doc.created_at, "DD.MM.YYYY")}</td>
+                            <td>
+                              <Eye size={18} className="cursor-pointer" onClick={() => onCaseLetterDetail(letter)} />
+                            </td>
+                          </tr>
+                        ))}
+                        {store.caseDocs.map((doc, index) => (
+                          <tr key={`docs_${index}`} onClick={onRecordClick(doc)} className="cursor-pointer">
+                            <td/>
+                            <td>{doc.created_at && getTransformDate(doc.created_at, "DD.MM.YYYY")}</td>
 
-                          <td>{doc.title}</td>
+                            <td>{doc.title}</td>
 
-                          <td>
-                            <div className='form-switch form-check-primary'>
-                              <Input
-                                type='switch'
-                                // defaultChecked={doc.isErledigt}
-                                checked={doc.isErledigt}
-                                id={`docs_${index}_${doc.isErledigt}`}
-                                name={`docs_${index}_${doc.isErledigt}`}
-                                className="cursor-pointer"
-                                onChange={() => onDocumentDone(doc.id)}
-                              />
-                              <Label className='form-check-label' htmlFor="icon-primary">
-                                <span className='switch-icon-left'>
-                                  <Check size={14} />
-                                </span>
-                                <span className='switch-icon-right'>
-                                  <X size={14} />
-                                </span>
-                              </Label>
-                            </div>
-                          </td>
+                            <td>
+                              <div className='form-switch form-check-primary'>
+                                <Input
+                                  type='switch'
+                                  checked={doc.isErledigt}
+                                  id={`docs_${index}_${doc.isErledigt}`}
+                                  name={`docs_${index}_${doc.isErledigt}`}
+                                  className="cursor-pointer"
+                                  onChange={() => onDocumentDone(doc.id)}
+                                />
+                                <Label className='form-check-label' htmlFor="icon-primary">
+                                  <span className='switch-icon-left'>
+                                    <Check size={14} />
+                                  </span>
+                                  <span className='switch-icon-right'>
+                                    <X size={14} />
+                                  </span>
+                                </Label>
+                              </div>
+                            </td>
 
-                          <td>
-                            <Eye size={18} className="cursor-pointer" onClick={() => onCaseDocumentDetail(doc)} />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                </Table>
+                            <td>
+                              <Eye size={18} className="cursor-pointer" onClick={() => onCaseDocumentDetail(doc)} />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                  </Table>
+                </Col>
 
                 <ModalCaseRecordDetail
                   open={recordDetailModalOpen}
@@ -704,6 +714,22 @@ const CaseView = () => {
                   setCaseRecordRowData={setCaseRecordRowData}
                 />
               </Row>
+            </CardBody>
+          </Card>
+        </Col>
+        
+        <Col xl={4} md={12} sm={12}>
+          <Card className='case-details-card'>
+            <CardBody className='invoice-padding pb-0'>
+              <h3 className='mt-1 text-end'>{t("Details")}</h3>
+              <hr/>
+              {recordDetails ? (
+                <CardDetails details={recordDetails} />
+              ) : (
+                <div className='py-3 text-center'>
+                  Not selected
+                </div>
+              )}
             </CardBody>
           </Card>
         </Col>

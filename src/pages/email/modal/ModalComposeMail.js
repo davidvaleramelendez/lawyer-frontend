@@ -53,6 +53,7 @@ import { useForm, Controller } from 'react-hook-form'
 // ** Store & Actions
 import { useDispatch, useSelector } from 'react-redux'
 import {
+  getMails,
   sendEmail,
   updateEmailLoader,
   createEmailAttachment,
@@ -146,7 +147,7 @@ const ModalComposeMail = () => {
     const body = {
       id: store.composeModal.draftId
     }
-    
+
     if (store.composeModal.mailTo.length) {
       body.to_ids = store.composeModal.mailTo.map((t) => t.value).join(',')
     }
@@ -162,18 +163,19 @@ const ModalComposeMail = () => {
     body.subject = store.composeModal.subject
     body.body = store.composeModal.editorHtmlContent
     body.attached_ids = store.composeModal.attachments.map((t) => t.id).join(',')
-    
+
     dispatch(saveDraftEmail(body))
+    dispatch(getMails({ ...store.params }))
   }
-  
+
   const canSave = () => {
     if (!store.composeModal.open) return false
     if (store.composeModal.mailTo.length) return true
     if (store.composeModal.cc.length) return true
-    if (store.composeModal.bcc.length)  return true
-    if (store.composeModal.subject !== '')  return true
+    if (store.composeModal.bcc.length) return true
+    if (store.composeModal.subject !== '') return true
     if (store.composeModal.editorHtmlContent !== '') return true
-    if (store.composeModal.attachments.length)  return true
+    if (store.composeModal.attachments.length) return true
 
     return false
   }
@@ -332,7 +334,7 @@ const ModalComposeMail = () => {
   }
 
   // ** Compose Modal Resize Observer
-  const ro = new ResizeObserver(() => {        
+  const ro = new ResizeObserver(() => {
     const modalContents = document.getElementsByClassName('modal-content')
     if (modalContents.length > 0 && modalContents[0].getAttribute('style') && modalContents[0].getAttribute('style') !== "") {
       setResized(true)
@@ -340,7 +342,7 @@ const ModalComposeMail = () => {
       setResized(false)
     }
   })
- 
+
   // ** modal open event
   const onModalOpened = () => {
     const modalContents = document.getElementsByClassName('modal-content')
@@ -385,7 +387,7 @@ const ModalComposeMail = () => {
 
     /* Updating uploaded files */
     // if (store && store.actionFlag && store.actionFlag === "ATTACHMENT_ADDED") {
-      setUploadedFiles(store.composeModal.attachments)
+    setUploadedFiles(store.composeModal.attachments)
     // }
 
     /* Updating editor state */
@@ -397,7 +399,7 @@ const ModalComposeMail = () => {
       setEditorState(null)
     }
 
-  }, [dispatch, store.userItems, store.success, store.error, store.actionFlag, store.composeModal.draftId])
+  }, [store.userItems, store.success, store.error, store.actionFlag, store.composeModal.draftId])
 
   // ** close compose modal
   const closeModal = () => {
@@ -409,6 +411,7 @@ const ModalComposeMail = () => {
   const deleteAndClose = () => {
     if (store.composeModal.draftId > 0) {
       dispatch(deleteDrafts(store.composeModal.draftId))
+      dispatch(getMails({ ...store.params }))
     }
     setEditorState(null)
     dispatch(resetComposeModal())
@@ -488,7 +491,7 @@ const ModalComposeMail = () => {
         backdrop={false}
         id='compose-mail'
         container='.content-body'
-        className={`compose-modal ${  store.composeModal.maximize ? 'modal-large' : 'modal-medium'}`}
+        className={`compose-modal ${store.composeModal.maximize ? 'modal-large' : 'modal-medium'}`}
         isOpen={store.composeModal.open}
         contentClassName='p-0'
         toggle={toggleCompose}
@@ -546,7 +549,7 @@ const ModalComposeMail = () => {
                   id='email_to'
                   control={control}
                   rules={ValidationSchema.email_to}
-                  
+
                   render={({ field }) => (
                     <Select
                       {...field}
@@ -698,7 +701,7 @@ const ModalComposeMail = () => {
                       }
                     }}
                     onEditorStateChange={handleEditorStateChange}
-                    editorState={editorState}             
+                    editorState={editorState}
                   />
                 )}
               />

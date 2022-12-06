@@ -22,7 +22,7 @@ import {
 
 // ** Store & Actions
 import { useDispatch } from 'react-redux'
-import {  toggleCompose, getMails, resetSelectedMail, getDraftList } from './store'
+import { toggleCompose, getMails, resetSelectedMail, getDraftList } from './store'
 
 // Translation
 import { useTranslation } from 'react-i18next'
@@ -31,10 +31,10 @@ const Sidebar = (props) => {
   // ** Props
   const {
     store,
+    folder,
     setOpenMail,
     sidebarOpen,
-    setSidebarOpen, 
-    folder,
+    setSidebarOpen,
     goToOtherFolder
   } = props
 
@@ -85,7 +85,7 @@ const Sidebar = (props) => {
                 >
                   <Mail size={18} className='me-75' />
                   <span className='align-middle'>{t("Inbox")}</span>
-                  {store.emailsMeta.inbox ? (
+                  {store.emailsMeta && store.emailsMeta.inbox ? (
                     <Badge className='float-end' color='light-primary' pill>
                       {store.emailsMeta.inbox}
                     </Badge>
@@ -99,8 +99,8 @@ const Sidebar = (props) => {
                 >
                   <File size={18} className='me-75' />
                   <span className='align-middle'>{t("Drafts")}</span>
-                  {store.emailsMeta.draft ? (
-                    <Badge className='float-end' color='light-primary' pill>
+                  {store.emailsMeta && store.emailsMeta.draft ? (
+                    <Badge className='float-end' color='light-warning' pill>
                       {store.emailsMeta.draft}
                     </Badge>
                   ) : null}
@@ -113,6 +113,11 @@ const Sidebar = (props) => {
                 >
                   <Star size={18} className='me-75' />
                   <span className='align-middle'>{t("Important")}</span>
+                  {store.emailsMeta && store.emailsMeta.important ? (
+                    <Badge className='float-end' color='light-primary' pill>
+                      {store.emailsMeta.important}
+                    </Badge>
+                  ) : null}
                 </ListGroupItem>
 
                 <ListGroupItem

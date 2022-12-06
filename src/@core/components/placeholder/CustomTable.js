@@ -10,7 +10,6 @@ import {
 
 // ** Utils
 import {
-    // setInnerHtml
 } from '@utils'
 
 // ** Icons Import

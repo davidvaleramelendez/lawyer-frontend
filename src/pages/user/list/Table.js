@@ -347,32 +347,34 @@ const UsersList = () => {
     /* Renders User Columns */
     const renderUser = (row) => {
         if (row.profile_photo_path && row.profile_photo_path.length) {
-            return <Avatar className='me-1' img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`} width='32' height='32' />
+            return <Avatar className="me-50" img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`} width="32" height="32" />
         } else {
             return (
                 <Avatar
                     initials
-                    className='me-1'
+                    className="me-50"
                     color={getRandColorClass()}
-                    content={row.name || 'John Doe'}
+                    content={row.name || "John Doe"}
                 />
             )
         }
     }
     /* /Renders User Columns */
 
+    /* User detail popup modal */
     const onUserDetail = (row) => {
         setUserRowData(row)
         setDetailModalOpen(true)
     }
+    /* /User detail popup modal */
 
     const columns = [
         {
-            minWidth: '40px',
-            maxWidth: '40px',
+            minWidth: "40px",
+            maxWidth: "40px",
             omit: plusIconAction,
             cell: (row) => (
-                <div className='d-flex align-items-center'>
+                <div className="d-flex align-items-center">
                     <PlusCircle
                         size={17}
                         color="#7367f0"
@@ -383,87 +385,85 @@ const UsersList = () => {
             )
         },
         {
-            name: 'Name',
+            name: "Name",
             sortable: true,
-            minWidth: '190px',
-            maxWidth: '190px',
-            customLoaderCellClass: 'p-0 px-2',
-            customLoaderContentClass: 'w-100',
-            sortField: 'name',
+            minWidth: "190px",
+            customLoaderCellClass: "",
+            customLoaderContentClass: "w-75",
+            sortField: "name",
             cell: (row) => (
-                <div className='d-flex justify-content-left align-items-center'>
-                    {row && row.role && row.role.role_id !== 11 ? (renderUser(row)) : null}
-                    <div className='d-flex flex-column'>
+                <div className="d-flex justify-content-left align-items-center">
+                    {row && row.role && row.role.role_id !== 11 ? (
+                        renderUser(row)
+                    ) : (
+                        <div className="me-3" />
+                    )}
+                    <div className="d-flex flex-column">
                         <Link
                             to={`${adminRoot}/user/view/${row.id}`}
-                            className='user_name text-truncate text-body'
+                            className="user_name text-truncate text-body"
                         >
-                            <span className='fw-bolder text-primary text-wrap'>{row.name}</span>
+                            <span className="fw-bolder text-primary text-wrap">{row.name}</span>
                         </Link>
                     </div>
                 </div>
             )
         },
         {
-            name: 'Email',
+            name: "Email",
             sortable: true,
-            sortField: 'email',
-            minWidth: '210px',
-            maxWidth: '210px',
-            customLoaderCellClass: 'p-0 px-2',
-            customLoaderContentClass: 'w-75',
-            cell: (row) => (<div className=''>{row.email}</div>)
+            sortField: "email",
+            minWidth: "210px",
+            customLoaderCellClass: "",
+            customLoaderContentClass: "w-75",
+            cell: (row) => (<div className="">{row.email}</div>)
         },
         {
-            name: 'Role',
+            name: "Role",
             sortable: true,
-            sortField: 'role_id',
-            minWidth: '150px',
-            maxWidth: '150px',
+            sortField: "role_id",
+            minWidth: "150px",
             customLoadingWithIcon: "User",
-            customLoaderCellClass: 'p-0 px-2 w-100',
-            customLoaderContentClass: 'w-50',
+            customLoaderCellClass: "",
+            customLoaderContentClass: "w-50",
             cell: (row) => (
-                <div className='d-flex justify-content-left align-items-center'>
+                <div className="d-flex justify-content-left align-items-center">
                     {row.role && row.role.role_id ? <>
-                        {row.role.role_id === 10 ? <Slack color="#ea5455" size={17} className="me-1" /> : <User color={row.role.role_id === 14 ? "#28c76f" : "#7367f0"} size={17} className="me-1" />}
+                        {row.role.role_id === 10 ? <Slack color="#ea5455" size={17} className="me-50" /> : <User color={row.role.role_id === 14 ? "#28c76f" : "#7367f0"} size={17} className="me-50" />}
                         <span>{row.role.RoleName}</span>
                     </> : null}
                 </div>
             )
         },
         {
-            name: 'Contact',
+            name: "Contact",
             sortable: true,
-            sortField: 'Contact',
-            minWidth: '150px',
-            maxWidth: '150px',
-            customLoaderCellClass: 'p-0 pe-3',
-            customLoaderContentClass: 'w-100',
+            sortField: "Contact",
+            minWidth: "150px",
+            customLoaderCellClass: "",
+            customLoaderContentClass: "w-100",
             cell: (row) => row.Contact
         },
         {
-            name: 'Status',
+            name: "Status",
             sortable: true,
-            sortField: 'Status',
-            minWidth: '130px',
-            maxWidth: '130px',
-            customLoaderCellClass: 'p-0 pe-2',
-            customLoaderContentClass: 'w-50 rounded-circle',
+            sortField: "Status",
+            minWidth: "130px",
+            customLoaderCellClass: "",
+            customLoaderContentClass: "w-50 rounded-circle",
             selector: (row) => row.Status,
             cell: (row) => (
-                <Badge className='text-capitalize' color="light-success" pill>
+                <Badge className="text-capitalize" color="light-success" pill>
                     {row.Status}
                 </Badge>
             )
         },
         {
-            name: 'Action',
+            name: "Action",
             omit: dotIconAction,
-            minWidth: '110px',
-            maxWidth: '110px',
-            customLoaderCellClass: 'p-0 pe-2',
-            customLoaderContentClass: 'width-10-per',
+            minWidth: "110px",
+            customLoaderCellClass: "",
+            customLoaderContentClass: "width-10-per",
             cell: (row) => (
                 <UncontrolledButtonDropdown>
                     <DropdownToggle color="#FFFFFF">
@@ -474,16 +474,16 @@ const UsersList = () => {
                             tag={Link}
                             to={`${adminRoot}/user/view/${row && row.id}`}
                         >
-                            <Eye size={20} className='mb-0 me-1' />
-                            <span className='me-2'>View</span>
+                            <Eye size={20} className="mb-0 me-1" />
+                            <span className="me-2">View</span>
                         </DropdownItem>
 
                         <DropdownItem
                             tag={Link}
                             to={`${adminRoot}/user/edit/${row && row.id}`}
                         >
-                            <Archive size={20} className='mb-0 me-1' />
-                            <span className='me-2'>Edit</span>
+                            <Archive size={20} className="mb-0 me-1" />
+                            <span className="me-2">Edit</span>
                         </DropdownItem>
                     </DropdownMenu>
                 </UncontrolledButtonDropdown>

@@ -46,7 +46,7 @@ const ChangePassword = ({
     const store = useSelector((state) => state.user)
 
     const UserPswdSchema = yup.object({
-        password: yup.string().required('Password is required!').matches('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$', "Min. 8 characters,At least one uppercase letter,One lowercase letter,One number and one special character"),
+        password: yup.string().required('Password is required!').min(6, "Password Must be 6 digit!"),
         retypePassword: yup.string().oneOf([yup.ref('password'), null], 'Retype Password must match with Password!').required('Retype Password is required!')
     }).required()
 

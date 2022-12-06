@@ -347,32 +347,34 @@ const UsersList = () => {
     /* Renders User Columns */
     const renderUser = (row) => {
         if (row.profile_photo_path && row.profile_photo_path.length) {
-            return <Avatar className='me-1' img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`} width='32' height='32' />
+            return <Avatar className="me-50" img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`} width="32" height="32" />
         } else {
             return (
                 <Avatar
                     initials
-                    className='me-1'
+                    className="me-50"
                     color={getRandColorClass()}
-                    content={row.name || 'John Doe'}
+                    content={row.name || "John Doe"}
                 />
             )
         }
     }
     /* /Renders User Columns */
 
+    /* User detail popup modal */
     const onUserDetail = (row) => {
         setUserRowData(row)
         setDetailModalOpen(true)
     }
+    /* /User detail popup modal */
 
     const columns = [
         {
-            minWidth: '60px',
-            maxWidth: '60px',
+            minWidth: "60px",
+            maxWidth: "60px",
             omit: plusIconAction,
             cell: (row) => (
-                <div className='d-flex align-items-center'>
+                <div className="d-flex align-items-center">
                     <PlusCircle
                         size={17}
                         color="#7367f0"
@@ -383,72 +385,67 @@ const UsersList = () => {
             )
         },
         {
-            name: 'User',
+            name: "Name",
             sortable: true,
-            cellClass: 'text-uppercase',
-            minWidth: '250px',
-            sortField: 'name',
+            minWidth: "250px",
+            sortField: "name",
             cell: (row) => (
-                <div className='d-flex justify-content-left align-items-center'>
+                <div className="d-flex justify-content-left align-items-center">
                     {renderUser(row)}
-                    <div className='d-flex flex-column'>
+                    <div className="d-flex flex-column">
                         <Link
                             to={`${adminRoot}/user/view/${row.id}`}
-                            className='user_name text-truncate text-body'
+                            className="user_name text-truncate text-body"
                         >
-                            <span className='fw-bolder text-primary'>{row.name}</span>
+                            <span className="fw-bolder text-primary">{row.name}</span>
                         </Link>
-                        <small className='text-truncate text-muted mb-0'>{row.email}</small>
                     </div>
                 </div>
             )
         },
         {
-            name: 'Email',
+            name: "Email",
             sortable: true,
-            cellClass: 'text-uppercase',
-            minWidth: '300px',
-            sortField: 'email',
+            minWidth: "300px",
+            sortField: "email",
             cell: (row) => row.email
         },
         {
-            name: 'Role',
+            name: "Role",
             sortable: true,
-            cellClass: 'text-uppercase',
-            minWidth: '150px',
-            sortField: 'role_id',
+            minWidth: "150px",
+            sortField: "role_id",
             cell: (row) => (
-                <div className='d-flex justify-content-left align-items-center'>
+                <div className="d-flex justify-content-left align-items-center">
                     {row.role && row.role.role_id ? <>
-                        {row.role.role_id === 10 ? <Slack color="#ea5455" size={17} className="me-1" /> : <User color={row.role.role_id === 14 ? "#28c76f" : "#7367f0"} size={17} className="me-1" />}
+                        {row.role.role_id === 10 ? <Slack color="#ea5455" size={17} className="me-50" /> : <User color={row.role.role_id === 14 ? "#28c76f" : "#7367f0"} size={17} className="me-50" />}
                         <span>{row.role.RoleName}</span>
                     </> : null}
                 </div>
             )
         },
         {
-            name: 'Contact',
+            name: "Contact",
             sortable: true,
-            cellClass: 'text-uppercase',
-            minWidth: '130px',
-            sortField: 'Contact',
+            minWidth: "130px",
+            sortField: "Contact",
             cell: (row) => row.Contact
         },
         {
-            name: 'Status',
-            minWidth: '108px',
+            name: "Status",
+            minWidth: "108px",
             sortable: true,
-            sortField: 'Status',
+            sortField: "Status",
             selector: (row) => row.Status,
             cell: (row) => (
-                <Badge className='text-capitalize' color="light-success" pill>
+                <Badge className="text-capitalize" color="light-success" pill>
                     {row.Status}
                 </Badge>
             )
         },
         {
-            name: 'Action',
-            minWidth: '108px',
+            name: "Action",
+            minWidth: "108px",
             omit: dotIconAction,
             cell: (row) => (
                 <UncontrolledButtonDropdown>
@@ -460,27 +457,27 @@ const UsersList = () => {
                             tag={Link}
                             to={`${adminRoot}/user/view/${row && row.id}`}
                         >
-                            <Eye size={20} className='mb-0 me-1' />
-                            <span className='me-2'>View</span>
+                            <Eye size={20} className="mb-0 me-1" />
+                            <span className="me-2">View</span>
                         </DropdownItem>
 
                         <DropdownItem
                             tag={Link}
                             to={`${adminRoot}/user/edit/${row && row.id}`}
                         >
-                            <Archive size={20} className='mb-0 me-1' />
-                            <span className='me-2'>Edit</span>
+                            <Archive size={20} className="mb-0 me-1" />
+                            <span className="me-2">Edit</span>
                         </DropdownItem>
                     </DropdownMenu>
                 </UncontrolledButtonDropdown>
             )
         }
     ]
-    console.log(getCurrentPageNumber(TN_USER, rowsPerPage, currentPage))
+
     return (
         <Fragment>
             <Card className="overflow-hidden">
-            {(!store.loading && !getTotalNumber(TN_USER)) ? (
+                {(!store.loading && !getTotalNumber(TN_USER)) ? (
                     <DotPulse />
                 ) : (
                     <DatatablePagination
@@ -489,9 +486,9 @@ const UsersList = () => {
                         data={store.userItems}
                         loading={store.loading}
                         pagination={store.loading ? store.pagination : {
-                                ...store.pagination, 
-                                perPage: getCurrentPageNumber(TN_USER, rowsPerPage, currentPage)
-                            }
+                            ...store.pagination,
+                            perPage: getCurrentPageNumber(TN_USER, rowsPerPage, currentPage)
+                        }
                         }
                         handleSort={handleSort}
                         handlePagination={handlePagination}
@@ -509,7 +506,7 @@ const UsersList = () => {
                         }
                     />
                 )
-            }
+                }
             </Card>
 
             <ModalAddUser

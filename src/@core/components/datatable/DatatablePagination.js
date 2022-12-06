@@ -83,7 +83,7 @@ const DatatablePagination = ({
     }
 
     return (
-        <div className={`${customClass} react-dataTable`}>
+        <div className={`react-dataTable ${customClass}`}>
             <DataTable
                 noHeader={true}
                 pagination={true}

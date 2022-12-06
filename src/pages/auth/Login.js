@@ -50,8 +50,8 @@ import {
 import '@styles/react/pages/page-authentication.scss'
 
 const defaultValues = {
-  password: '1234567890',
-  email: 'test@valera-melendez.com'
+  email: '',
+  password: ''
 }
 
 const LoginApp = () => {

@@ -370,8 +370,8 @@ const UsersList = () => {
 
     const columns = [
         {
-            minWidth: "40px",
-            maxWidth: "40px",
+            minWidth: "60px",
+            maxWidth: "60px",
             omit: plusIconAction,
             cell: (row) => (
                 <div className="d-flex align-items-center">
@@ -387,23 +387,17 @@ const UsersList = () => {
         {
             name: "Name",
             sortable: true,
-            minWidth: "190px",
-            customLoaderCellClass: "",
-            customLoaderContentClass: "w-75",
+            minWidth: "250px",
             sortField: "name",
             cell: (row) => (
                 <div className="d-flex justify-content-left align-items-center">
-                    {row && row.role && row.role.role_id !== 11 ? (
-                        renderUser(row)
-                    ) : (
-                        <div className="me-3" />
-                    )}
+                    {renderUser(row)}
                     <div className="d-flex flex-column">
                         <Link
                             to={`${adminRoot}/user/view/${row.id}`}
                             className="user_name text-truncate text-body"
                         >
-                            <span className="fw-bolder text-primary text-wrap">{row.name}</span>
+                            <span className="fw-bolder text-primary">{row.name}</span>
                         </Link>
                     </div>
                 </div>
@@ -412,20 +406,15 @@ const UsersList = () => {
         {
             name: "Email",
             sortable: true,
+            minWidth: "300px",
             sortField: "email",
-            minWidth: "210px",
-            customLoaderCellClass: "",
-            customLoaderContentClass: "w-75",
-            cell: (row) => (<div className="">{row.email}</div>)
+            cell: (row) => row.email
         },
         {
             name: "Role",
             sortable: true,
-            sortField: "role_id",
             minWidth: "150px",
-            customLoadingWithIcon: "User",
-            customLoaderCellClass: "",
-            customLoaderContentClass: "w-50",
+            sortField: "role_id",
             cell: (row) => (
                 <div className="d-flex justify-content-left align-items-center">
                     {row.role && row.role.role_id ? <>
@@ -438,19 +427,15 @@ const UsersList = () => {
         {
             name: "Contact",
             sortable: true,
+            minWidth: "130px",
             sortField: "Contact",
-            minWidth: "150px",
-            customLoaderCellClass: "",
-            customLoaderContentClass: "w-100",
             cell: (row) => row.Contact
         },
         {
             name: "Status",
+            minWidth: "108px",
             sortable: true,
             sortField: "Status",
-            minWidth: "130px",
-            customLoaderCellClass: "",
-            customLoaderContentClass: "w-50 rounded-circle",
             selector: (row) => row.Status,
             cell: (row) => (
                 <Badge className="text-capitalize" color="light-success" pill>
@@ -460,10 +445,8 @@ const UsersList = () => {
         },
         {
             name: "Action",
+            minWidth: "108px",
             omit: dotIconAction,
-            minWidth: "110px",
-            customLoaderCellClass: "",
-            customLoaderContentClass: "width-10-per",
             cell: (row) => (
                 <UncontrolledButtonDropdown>
                     <DropdownToggle color="#FFFFFF">

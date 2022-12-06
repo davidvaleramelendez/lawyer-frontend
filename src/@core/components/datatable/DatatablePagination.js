@@ -83,7 +83,7 @@ const DatatablePagination = ({
     }
 
     return (
-        <div className={`react-dataTable ${customClass} ${!loading ? 'customize-placeholder-header' : ''}`}>
+        <div className={`react-dataTable ${customClass}`}>
             <DataTable
                 noHeader={true}
                 pagination={true}
@@ -98,7 +98,7 @@ const DatatablePagination = ({
                 progressComponent={
                     <CustomTable
                         responsive={false}
-                        headerClassName=""
+                        headerClassName="d-none"
                         columns={columns}
                         bodyRows={pagination && pagination.perPage ? parseInt(pagination.perPage) : defaultPerPageRow}
                         bodyRowHeight={40}

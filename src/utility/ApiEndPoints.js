@@ -65,6 +65,13 @@ export const API_ENDPOINTS = {
     },
     /* /Account Setting */
 
+    /* Language & Labels */
+    language: {
+        languages: `/api/admin/language`,
+        labels: `/api/admin/language/labels`
+    },
+    /* /Language & Labels */
+
     /* Role module */
     roles: {
         list: `/api/admin/roles`

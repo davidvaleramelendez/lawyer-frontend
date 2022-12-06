@@ -9,7 +9,6 @@ import {
   saveAccount,
   saveAccountImap,
   getAccountSetting,
-  saveAccountSetting,
   clearUserMessage
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -35,6 +34,12 @@ import { useForm, Controller } from 'react-hook-form'
 // Translation
 import { useTranslation } from 'react-i18next'
 
+// ** API calling components
+import axios from 'axios'
+import {
+  API_ENDPOINTS
+} from '@src/utility/ApiEndPoints'
+
 // ** Utils
 import {
   isUserLoggedIn,
@@ -50,16 +55,12 @@ import {
   Info
 } from 'react-feather'
 
-// ** Third Party Components
-import { Editor } from 'react-draft-wysiwyg'
-import draftToHtml from 'draftjs-to-html'
-import htmlToDraft from 'html-to-draftjs'
-import { EditorState, ContentState, convertToRaw } from 'draft-js'
-
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 import '@styles/react/apps/app-users.scss'
 import '@styles/react/libs/editor/editor.scss'
+
+import LanguageLabels from './language-labels'
 
 const AccountSettingApp = () => {
   /* Hooks */
@@ -76,13 +77,6 @@ const AccountSettingApp = () => {
     handleSubmit: acntHandleSubmit,
     formState: { errors: acntErrors }
   } = useForm({ defaultValues: store.userItem, mode: 'all' })
-
-  /* info => information */
-  const {
-    control: infoControl,
-    handleSubmit: infoHandleSubmit,
-    formState: { errors: infoErrors }
-  } = useForm({ defaultValues: store.accountItem, mode: 'all' })
 
   /* imap => Imap information */
   const {
@@ -179,17 +173,30 @@ const AccountSettingApp = () => {
   const [loadFirst, setLoadFirst] = useState(true)
   const [active, setActive] = useState('1')
   const [imageUrl, setImageUrl] = useState("")
-  const [invoiceLogoUrl, setInvoiceLogoUrl] = useState("")
-  const [editorStateContent, setEditorStateContent] = useState(null)
-  const [editorHtmlContent, setEditorHtmlContent] = useState("")
+  const [languages, setLanguages] = useState([])
+  // const [selLanguage, setSelLanguage] = useState(store.userItem.language)
 
-  const getInitialHTML = (value) => {
-    const contentBlock = htmlToDraft(value)
-    if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks)
-      const editorState = EditorState.createWithContent(contentState)
-      setEditorStateContent(editorState)
-    }
+  // ** Get languages 
+  const getLanguages = () => {
+    axios.get(`${API_ENDPOINTS.language.languages}`)
+        .then((res) => {
+          let langList = res.data.data
+          if (langList === undefined || langList === null) {
+            langList = []
+          }
+
+          if (!langList.includes('English')) {
+            langList.push('English')
+          }
+
+          if (!langList.includes('Dutch')) {
+            langList.push('Dutch')
+          }
+          setLanguages(langList)
+        })
+        .catch((error) => {
+          Notification("Error", error, "Error")
+        })
   }
 
   // ** Get user on mount based on id
@@ -202,11 +209,8 @@ const AccountSettingApp = () => {
     /* Calling first time */
     if (loadFirst) {
       dispatch(getAccountSetting({}))
+      getLanguages()
       setLoadFirst(false)
-    }
-
-    if (store.accountItem && (store.accountItem.defaultText || store.accountItem.bank_information)) {
-      getInitialHTML(store.accountItem.bank_information ? store.accountItem.bank_information : store.accountItem.defaultText)
     }
 
     /* For blank message api called inside */
@@ -244,30 +248,15 @@ const AccountSettingApp = () => {
     }
   }
 
-  const onLogoFileChange = (event) => {
-    const fileReader = new FileReader()
-    const files = event.target.files
-
-    if (files && files.length > 0) {
-      fileReader.onloadend = async () => {
-        setInvoiceLogoUrl(fileReader.result)
-      }
-      fileReader.readAsDataURL(files[0])
-    }
-  }
-
-  const handleEditorStateChange = (state) => {
-    setEditorStateContent(state)
-    setEditorHtmlContent(draftToHtml(convertToRaw(state.getCurrentContent())))
-  }
-
   /* Submitting Account data */
   const onSubmitAccount = (values) => {
+
     if (values) {
       const userData = {
         name: values.fullname,
         email: values.emailAddress,
-        Company: values.company
+        Company: values.company,
+        language: values.language
       }
 
       if (imageUrl) {
@@ -279,35 +268,6 @@ const AccountSettingApp = () => {
       // console.log("onSubmitAccount >>>>>>>>> ", userData)
     }
 
-  }
-
-  /* Submitting Information data */
-  const onSubmitInformation = (values) => {
-    if (values) {
-      const infoData = {
-        UserID: store.userItem.id,
-        User_Name: values.User_Name,
-        footer_column_1: values.column1,
-        footer_column_2: values.column2,
-        footer_column_3: values.column3,
-        footer_column_4: values.column4,
-        Address: values.Address,
-        Postal_Code: values.Postal_Code,
-        City: values.City,
-        Invoice_text: values.Invoice_text
-      }
-
-      if (editorHtmlContent) {
-        infoData.bank_information = editorHtmlContent
-      }
-
-      if (invoiceLogoUrl) {
-        infoData.invoice_logo = invoiceLogoUrl
-      }
-
-      // console.log("onSubmitInformation >>>>> ", userData)
-      dispatch(saveAccountSetting(infoData))
-    }
   }
 
   /* Submitting Imap Information data */
@@ -342,7 +302,7 @@ const AccountSettingApp = () => {
             <NavItem>
               <NavLink active={active === "2"} onClick={() => toggleTab("2")}>
                 <Info size={14} className="me-50" />
-                <span className="fw-bold d-none d-sm-block">Information</span>
+                <span className="fw-bold d-none d-sm-block">Language Labels</span>
               </NavLink>
             </NavItem>
 
@@ -454,6 +414,31 @@ const AccountSettingApp = () => {
                     />
                     <div className="invalid-feedback">{acntErrors.company?.message}</div>
                   </Col>
+
+                  <Col xl={4} md={4} sm={4} className="mb-1">
+                    <label className="form-label" htmlFor="language-select">Language</label>
+                    <Controller
+                      defaultValue={store.userItem && store.userItem.language ? store.userItem.language : "English"}
+                      name="language"
+                      id="language"
+                      control={acntControl}
+                      rules={ValidationSchema.company}
+                      render={({ field }) => (
+                      <Input
+                        {...field}
+                        type="select"
+                        id="language-select"
+                        // onChange={(event) => setSelLanguage(event.target.value)}
+                      >
+                        {languages && languages.length ? (<>
+                            {languages.map((item, index) => (
+                                <option key={`row-${index}`} value={item}>{item}</option>
+                            ))}
+                        </>) : null}
+                      </Input>
+                      )}
+                    />
+                  </Col>
                 </Row>
 
                 <div className="d-flex flex-wrap mb-2 mt-2">
@@ -465,156 +450,7 @@ const AccountSettingApp = () => {
             </TabPane>
 
             <TabPane tabId="2">
-              <Form id="information" className="mt-2" onSubmit={infoHandleSubmit(onSubmitInformation)} autoComplete="off">
-                <Row>
-                  <Col xl={12} md={12} sm={12}>
-                    <div className="d-flex mb-2">
-                      <div className="me-25">
-                        <img
-                          className="rounded me-50"
-                          id="invoice-logo"
-                          src={invoiceLogoUrl ? invoiceLogoUrl : store.accountItem && store.accountItem.invoice_logo ? `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${store.accountItem.invoice_logo}` : `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/images/avatars/avatar-blank.png`}
-                          onError={(currentTarget) => onImageSrcError(currentTarget)}
-                          alt="user-avatar"
-                          height="100"
-                          width="100"
-                        />
-                      </div>
-
-                      <div className="mt-75 ms-1">
-                        <h4 className="mb-50">Logo</h4>
-                        <Button type="button" tag={Label} className="mb-75 me-75" color="primary">
-                          Add
-                          <Input type="file" hidden accept="image/*" onChange={(event) => onLogoFileChange(event)} />
-                        </Button>
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col xl={12} md={12} sm={12}>
-                    <h4 className="mb-1">
-                      <User size={20} />
-                      <span className="align-middle">Personal Information</span>
-                    </h4>
-                  </Col>
-
-                  <Col xl={12} md={12} sm={12} className="mb-1">
-                    <Controller
-                      defaultValue={store.accountItem && store.accountItem.bank_information ? store.accountItem.bank_information : store.accountItem && store.accountItem.defaultText ? store.accountItem.defaultText : ""}
-                      name="bankInformation"
-                      id="bankInformation"
-                      control={infoControl}
-                      rules={ValidationSchema.bank_information}
-                      render={({ field }) => (<>
-                        <Editor
-                          {...field}
-                          toolbar={{
-                            options: ["blockType", "fontSize", "inline", "list", "textAlign", "history"],
-                            blockType: {
-                              inDropdown: true,
-                              options: ["Normal", "H1", "H2", "H3", "H4", "H5", "H6"]
-                            },
-                            fontSize: {
-                              options: [8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96]
-                            },
-                            inline: {
-                              inDropdown: false,
-                              options: ["bold", "italic", "underline", "strikethrough"]
-                            }
-                          }}
-                          editorState={editorStateContent}
-                          placeholder={ValidationSchema.bank_information && ValidationSchema.bank_information.placeholder}
-                          onEditorStateChange={handleEditorStateChange}
-                        />
-                      </>)}
-                    />
-                    <div className="invalid-feedback">{infoErrors.bank_information?.message}</div>
-                  </Col>
-
-                  <Col xl={12} md={12} sm={12}>
-                    <h4 className="mb-1">
-                      <User size={20} />
-                      <span className="align-middle">Footer Information</span>
-                    </h4>
-                  </Col>
-
-                  <Col xl={6} md={6} sm={6} className="mb-1">
-                    <Label className="form-label" for="column1">
-                      Column 1
-                    </Label>
-                    <Controller
-                      defaultValue={store.accountItem && store.accountItem.footer_columns && store.accountItem.footer_columns.footer_column_1 ? store.accountItem.footer_columns.footer_column_1 : ""}
-                      name="column1"
-                      id="column1"
-                      control={infoControl}
-                      rules={ValidationSchema.column1}
-                      render={({ field }) => (
-                        <Input {...field} type="text" placeholder={ValidationSchema.column1 && ValidationSchema.column1.placeholder} invalid={infoErrors.column1 && true} />
-                      )}
-                    />
-                    <div className="invalid-feedback">{infoErrors.column1?.message}</div>
-                  </Col>
-
-                  <Col xl={6} md={6} sm={6} className="mb-1">
-                    <Label className="form-label" for="column2">
-                      Column 2
-                    </Label>
-                    <Controller
-                      defaultValue={store.accountItem && store.accountItem.footer_columns && store.accountItem.footer_columns.footer_column_2 ? store.accountItem.footer_columns.footer_column_2 : ""}
-                      name="column2"
-                      id="column2"
-                      control={infoControl}
-                      rules={ValidationSchema.column2}
-                      render={({ field }) => (
-                        <Input {...field} type="text" placeholder={ValidationSchema.column2 && ValidationSchema.column2.placeholder} invalid={infoErrors.column2 && true} />
-                      )}
-                    />
-                    <div className="invalid-feedback">{infoErrors.column2?.message}</div>
-                  </Col>
-
-                  <Col xl={6} md={6} sm={6} className="mb-1">
-                    <Label className="form-label" for="column3">
-                      Column 3
-                    </Label>
-                    <Controller
-                      defaultValue={store.accountItem && store.accountItem.footer_columns && store.accountItem.footer_columns.footer_column_3 ? store.accountItem.footer_columns.footer_column_3 : ""}
-                      name="column3"
-                      id="column3"
-                      control={infoControl}
-                      rules={ValidationSchema.column3}
-                      render={({ field }) => (
-                        <Input {...field} type="text" placeholder={ValidationSchema.column3 && ValidationSchema.column3.placeholder} invalid={infoErrors.column3 && true} />
-                      )}
-                    />
-                    <div className="invalid-feedback">{infoErrors.column3?.message}</div>
-                  </Col>
-
-                  <Col xl={6} md={6} sm={6} className="mb-1">
-                    <Label className="form-label" for="column4">
-                      Column 4
-                    </Label>
-                    <Controller
-                      defaultValue={store.accountItem && store.accountItem.footer_columns && store.accountItem.footer_columns.footer_column_4 ? store.accountItem.footer_columns.footer_column_4 : ""}
-                      name="column4"
-                      id="column4"
-                      control={infoControl}
-                      rules={ValidationSchema.column4}
-                      render={({ field }) => (
-                        <Input {...field} type="text" placeholder={ValidationSchema.column4 && ValidationSchema.column4.placeholder} invalid={infoErrors.column4 && true} />
-                      )}
-                    />
-                    <div className="invalid-feedback">{infoErrors.column4?.message}</div>
-                  </Col>
-                </Row>
-
-                <div className="d-flex flex-wrap mb-2 mt-2">
-                  <Button type="submit" className="me-1" color="primary">
-                    {t("Save Change")}
-                  </Button>
-                </div>
-              </Form>
+              <LanguageLabels />
             </TabPane>
 
             <TabPane tabId="3">

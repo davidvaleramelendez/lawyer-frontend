@@ -17,7 +17,7 @@ export const accountItem = { id: null, UserId: null, bank_information: "", foote
 export const imapItem = { id: null, user_id: null, imap_host: "", imap_email: "", imap_password: "", imap_port: "", imap_ssl: "" }
 
 // Email
-export const emailsMeta = { inbox: 0, spam: 0 }
+export const emailsMeta = { inbox: 0, draft: 0, important: 0, spam: 0 }
 
 export const emailItem = { id: "", imap_id: "", folder: "", from_id: "", to_id: "", from: "", to: "", reply_to: "", sender: "", subject: "", message_id: "", uid: "", email_group_id: "", date: "", toaddress: "", fromaddress: "", reply_toaddress: "", senderaddress: "", body: "", hasAttachment: null, attachedFiles: null, is_read: 0, is_delete: 0, is_trash: 0, important: 0, email_to: null, email_cc: null, email_bcc: null }
 

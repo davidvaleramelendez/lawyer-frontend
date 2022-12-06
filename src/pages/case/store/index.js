@@ -748,6 +748,7 @@ export const appCaseSlice = createSlice({
     caseLetters: [],
     typeItems: [],
     laywerItems: [],
+    selectedItem: null,
     actionFlag: "",
     loading: false,
     success: "",
@@ -762,6 +763,10 @@ export const appCaseSlice = createSlice({
       state.actionFlag = ""
       state.success = ""
       state.error = ""
+    },
+
+    updateSelectedDetails: (state, action) => {
+      state.selectedItem = action.payload || null
     }
   },
   extraReducers: (builder) => {
@@ -928,7 +933,8 @@ export const appCaseSlice = createSlice({
 
 export const {
   updateCaseLoader,
-  clearCaseMessage
+  clearCaseMessage,
+  updateSelectedDetails
 } = appCaseSlice.actions
 
 export default appCaseSlice.reducer

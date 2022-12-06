@@ -2,6 +2,10 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
+import {
+  handleContentWidth
+} from '@store/layout'
+
 // ** Store & Actions
 import {
   closeCase,
@@ -12,7 +16,8 @@ import {
   shareCaseRecord,
   statusCaseLetter,
   statusCaseDocument,
-  clearCaseMessage
+  clearCaseMessage,
+  updateSelectedDetails
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -94,9 +99,6 @@ const CaseView = () => {
   const dispatch = useDispatch()
 
   const MySwal = withReactContent(Swal)
-
-  // ** State
-  const [recordDetails, SetRecordDetails] = useState(null)
 
   // ** Store vars
   const navigate = useNavigate()
@@ -225,11 +227,11 @@ const CaseView = () => {
     })
   }
 
-  /* Detail view of Case Document */
-  const onCaseDocumentDetail = (row) => {
-    setDocumentRowData({ ...row })
-    setDocUploadModalOpen(true)
-  }
+  // /* Detail view of Case Document */
+  // const onCaseDocumentDetail = (row) => {
+  //   setDocumentRowData({ ...row })
+  //   setDocUploadModalOpen(true)
+  // }
 
   /* Change letter done status */
   const onLetterDone = (id) => {
@@ -252,26 +254,28 @@ const CaseView = () => {
     })
   }
 
-  /* Detail view of Case Letter */
-  const onCaseLetterDetail = (row) => {
-    setLetterRowData({ ...row })
-    setLetterModalOpen(true)
-  }
+  // /* Detail view of Case Letter */
+  // const onCaseLetterDetail = (row) => {
+  //   setLetterRowData({ ...row })
+  //   setLetterModalOpen(true)
+  // }
 
   /* Details of record at the right side */
   const onRecordClick = (details) => () => {
-    SetRecordDetails(details)
+    dispatch(handleContentWidth('full'))
+    dispatch(updateSelectedDetails(details))
   }
 
   /* Format Details of record */
   const onRecordCloseClick = () => {
-    SetRecordDetails(null)
+    dispatch(handleContentWidth('boxed'))
+    dispatch(updateSelectedDetails(null))
   }
 
   return store ? (
     <div className='invoice-preview-wrapper'>
-      <Row>
-        <Col xl={`${recordDetails ? '8' : '12'}`} md={`${recordDetails ? '8' : '12'}`} sm={`${recordDetails ? '8' : '12'}`} className={`${recordDetails ? 'case-left-animation' : ''}`}>
+      <Row className='match-height'>
+        <Col xl={`${store.selectedItem ? '7' : '12'}`} md={12} sm={12}>
           {/* Header */}
           <Row
             className={`invoice-preview ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder-glow'}`}
@@ -499,7 +503,7 @@ const CaseView = () => {
 
                         <div className='invoice-date-wrapper'>
                           <Calendar size={14} />
-                          <p className='invoice-date-title ms-1'>Date changed</p>
+                          <p className='invoice-date-title ms-1'>Updated</p>
                           <p className='invoice-date'>{store.fighterItem && store.fighterItem.created_at && getTransformDate(store.fighterItem.created_at, "DD.MM.YYYY")}</p>
                         </div>
 
@@ -641,7 +645,9 @@ const CaseView = () => {
                                     </Label>
                                   </div>
                                 </td>
-                                <td/>
+                                <td>
+                                  <Eye size={18} className="cursor-pointer" onClick={() => onRecordClick(record)} />
+                                </td>
                               </tr>
                             ))}
                             {store.caseLetters.map((letter, index) => (
@@ -673,7 +679,8 @@ const CaseView = () => {
                                 </td>
 
                                 <td>
-                                  <Eye size={18} className="cursor-pointer" onClick={() => onCaseLetterDetail(letter)} />
+                                  {/* <Eye size={18} className="cursor-pointer" onClick={() => onCaseLetterDetail(letter)} /> */}
+                                  <Eye size={18} className="cursor-pointer" onClick={() => onRecordClick(letter)} />
                                 </td>
                               </tr>
                             ))}
@@ -706,7 +713,8 @@ const CaseView = () => {
                                 </td>
 
                                 <td>
-                                  <Eye size={18} className="cursor-pointer" onClick={() => onCaseDocumentDetail(doc)} />
+                                  {/* <Eye size={18} className="cursor-pointer" onClick={() => onCaseDocumentDetail(doc)} /> */}
+                                  <Eye size={18} className="cursor-pointer" onClick={() => onRecordClick(doc)} />
                                 </td>
                               </tr>
                             ))}
@@ -728,8 +736,8 @@ const CaseView = () => {
           </Row>
           {/* /Notes && Time Recording && Letter && Document History */}
         </Col>
-        <Col xl={4} md={4} sm={4} className={`${recordDetails ? 'case-right-animation-move' : 'case-right-animation'}`}>
-          { recordDetails ? (
+        <Col xl={5} md={12} sm={12}>
+          { store.selectedItem ? (
               <Card className='case-details-card'>
               <CardBody className='invoice-padding pb-0'>
                 <div className='d-flex justify-content-between' >
@@ -739,13 +747,7 @@ const CaseView = () => {
                   </Button.Ripple>
                 </div>
                 <hr/>
-                {recordDetails ? (
-                  <CardDetails details={recordDetails} />
-                ) : (
-                  <div className='py-3 text-center'>
-                    Not selected
-                  </div>
-                )}
+                <CardDetails details={store.selectedItem} />
               </CardBody>
             </Card>
           ) : (

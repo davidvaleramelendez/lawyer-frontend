@@ -106,7 +106,9 @@ export const API_ENDPOINTS = {
         createLetter: `/api/admin/case/add_letter`,
         updateLetter: `/api/admin/case/update_letter`,
         deleteLetter: `/api/admin/case/delete_letter`,
-        isErledigtLetter: `/api/admin/case/letter_erledigt`
+        isErledigtLetter: `/api/admin/case/letter_erledigt`,
+        createTimeRecord: `/api/admin/case/case_records/time/create`, 
+        getTimeRecord: `/api/admin/case/case_record/times`
     },
     /* /Case module */
 

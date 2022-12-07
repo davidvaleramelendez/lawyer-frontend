@@ -17,7 +17,8 @@ import {
   statusCaseLetter,
   statusCaseDocument,
   clearCaseMessage,
-  updateSelectedDetails
+  updateSelectedDetails,
+  getTimeCaseRecords
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -69,7 +70,8 @@ import {
 // ** Utils
 import {
   isUserLoggedIn,
-  getTransformDate
+  getTransformDate,
+  getTimeCounter
 } from '@utils'
 
 // ** Custom Components
@@ -88,9 +90,11 @@ import ModalCaseRecordDetail from '../modals/ModalCaseRecordDetail'
 import ModalCaseDocument from '../modals/ModalCaseDocument'
 import ModalCaseLetter from '../modals/ModalCaseLetter'
 import ModalCaseTimeTracking from '../modals/ModalCaseTimeTracking'
+import ModalCaseTimeTrackingCounter from '../modals/ModalCaseTimeTrackingCounter'
 
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
+import { setTimeCounter } from '../../../utility/Utils'
 
 const CaseView = () => {
   // ** Hooks
@@ -104,6 +108,7 @@ const CaseView = () => {
   const navigate = useNavigate()
   const store = useSelector((state) => state.cases)
 
+
   /* Constant */
   const [loadFirst, setLoadFirst] = useState(true)
   const [editModalOpen, setEditModalOpen] = useState(false)
@@ -116,6 +121,15 @@ const CaseView = () => {
   const [letterModalOpen, setLetterModalOpen] = useState(false)
   const [letterRowData, setLetterRowData] = useState(letterItem)
   const [timeTrackModalOpen, setTimeTrackModalOpen] = useState(false)
+  const [timeCounterModalOpen, setTimeCounterModalOpen] = useState(false)
+
+  // Check TimeCounterModal 
+  useEffect(() => {
+    const time_modal_status = getTimeCounter().status
+    if (time_modal_status === true) {
+      setTimeCounterModalOpen(true)
+    }
+  }, [])
 
   // ** Get contact on mount based on id
   useEffect(() => {
@@ -135,6 +149,7 @@ const CaseView = () => {
       dispatch(getCaseLetters({ case_id: id }))
       dispatch(getCaseDocuments({ case_id: id }))
       dispatch(getNoteCaseRecords({ CaseID: id }))
+      dispatch(getTimeCaseRecords(id))
       setLoadFirst(false)
     }
 
@@ -270,6 +285,20 @@ const CaseView = () => {
   const onRecordCloseClick = () => {
     dispatch(handleContentWidth('boxed'))
     dispatch(updateSelectedDetails(null))
+  }
+
+  const onRecordSubmit = (values, caseId) => {
+    const timeData = {
+      CaseID: caseId,
+      Subject: values.Subject,
+      interval_time: values.interval_time * 1,
+      current_time: 0,
+      status: true
+    }
+
+    setTimeCounter(timeData)
+    
+    setTimeCounterModalOpen(true)
   }
 
   return store ? (
@@ -564,6 +593,7 @@ const CaseView = () => {
                         open={timeTrackModalOpen}
                         toggleModal={() => setTimeTrackModalOpen(!timeTrackModalOpen)}
                         caseId={store.caseItem.CaseID}
+                        onRecordSubmit={onRecordSubmit}
                       />
 
                       <Button className="ms-2 mt-1" color="primary" onClick={() => setLetterModalOpen(true)}>
@@ -611,6 +641,39 @@ const CaseView = () => {
                           </tr>
                         </thead>
                           <tbody>
+                            {store.timeCaseRecord.map((record, index) => (
+                              <tr key={`record_${index}`} onClick={onRecordClick(record)} className="cursor-pointer">
+                                <td/>
+
+                                <td>{record.CreatedAt && getTransformDate(record.CreatedAt, "DD.MM.YYYY")}</td>
+
+                                <td>{record.Subject}</td>
+
+                                <td>
+                                  <div className='form-switch form-check-primary'>
+                                    <Input
+                                      type='switch'
+                                      checked={record.IsShare}
+                                      id={`record_${index}_${record.IsShare}`}
+                                      name={`record_${index}_${record.IsShare}`}
+                                      className="cursor-pointer"
+                                      onChange={() => onShareCaseRecord(record.RecordID)}
+                                    />
+                                    <Label className='form-check-label' htmlFor="icon-primary">
+                                      <span className='switch-icon-left'>
+                                        <Check size={14} />
+                                      </span>
+                                      <span className='switch-icon-right'>
+                                        <X size={14} />
+                                      </span>
+                                    </Label>
+                                  </div>
+                                </td>
+                                <td>
+                                  <Eye size={18} className="cursor-pointer" onClick={() => onRecordClick(record)} />
+                                </td>
+                              </tr>
+                            ))}
                             {store.caseRecords.map((record, index) => (
                               <tr key={`record_${index}`} onClick={onRecordClick(record)} className="cursor-pointer">
                                 <td>
@@ -721,6 +784,11 @@ const CaseView = () => {
                           </tbody>
                       </Table>
                     </Col>
+                    <ModalCaseTimeTrackingCounter
+                        open={timeCounterModalOpen}
+                        toggleModal={() => setTimeCounterModalOpen(!timeCounterModalOpen)}
+                        caseId={store.caseItem.CaseID}
+                      />
 
                     <ModalCaseRecordDetail
                       open={recordDetailModalOpen}

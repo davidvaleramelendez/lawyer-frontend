@@ -37,6 +37,7 @@ export const getCaseList = createAsyncThunk('appCase/getCaseList', async (params
         fighterItem: fighterItem,
         caseDocs: [],
         caseRecords: [],
+        timeCaseRecord:[],
         caseLetters: [],
         actionFlag: "",
         success: "",
@@ -51,6 +52,7 @@ export const getCaseList = createAsyncThunk('appCase/getCaseList', async (params
         fighterItem: fighterItem,
         caseDocs: [],
         caseRecords: [],
+        timeCaseRecord:[],
         caseLetters: [],
         actionFlag: "",
         success: "",
@@ -166,6 +168,7 @@ export const closeCase = createAsyncThunk('appCase/closeCase', async (id) => {
         caseDocs: [],
         attachments: [],
         caseRecords: [],
+        timeCaseRecord:[],
         caseLetters: [],
         typeItems: [],
         laywerItems: [],
@@ -178,6 +181,7 @@ export const closeCase = createAsyncThunk('appCase/closeCase', async (id) => {
         caseDocs: [],
         attachments: [],
         caseRecords: [],
+        timeCaseRecord:[],
         caseLetters: [],
         typeItems: [],
         laywerItems: [],
@@ -192,6 +196,7 @@ export const closeCase = createAsyncThunk('appCase/closeCase', async (id) => {
       caseDocs: [],
       attachments: [],
       caseRecords: [],
+      timeCaseRecord:[],
       caseLetters: [],
       typeItems: [],
       laywerItems: [],
@@ -733,6 +738,78 @@ export const statusCaseLetter = createAsyncThunk('appCase/statusCaseLetter', asy
 })
 /* /Case Letters */
 
+/* Case RecordTime */
+
+async function getTimeCaseRecordsRequest(id) {
+  return axios.get(`${API_ENDPOINTS.cases.getTimeRecord}/${id}`).then((cases) => cases.data).catch((error) => error)
+}
+
+export const getTimeCaseRecords = createAsyncThunk('appCase/getTimeCase', async (id) => {
+  try {
+    const response = await getTimeCaseRecordsRequest(id)
+    if (response && response.flag) {
+      return {
+        timeCaseRecord: response.data,
+        actionFlag: "",
+        success: "",
+        error: ""
+      }
+    } else {
+      return {
+        timeCaseRecord: [],
+        actionFlag: "",
+        success: "",
+        error: ""
+      }
+    }
+  } catch (error) {
+    console.log("gettimecaserecord catch ", error)
+    return {
+      timeCaseRecord: [],
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function createTimeCaseRecordRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.cases.createTimeRecord}`, payload).then((cases) => cases.data).catch((error) => error)
+}
+
+export const createTimeCaseRecord = createAsyncThunk('appCase/createTimeCaseRecord', async (payload, { dispatch, getState }) => {
+  try {
+    const response = await createTimeCaseRecordRequest(payload)
+    if (response && response.flag) {
+      await dispatch(getTimeCaseRecords(getState().cases.id))
+      return {
+        attachments: [],
+        actionFlag: "TIME_CREATED",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        attachments: [],
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("createTimeCaseRecord catch ", error)
+    return {
+      attachments: [],
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+/* Case RecordTime */
+
+
 export const appCaseSlice = createSlice({
   name: 'appCase',
   initialState: {
@@ -746,6 +823,7 @@ export const appCaseSlice = createSlice({
     attachments: [],
     caseRecords: [],
     caseLetters: [],
+    timeCaseRecord: [],
     typeItems: [],
     laywerItems: [],
     selectedItem: null,
@@ -779,6 +857,7 @@ export const appCaseSlice = createSlice({
         state.fighterItem = action.payload.fighterItem
         state.caseDocs = action.payload.caseDocs
         state.caseRecords = action.payload.caseRecords
+        state.timeCaseRecord = action.payload.timeCaseRecord
         state.caseLetters = action.payload.caseLetters
         state.actionFlag = action.payload.actionFlag
         state.loading = true
@@ -801,6 +880,7 @@ export const appCaseSlice = createSlice({
       .addCase(closeCase.fulfilled, (state, action) => {
         state.caseDocs = action.payload.caseDocs
         state.caseRecords = action.payload.caseRecords
+        state.timeCaseRecord = action.payload.timeCaseRecord
         state.attachments = action.payload.attachments
         state.caseLetters = action.payload.caseLetters
         state.typeItems = action.payload.typeItems
@@ -928,6 +1008,21 @@ export const appCaseSlice = createSlice({
         state.error = action.payload.error
       })
     /* /Case Letters */
+    /* Case RecordTime */
+      .addCase(getTimeCaseRecords.fulfilled, (state, action) => {
+        state.timeCaseRecord = action.payload.timeCaseRecord
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(createTimeCaseRecord.fulfilled, (state, action) => {
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+    /* Case RecordTime */
   }
 })
 

@@ -10,7 +10,8 @@ import {
   storageRefreshTokenKeyName,
   storageTokenExpiresKeyName,
   storageTotalNumberName,
-  storageSiteSetting
+  storageSiteSetting,
+  storageTimeCounter
 } from '@constant/defaultValues'
 
 import {
@@ -406,4 +407,33 @@ export const getSiteLayoutSetting = () => {
     _sitesetting = null
   }
   return _sitesetting
+}
+
+/* Get time counter from local storage */
+export const getTimeCounter = () => {
+  let timecounter = null
+  try {
+    timecounter = localStorage.getItem(storageTimeCounter) !== null ? JSON.parse(localStorage.getItem(storageTimeCounter)) : {
+      interval_time: 0,
+      current_time: 0,
+      status: false
+    }
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js  : getTimeCounter -> error', error)
+    timecounter = null
+  }
+  return timecounter
+}
+
+/* Set time counter on local storage  */
+export const setTimeCounter = (timecounter) => {
+  try {
+    if (timecounter) {
+      localStorage.setItem(storageTimeCounter, JSON.stringify(timecounter))
+    } else {
+      localStorage.removeItem(storageTimeCounter)
+    }
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js : setTimeCounter -> error', error)
+  }
 }

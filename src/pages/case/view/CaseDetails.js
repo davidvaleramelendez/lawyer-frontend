@@ -138,6 +138,16 @@ const CaseDetails = ({details}) => {
           </div>
         </div>
       }
+      {(details.interval_time) &&
+        <div className="row mb-1">
+          <div className="col-3">
+            <strong>{t("Interval Tiime")}: </strong>
+          </div>
+          <div className="col-9">
+            {details.interval_time} S
+          </div>
+        </div>
+      }
       
     </div>
   )

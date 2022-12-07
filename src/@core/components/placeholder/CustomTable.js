@@ -36,14 +36,17 @@ const CustomTable = ({
             >
                 <thead
                     className={`${headerClassName}`}
+                    style={
+                        { height: `${bodyRowHeight}px` }
+                    }
                 >
                     <tr>
                         {columns.map((col, index) => {
-                            const minWidth = col.minWidth
-                            const maxWidth = col.maxWidth
+                            const minWidth = col.minWidth || ""
+                            const maxWidth = col.maxWidth || ""
                             const style = {}
                             if (minWidth) {
-                                style.minWidth = minWidth
+                                style.width = minWidth
                             }
 
                             if (maxWidth) {
@@ -55,6 +58,7 @@ const CustomTable = ({
                                     <th
                                         style={style}
                                         key={`place-holder-head-${index}`}
+                                        className={`${col && col.customLoaderCellClass ? col.customLoaderCellClass : ''}`}
                                     >
                                         {col.name || ""}
                                     </th>
@@ -71,16 +75,13 @@ const CustomTable = ({
                         {Array.from(Array(bodyRows).keys(), (row, index) => (
                             <tr
                                 key={`place-holder-body-${index}`}
-                                style={
-                                    { height: `${bodyRowHeight}px` }
-                                }
                             >
                                 {columns.map((col, bodyIndex) => {
-                                    const minWidth = col.minWidth
-                                    const maxWidth = col.maxWidth
+                                    const minWidth = col.minWidth || ""
+                                    const maxWidth = col.maxWidth || ""
                                     const style = {}
                                     if (minWidth) {
-                                        style.minWidth = minWidth
+                                        style.width = minWidth
                                     }
 
                                     if (maxWidth) {
@@ -106,14 +107,16 @@ const CustomTable = ({
                                                             size={"sm"}
                                                             imgWidth='30'
                                                             imgHeight='30'
-                                                            className="placeholder me-1"
+                                                            className="placeholder me-50"
                                                             icon={<IconTag size={17} />}
                                                         />
                                                     ) : null}
 
                                                     <div
-                                                        className={`placeholder ${col && col.customLoaderContentClass ? col.customLoaderContentClass : 'w-100'}`}
-                                                    />
+                                                        className={`placeholder ${col && col.customLoaderContentClass ? col.customLoaderContentClass : ''}`}
+                                                    >
+                                                        {col && col.loaderContent}
+                                                    </div>
                                                 </td>
                                             ) : null}
                                         </Fragment>)

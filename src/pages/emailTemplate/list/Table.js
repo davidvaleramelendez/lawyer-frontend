@@ -52,9 +52,9 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
 // ** Custom Components
+import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
-import DotPulse from '@components/dotpulse'
 
 const CustomHeader = ({
     searchInput,
@@ -225,14 +225,14 @@ const EmailTemplateList = () => {
         if (store && store.error) {
             Notification("Error", store.error, "warning")
         }
-    }, [dispatch, store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
+    }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
     // console.log("store >>> ", store)
 
     const columns = [
         {
             name: 'Subject',
             sortable: true,
-            minWidth: '310',
+            minWidth: '40%',
             sortField: 'subject',
             cell: (row) => (
                 <Link
@@ -240,17 +240,28 @@ const EmailTemplateList = () => {
                 >
                     {row.subject}
                 </Link>
-            )
+            ),
+            /* Custom placeholder vars */
+            loaderContent: "Subject",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: 'Status',
             sortable: true,
-            minWidth: '80',
+            minWidth: '20%',
             sortField: 'status',
-            cell: (row) => <>{row.status === "Active" ? <Badge color='success'>{row.status}</Badge> : <Badge color='warning'>{row.status}</Badge>}</>
+            cell: (row) => <>{row.status === "Active" ? <Badge color='success'>{row.status}</Badge> : <Badge color='warning'>{row.status}</Badge>}</>,
+            /* Custom placeholder vars */
+            loaderContent: "Active",
+            customLoaderCellClass: "",
+            customLoaderContentClass: "rounded-pill"
+            /* /Custom placeholder vars */
         },
         {
             name: 'Action',
+            minWidth: '40%',
             cell: (row) => (
                 <div className='column-action d-flex align-items-center'>
                     <Link
@@ -294,37 +305,42 @@ const EmailTemplateList = () => {
                         </UncontrolledTooltip>
                     </>) : null}
                 </div>
-            )
+            ),
+            /* Custom placeholder vars */
+            loaderContent: "Actions",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         }
     ]
 
     return store ? (<Fragment>
         <Card className="overflow-hidden">
             {(!store.loading && !getTotalNumber(TN_EMAIL_TEMPLATE)) ? (
-                    <DotPulse />
-                ) : (
-                    <DatatablePagination
-                        customClass="react-dataTable"
-                        columns={columns}
-                        loading={store.loading}
-                        data={store.emailTemplateItems}
-                        pagination={store.loading ? store.pagination : {
-                                ...store.pagination, 
-                                perPage: getCurrentPageNumber(TN_EMAIL_TEMPLATE, rowsPerPage, currentPage)
-                            }
-                        }
-                        handleSort={handleSort}
-                        handlePagination={handlePagination}
-                        subHeaderComponent={
-                            <CustomHeader
-                                searchInput={searchInput}
-                                rowsPerPage={rowsPerPage}
-                                handleSearch={handleSearch}
-                                handlePerPage={handlePerPage}
-                            />
-                        }
-                    />
-                )
+                <DotPulse />
+            ) : (
+                <DatatablePagination
+                    customClass="react-dataTable"
+                    columns={columns}
+                    loading={store.loading}
+                    data={store.emailTemplateItems}
+                    pagination={store.loading ? store.pagination : {
+                        ...store.pagination,
+                        perPage: getCurrentPageNumber(TN_EMAIL_TEMPLATE, rowsPerPage, currentPage)
+                    }
+                    }
+                    handleSort={handleSort}
+                    handlePagination={handlePagination}
+                    subHeaderComponent={
+                        <CustomHeader
+                            searchInput={searchInput}
+                            rowsPerPage={rowsPerPage}
+                            handleSearch={handleSearch}
+                            handlePerPage={handlePerPage}
+                        />
+                    }
+                />
+            )
             }
         </Card>
     </Fragment>) : null

@@ -6,9 +6,9 @@ import { useNavigate, Link } from 'react-router-dom'
 
 // ** Custom Components
 import Avatar from '@components/avatar'
+import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
-import DotPulse from '@components/dotpulse'
 
 // ** Reactstrap Imports
 import {
@@ -39,9 +39,9 @@ import {
 
 // ** Utils
 import {
+    getTotalNumber,
     isUserLoggedIn,
     getRandColorClass,
-    getTotalNumber,
     getCurrentPageNumber
 } from '@utils'
 
@@ -58,10 +58,10 @@ import { useDispatch, useSelector } from 'react-redux'
 // Constant
 import {
     root,
+    TN_USER,
     adminRoot,
     perPageRowItems,
-    defaultPerPageRow,
-    TN_USER
+    defaultPerPageRow
 } from '@constant/defaultValues'
 import {
     userItem
@@ -73,6 +73,9 @@ import { useTranslation } from 'react-i18next'
 // Modal
 import ModalAddUser from '../modals/ModalAddUser'
 import ModalUserDetail from '../modals/ModalUserDetail'
+
+// ** SVG image icons
+import avatarBlank from '@src/assets/images/avatars/avatar-blank.png'
 
 // ** Styles
 import '@styles/react/libs/tables/react-dataTable-component.scss'
@@ -346,15 +349,29 @@ const UsersList = () => {
 
     /* Renders User Columns */
     const renderUser = (row) => {
-        if (row.profile_photo_path && row.profile_photo_path.length) {
-            return <Avatar className="me-50" img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`} width="32" height="32" />
-        } else {
+        if (row && row.profile_photo_path && row.profile_photo_path.length) {
+            return <Avatar
+                width="32"
+                height="32"
+                className="me-50"
+                img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`}
+            />
+        } else if (row && row.role && row.role.role_id === 11) {
             return (
                 <Avatar
                     initials
                     className="me-50"
                     color={getRandColorClass()}
                     content={row.name || "John Doe"}
+                />
+            )
+        } else {
+            return (
+                <Avatar
+                    height="32"
+                    width="32"
+                    className="me-50"
+                    img={avatarBlank}
                 />
             )
         }
@@ -370,8 +387,8 @@ const UsersList = () => {
 
     const columns = [
         {
-            minWidth: "60px",
-            maxWidth: "60px",
+            minWidth: "10%",
+            maxWidth: "10%",
             omit: plusIconAction,
             cell: (row) => (
                 <div className="d-flex align-items-center">
@@ -382,39 +399,56 @@ const UsersList = () => {
                         onClick={() => onUserDetail(row)}
                     />
                 </div>
-            )
+            ),
+            /* Custom placeholder vars */
+            loaderContent: "--",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: "Name",
             sortable: true,
-            minWidth: "250px",
             sortField: "name",
+            minWidth: "20%",
             cell: (row) => (
                 <div className="d-flex justify-content-left align-items-center">
                     {renderUser(row)}
+
                     <div className="d-flex flex-column">
                         <Link
                             to={`${adminRoot}/user/view/${row.id}`}
                             className="user_name text-truncate text-body"
                         >
-                            <span className="fw-bolder text-primary">{row.name}</span>
+                            <span className="fw-bolder text-primary text-wrap">{row.name}</span>
                         </Link>
                     </div>
                 </div>
-            )
+            ),
+            /* Custom placeholder vars */
+            loaderContent: "John Doe",
+            customLoadingWithIcon: "User",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: "Email",
             sortable: true,
-            minWidth: "300px",
             sortField: "email",
-            cell: (row) => row.email
+            minWidth: "25%",
+            cell: (row) => (<div className="">{row.email}</div>),
+            /* Custom placeholder vars */
+            loaderContent: 'johndoe@example.com',
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: "Role",
             sortable: true,
-            minWidth: "150px",
             sortField: "role_id",
+            minWidth: "15%",
             cell: (row) => (
                 <div className="d-flex justify-content-left align-items-center">
                     {row.role && row.role.role_id ? <>
@@ -422,55 +456,78 @@ const UsersList = () => {
                         <span>{row.role.RoleName}</span>
                     </> : null}
                 </div>
-            )
+            ),
+            /* Custom placeholder vars */
+            loaderContent: "Customer",
+            customLoadingWithIcon: "User",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: "Contact",
             sortable: true,
-            minWidth: "130px",
             sortField: "Contact",
-            cell: (row) => row.Contact
+            minWidth: "15%",
+            cell: (row) => row.Contact,
+            /* Custom placeholder vars */
+            loaderContent: "Contact---",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: "Status",
-            minWidth: "108px",
             sortable: true,
             sortField: "Status",
-            selector: (row) => row.Status,
+            minWidth: "15%",
             cell: (row) => (
                 <Badge className="text-capitalize" color="light-success" pill>
                     {row.Status}
                 </Badge>
-            )
+            ),
+            /* Custom placeholder vars */
+            loaderContent: "Active",
+            customLoaderCellClass: "",
+            customLoaderContentClass: "rounded-pill"
+            /* /Custom placeholder vars */
         },
         {
             name: "Action",
-            minWidth: "108px",
+            center: true,
             omit: dotIconAction,
+            minWidth: "10%",
             cell: (row) => (
-                <UncontrolledButtonDropdown>
-                    <DropdownToggle color="#FFFFFF">
-                        <MoreVertical size={20} />
-                    </DropdownToggle>
-                    <DropdownMenu>
-                        <DropdownItem
-                            tag={Link}
-                            to={`${adminRoot}/user/view/${row && row.id}`}
-                        >
-                            <Eye size={20} className="mb-0 me-1" />
-                            <span className="me-2">View</span>
-                        </DropdownItem>
+                <div className='column-action d-flex align-items-center'>
+                    <UncontrolledButtonDropdown>
+                        <DropdownToggle color="#FFFFFF">
+                            <MoreVertical size={20} />
+                        </DropdownToggle>
+                        <DropdownMenu>
+                            <DropdownItem
+                                tag={Link}
+                                to={`${adminRoot}/user/view/${row && row.id}`}
+                            >
+                                <Eye size={20} className="mb-0 me-1" />
+                                <span className="me-2">View</span>
+                            </DropdownItem>
 
-                        <DropdownItem
-                            tag={Link}
-                            to={`${adminRoot}/user/edit/${row && row.id}`}
-                        >
-                            <Archive size={20} className="mb-0 me-1" />
-                            <span className="me-2">Edit</span>
-                        </DropdownItem>
-                    </DropdownMenu>
-                </UncontrolledButtonDropdown>
-            )
+                            <DropdownItem
+                                tag={Link}
+                                to={`${adminRoot}/user/edit/${row && row.id}`}
+                            >
+                                <Archive size={20} className="mb-0 me-1" />
+                                <span className="me-2">Edit</span>
+                            </DropdownItem>
+                        </DropdownMenu>
+                    </UncontrolledButtonDropdown>
+                </div>
+            ),
+            /* Custom placeholder vars */
+            loaderContent: "|",
+            customLoaderCellClass: "text-center",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         }
     ]
 

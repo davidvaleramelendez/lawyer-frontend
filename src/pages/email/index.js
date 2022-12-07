@@ -115,16 +115,16 @@ const EmailApp = () => {
       setUploadedFiles(store.attachments)
       setEditorStateContent(null)
     }
-  }, [dispatch, store.attachments, store.success, store.error, store.actionFlag, searchInput, loadFirst])
-  
+  }, [store.attachments, store.success, store.error, store.actionFlag, searchInput, loadFirst])
+
   return (
     <Fragment>
       <Sidebar
         store={store}
+        folder={folder}
         setOpenMail={setOpenMail}
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
-        folder={folder}
         goToOtherFolder={goToOtherFolder}
       />
       <div className='content-right'>
@@ -169,7 +169,7 @@ const EmailApp = () => {
         </div>
       </div>
 
-      <ModalComposeMail/>
+      <ModalComposeMail />
     </Fragment>
   )
 }

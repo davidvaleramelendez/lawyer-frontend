@@ -32,12 +32,13 @@ import {
   InputGroupText
 } from 'reactstrap'
 import DraftCard from './DraftCard'
-import { 
+import {
+  getMails,
   selectMail,
   selectAllMail,
   selectDraft,
-  selectAllDraft, 
-  getDraftMail, 
+  selectAllDraft,
+  getDraftMail,
   deleteDrafts,
   resetSelectedDraft,
   resetComposeModal
@@ -75,11 +76,11 @@ const Mails = (props) => {
     resetSelectedMail
   } = props
 
-  const { 
-    mails, 
-    drafts, 
-    selectedMails, 
-    selectedDrafts 
+  const {
+    mails,
+    drafts,
+    selectedMails,
+    selectedDrafts
   } = store
 
   // ** States
@@ -177,13 +178,14 @@ const Mails = (props) => {
   // ** Handles Draft removing
   const handleRemoveDrafts = () => {
     const ids = selectedDrafts.map(t => t.id).join(',')
-    
+
     if (selectedDrafts.filter(t => t.id === store.composeModal.draftId).length) {
       dispatch(resetComposeModal())
     }
 
     dispatch(deleteDrafts(ids))
     dispatch(resetSelectedDraft())
+    dispatch(getMails({ ...store.params }))
   }
 
   const getCheckedAllStatus = () => {

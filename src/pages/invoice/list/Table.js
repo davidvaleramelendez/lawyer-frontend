@@ -399,7 +399,6 @@ const InvoiceList = () => {
             cell: (row) => <Link to={`${adminRoot}/invoice/view/${row.id}`}>{`#${row.invoice_no}`}</Link>,
             /* Custom placeholder vars */
             loaderContent: "Invoice No",
-            customLoadingWithIcon: "User",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */

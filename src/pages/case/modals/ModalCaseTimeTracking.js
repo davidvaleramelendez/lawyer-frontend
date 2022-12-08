@@ -37,6 +37,7 @@ import '@styles/base/pages/app-invoice.scss'
 const ModalCaseTimeTracking = ({
   open,
   caseId,
+  onRecordSubmit,
   toggleModal
 }) => {
   // ** Hooks for tanslation
@@ -44,6 +45,7 @@ const ModalCaseTimeTracking = ({
 
   // ** Store vars
   const dispatch = useDispatch()
+
   const store = useSelector((state) => state.cases)
 
   const ValidationSchema = {
@@ -79,12 +81,8 @@ const ModalCaseTimeTracking = ({
 
   /* Submitting data */
   const onSubmit = async (values) => {
-    const timeData = {
-      CaseID: caseId,
-      Subject: values.Subject,
-      interval_time: values.interval_time
-    }
-    console.log("onSubmit >>> ", timeData)
+    onRecordSubmit(values, caseId)
+    toggleModal()
   }
 
   return (
@@ -132,7 +130,7 @@ const ModalCaseTimeTracking = ({
 
             <Row className="mt-2 mb-2">
               <div className="d-flex justify-content-end">
-                <Button type="submit" color="primary" className="btn btn-primary">
+                <Button type="submit" color="primary" className="btn btn-primary" >
                   {t("Record")} {t("now")}
                 </Button>
               </div>

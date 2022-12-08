@@ -20,7 +20,8 @@ import {
   Input,
   Button,
   ModalBody,
-  ModalHeader
+  ModalHeader,
+  FormFeedback
 } from 'reactstrap'
 
 import { useForm, Controller } from 'react-hook-form'
@@ -132,8 +133,15 @@ const ModalAddContact = ({ open, toggleModal }) => {
           />
         ) : null}
 
-        <ModalHeader toggle={handleReset}>Add New Contact</ModalHeader>
-        <ModalBody>
+        <ModalHeader
+          toggle={handleReset}
+          className="bg-transparent"
+        />
+        <ModalBody className="px-5 pb-5">
+          <div className='text-center mb-4'>
+            <h1>Add New Contact</h1>
+          </div>
+
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <div className='mb-1'>
               <Label className='form-label' for='Name'>
@@ -146,7 +154,7 @@ const ModalAddContact = ({ open, toggleModal }) => {
                 control={control}
                 render={({ field }) => <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.fullname} invalid={errors.Name && true} />}
               />
-              <div className="invalid-feedback">{errors.Name?.message}</div>
+              <FormFeedback>{errors.Name?.message}</FormFeedback>
             </div>
 
             <div className='mb-1'>
@@ -160,7 +168,7 @@ const ModalAddContact = ({ open, toggleModal }) => {
                 control={control}
                 render={({ field }) => <Input {...field} type="number" placeholder={PlaceholderSchema && PlaceholderSchema.phoneno} invalid={errors.PhoneNo && true} />}
               />
-              <div className="invalid-feedback">{errors.PhoneNo?.message}</div>
+              <FormFeedback>{errors.PhoneNo?.message}</FormFeedback>
             </div>
 
             <div className='mb-1'>
@@ -176,7 +184,7 @@ const ModalAddContact = ({ open, toggleModal }) => {
                   <Input {...field} type='email' placeholder={PlaceholderSchema && PlaceholderSchema.emailAddress} invalid={errors.Email && true} />
                 )}
               />
-              <div className="invalid-feedback">{errors.Email?.message}</div>
+              <FormFeedback>{errors.Email?.message}</FormFeedback>
             </div>
 
             <div className='mb-1'>
@@ -210,10 +218,10 @@ const ModalAddContact = ({ open, toggleModal }) => {
                   />
                 )}
               />
-              <div className="invalid-feedback">{errors.Subject?.message}</div>
+              <FormFeedback>{errors.Subject?.message}</FormFeedback>
             </div>
 
-            <div className="d-flex flex-wrap mb-2 mt-2">
+            <div className="d-flex justify-content-center mb-2 mt-2">
               <Button
                 type="submit"
                 className="me-1"

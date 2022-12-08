@@ -37,11 +37,13 @@ import { T } from '@localization'
 const ModalCaseTimeTracking = ({
   open,
   caseId,
+  onRecordSubmit,
   toggleModal
 }) => {
 
   // ** Store vars
   const dispatch = useDispatch()
+
   const store = useSelector((state) => state.cases)
 
   const ValidationSchema = {
@@ -77,12 +79,8 @@ const ModalCaseTimeTracking = ({
 
   /* Submitting data */
   const onSubmit = async (values) => {
-    const timeData = {
-      CaseID: caseId,
-      Subject: values.Subject,
-      interval_time: values.interval_time
-    }
-    console.log("onSubmit >>> ", timeData)
+    onRecordSubmit(values, caseId)
+    toggleModal()
   }
 
   return (

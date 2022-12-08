@@ -55,7 +55,6 @@ const Tasks = (props) => {
     deleteTodoItem,
     restoreTodoItem,
     handleTodoLists,
-    placeholderTasks,
     completeTodoItem,
     handleMainSidebar,
     setOpenTaskSidebar
@@ -160,44 +159,8 @@ const Tasks = (props) => {
   }
 
   const renderTasks = () => {
-    if (!store.loading && placeholderTasks === 0) {
-      return <DotPulse />
-    }
     if (!store.loading) {
-      return (
-        <div className="list-group todo-task-list-wrapper">
-          <ul className="todo-task-list media-list">
-            {Array.from(Array(placeholderTasks).keys(), (row, index) => (
-              <li
-                key={`placeholder-todo-${index}`}
-                className="todo-item placeholder-glow"
-              >
-                <div className="todo-title-wrapper w-100">
-                  <div className="todo-title-area w-75">
-                    <MoreVertical className="drag-icon" />
-                    <div className="form-check placeholder" />
-
-                    <span className="todo-title placeholder w-75" />
-                  </div>
-
-                  <div className="todo-item-action mt-lg-0 mt-50 w-25">
-                    <div className="badge-wrapper me-1 placeholder w-25" />
-
-                    <small className="text-nowrap text-muted me-1 placeholder w-25" />
-
-                    <Avatar
-                      imgClassName="placeholder"
-                      img={blankAvatar}
-                      imgHeight='32'
-                      imgWidth='32'
-                    />
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
+      return <DotPulse />
     }
 
     return (

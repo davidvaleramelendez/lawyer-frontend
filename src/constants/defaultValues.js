@@ -9,6 +9,8 @@ export const storageTokenExpiresKeyName = 'tokenExpires'
 export const storageLoggedAtKeyName = 'loggedAt'
 export const storageTotalNumberName = "totalNubmer"
 export const storageSiteSetting = "siteSetting"
+export const storageTimeCounter = "timecounter"
+export const storageRememberMeAuth = "LWY_KP_329"
 export const storageLanguageLabels = "languageLabels"
 
 /* Hexadecimal key for encryption */

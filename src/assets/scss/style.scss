@@ -9,6 +9,8 @@ NOTE:
 ------
 PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
 WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+/* Invoice send modal  */
 .send-invoice-backdrop-modal {
 	background: rgb(34 41 47 / 10%) !important;
 }
@@ -18,35 +20,55 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 		box-shadow: unset;
 	}
 }
+/* /Invoice send modal  */
 
+/* Calendar */
 .fc-not-allowed,
-.fc-not-allowed .fc-event { /* override events' custom cursors */
-  cursor: auto!important;
+.fc-not-allowed .fc-event {
+	/* override events' custom cursors */
+	cursor: auto !important;
 }
 
 $calendar-night-color: rgb(215 215 215 / 34%);
 
-.fc-timegrid-slot.fc-timegrid-slot-lane{
-	&[data-time^="06:"]{
+.fc-timegrid-slot.fc-timegrid-slot-lane {
+	&[data-time^="06:"] {
 		background-color: $calendar-night-color;
 	}
-	&[data-time^="07:"]{
+	&[data-time^="07:"] {
 		background-color: $calendar-night-color;
 	}
-	&[data-time^="17:"]{
+	&[data-time^="17:"] {
 		background-color: $calendar-night-color;
 	}
-	&[data-time^="18:"]{
+	&[data-time^="18:"] {
 		background-color: $calendar-night-color;
 	}
-	&[data-time^="19:"]{
+	&[data-time^="19:"] {
 		background-color: $calendar-night-color;
 	}
-	&[data-time^="2"]{
+	&[data-time^="2"] {
 		background-color: $calendar-night-color;
 	}
 }
+/* Calendar */
 
 .main-menu:not(.expanded) .navigation li.nav-item a:hover > * {
 	transform: none;
 }
+
+.time-tracking {
+	width: 200px;
+	margin: auto;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+/* Bootstrap table override */
+.placeholder-table {
+	th,
+	td {
+		padding: 0.72rem 1.5rem;
+	}
+}
+/* /Bootstrap table override */

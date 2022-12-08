@@ -10,7 +10,6 @@ const CustomTable = ({
     bodyClassName = "",
     columns,
     bodyRows = 3
-    // bodyRowHeight = 40
 }) => {
 
     return columns ? (
@@ -32,7 +31,7 @@ const CustomTable = ({
                                 const maxWidth = col.maxWidth
                                 const style = {}
                                 if (minWidth) {
-                                    style.minWidth = minWidth
+                                    style.width = minWidth
                                 }
 
                                 if (maxWidth) {
@@ -65,7 +64,7 @@ const CustomTable = ({
                                             ) : null}
 
                                             <div
-                                                className={`placeholder ${col && col.customLoaderContentClass ? col.customLoaderContentClass : 'w-100'}`}
+                                                className={`placeholder ${col && col.customLoaderContentClass ? col.customLoaderContentClass : ''}`}
                                             />
                                         </div>
                                     ) : null

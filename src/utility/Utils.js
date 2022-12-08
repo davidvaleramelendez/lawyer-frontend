@@ -10,7 +10,8 @@ import {
   storageRefreshTokenKeyName,
   storageTokenExpiresKeyName,
   storageTotalNumberName,
-  storageSiteSetting
+  storageSiteSetting,
+  storageLanguageLabels
 } from '@constant/defaultValues'
 
 import {
@@ -406,4 +407,29 @@ export const getSiteLayoutSetting = () => {
     _sitesetting = null
   }
   return _sitesetting
+}
+
+// Get language labels value
+export const getLanguageLabels = () => {
+  let _languageLabels = null
+  try {
+    _languageLabels = localStorage.getItem(storageLanguageLabels) !== null ? JSON.parse(localStorage.getItem(storageLanguageLabels)) : null
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js  : getLanguageLabels -> error', error)
+    _languageLabels = null
+  }
+  return _languageLabels
+}
+
+// Set language labels value
+export const setLanguageLabels = (labels) => {
+  try {
+    if (labels) {
+      localStorage.setItem(storageLanguageLabels, JSON.stringify(labels))
+    } else {
+      localStorage.removeItem(storageLanguageLabels)
+    }
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js : setLanguageLabels -> error', error)
+  }
 }

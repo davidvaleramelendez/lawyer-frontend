@@ -12,6 +12,9 @@ import { Button, Input, Label } from 'reactstrap'
 // ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const Customizer = (props) => {
   // ** Props
   const {
@@ -51,22 +54,22 @@ const Customizer = (props) => {
     const skinsArr = [
       {
         name: 'light',
-        label: 'Light',
+        label: T('Light'),
         checked: skin === 'light'
       },
       {
         name: 'bordered',
-        label: 'Bordered',
+        label: T('Bordered'),
         checked: skin === 'bordered'
       },
       {
         name: 'dark',
-        label: 'Dark',
+        label: T('Dark'),
         checked: skin === 'dark'
       },
       {
         name: 'semi-dark',
-        label: 'Semi Dark',
+        label: T('Semi Dark'),
         checked: skin === 'semi-dark'
       }
     ]
@@ -110,22 +113,22 @@ const Customizer = (props) => {
     const navbarTypeArr = [
       {
         name: 'floating',
-        label: 'Floating',
+        label: T('Floating'),
         checked: navbarType === 'floating'
       },
       {
         name: 'sticky',
-        label: 'Sticky',
+        label: T('Sticky'),
         checked: navbarType === 'sticky'
       },
       {
         name: 'static',
-        label: 'Static',
+        label: T('Static'),
         checked: navbarType === 'static'
       },
       {
         name: 'hidden',
-        label: 'Hidden',
+        label: T('Hidden'),
         checked: navbarType === 'hidden'
       }
     ]
@@ -153,17 +156,17 @@ const Customizer = (props) => {
     const footerTypeArr = [
       {
         name: 'sticky',
-        label: 'Sticky',
+        label: T('Sticky'),
         checked: footerType === 'sticky'
       },
       {
         name: 'static',
-        label: 'Static',
+        label: T('Static'),
         checked: footerType === 'static'
       },
       {
         name: 'hidden',
-        label: 'Hidden',
+        label: T('Hidden'),
         checked: footerType === 'hidden'
       }
     ]
@@ -198,8 +201,8 @@ const Customizer = (props) => {
       </a>
       <PerfectScrollbar className='customizer-content' options={{ wheelPropagation: false }}>
         <div className='customizer-header px-2 pt-1 pb-0 position-relative'>
-          <h4 className='mb-0'>Theme Customizer</h4>
-          <p className='m-0'>Customize & Preview in Real Time</p>
+          <h4 className='mb-0'>{T('Theme Customizer')}</h4>
+          <p className='m-0'>{T('Customize & Preview in Real Time')}</p>
           <a href='/' className='customizer-close' onClick={handleToggle}>
             <X />
           </a>
@@ -209,12 +212,12 @@ const Customizer = (props) => {
 
         <div className='px-2'>
           <div className='mb-2'>
-            <p className='fw-bold'>Skin</p>
+            <p className='fw-bold'>{T('Skin')}</p>
             <div className='d-flex'>{renderSkinsRadio()}</div>
           </div>
 
           <div className='mb-2'>
-            <p className='fw-bold'>Content Width</p>
+            <p className='fw-bold'>{T('Content Width')}</p>
             <div className='d-flex'>
               <div className='form-check me-1'>
                 <Input
@@ -224,7 +227,7 @@ const Customizer = (props) => {
                   onChange={() => setContentWidth('full')}
                 />
                 <Label className='form-check-label' for='full-width'>
-                  Full Width
+                  {T('Full Width')}
                 </Label>
               </div>
 
@@ -291,7 +294,7 @@ const Customizer = (props) => {
           {layout !== 'horizontal' ? (
             <div className='form-switch mb-2 ps-0'>
               <div className='d-flex align-items-center'>
-                <p className='fw-bold me-auto mb-0'>Menu Collapsed</p>
+                <p className='fw-bold me-auto mb-0'>{T('Menu Collapsed')}</p>
                 <Input
                   type='switch'
                   id='menu-collapsed'
@@ -305,7 +308,7 @@ const Customizer = (props) => {
 
           <div className='form-switch mb-2 ps-0'>
             <div className='d-flex align-items-center'>
-              <p className='fw-bold me-auto mb-0'>Menu Hidden</p>
+              <p className='fw-bold me-auto mb-0'>{T('Menu Hidden')}</p>
               <Input
                 type='switch'
                 id='menu-hidden'
@@ -322,13 +325,13 @@ const Customizer = (props) => {
         <div className='px-2'>
           {layout !== 'horizontal' ? (
             <div className='mb-2'>
-              <p className='fw-bold'>Navbar Color</p>
+              <p className='fw-bold'>{T('Navbar Color')}</p>
               <ul className='list-inline unstyled-list'>{renderNavbarColors()}</ul>
             </div>
           ) : null}
 
           <div className='mb-2'>
-            <p className='fw-bold'>{layout === 'horizontal' ? 'Menu' : 'Navbar'} Type</p>
+            <p className='fw-bold'>{layout === 'horizontal' ? T('Menu Type') : T('Navbar Type')}</p>
             <div className='d-flex'>{renderNavbarTypeRadio()}</div>
           </div>
         </div>
@@ -337,7 +340,7 @@ const Customizer = (props) => {
 
         <div className='px-2'>
           <div className='mb-2'>
-            <p className='fw-bold'>Footer Type</p>
+            <p className='fw-bold'>{T('Footer Type')}</p>
             <div className='d-flex'>{renderFooterTypeRadio()}</div>
           </div>
 
@@ -347,7 +350,7 @@ const Customizer = (props) => {
               color="primary"
               onClick={() => onThemeSettingSubmit()}
             >
-              Apply & Save
+              {T('Apply & Save')}
             </Button>
           </div>
         </div>

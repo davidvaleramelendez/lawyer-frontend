@@ -3,9 +3,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
   convertContactToCase,
@@ -40,6 +37,9 @@ import Spinner from '@components/spinner/Simple-grow-spinner'
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalAcceptRequest = ({
   open,
   groups,
@@ -52,9 +52,6 @@ const ModalAcceptRequest = ({
   const [lawyerOptions, setLawyerOptions] = useState([])
   const [typeOptions, setTypeOptions] = useState([])
 
-  // ** Hooks
-  const { t } = useTranslation()
-
   // ** Store vars
   const dispatch = useDispatch()
   const store = useSelector((state) => state.contact)
@@ -63,8 +60,8 @@ const ModalAcceptRequest = ({
     Name: yup.string().required('Name is required!'),
     Email: yup.string().required('Email is required!').email('Invalid email address!'),
     PhoneNo: yup.string().required('Mobile is required!').min(10, "Mobile Must be 10 digit!").max(10, "Mobile Must be 10 digit!"),
-    LaywerID: yup.object().required(`${t("Attorney")} is required!`).nullable(),
-    CaseTypeID: yup.object().required(`${t("Group")} is required!`).nullable()
+    LaywerID: yup.object().required(`${T("Attorney")} is required!`).nullable(),
+    CaseTypeID: yup.object().required(`${T("Group")} is required!`).nullable()
   }).required()
 
   /* Placeholder texts */
@@ -72,11 +69,11 @@ const ModalAcceptRequest = ({
     Name: "John Doe",
     PhoneNo: "+4915901766553",
     Email: "john.doe@example.com",
-    LaywerID: `Select ${t("Attorney")}...`,
-    Address: "Address",
-    City: t("City"),
-    Pincode: "Postal code",
-    CaseTypeID: `Select ${t("Group")}...`
+    LaywerID: `${T("Select Attorney")}...`,
+    Address: T("Address"),
+    City: T("City"),
+    Pincode: T("Postal code"),
+    CaseTypeID: `${T("Select Group")}...`
   }
 
   const {
@@ -177,13 +174,13 @@ const ModalAcceptRequest = ({
           />
         ) : null}
 
-        <ModalHeader toggle={handleReset}>{t("Accept")} {t("the")} {t("request")}</ModalHeader>
+        <ModalHeader toggle={handleReset}>{T("Accept the request")}</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <Row>
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="Name">
-                  Name
+                  {T("Name")}                  
                 </Label>
                 <Controller
                   defaultValue={contactData.Name}
@@ -197,7 +194,7 @@ const ModalAcceptRequest = ({
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="PhoneNo">
-                  {t("Telephone")}
+                  {T("Telephone")}
                 </Label>
                 <Controller
                   defaultValue={contactData.PhoneNo}
@@ -211,7 +208,7 @@ const ModalAcceptRequest = ({
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="Email">
-                  {t("Email")}
+                  {T("Email")}
                 </Label>
                 <Controller
                   defaultValue={contactData.Email}
@@ -227,7 +224,7 @@ const ModalAcceptRequest = ({
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="LaywerID">
-                  {t("Attorney")}
+                  {T("Attorney")}
                 </Label>
                 <Controller
                   defaultValue={null}
@@ -251,7 +248,7 @@ const ModalAcceptRequest = ({
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="Address">
-                  Address
+                  {T("Address")}                  
                 </Label>
                 <Controller
                   defaultValue=""
@@ -265,7 +262,7 @@ const ModalAcceptRequest = ({
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="City">
-                  {t("City")}
+                  {T("City")}
                 </Label>
                 <Controller
                   defaultValue=""
@@ -279,7 +276,7 @@ const ModalAcceptRequest = ({
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="Pincode">
-                  Postal code
+                  {T("Postal code")}
                 </Label>
                 <Controller
                   defaultValue=""
@@ -293,7 +290,7 @@ const ModalAcceptRequest = ({
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="CaseTypeID">
-                  {t("Group")}
+                  {T("Group")}
                 </Label>
                 <Controller
                   defaultValue={null}
@@ -323,7 +320,7 @@ const ModalAcceptRequest = ({
                   color="primary"
                   disabled={!store.loading}
                 >
-                  {t("Create")}
+                  {T("Create")}
                 </Button>
               </div>
             </Row>

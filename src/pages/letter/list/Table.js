@@ -54,6 +54,9 @@ import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
 
+// ** Translation
+import { T } from '@localization'
+
 const CustomHeader = ({
     searchInput,
     rowsPerPage,
@@ -65,7 +68,7 @@ const CustomHeader = ({
             <Row>
                 <Col lg={6} className="mt-1 d-flex align-items-center px-0 px-lg-1">
                     <div className="d-flex align-items-center me-2">
-                        <label htmlFor="rows-per-page">Show</label>
+                        <label htmlFor="rows-per-page">{T('Show')}</label>
                         <Input
                             type="select"
                             id="rows-per-page"
@@ -82,13 +85,13 @@ const CustomHeader = ({
 
                 <Col lg={6} className="actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0">
                     <div className="d-flex align-items-center">
-                        <label htmlFor="search-letter">Search</label>
+                        <label htmlFor="search-letter">{T('Search')}</label>
                         <Input
                             id="search-letter"
                             className="ms-50 me-2 w-100"
                             type="text"
                             value={searchInput}
-                            placeholder="Search Letter"
+                            placeholder={T('Search Letter')}
                             onChange={(event) => handleSearch(event.target.value)}
                         />
                     </div>
@@ -179,11 +182,11 @@ const LetterList = () => {
 
     const onLetterArchive = (id, type) => {
         MySwal.fire({
-            title: 'Are you sure?',
-            text: "You want to archive this!",
+            title: T('Are you sure?'),
+            text: T("You want to archive this!"),
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, archive it!',
+            confirmButtonText: T('Yes, archive it!'),
             customClass: {
                 confirmButton: 'btn btn-primary',
                 cancelButton: 'btn btn-outline-danger ms-1'
@@ -203,7 +206,7 @@ const LetterList = () => {
 
     const columns = [
         {
-            name: "Reference Number",
+            name: T("Reference Number"),
             sortable: true,
             sortField: "case_id",
             minWidth: "17%",
@@ -215,31 +218,31 @@ const LetterList = () => {
             /* /Custom placeholder vars */
         },
         {
-            name: "Date",
+            name: T("Date"),
             sortable: true,
             sortField: "last_date",
             minWidth: "18%",
             cell: (row) => row.last_date,
             /* Custom placeholder vars */
-            loaderContent: "Last Date",
+            loaderContent: T("Last Date"),
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
         },
         {
-            name: "Subject",
+            name: T("Subject"),
             sortable: true,
             minWidth: "30%",
             sortField: "subject",
             cell: (row) => row.subject,
             /* Custom placeholder vars */
-            loaderContent: "Subject ------------",
+            loaderContent: `${T('Subject')} ------------`,
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
         },
         {
-            name: "Printed",
+            name: T("Printed"),
             sortable: true,
             minWidth: "13%",
             sortField: "is_print",
@@ -264,13 +267,13 @@ const LetterList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: "Printed",
+            loaderContent: T("Printed"),
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
         },
         {
-            name: "Done?",
+            name: `${T('Done')}?`,
             sortable: true,
             minWidth: "12%",
             sortField: "is_archived",
@@ -280,13 +283,13 @@ const LetterList = () => {
                 </Badge>
             ),
             /* Custom placeholder vars */
-            loaderContent: "Status",
+            loaderContent: T("Status"),
             customLoaderCellClass: "",
             customLoaderContentClass: "rounded-pill"
             /* /Custom placeholder vars */
         },
         {
-            name: "View",
+            name: T("View"),
             center: true,
             minWidth: "10%",
             cell: (row) => <a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.pdf_path}`} target="_blank" className="d-flex align-items-center" onClick={(event) => {
@@ -306,7 +309,7 @@ const LetterList = () => {
     return store ? (<Fragment>
         <Card className="overflow-hidden">
             <CardHeader className="border-bottom">
-                <CardTitle tag="h4">Outbox</CardTitle>
+                <CardTitle tag="h4">{T('Outbox')}</CardTitle>
             </CardHeader>
             {(!store.loading && !getTotalNumber(TN_OUTBOX)) ? (
                 <DotPulse />

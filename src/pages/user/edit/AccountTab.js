@@ -3,9 +3,6 @@
 // ** React Imports
 import { Fragment, useEffect, useState } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
     updateUser,
@@ -45,14 +42,15 @@ import {
     statusOptions
 } from '@constant/defaultValues'
 
+// ** Translation
+import { T } from '@localization'
+
 const AccountTab = ({
     id,
     onImageSrcError,
     getTransformDate,
     PlaceholderSchema
 }) => {
-    /* Hook */
-    const { t } = useTranslation()
 
     // ** Store vars
     const dispatch = useDispatch()
@@ -63,18 +61,18 @@ const AccountTab = ({
     const [imageUrl, setImageUrl] = useState("")
 
     const UserAcntSchema = yup.object({
-        username: yup.string().required('Email is required!').email('Invalid username!'),
-        name: yup.string().required('Name is required!'),
-        email: yup.string().required('Email is required!').email('Invalid email address!'),
-        status: yup.object().required(`${t("Status")} is required!`).nullable(),
-        roleId: yup.object().required(`${t("Role")} is required!`).nullable(),
-        DOB: yup.date().required("Birth date is required!").max(new Date(Date.now() - 86400000), "Date cannot be in the future!").nullable(),
-        contact: yup.string().required('Mobile is required!').min(6, "Mobile Must be 6 digit!").max(16, "Mobile Must be 16 digit!"),
-        gender: yup.string().required('Gender is required!'),
-        address: yup.string().required('Address line 1 is required!'),
-        postcode: yup.string().required('Postcode is required!').max(6, "Postcode no more than 6 characters!"),
-        state: yup.string().required('State is required!'),
-        country: yup.string().required('Country is required!')
+        username: yup.string().required(T('Email is required!')).email(T('Invalid username!')),
+        name: yup.string().required(T('Name is required!')),
+        email: yup.string().required(T('Email is required!')).email(T('Invalid email address!')),
+        status: yup.object().required(T(`Status is required!`)).nullable(),
+        roleId: yup.object().required(T(`Role is required!`)).nullable(),
+        DOB: yup.date().required(T("Birth date is required!")).max(new Date(Date.now() - 86400000), T("Date cannot be in the future!")).nullable(),
+        contact: yup.string().required(T('Mobile is required!')).min(6, T("Mobile Must be 6 digit!")).max(16, T("Mobile Must be 16 digit!")),
+        gender: yup.string().required(T('Gender is required!')),
+        address: yup.string().required(T('Address line 1 is required!')),
+        postcode: yup.string().required(T('Postcode is required!')).max(6, T("Postcode no more than 6 characters!")),
+        state: yup.string().required(T('State is required!')),
+        country: yup.string().required(T('Country is required!'))
     }).required()
 
     /* acnt => account */
@@ -248,7 +246,7 @@ const AccountTab = ({
                                         color="primary"
                                         className="mb-75 me-75"
                                     >
-                                        Change
+                                        {T('Change')}
                                         <Input type="file" hidden accept="image/*" onChange={(event) => onFileChange(event)} />
                                     </Button>
                                 </div>
@@ -258,7 +256,7 @@ const AccountTab = ({
                         <Row>
                             <Col sm={6} className="mb-1">
                                 <Label className="form-label" for="username">
-                                    Username
+                                    {T('Username')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem.email}
@@ -274,7 +272,7 @@ const AccountTab = ({
 
                             <Col sm={6} className="mb-1">
                                 <Label className="form-label" for="name">
-                                    Name
+                                    {T('Name')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem.name}
@@ -288,7 +286,7 @@ const AccountTab = ({
 
                             <Col sm={6} className="mb-1">
                                 <Label className="form-label" for="email">
-                                    {t("Email")}
+                                    {T("Email")}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem.email}
@@ -304,7 +302,7 @@ const AccountTab = ({
 
                             <Col sm={6} className="mb-1">
                                 <Label className="form-label" for="status">
-                                    {t("Status")}
+                                    {T("Status")}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem.Status ? { label: store.userItem.Status, value: store.userItem.Status } : null}
@@ -328,7 +326,7 @@ const AccountTab = ({
 
                             <Col sm={6} className="mb-1">
                                 <Label className="form-label" for="roleId">
-                                    {t("Role")}
+                                    {T("Role")}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem.role && store.userItem.role.role_id ? { label: store.userItem.role.RoleName, value: store.userItem.role.role_id } : null}
@@ -352,7 +350,7 @@ const AccountTab = ({
 
                             <Col sm={6} className="mb-1">
                                 <Label className="form-label" for="company">
-                                    Company
+                                    {T('Company')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem.Company ? store.userItem.Company : ""}
@@ -377,7 +375,7 @@ const AccountTab = ({
 
                             <Col sm={12} className="mb-1">
                                 <Label className="form-label" for="gender">
-                                    Gender
+                                    {T('Gender')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem.Gender ? store.userItem.Gender : ""}
@@ -402,7 +400,7 @@ const AccountTab = ({
 
                             <Col sm={6} className="mb-1">
                                 <Label className="form-label" for="DOB">
-                                    Birth date
+                                    {T('Birth date')}
                                 </Label>
                                 <Controller
                                     defaultValue=""
@@ -426,7 +424,7 @@ const AccountTab = ({
 
                             <Col sm={6} className="mb-1">
                                 <Label className="form-label" for="contact">
-                                    Mobile
+                                    {T('Mobile')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem.Contact ? store.userItem.Contact : ""}
@@ -449,7 +447,7 @@ const AccountTab = ({
 
                             <Col sm={6} className="mb-1">
                                 <Label className="form-label" for="address">
-                                    Address Line 1
+                                    {T('Address Line')} 1
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem.Address ? store.userItem.Address : ""}
@@ -465,7 +463,7 @@ const AccountTab = ({
 
                             <Col sm={6} className="mb-1">
                                 <Label className="form-label" for="address1">
-                                    Address Line 2
+                                    {T('Address Line')} 2
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem.Address1 ? store.userItem.Address1 : ""}
@@ -481,7 +479,7 @@ const AccountTab = ({
 
                             <Col sm={6} className="mb-1">
                                 <Label className="form-label" for="postcode">
-                                    Postcode
+                                    {T('Postcode')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem.Postcode ? store.userItem.Postcode : ""}
@@ -497,7 +495,7 @@ const AccountTab = ({
 
                             <Col sm={6} className="mb-1">
                                 <Label className="form-label" for="city">
-                                    City
+                                    {T('City')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem.City ? store.userItem.City : ""}
@@ -513,7 +511,7 @@ const AccountTab = ({
 
                             <Col sm={6} className="mb-1">
                                 <Label className="form-label" for="state">
-                                    State
+                                    {T('State')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem.State ? store.userItem.State : ""}
@@ -529,7 +527,7 @@ const AccountTab = ({
 
                             <Col sm={6} className="mb-1">
                                 <Label className="form-label" for="country">
-                                    Country
+                                    {T('Country')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem.Country ? store.userItem.Country : ""}
@@ -551,7 +549,7 @@ const AccountTab = ({
                                 color="primary"
                                 disabled={!store.loading}
                             >
-                                {t("Save Change")}
+                                {T("Save Change")}
                             </Button>
                         </div>
                     </Form>

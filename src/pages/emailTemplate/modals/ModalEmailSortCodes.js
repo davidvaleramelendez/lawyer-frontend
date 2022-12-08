@@ -10,8 +10,8 @@ import {
     ListGroupItem
 } from 'reactstrap'
 
-// Translation
-import { useTranslation } from 'react-i18next'
+// ** Translation
+import { T } from '@localization'
 
 const ModalEmailSortCodes = ({
     open,
@@ -20,8 +20,6 @@ const ModalEmailSortCodes = ({
     toggleModal,
     clearSortCode
 }) => {
-    // ** Hooks
-    const { t } = useTranslation()
 
     const handleReset = () => {
         dispatch(clearSortCode([]))
@@ -39,7 +37,7 @@ const ModalEmailSortCodes = ({
                 className="modal-dialog-centered modal-md"
                 backdrop="static"
             >
-                <ModalHeader toggle={handleReset}>{t(store.sortCodeType)} {t("Sort codes")}</ModalHeader>
+                <ModalHeader toggle={handleReset}>{T(store.sortCodeType)} {T("Sort codes")}</ModalHeader>
                 <ModalBody>
                     <ListGroup flush>
                         {store.sortCodes && store.sortCodes.length ? <>

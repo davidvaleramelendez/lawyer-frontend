@@ -87,7 +87,7 @@ const AccountSettingApp = () => {
   const ValidationSchema = {
     username: {
       placeholder: "john.doe@example.com",
-      required: "Username is required!",
+      required: T("Username is required!"),
       pattern: {
         value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
         message: "Invalid username!"
@@ -95,11 +95,11 @@ const AccountSettingApp = () => {
     },
     fullname: {
       placeholder: "John Doe",
-      required: "Name is required!"
+      required: T("Name is required!")
     },
     emailAddress: {
       placeholder: "john.doe@example.com",
-      required: "Email is required!",
+      required: T("Email is required!"),
       pattern: {
         value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
         message: "Invalid username!"
@@ -342,7 +342,7 @@ const AccountSettingApp = () => {
                         </h4>
 
                         <Button type="button" tag={Label} className="mb-75 me-75" color="primary">
-                          Change
+                          {T('Change')}
                           <Input type="file" hidden accept="image/*" onChange={(event) => onFileChange(event)} />
                         </Button>
                       </div>
@@ -353,7 +353,7 @@ const AccountSettingApp = () => {
                 <Row>
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="username">
-                      Username
+                      {T('Username')}
                     </Label>
                     <Controller
                       defaultValue={store.userItem && store.userItem.email}
@@ -370,7 +370,7 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="fullname">
-                      Name
+                      {T('Name')}
                     </Label>
                     <Controller
                       defaultValue={store.userItem && store.userItem.name}
@@ -404,7 +404,7 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="company">
-                      Company
+                      {T('Company')}
                     </Label>
                     <Controller
                       defaultValue={store.userItem && store.userItem.Company ? store.userItem.Company : ""}
@@ -420,7 +420,7 @@ const AccountSettingApp = () => {
                   </Col>
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
-                    <label className="form-label" htmlFor="language-select">Language</label>
+                    <label className="form-label" htmlFor="language-select">{T('Language')}</label>
                     <Input
                       type="select"
                       name="language"
@@ -454,7 +454,7 @@ const AccountSettingApp = () => {
                 <Row>
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="imapName">
-                      Name
+                    {T('Name')}
                     </Label>
                     <Controller
                       defaultValue={store.userItem && store.userItem.name}
@@ -471,7 +471,7 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="imapEmail">
-                      Email
+                      {T('Email')}
                     </Label>
                     <Controller
                       defaultValue={store.userItem && store.userItem.email}
@@ -488,7 +488,7 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="imap_host">
-                      IMAP Host
+                      {T('IMAP Host')}
                     </Label>
                     <Controller
                       defaultValue={store.imapItem && store.imapItem.imap_host ? store.imapItem.imap_host : ""}
@@ -505,7 +505,7 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="imap_port">
-                      IMAP Port
+                      {T('IMAP Port')}
                     </Label>
                     <Controller
                       defaultValue={store.imapItem && store.imapItem.imap_port ? store.imapItem.imap_port : ""}
@@ -522,7 +522,7 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="imap_ssl">
-                      Secure
+                      {T('Secure')}
                     </Label>
                     <Controller
                       defaultValue={store.imapItem && store.imapItem.imap_ssl ? store.imapItem.imap_ssl : ""}
@@ -534,7 +534,7 @@ const AccountSettingApp = () => {
                         <div className="form-check">
                           <Input {...field} type="checkbox" id="imap_ssl" defaultChecked={field && field.value} />
                           <Label for="imap_ssl" className="form-check-label">
-                            Use SSL
+                            {T('Use SSL')}
                           </Label>
                         </div>
                       )}
@@ -546,7 +546,7 @@ const AccountSettingApp = () => {
                 <Row>
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="imap_email">
-                      IMAP Email
+                      {T('IMAP Email')}
                     </Label>
                     <Controller
                       defaultValue={store.imapItem && store.imapItem.imap_email ? store.imapItem.imap_email : ""}
@@ -563,7 +563,7 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="imap_password">
-                      IMAP Password
+                      {T('IMAP Password')}
                     </Label>
                     <Controller
                       defaultValue={store.imapItem && store.imapItem.imap_password ? store.imapItem.imap_password : ""}

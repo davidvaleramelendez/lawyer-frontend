@@ -67,9 +67,6 @@ import {
     userItem
 } from '@constant/reduxConstant'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // Modal
 import ModalAddUser from '../modals/ModalAddUser'
 import ModalUserDetail from '../modals/ModalUserDetail'
@@ -79,6 +76,9 @@ import avatarBlank from '@src/assets/images/avatars/avatar-blank.png'
 
 // ** Styles
 import '@styles/react/libs/tables/react-dataTable-component.scss'
+
+// ** Translation
+import { T } from '@localization'
 
 /* Get windows size */
 function getWindowSize() {
@@ -100,13 +100,11 @@ const CustomHeader = ({
     handlePerPage,
     handleRoleFilter
 }) => {
-    /* Hook */
-    const { t } = useTranslation()
 
     return (<>
         <div className='invoice-list-table-header w-100 me-50 ms-50 mt-2 mb-75'>
             <Row className="border-bottom">
-                <h4 className="p-0 mb-1">Search & Filter</h4>
+                <h4 className="p-0 mb-1">{T('Search & Filter')}</h4>
             </Row>
 
             <Row className="mt-1">
@@ -115,7 +113,7 @@ const CustomHeader = ({
                     className="d-flex align-items-center px-0"
                 >
                     <div className="d-flex align-items-center w-100">
-                        <label htmlFor="rows-per-page">Show</label>
+                        <label htmlFor="rows-per-page">{T('Show')}</label>
                         <Input
                             type="select"
                             className="mx-50"
@@ -130,7 +128,7 @@ const CustomHeader = ({
                                 ))}
                             </>) : null}
                         </Input>
-                        <label htmlFor="rows-per-page">Entries</label>
+                        <label htmlFor="rows-per-page">{T('Entries')}</label>
                     </div>
                 </Col>
 
@@ -139,13 +137,13 @@ const CustomHeader = ({
                     className="d-flex align-items-sm-center justify-content-xl-end justify-content-start flex-xl-nowrap flex-wrap flex-sm-row flex-column pe-xl-1 p-0 mt-xl-0 mt-1"
                 >
                     <div className="d-flex align-items-center mb-sm-0 mb-1 me-1">
-                        <label className="mb-0" htmlFor="search-user">Search</label>
+                        <label className="mb-0" htmlFor="search-user">{T('Search')}</label>
                         <Input
                             type="text"
                             id="search-user"
                             className="ms-50 w-100"
                             value={searchInput}
-                            placeholder="Search User"
+                            placeholder={T("Search User")}
                             onChange={(event) => handleSearch(event.target.value)}
                         />
                     </div>
@@ -153,7 +151,7 @@ const CustomHeader = ({
                     <div className="d-flex align-items-center table-header-actions">
                         <Select
                             id="role_id-filter"
-                            placeholder="Select Role..."
+                            placeholder={`${T('Select Role')}...`}
                             options={roleOptions}
                             className="react-select dropdown me-2"
                             classNamePrefix="select"
@@ -167,7 +165,7 @@ const CustomHeader = ({
                             className="add-new-user"
                             onClick={() => setModalOpen(true)}
                         >
-                            {t("Add")} {t("New")} {t("User")}
+                            {T("Add New User")}
                         </Button>
                     </div>
                 </Col>
@@ -407,7 +405,7 @@ const UsersList = () => {
             /* /Custom placeholder vars */
         },
         {
-            name: "Name",
+            name: T("Name"),
             sortable: true,
             sortField: "name",
             minWidth: "20%",
@@ -433,7 +431,7 @@ const UsersList = () => {
             /* /Custom placeholder vars */
         },
         {
-            name: "Email",
+            name: T("Email"),
             sortable: true,
             sortField: "email",
             minWidth: "25%",
@@ -445,7 +443,7 @@ const UsersList = () => {
             /* /Custom placeholder vars */
         },
         {
-            name: "Role",
+            name: T("Role"),
             sortable: true,
             sortField: "role_id",
             minWidth: "15%",
@@ -458,26 +456,26 @@ const UsersList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: "Customer",
+            loaderContent: T("Customer"),
             customLoadingWithIcon: "User",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
         },
         {
-            name: "Contact",
+            name: T("Contact"),
             sortable: true,
             sortField: "Contact",
             minWidth: "15%",
             cell: (row) => row.Contact,
             /* Custom placeholder vars */
-            loaderContent: "Contact---",
+            loaderContent: T("Contact"),
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
         },
         {
-            name: "Status",
+            name: T("Status"),
             sortable: true,
             sortField: "Status",
             minWidth: "15%",
@@ -487,13 +485,13 @@ const UsersList = () => {
                 </Badge>
             ),
             /* Custom placeholder vars */
-            loaderContent: "Active",
+            loaderContent: T("Active"),
             customLoaderCellClass: "",
             customLoaderContentClass: "rounded-pill"
             /* /Custom placeholder vars */
         },
         {
-            name: "Action",
+            name: T("Action"),
             center: true,
             omit: dotIconAction,
             minWidth: "10%",
@@ -509,7 +507,7 @@ const UsersList = () => {
                                 to={`${adminRoot}/user/view/${row && row.id}`}
                             >
                                 <Eye size={20} className="mb-0 me-1" />
-                                <span className="me-2">View</span>
+                                <span className="me-2">{T('View')}</span>
                             </DropdownItem>
 
                             <DropdownItem
@@ -517,7 +515,7 @@ const UsersList = () => {
                                 to={`${adminRoot}/user/edit/${row && row.id}`}
                             >
                                 <Archive size={20} className="mb-0 me-1" />
-                                <span className="me-2">Edit</span>
+                                <span className="me-2">{T('Edit')}</span>
                             </DropdownItem>
                         </DropdownMenu>
                     </UncontrolledButtonDropdown>

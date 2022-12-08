@@ -3,9 +3,6 @@
 // ** React Imports
 import { useEffect } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
   sendInvoiceItem,
@@ -43,14 +40,15 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 // ** Images
 import pdfImage from '@src/assets/images/icons/pdf.png'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalSendInvoice = ({
   open,
   toggleModal,
   invoiceData,
   setInvoiceRowData
 }) => {
-  /* Hook */
-  const { t } = useTranslation()
 
   // ** Store vars
   const dispatch = useDispatch()
@@ -95,7 +93,7 @@ const ModalSendInvoice = ({
 
   const handleSidebarClosed = () => {
     setValue('to', (invoiceData && invoiceData.customer && invoiceData.customer.email) || "")
-    setValue('subject', `${t("Your")} ${t("bill")}# ${(invoiceData && invoiceData.invoice_no) || ""}`)
+    setValue('subject', `${T("Your")} ${T("bill")}# ${(invoiceData && invoiceData.invoice_no) || ""}`)
     setValue('message', `€ ${(invoiceData && invoiceData.total_price) || 0}
     ${(invoiceData && invoiceData.invoice_due_date) || ""}`)
   }
@@ -131,7 +129,7 @@ const ModalSendInvoice = ({
     >
       <ModalHeader className="mb-1" toggle={handleReset} close={CloseBtn} tag="div">
         <h5 className="modal-title">
-          {`${t("Send")} ${t("Invoice")}`}
+          {`${T("Send Invoice")}`}
         </h5>
       </ModalHeader>
       <PerfectScrollbar
@@ -142,7 +140,7 @@ const ModalSendInvoice = ({
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <div className="mb-1">
               <Label className="form-label" for="total_price">
-                {t("To")}
+                {T("To")}
               </Label>
               <Controller
                 defaultValue={(invoiceData && invoiceData.customer && invoiceData.customer.email) || ""}
@@ -159,16 +157,16 @@ const ModalSendInvoice = ({
 
             <div className="mb-1">
               <Label className="form-label" for="subject">
-                {t("Subject")}
+                {T("Subject")}
               </Label>
               <Controller
-                defaultValue={`${t("Your")} ${t("bill")}# ${(invoiceData && invoiceData.invoice_no) || ""}`}
+                defaultValue={`${T("Your bill")}# ${(invoiceData && invoiceData.invoice_no) || ""}`}
                 id="subject"
                 name="subject"
                 control={control}
                 render={({ field }) => <Input
                   {...field}
-                  placeholder="Invoice regarding goods"
+                  placeholder={T("Invoice regarding goods")}
                   invalid={errors.subject && true}
                 />}
               />
@@ -177,7 +175,7 @@ const ModalSendInvoice = ({
 
             <div className="mb-1">
               <Label className="form-label" for="message">
-                {t("Message")}
+                {T("Message")}
               </Label>
               <Controller
                 defaultValue={
@@ -190,7 +188,7 @@ ${(invoiceData && invoiceData.invoice_due_date) || ""}`
                 render={({ field }) => <Input
                   {...field}
                   type="textarea"
-                  placeholder="Message..."
+                  placeholder={`${T('Message')}...`}
                   cols={3}
                   rows={11}
                   invalid={errors.note && true} />}
@@ -206,7 +204,7 @@ ${(invoiceData && invoiceData.invoice_due_date) || ""}`
                   alt="pdf-icon"
                   height="18"
                 />
-                <span className='align-middle'>{t("Invoice")} {t("automatically")} {t("attached")}</span>
+                <span className='align-middle'>{T("Invoice automatically attached")}</span>
               </Badge>
             </div>
 
@@ -217,7 +215,7 @@ ${(invoiceData && invoiceData.invoice_due_date) || ""}`
                 className="me-1"
                 disabled={!store.loading}
               >
-                {t("Send")}
+                {T("Send")}
               </Button>
 
               <Button
@@ -227,7 +225,7 @@ ${(invoiceData && invoiceData.invoice_due_date) || ""}`
                 disabled={!store.loading}
                 onClick={handleReset}
               >
-                {t("Abort")}
+                {T("Abort")}
               </Button>
             </div>
           </Form>

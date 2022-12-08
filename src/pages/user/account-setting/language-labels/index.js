@@ -49,7 +49,7 @@ import '@styles/react/apps/app-users.scss'
 import '@styles/react/libs/editor/editor.scss'
 
 // ** localization keys
-import { L10nKeys, L10nOrgKeys, L10nMenuItemIDKeys } from '@localization'
+import { L10nKeys, L10nOrgKeys, L10nMenuItemIDKeys, T } from '@localization'
 
 // ** API calling components
 import axios from 'axios'
@@ -185,10 +185,6 @@ const LanguageLabels = () => {
     }
   }
 
-  const capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1)
-  }
-
   const onChangeTranslation = (origin, value) => {
     const values = {...translation}
     values[origin] = value
@@ -232,11 +228,11 @@ const LanguageLabels = () => {
         return <User size={14} />
       case "Account":
         return <Settings size={14} />
-      case "Emial_Template":
+      case "Email Template":
         return <Codepen size={14} />
-      case "Cloud_Server":
+      case "Cloud-Server":
         return <HardDrive size={14} />
-      case "Calendar_Setting":
+      case "Calendar Setting":
         return <Calendar size={14} />
     }
   }
@@ -244,7 +240,7 @@ const LanguageLabels = () => {
   return (<>
     <div className="app-user-view">
       <div className="d-flex align-items-center me-2" style={{ width: '300px', marginBottom: '30px' }}>
-        <label htmlFor="language-select">Language</label>
+        <label htmlFor="language-select">{T('Language')}</label>
         <Input
           type="select"
           id="language-select"
@@ -262,7 +258,7 @@ const LanguageLabels = () => {
       <Tabs>
         <TabList>
           {Object.keys(L10nOrgKeys).map(tabName => {
-            return <Tab key={tabName}>{tabName}</Tab>
+            return <Tab key={tabName}>{T(tabName)}</Tab>
           })}
         </TabList>
 
@@ -285,7 +281,7 @@ const LanguageLabels = () => {
                       <NavItem key={subTabName + i}>
                         <NavLink active={active === i} onClick={() => toggleTab(i)}>
                           {getPageIconComponent(subTabName)}
-                          <span className="fw-bold d-none d-sm-block">{capitalizeFirstLetter(subTabName)}</span>
+                          <span className="fw-bold d-none d-sm-block">{T(subTabName)}</span>
                         </NavLink>
                       </NavItem>
                     ) : null

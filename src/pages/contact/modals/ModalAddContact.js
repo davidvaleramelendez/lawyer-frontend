@@ -1,9 +1,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
   addContact,
@@ -44,9 +41,10 @@ import {
 // ** Styles
 import '@styles/react/libs/editor/editor.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalAddContact = ({ open, toggleModal }) => {
-  // ** Hooks
-  const { t } = useTranslation()
 
   // ** Store vars
   const dispatch = useDispatch()
@@ -54,9 +52,9 @@ const ModalAddContact = ({ open, toggleModal }) => {
 
   const ContactSchema = yup.object({
     // Name: yup.string().required('Name is required!').matches(/^([a-zA-Z]+ [a-zA-Z]+)$/i, 'Invalid full name!'),
-    Name: yup.string().required('Name is required!'),
-    Email: yup.string().required('Email is required!').email('Invalid email address!'),
-    PhoneNo: yup.string().required('Mobile is required!').min(10, "Mobile Must be 10 digit!").max(10, "Mobile Must be 10 digit!")
+    Name: yup.string().required(T('Name is required!')),
+    Email: yup.string().required(T('Email is required!')).email(T('Invalid email address!')),
+    PhoneNo: yup.string().required(T('Mobile is required!')).min(10, T("Mobile Must be 10 digit!")).max(10, T("Mobile Must be 10 digit!"))
   }).required()
 
   const {
@@ -75,7 +73,7 @@ const ModalAddContact = ({ open, toggleModal }) => {
     fullname: "John Doe",
     phoneno: "+4915901766553",
     emailAddress: "john.doe@example.com",
-    subject: t("Message")
+    subject: T("Message")
   }
 
   const [editorHtmlContent, setEditorHtmlContent] = useState("")
@@ -139,13 +137,13 @@ const ModalAddContact = ({ open, toggleModal }) => {
         />
         <ModalBody className="px-5 pb-5">
           <div className='text-center mb-4'>
-            <h1>Add New Contact</h1>
+            <h1>{T('Add New Contact')}</h1>
           </div>
 
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <div className='mb-1'>
               <Label className='form-label' for='Name'>
-                Full Name
+              {T('Full Name')}
               </Label>
               <Controller
                 defaultValue=""
@@ -159,7 +157,7 @@ const ModalAddContact = ({ open, toggleModal }) => {
 
             <div className='mb-1'>
               <Label className='form-label' for='PhoneNo'>
-                {t("Telephone")}
+                {T("Telephone")}
               </Label>
               <Controller
                 defaultValue=""
@@ -173,7 +171,7 @@ const ModalAddContact = ({ open, toggleModal }) => {
 
             <div className='mb-1'>
               <Label className='form-label' for='Email'>
-                {t("Email")}
+                {T("Email")}
               </Label>
               <Controller
                 defaultValue=""
@@ -189,7 +187,7 @@ const ModalAddContact = ({ open, toggleModal }) => {
 
             <div className='mb-1'>
               <Label className='form-label' for='Subject'>
-                {t("Message")}
+                {T("Message")}
               </Label>
               <Controller
                 defaultValue=""
@@ -227,7 +225,7 @@ const ModalAddContact = ({ open, toggleModal }) => {
                 className="me-1"
                 color="primary"
               >
-                {t("Submit")}
+                {T("Submit")}
               </Button>
 
               <Button
@@ -235,7 +233,7 @@ const ModalAddContact = ({ open, toggleModal }) => {
                 color="secondary"
                 onClick={handleReset}
               >
-                {t("Cancel")}
+                {T("Cancel")}
               </Button>
             </div>
           </Form>

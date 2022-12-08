@@ -48,6 +48,9 @@ import UserInfoCard from './UserInfoCard'
 import '@styles/base/pages/app-invoice.scss'
 import '@styles/react/apps/app-users.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const UserView = () => {
   // ** Hooks
   const { id } = useParams()
@@ -120,11 +123,11 @@ const UserView = () => {
 
   const onDeleteUser = (userId) => {
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      title: T('Are you sure?'),
+      text: T("You won't be able to revert this!"),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonText: T('Yes, delete it!'),
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-danger ms-1'

@@ -1,9 +1,6 @@
 // ** React Imports
 import { Fragment } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Reactstrap Imports
 import {
     Nav,
@@ -27,14 +24,15 @@ import DocumentsTab from './DocumentsTab'
 import PermissionsTab from './PermissionsTab'
 import RecentDevicesTab from './RecentDevicesTab'
 
+// ** Translation
+import { T } from '@localization'
+
 const UserTabs = ({
     id,
     active,
     toggleTab,
     permissions
 }) => {
-    /* Hook */
-    const { t } = useTranslation()
 
     return (
         <Fragment>
@@ -42,28 +40,28 @@ const UserTabs = ({
                 <NavItem>
                     <NavLink active={active === "1"} onClick={() => toggleTab("1")}>
                         <Briefcase size={18} className="me-50" />
-                        <span className="fw-bold d-none d-sm-block">{t("Documents")}</span>
+                        <span className="fw-bold d-none d-sm-block">{T("Documents")}</span>
                     </NavLink>
                 </NavItem>
 
                 <NavItem>
                     <NavLink active={active === "2"} onClick={() => toggleTab("2")}>
                         <FileText size={18} className="me-50" />
-                        <span className="fw-bold d-none d-sm-block">{t("Bills")}</span>
+                        <span className="fw-bold d-none d-sm-block">{T("Bills")}</span>
                     </NavLink>
                 </NavItem>
 
                 <NavItem>
                     <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
                         <Monitor size={18} className="me-50" />
-                        <span className="fw-bold d-none d-sm-block">{t("Recent devices")}</span>
+                        <span className="fw-bold d-none d-sm-block">{T("Recent devices")}</span>
                     </NavLink>
                 </NavItem>
 
                 <NavItem>
                     <NavLink active={active === "4"} onClick={() => toggleTab("4")}>
                         <Unlock size={18} className="me-50" />
-                        <span className="fw-bold d-none d-sm-block">{t("Permissions")}</span>
+                        <span className="fw-bold d-none d-sm-block">{T("Permissions")}</span>
                     </NavLink>
                 </NavItem>
             </Nav>

@@ -19,13 +19,12 @@ import {
 } from 'reactstrap'
 
 // ** localization keys
-import { L10nKeys, L10nMenuItemIDKeys } from '@localization'
+import { L10nKeys, L10nMenuItemIDKeys, T } from '@localization'
 
 const LabelsForm = (props) => {
   const { category, originKeys, translation, formId, isVisibleMenuItem, onSubmitParent, onChangeTranslation } = props
 
   const [errors, setErrors] = useState([])
-  console.log('translation: ', translation)
 
   /* Validation rules */
   const ValidationSchema = {}
@@ -42,13 +41,10 @@ const LabelsForm = (props) => {
     e.preventDefault()
 
     for (const key of Object.keys(errors)) {
-      console.log('------- KEY: ', key, errors[category + key])
       if (errors[key]) {
         return
       }
     }
-    console.log('errors: ', errors)
-    console.log('translation: ', translation)
     onSubmitParent(category, translation)
   }
 
@@ -97,7 +93,7 @@ const LabelsForm = (props) => {
                       value={getValue(L10nKeys[key])} 
                       onChange={event => onChangeValue(L10nKeys[key], event.target.value)}
                       invalid={errors[category + key] && true}/>
-                  <div className="invalid-feedback">{errors[key] ? 'Translation is required!' : ''}</div>
+                  <div className="invalid-feedback">{errors[key] ? T('Translation is required!') : ''}</div>
                 </Col>
               </Row>
             ) : null
@@ -106,7 +102,7 @@ const LabelsForm = (props) => {
 
         <div className="d-flex flex-wrap mb-2 mt-2">
           <Button type="submit" className="me-1" color="primary" onClick={onSubmit}>
-            Save Change
+            {T('Save Change')}
           </Button>
         </div>
       </Form>

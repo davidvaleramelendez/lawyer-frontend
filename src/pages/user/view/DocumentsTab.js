@@ -4,9 +4,6 @@
 import { Fragment, useEffect, useState } from "react"
 import { Link } from 'react-router-dom'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
     getCaseList
@@ -56,6 +53,9 @@ import {
 // ** Modal
 import ModalCaseDetail from '../../case/modals/ModalCaseDetail'
 
+// ** Translation
+import { T } from '@localization'
+
 /* Get windows size */
 function getWindowSize() {
     const { innerWidth: width, innerHeight: height } = window
@@ -79,7 +79,7 @@ const CustomCaseHeader = ({
         <Row>
             <Col lg={4} className="d-flex align-items-center px-0 px-lg-1">
                 <div className="d-flex align-items-center me-2">
-                    <label htmlFor="rows-per-page">Show</label>
+                    <label htmlFor="rows-per-page">{T('Show')}</label>
                     <Input
                         type="select"
                         id="rows-per-page"
@@ -98,13 +98,13 @@ const CustomCaseHeader = ({
 
             <Col lg={8} className="actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0">
                 <div className="d-flex align-items-center">
-                    <label htmlFor="search-case">Search</label>
+                    <label htmlFor="search-case">{T('Search')}</label>
                     <Input
                         id="search-case"
                         className="ms-50 me-2 w-100"
                         type="text"
                         value={searchInput}
-                        placeholder="Search Case"
+                        placeholder={T("Search Case")}
                         onChange={(event) => handleSearch(event.target.value)}
                     />
                 </div>
@@ -113,7 +113,7 @@ const CustomCaseHeader = ({
                     <Select
                         id="status-filter"
                         placeholder="Select..."
-                        options={[{ label: "Hold", value: "Hold" }, { label: "Open", value: "Open" }]}
+                        options={[{ label: T("Hold"), value: "Hold" }, { label: T("Open"), value: "Open" }]}
                         className="react-select w-100"
                         classNamePrefix="select"
                         isClearable={true}
@@ -130,8 +130,6 @@ const CustomCaseHeader = ({
 const DocumentsTab = ({
     id
 }) => {
-    // ** Hooks
-    const { t } = useTranslation()
 
     // ** Store vars
     const dispatch = useDispatch()
@@ -295,7 +293,7 @@ const DocumentsTab = ({
             )
         },
         {
-            name: "Reference Number",
+            name: T("Reference Number"),
             sortable: true,
             sortField: "CaseID",
             cellClass: "text-uppercase",
@@ -303,7 +301,7 @@ const DocumentsTab = ({
             cell: row => <Link to={`${adminRoot}/case/view/${row.CaseID}`}>{`#${row.CaseID}`}</Link>
         },
         {
-            name: "Client",
+            name: T("Client"),
             sortable: true,
             cellClass: "text-uppercase",
             minWidth: "250px",
@@ -324,7 +322,7 @@ const DocumentsTab = ({
             }
         },
         {
-            name: "Attorney",
+            name: T("Attorney"),
             sortable: true,
             sortField: "LaywerID",
             cellClass: "text-uppercase",
@@ -332,7 +330,7 @@ const DocumentsTab = ({
             cell: (row) => <>{row && row.laywer && row.laywer.id ? (<Link to={`${adminRoot}/user/view/${row.laywer.id}`}>{row.laywer.name}</Link>) : null}</>
         },
         {
-            name: "Datum",
+            name: T("Date"),
             sortable: true,
             sortField: "Date",
             cellClass: "text-uppercase",
@@ -340,7 +338,7 @@ const DocumentsTab = ({
             cell: (row) => row.Date && getTransformDate(row.Date, "DD MMM YYYY")
         },
         {
-            name: "Status",
+            name: T("Status"),
             sortable: true,
             sortField: "Status",
             cellClass: "text-uppercase",
@@ -348,7 +346,7 @@ const DocumentsTab = ({
             cell: (row) => row.Status
         },
         {
-            name: "Group",
+            name: T("Group"),
             sortable: true,
             sortField: "Status",
             cellClass: "text-uppercase",
@@ -356,7 +354,7 @@ const DocumentsTab = ({
             cell: (row) => row && row.type && row.type.CaseTypeName
         },
         {
-            name: 'Action',
+            name: T('Action'),
             minWidth: '90px',
             omit: dotIconAction,
             cell: (row) => (
@@ -377,7 +375,7 @@ const DocumentsTab = ({
             {/* Case listing */}
             <Card>
                 <CardHeader className="border-bottom">
-                    <CardTitle tag="h4">{t("Documents")}</CardTitle>
+                    <CardTitle tag="h4">{T("Documents")}</CardTitle>
                 </CardHeader>
 
                 <DatatablePagination

@@ -34,6 +34,9 @@ import { useForm, Controller } from 'react-hook-form'
 // Translation
 import { useTranslation } from 'react-i18next'
 
+// ** React Dropdown Import
+import Select from 'react-select'
+
 // ** API calling components
 import axios from 'axios'
 import {
@@ -174,7 +177,7 @@ const AccountSettingApp = () => {
   const [active, setActive] = useState('1')
   const [imageUrl, setImageUrl] = useState("")
   const [languages, setLanguages] = useState([])
-  // const [selLanguage, setSelLanguage] = useState(store.userItem.language)
+  const [selLanguage, setSelLanguage] = useState(store.userItem.language)
 
   // ** Get languages 
   const getLanguages = () => {
@@ -210,6 +213,7 @@ const AccountSettingApp = () => {
     if (loadFirst) {
       dispatch(getAccountSetting({}))
       getLanguages()
+      setSelLanguage(store.userItem.language)
       setLoadFirst(false)
     }
 
@@ -228,7 +232,10 @@ const AccountSettingApp = () => {
       Notification("Error", store.error, "warning")
     }
   }, [dispatch, store.roleItems, store.accountItem, store.success, store.error, store.actionFlag, loadFirst])
-  // console.log("active >>> ", active)
+  
+  useEffect(() => {
+    setSelLanguage(store.userItem.language)
+  }, [store.userItem])
 
   const toggleTab = (tab) => {
     if (active !== tab) {
@@ -248,6 +255,10 @@ const AccountSettingApp = () => {
     }
   }
 
+  const onLanguageChange = (event) => {
+    setSelLanguage(event.target.value)
+  }
+
   /* Submitting Account data */
   const onSubmitAccount = (values) => {
 
@@ -256,7 +267,7 @@ const AccountSettingApp = () => {
         name: values.fullname,
         email: values.emailAddress,
         Company: values.company,
-        language: values.language
+        language: selLanguage
       }
 
       if (imageUrl) {
@@ -281,8 +292,6 @@ const AccountSettingApp = () => {
         imap_port: values.imap_port,
         imap_ssl: values.imap_ssl
       }
-
-      // console.log("onSubmitImapInfo >>>>> ", userData)
       dispatch(saveAccountImap(userData))
     }
   }
@@ -417,27 +426,19 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <label className="form-label" htmlFor="language-select">Language</label>
-                    <Controller
-                      defaultValue={store.userItem && store.userItem.language ? store.userItem.language : "English"}
+                    <Input
+                      type="select"
                       name="language"
                       id="language"
-                      control={acntControl}
-                      rules={ValidationSchema.company}
-                      render={({ field }) => (
-                      <Input
-                        {...field}
-                        type="select"
-                        id="language-select"
-                        // onChange={(event) => setSelLanguage(event.target.value)}
-                      >
-                        {languages && languages.length ? (<>
-                            {languages.map((item, index) => (
-                                <option key={`row-${index}`} value={item}>{item}</option>
-                            ))}
-                        </>) : null}
-                      </Input>
-                      )}
-                    />
+                      value={selLanguage}
+                      onChange={onLanguageChange}
+                    >
+                      {languages && languages.length ? (<>
+                          {languages.map((item, index) => (
+                              <option key={`row-${index}`} value={item}>{item}</option>
+                          ))}
+                      </>) : null}
+                    </Input>
                   </Col>
                 </Row>
 

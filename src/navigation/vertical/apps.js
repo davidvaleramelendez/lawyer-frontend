@@ -20,7 +20,6 @@ import {
   adminRoot
 } from '@constant/defaultValues'
 
-
 export default [
   {
     header: 'Apps & Menu'

@@ -365,9 +365,9 @@ export const T = (origin) => {
         labels = getDefaultLanguageLabels()
     }
 
-    if (labels[language] === undefined) {
+    if (labels[language] === undefined || labels[language][origin] === undefined) {
         return origin
     }
 
-    return labels[language][origin] === undefined ? origin : labels[language][origin]
+    return labels[language][origin]
 }

@@ -59,7 +59,8 @@ export const login = createAsyncThunk('appAuth/login', async (payload) => {
 
           Object.keys(L10nKeys).forEach(key => {
             const origin = L10nKeys[key]
-            if (respLangLabels[type][origin] !== undefined 
+            labels[type][origin] = origin
+            if (respLangLabels[type] && respLangLabels[type][origin] !== undefined 
               && respLangLabels[type][origin] !== null
               && respLangLabels[type][origin] !== '') {
               labels[type][origin] = respLangLabels[type][origin]

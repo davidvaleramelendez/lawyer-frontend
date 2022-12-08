@@ -124,7 +124,7 @@ const SidebarLeft = (props) => {
     if (searchInput.length && !Object.keys(chatItems).length) {
       return (
         <li className='no-results show'>
-          <h6 className='mb-0'>No Chats Found</h6>
+          <h6 className='mb-0'>{T('No Chats Found')}</h6>
         </li>
       )
     } else {
@@ -194,7 +194,7 @@ const SidebarLeft = (props) => {
     if (searchInput.length && !contacts.length) {
       return (
         <li className='no-results show'>
-          <h6 className='mb-0'>No Chats Found</h6>
+          <h6 className='mb-0'>{T('No Chats Found')}</h6>
         </li>
       )
     } else {
@@ -262,17 +262,17 @@ const SidebarLeft = (props) => {
             </div>
           </header>
           <PerfectScrollbar className="profile-sidebar-area" options={{ wheelPropagation: false }}>
-            <h6 className="section-label mb-1 mt-2">Settings</h6>
+            <h6 className="section-label mb-1 mt-2">{T('Settings')}</h6>
             <ul className="list-unstyled">
               <li className="d-flex justify-content-between align-items-center mb-1">
                 <div className="d-flex align-items-center">
                   <Bell className="me-75" size="18" />
-                  <span className="align-middle">Notification</span>
+                  <span className="align-middle">{T('Notification')}</span>
                 </div>
               </li>
               <li className="d-flex align-items-center cursor-pointer mb-1">
                 <User className="me-75" size="18" />
-                <span className="align-middle">Invite Friends</span>
+                <span className="align-middle">{T('Invite Friends')}</span>
               </li>
             </ul>
           </PerfectScrollbar>
@@ -323,9 +323,9 @@ const SidebarLeft = (props) => {
           </div>
 
           <PerfectScrollbar className="chat-user-list-wrapper list-group" options={{ wheelPropagation: false }}>
-            <h4 className="chat-list-title">Chats</h4>
+            <h4 className="chat-list-title">{T('Chats')}</h4>
             <ul className="chat-users-list chat-list media-list">{renderChats()}</ul>
-            <h4 className="chat-list-title">Contacts</h4>
+            <h4 className="chat-list-title">{T('Contacts')}</h4>
             <ul className="chat-users-list contact-list media-list">{renderContacts()}</ul>
           </PerfectScrollbar>
         </div>

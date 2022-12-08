@@ -15,9 +15,6 @@ import {
   CardHeader
 } from 'reactstrap'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Utils
 import {
   isUserLoggedIn,
@@ -57,9 +54,10 @@ import withReactContent from 'sweetalert2-react-content'
 // ** Images
 import pdfImage from '@src/assets/images/icons/pdf.png'
 
+// ** Translation
+import { T } from '@localization'
+
 const TimelineApp = () => {
-  /* Hook */
-  const { t } = useTranslation()
   const navigate = useNavigate()
   const MySwal = withReactContent(Swal)
 
@@ -136,12 +134,12 @@ const TimelineApp = () => {
                     <h6 className="font-weight-bolder text-dark">
                       R.-Nr.# <Link to={`${adminRoot}/invoice/view/${invoice.id}`} target="_blank">{invoice.invoice_no}</Link>
                     </h6>
-                    <span className="timeline-event-time" align="right">{t("First anniversary")} : {invoice.invoice_date && getTransformDate(invoice.invoice_date, "DD.MM.YYYY")} </span>
+                    <span className="timeline-event-time" align="right">{T("First anniversary")} : {invoice.invoice_date && getTransformDate(invoice.invoice_date, "DD.MM.YYYY")} </span>
                   </div>
 
                   <div className="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
                     <div className="mt-sm-0 mt-1">
-                      <p className="text-muted mb-50 font-weight-bolder text-dark">{t("File")}:# {invoice.CaseID ? (<Link to={`${adminRoot}/case/view/${invoice.CaseID}`} target="_blank">{invoice.CaseID}</Link>) : null}</p>
+                      <p className="text-muted mb-50 font-weight-bolder text-dark">{T("File")}:# {invoice.CaseID ? (<Link to={`${adminRoot}/case/view/${invoice.CaseID}`} target="_blank">{invoice.CaseID}</Link>) : null}</p>
                       <div className="media align-items-center">
                         <a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${invoice.pdf_path}`} target="_blank">
                           <img
@@ -158,17 +156,17 @@ const TimelineApp = () => {
                     </div>
 
                     <div className="mt-sm-0 mt-1">
-                      <p className="text-muted mb-50">{t("Deadline Date")}</p>
+                      <p className="text-muted mb-50">{T("Deadline Date")}</p>
                       <p className="mb-0 font-weight-bolder text-danger">{invoice.invoice_due_date && getTransformDate(invoice.invoice_due_date, "DD.MM.YYYY")}</p>
                     </div>
 
                     <div className="mt-sm-0 mt-1">
-                      <p className="text-muted mb-50">{t("Amount")}</p>
+                      <p className="text-muted mb-50">{T("Amount")}</p>
                       <p className="mb-0">€ {invoice && invoice.remaining_amount}</p>
                     </div>
 
                     <div className="mt-sm-0 mt-1">
-                      <p className="text-muted mb-50">{t("Done")}</p>
+                      <p className="text-muted mb-50">{T("Done")}</p>
                       <p className="mb-0">
                         <Link to={`${adminRoot}/invoice/view/${invoice.id}`} target="_blank"><Eye size={14} /></Link>
                       </p>
@@ -185,11 +183,11 @@ const TimelineApp = () => {
 
   const onDoneTimelineRecord = (id, type) => {
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You want to Done this timeline?",
+      title: T('Are you sure?'),
+      text: T("You want to Done this timeline?"),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes',
+      confirmButtonText: T('Yes'),
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-warning ms-1'
@@ -211,14 +209,14 @@ const TimelineApp = () => {
 
     <Row>
       <Col sm={12} md={6}>
-        <h4 className="font-weight-bolder text-dark mb-2">{t("Letter Deadline")}</h4>
+        <h4 className="font-weight-bolder text-dark mb-2">{T("Letter Deadline")}</h4>
         <div className="d-flex align-items-center mb-2">
           <Input
             id="search-letter"
             className="w-100"
             type="text"
             value={searchLetterInput}
-            placeholder="Search Letter"
+            placeholder={T("Search Letter")}
             onChange={(event) => handleLetterSearch(event.target.value)}
           />
         </div>
@@ -233,13 +231,13 @@ const TimelineApp = () => {
                     <span className="timeline-point timeline-point-danger timeline-point-indicator"></span>
                     <div className='timeline-event'>
                       <div className="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
-                        <h6>{t("Subject")} : {letter && letter.subject}</h6>
-                        <span className="timeline-event-time" align="right">{t("First anniversary")} : {letter && letter.created_at && getTransformDate(letter.created_at, "DD.MM.YYYY")} </span>
+                        <h6>{T("Subject")} : {letter && letter.subject}</h6>
+                        <span className="timeline-event-time" align="right">{T("First anniversary")} : {letter && letter.created_at && getTransformDate(letter.created_at, "DD.MM.YYYY")} </span>
                       </div>
 
                       <div className="d-flex justify-content-between flex-wrap flex-sm-row flex-column">
                         <div className="mt-sm-0 mt-1">
-                          <p className="text-muted mb-50 font-weight-bolder text-dark">{t("PDF documents")}</p>
+                          <p className="text-muted mb-50 font-weight-bolder text-dark">{T("PDF documents")}</p>
                           <div className="media align-items-center">
                             <img
                               className="me-1"
@@ -258,12 +256,12 @@ const TimelineApp = () => {
                         </div>
 
                         <div className="mt-sm-0 mt-1">
-                          <p className="text-muted mb-50">{t("Deadline Date")}</p>
+                          <p className="text-muted mb-50">{T("Deadline Date")}</p>
                           <p className="mb-0 font-weight-bolder text-danger">{letter && letter.frist_date && getTransformDate(letter.frist_date, "DD.MM.YYYY")}</p>
                         </div>
 
                         <div className="mt-sm-0 mt-1">
-                          <p className="text-muted mb-50">{t("Reference number")}</p>
+                          <p className="text-muted mb-50">{T("Reference number")}</p>
                           {letter && letter.case_id ? (
                             <Link to={`${adminRoot}/case/view/${letter.case_id}`} target="_blank">
                               {letter.case_id}
@@ -272,7 +270,7 @@ const TimelineApp = () => {
                         </div>
 
                         <div className="mt-sm-0 mt-1">
-                          <p className="text-muted mb-50">{t("Done?")}</p>
+                          <p className="text-muted mb-50">{T("Done?")}</p>
                           <div className='form-switch form-check-primary'>
                             <Input
                               type='switch'
@@ -303,14 +301,14 @@ const TimelineApp = () => {
       </Col>
 
       <Col sm={12} md={6}>
-        <h4 className="font-weight-bolder text-dark mb-2">{t("Invoice Deadline")}</h4>
+        <h4 className="font-weight-bolder text-dark mb-2">{T("Invoice Deadline")}</h4>
         <div className="d-flex align-items-center mb-2">
           <Input
             id="search-invoice"
             className="w-100"
             type="text"
             value={searchInvoiceInput}
-            placeholder="Search Invoice"
+            placeholder={T("Search Invoice")}
             onChange={(event) => handleInvoiceSearch(event.target.value)}
           />
         </div>

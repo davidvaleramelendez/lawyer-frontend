@@ -31,9 +31,6 @@ import {
 } from 'reactstrap'
 import { useForm, Controller } from 'react-hook-form'
 
-// ** React Dropdown Import
-import Select from 'react-select'
-
 // ** API calling components
 import axios from 'axios'
 import {

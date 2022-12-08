@@ -20,6 +20,9 @@ import {
   ListGroupItem
 } from 'reactstrap'
 
+// ** Translation
+import { T } from '@localization'
+
 const TodoSidebar = (props) => {
   // ** Props
   const {
@@ -66,7 +69,7 @@ const TodoSidebar = (props) => {
           <div className='todo-app-menu'>
             <div className='add-task'>
               <Button color='primary' onClick={handleAddClick} block>
-                Add Task
+                {T('Add Task')}
               </Button>
             </div>
 
@@ -80,7 +83,7 @@ const TodoSidebar = (props) => {
                   onClick={() => handleFilter('')}
                 >
                   <Mail className='me-75' size={18} />
-                  <span className='align-middle'>My Tasks</span>
+                  <span className='align-middle'>{T('My Tasks')}</span>
                 </ListGroupItem>
 
                 <ListGroupItem
@@ -91,7 +94,7 @@ const TodoSidebar = (props) => {
                   action
                 >
                   <Star className='me-75' size={18} />
-                  <span className='align-middle'>Important</span>
+                  <span className='align-middle'>{T('Important')}</span>
                 </ListGroupItem>
 
                 <ListGroupItem
@@ -102,7 +105,7 @@ const TodoSidebar = (props) => {
                   action
                 >
                   <Check className='me-75' size={18} />
-                  <span className='align-middle'>Completed</span>
+                  <span className='align-middle'>{T('Completed')}</span>
                 </ListGroupItem>
 
                 <ListGroupItem
@@ -113,12 +116,12 @@ const TodoSidebar = (props) => {
                   action
                 >
                   <Trash className='me-75' size={18} />
-                  <span className='align-middle'>Deleted</span>
+                  <span className='align-middle'>{T('Deleted')}</span>
                 </ListGroupItem>
               </ListGroup>
 
               <div className='mt-3 px-2 d-flex justify-content-between'>
-                <h6 className='section-label mb-1'>Tags</h6>
+                <h6 className='section-label mb-1'>{T('Tags')}</h6>
               </div>
 
               <ListGroup className='list-group-labels'>
@@ -131,7 +134,7 @@ const TodoSidebar = (props) => {
                   action
                 >
                   <span className='bullet bullet-sm bullet-primary me-1'></span>
-                  <span className='align-middle'>Team</span>
+                  <span className='align-middle'>{T('Team')}</span>
                 </ListGroupItem>
 
                 <ListGroupItem
@@ -143,7 +146,7 @@ const TodoSidebar = (props) => {
                   action
                 >
                   <span className='bullet bullet-sm bullet-success me-1'></span>
-                  <span className='align-middle'>Low</span>
+                  <span className='align-middle'>{T('Low')}</span>
                 </ListGroupItem>
 
                 <ListGroupItem
@@ -155,7 +158,7 @@ const TodoSidebar = (props) => {
                   action
                 >
                   <span className='bullet bullet-sm bullet-warning me-1'></span>
-                  <span className='align-middle'>Medium</span>
+                  <span className='align-middle'>{T('Medium')}</span>
                 </ListGroupItem>
 
                 <ListGroupItem
@@ -167,7 +170,7 @@ const TodoSidebar = (props) => {
                   action
                 >
                   <span className='bullet bullet-sm bullet-danger me-1'></span>
-                  <span className='align-middle'>High</span>
+                  <span className='align-middle'>{T('High')}</span>
                 </ListGroupItem>
 
                 <ListGroupItem
@@ -179,7 +182,7 @@ const TodoSidebar = (props) => {
                   action
                 >
                   <span className='bullet bullet-sm bullet-info me-1'></span>
-                  <span className='align-middle'>Update</span>
+                  <span className='align-middle'>{T('Update')}</span>
                 </ListGroupItem>
               </ListGroup>
             </PerfectScrollbar>

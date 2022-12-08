@@ -37,7 +37,7 @@ const UserProfileSidebar = (props) => {
       </header>
       <PerfectScrollbar className='user-profile-sidebar-area' options={{ wheelPropagation: false }}>
         <div className='personal-info'>
-          <h6 className='section-label mb-1 mt-3'>Personal Information</h6>
+          <h6 className='section-label mb-1 mt-3'>{T('Personal Information')}</h6>
           <ul className='list-unstyled'>
             <li className='mb-1'>
               <Mail className='me-75' size={17} />

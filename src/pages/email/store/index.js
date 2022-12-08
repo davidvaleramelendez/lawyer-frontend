@@ -656,7 +656,6 @@ export const appEmailSlice = createSlice({
 
     setComposeUserOptions: (state, action) => {
       state.composeModal.userOptions = action.payload || []
-      console.log('--------- user options: ', action.payload)
     },
 
     setComposeMailTo: (state, action) => {

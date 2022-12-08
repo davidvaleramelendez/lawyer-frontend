@@ -4,9 +4,6 @@ import { Fragment } from 'react'
 // ** Custom Components
 import Avatar from '@components/avatar'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // Constant
 import {
   calendarFilter
@@ -38,6 +35,9 @@ import {
 import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalAddEvent = props => {
   // ** Props
   const {
@@ -58,8 +58,6 @@ const ModalAddEvent = props => {
     toggleAddEventModal,
     underscoreCapitalizeWord
   } = props
-  // ** Hooks
-  const { t } = useTranslation()
 
   /* Validating url */
   const isValidURL = (string) => {
@@ -82,41 +80,41 @@ const ModalAddEvent = props => {
 
   const ValidationSchema = {
     title: {
-      placeholder: "Title",
-      required: "Title is required!"
+      placeholder: T("Title"),
+      required: T("Title is required!")
     },
     business: {
-      placeholder: `Select ${t("Label")}...`,
-      required: `${t("Label")} is required!`
+      placeholder: `${T('Select Label')}...`,
+      required: T(`Label is required!`)
     },
     start_date: {
       placeholder: "YYYY-MM-DD",
-      required: "Start date is required!"
+      required: T("Start date is required!")
     },
     end_date: {
       placeholder: "YYYY-MM-DD",
-      required: "End date is required!"
+      required: T("End date is required!")
     },
     guestIds: {
-      placeholder: `Select ${t("Guest")}...`,
-      required: `${t("Guest")} is required!`
+      placeholder: `${T('Select Guest')}...`,
+      required: T(`Guest is required!`)
     },
     event_url: {
       placeholder: "https://www.google.com",
       required: false,
       validate: (value) => {
         if (value) {
-          return isValidURL(value) || "Invalid appointment url!"
+          return isValidURL(value) || T("Invalid appointment url!")
         }
         return true
       }
     },
     location: {
-      placeholder: "Enter location",
+      placeholder: T("Enter location"),
       required: false
     },
     description: {
-      placeholder: "Description",
+      placeholder: T("Description"),
       required: false
     }
   }
@@ -160,11 +158,11 @@ const ModalAddEvent = props => {
 
   const onDeleteEvent = (evntId) => {
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      title: T('Are you sure?'),
+      text: T("You won't be able to revert this!"),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonText: T('Yes, delete it!'),
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-danger ms-1'
@@ -240,11 +238,11 @@ const ModalAddEvent = props => {
       return (
         <Fragment>
           <Button className="me-1" type="submit" color="primary">
-            Update
+            {T('Update')}
           </Button>
 
           <Button color="danger" onClick={() => onDeleteEvent(eventItem.id)} outline>
-            Delete
+            {T('Delete')}
           </Button>
         </Fragment>
       )
@@ -252,11 +250,11 @@ const ModalAddEvent = props => {
       return (
         <Fragment>
           <Button className="me-1" type="submit" color="primary">
-            Add
+          {T('Add')}
           </Button>
 
           <Button color="secondary" type="reset" onClick={toggleAddEventModal} outline>
-            Cancel
+            {T('Cancel')}
           </Button>
         </Fragment>
       )
@@ -279,7 +277,7 @@ const ModalAddEvent = props => {
     >
       <ModalHeader className="mb-1" toggle={toggleAddEventModal} close={CloseBtn} tag="div">
         <h5 className="modal-title">
-          {eventItem && eventItem.id ? "Update" : "Add"} Event
+          {eventItem && eventItem.id ? T("Update Event") : T("Add Event")}
         </h5>
       </ModalHeader>
       <PerfectScrollbar
@@ -293,7 +291,7 @@ const ModalAddEvent = props => {
           >
             <div className="mb-1">
               <Label className="form-label" for="title">
-                Title <span className="text-danger">*</span>
+                {T('Title')} <span className="text-danger">*</span>
               </Label>
               <Controller
                 defaultValue=""
@@ -314,7 +312,7 @@ const ModalAddEvent = props => {
 
             <div className="mb-1">
               <Label className="form-label" for="businessLbl">
-                {t("Label")} <span className="text-danger">*</span>
+                {T("Label")} <span className="text-danger">*</span>
               </Label>
               <Controller
                 defaultValue={eventItem && eventItem.business ? { label: underscoreCapitalizeWord(eventItem.business), value: eventItem.business, color: calendarsColor[eventItem.business] } : calendarFilter[0]}
@@ -341,7 +339,7 @@ const ModalAddEvent = props => {
 
             <div className="mb-1">
               <Label className="form-label" for="start_date">
-                Start Date <span className="text-danger">*</span>
+                {T('Start Date')} <span className="text-danger">*</span>
               </Label>
               <Controller
                 defaultValue=""
@@ -366,7 +364,7 @@ const ModalAddEvent = props => {
 
             <div className="mb-1">
               <Label className="form-label" for="end_date">
-                End Date <span className="text-danger">*</span>
+                {T('End Date')} <span className="text-danger">*</span>
               </Label>
               <Controller
                 defaultValue=""
@@ -392,7 +390,7 @@ const ModalAddEvent = props => {
 
             <div className="mb-1">
               <Label className="form-label" for="guestIds">
-                Guests <span className="text-danger">*</span>
+                {T('Guests')} <span className="text-danger">*</span>
               </Label>
               <Controller
                 defaultValue={guestDefaultDropdown}
@@ -437,13 +435,13 @@ const ModalAddEvent = props => {
                 )}
               />
               <Label className="form-label" for="allDay">
-                All Day
+                {T('All Day')}
               </Label>
             </div>
 
             <div className="mb-1">
               <Label className="form-label" for="event_url">
-                Appointment URL
+                {T('Appointment URL')}
               </Label>
               <Controller
                 defaultValue={(eventItem && eventItem.event_url) || ""}
@@ -464,7 +462,7 @@ const ModalAddEvent = props => {
 
             <div className="mb-1">
               <Label className="form-label" for="location">
-                Add Location
+                {T('Add Location')}
               </Label>
               <Controller
                 defaultValue={(eventItem && eventItem.location) || ""}
@@ -485,7 +483,7 @@ const ModalAddEvent = props => {
 
             <div className="mb-1">
               <Label className="form-label" for="Description">
-                Appointment Description
+                {T('Appointment Description')}
               </Label>
               <Controller
                 defaultValue={(eventItem && eventItem.description) || ""}

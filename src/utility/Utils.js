@@ -22,6 +22,7 @@ import {
 import moment from "moment"
 
 /* Imports for Encryption */
+const CryptoJS = require('crypto-js')
 const CryptoJSAES = require('crypto-js/aes')
 const CryptoEncHex = require('crypto-js/enc-hex')
 const padZeroPadding = require('crypto-js/pad-zeropadding')
@@ -278,19 +279,21 @@ export const selectThemeColors = theme => ({
   }
 })
 
-/* Encrypt data */
-export const encryptData = (data) => {
+/* Encrypting data */
+const encryptData = (data = "") => {
   try {
     const key = CryptoEncHex.parse(cryptoKey)
     const iv = CryptoEncHex.parse(cryptoIv)
+
     // Encrypt
-    const Encrypted = CryptoJSAES.encrypt(data, key, { iv: iv, padding: padZeroPadding }).toString()
+    const Encrypted = CryptoJSAES.encrypt(data || "", key, { iv: iv, padding: padZeroPadding }).toString()
     return Encrypted
   } catch (error) {
     console.log('>>>>: src/utility/Utils.js  : encryptData -> error', error)
-    return data
+    return false
   }
 }
+/* /Encrypting data */
 
 /* Return html value inside inner html */
 export const setInnerHtml = (value = "", classValue = "m-0") => {
@@ -409,31 +412,73 @@ export const getSiteLayoutSetting = () => {
   return _sitesetting
 }
 
-/* Get time counter from local storage */
-export const getTimeCounter = () => {
-  let timecounter = null
+/* Decrypting data */
+const decryptData = (encrypted = "") => {
   try {
-    timecounter = localStorage.getItem(storageTimeCounter) !== null ? JSON.parse(localStorage.getItem(storageTimeCounter)) : {
-      interval_time: 0,
-      current_time: 0,
-      status: false
-    }
-  } catch (error) {
-    console.log('>>>>: src/utility/Utils.js  : getTimeCounter -> error', error)
-    timecounter = null
-  }
-  return timecounter
-}
+    const key = CryptoEncHex.parse(cryptoKey)
+    const iv = CryptoEncHex.parse(cryptoIv)
 
-/* Set time counter on local storage  */
-export const setTimeCounter = (timecounter) => {
+    /* Decrypting */
+    let Decrypted = CryptoJSAES.decrypt(encrypted || "", key, { iv: iv, padding: padZeroPadding })
+    if (Decrypted) {
+      Decrypted = Decrypted.toString(CryptoJS.enc.Utf8)
+    }
+
+    return Decrypted
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js  : decryptData -> error', error)
+    return false
+  }
+}
+/* /Decrypting data */
+
+/* Encrypting auth remember me and setting to storage */
+const setRememberMeAuthData = (data = null) => {
   try {
-    if (timecounter) {
-      localStorage.setItem(storageTimeCounter, JSON.stringify(timecounter))
+    let rememberMe = null
+    if (data) {
+      const Encrypted = encryptData(JSON.stringify(data || ""))
+      if (Encrypted) {
+        rememberMe = Encrypted
+        localStorage.setItem(storageRememberMeAuth, JSON.stringify(Encrypted))
+      } else {
+        localStorage.removeItem(storageRememberMeAuth)
+      }
     } else {
-      localStorage.removeItem(storageTimeCounter)
+      rememberMe = null
+      localStorage.removeItem(storageRememberMeAuth)
+    }
+    return rememberMe
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js  : setRememberMeAuthData -> error', error)
+    return data
+  }
+}
+/* /Encrypting auth remember me and setting to storage */
+
+/* Decrypting auth remember me and getting from storage */
+const getRememberMeAuthData = () => {
+  let rememberMe = null
+  try {
+    rememberMe = localStorage.getItem(storageRememberMeAuth) !== null ? JSON.parse(localStorage.getItem(storageRememberMeAuth)) : null
+    if (rememberMe) {
+      const Decrypted = decryptData(rememberMe)
+      if (Decrypted) {
+        rememberMe = JSON.parse(Decrypted)
+      }
     }
   } catch (error) {
-    console.log('>>>>: src/utility/Utils.js : setTimeCounter -> error', error)
+    console.log('>>>>: src/utility/Utils.js  : getRememberMeAuthData -> error', error)
+    rememberMe = null
   }
+  return rememberMe
+}
+/* /Decrypting auth remember me and getting from storage */
+
+/* Exporting functions */
+export {
+  encryptData,
+  decryptData,
+  setRememberMeAuthData,
+  getRememberMeAuthData
 }

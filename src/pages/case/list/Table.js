@@ -20,19 +20,19 @@ import Select from "react-select"
 // ** Utils
 import {
     isUserLoggedIn,
+    getTotalNumber,
     getTransformDate,
     getRandColorClass,
-    getCurrentPageNumber, 
-    getTotalNumber
+    getCurrentPageNumber
 } from "@utils"
 
 // Constant
 import {
     root,
+    TN_CASES,
     adminRoot,
     perPageRowItems,
-    defaultPerPageRow,
-    TN_CASES
+    defaultPerPageRow
 } from "@constant/defaultValues"
 import {
     caseItem
@@ -56,9 +56,9 @@ import {
 
 // ** Custom Components
 import Avatar from "@components/avatar"
+import DotPulse from "@components/dotpulse"
 import Notification from '@components/toast/notification'
 import DatatablePagination from "@components/datatable/DatatablePagination"
-import DotPulse from "@components/dotpulse"
 
 /* Get windows size */
 function getWindowSize() {
@@ -164,7 +164,7 @@ const CaseList = () => {
                 status
             })
         )
-    }, [dispatch])
+    }, [])
 
     const handlePerPage = (value) => {
         setRowsPerPage(parseInt(value))
@@ -279,15 +279,28 @@ const CaseList = () => {
         if (store && store.error) {
             Notification("Error", store.error, "warning")
         }
-    }, [dispatch, store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
+    }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
     // console.log("store >>> ", store)
 
     // ** renders case column
     const renderCase = (row) => {
         if (row && row.profile_photo_path && row.profile_photo_path.length) {
-            return <Avatar className="me-1" img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`} width="32" height="32" />
+            return (
+                <Avatar
+                    width="32"
+                    height="32"
+                    className="me-50"
+                    img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`}
+                />
+            )
         } else {
-            return <Avatar color={getRandColorClass()} className="me-50" content={row ? row.name : ""} initials />
+            return (
+                <Avatar
+                    initials
+                    className="me-50"
+                    color={getRandColorClass()}
+                    content={row ? row.name : ""}
+                />)
         }
     }
 
@@ -299,8 +312,8 @@ const CaseList = () => {
     const columns = [
         {
             name: "",
-            minWidth: "60px",
-            maxWidth: "60px",
+            minWidth: "10%",
+            maxWidth: "10%",
             omit: plusIconAction,
             cell: (row) => (
                 <div className="d-flex align-items-center">
@@ -308,21 +321,31 @@ const CaseList = () => {
                         <PlusCircle color="#7367f0" size={17} />
                     </Button>
                 </div>
-            )
+            ),
+            /* Custom placeholder vars */
+            loaderContent: "--",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: "Reference Number#",
             sortable: true,
             sortField: "CaseID",
-            minWidth: "190px",
-            cell: row => <Link to={`${adminRoot}/case/view/${row.CaseID}`}>{`#${row.CaseID}`}</Link>
+            minWidth: "17%",
+            cell: (row) => <Link to={`${adminRoot}/case/view/${row.CaseID}`}>{`#${row.CaseID}`}</Link>,
+            /* Custom placeholder vars */
+            loaderContent: "Reference N#",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: "Client",
             sortable: true,
-            minWidth: "200px",
+            minWidth: "20%",
             sortField: "Name",
-            cell: row => {
+            cell: (row) => {
                 const name = row ? row.user && row.user.name : "John Doe"
                 return (
                     <div className="d-flex justify-content-left align-items-center">
@@ -335,81 +358,113 @@ const CaseList = () => {
                         </div>
                     </div>
                 )
-            }
+            },
+            /* Custom placeholder vars */
+            loaderContent: "Client -----------",
+            customLoadingWithIcon: "User",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: "Attorney",
             sortable: true,
             sortField: "LaywerID",
-            minWidth: "140px",
-            cell: (row) => row && row.laywer && row.laywer.id ? (<Link to={`${adminRoot}/user/view/${row.laywer.id}`}>{row.laywer.name}</Link>) : null
+            minWidth: "14%",
+            cell: (row) => row && row.laywer && row.laywer.id ? (<Link to={`${adminRoot}/user/view/${row.laywer.id}`}>{row.laywer.name}</Link>) : null,
+            /* Custom placeholder vars */
+            loaderContent: "LaywerID ---",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: "Datum",
+            name: "Date",
             sortable: true,
             sortField: "Date",
-            minWidth: "120px",
-            cell: (row) => row.Date && getTransformDate(row.Date, "DD MMM YYYY")
+            minWidth: "13%",
+            cell: (row) => row.Date && getTransformDate(row.Date, "DD MMM YYYY"),
+            /* Custom placeholder vars */
+            loaderContent: "Date --------",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: "Status",
             sortable: true,
             sortField: "Status",
-            minWidth: "50px",
-            cell: (row) => row.Status
+            minWidth: "12%",
+            cell: (row) => row.Status,
+            /* Custom placeholder vars */
+            loaderContent: "Status",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: "Group",
             sortable: true,
             sortField: "CaseTypeID",
-            minWidth: "50px",
-            cell: (row) => row && row.type && row.type.CaseTypeName
+            minWidth: "14%",
+            cell: (row) => row && row.type && row.type.CaseTypeName,
+            /* Custom placeholder vars */
+            loaderContent: "CaseTypeID --",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: 'Action',
-            minWidth: '90px',
+            name: "Action",
+            center: true,
+            minWidth: "10%",
             omit: dotIconAction,
             cell: (row) => (
-                <div className='column-action d-flex align-items-center'>
+                <div className="column-action d-flex align-items-center">
                     <Link
                         to={`${adminRoot}/case/view/${row.CaseID}`}
                     >
                         <Eye size={17} className="mx-1" />
                     </Link>
                 </div>
-            )
+            ),
+            /* Custom placeholder vars */
+            loaderContent: "--",
+            customLoaderCellClass: "text-center",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         }
     ]
-    
+
     return (<>
         <Card className="overflow-hidden">
             {(!store.loading && !getTotalNumber(TN_CASES)) ? (
-                    <DotPulse />
-                ) : (
-                    <DatatablePagination
-                        customClass="react-dataTable"
-                        columns={columns}
-                        data={store.caseItems}
-                        loading={store.loading}
-                        pagination={store.loading ? store.pagination : {
-                                ...store.pagination, 
-                                perPage: getCurrentPageNumber(TN_CASES, rowsPerPage, currentPage)
-                            }
-                        }
-                        handleSort={handleSort}
-                        handlePagination={handlePagination}
-                        subHeaderComponent={
-                            <CustomHeader
-                                searchInput={searchInput}
-                                rowsPerPage={rowsPerPage}
-                                handleSearch={handleSearch}
-                                handlePerPage={handlePerPage}
-                                statusFilter={statusFilter}
-                                handleStatusFilter={handleStatusFilter}
-                            />
-                        }
-                    />
-                )
+                <DotPulse />
+            ) : (
+                <DatatablePagination
+                    customClass="react-dataTable"
+                    columns={columns}
+                    data={store.caseItems}
+                    loading={store.loading}
+                    pagination={store.loading ? store.pagination : {
+                        ...store.pagination,
+                        perPage: getCurrentPageNumber(TN_CASES, rowsPerPage, currentPage)
+                    }
+                    }
+                    handleSort={handleSort}
+                    handlePagination={handlePagination}
+                    subHeaderComponent={
+                        <CustomHeader
+                            searchInput={searchInput}
+                            rowsPerPage={rowsPerPage}
+                            handleSearch={handleSearch}
+                            handlePerPage={handlePerPage}
+                            statusFilter={statusFilter}
+                            handleStatusFilter={handleStatusFilter}
+                        />
+                    }
+                />
+            )
             }
             <ModalCaseDetail
                 toggleModal={() => setDetailModalOpen(!detailModalOpen)}

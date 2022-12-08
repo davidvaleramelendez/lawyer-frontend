@@ -19,8 +19,8 @@ import {
 // ** Utils
 import {
     isUserLoggedIn,
-    getCurrentPageNumber, 
-    getTotalNumber
+    getTotalNumber,
+    getCurrentPageNumber
 } from '@utils'
 
 // Constant
@@ -50,9 +50,9 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
 // ** Custom Components
+import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
-import DotPulse from '@components/dotpulse'
 
 const CustomHeader = ({
     searchInput,
@@ -174,7 +174,7 @@ const LetterList = () => {
         if (store && store.error) {
             Notification("Error", store.error, "warning")
         }
-    }, [dispatch, store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
+    }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
     // console.log("store >>> ", store)
 
     const onLetterArchive = (id, type) => {
@@ -203,79 +203,103 @@ const LetterList = () => {
 
     const columns = [
         {
-            name: 'Reference Number',
+            name: "Reference Number",
             sortable: true,
-            sortField: 'case_id',
-            cellClass: 'text-uppercase',
-            minWidth: '210px',
-            cell: (row) => row.case_id
+            sortField: "case_id",
+            minWidth: "17%",
+            cell: (row) => row.case_id,
+            /* Custom placeholder vars */
+            loaderContent: "Reference N",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: 'Date',
+            name: "Date",
             sortable: true,
-            cellClass: 'text-uppercase',
-            minWidth: '180px',
-            sortField: 'last_date',
-            cell: (row) => row.last_date
+            sortField: "last_date",
+            minWidth: "18%",
+            cell: (row) => row.last_date,
+            /* Custom placeholder vars */
+            loaderContent: "Last Date",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: 'Subject',
+            name: "Subject",
             sortable: true,
-            cellClass: 'text-uppercase',
-            minWidth: '310px',
-            sortField: 'subject',
-            cell: (row) => row.subject
+            minWidth: "30%",
+            sortField: "subject",
+            cell: (row) => row.subject,
+            /* Custom placeholder vars */
+            loaderContent: "Subject ------------",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: 'Printed',
+            name: "Printed",
             sortable: true,
-            cellClass: 'text-uppercase',
-            minWidth: '140px',
-            // maxWidth: '50px',
-            sortField: 'is_print',
+            minWidth: "13%",
+            sortField: "is_print",
             cell: (row) => (
-                <div className='form-switch form-check-primary'>
+                <div className="form-switch form-check-primary">
                     <Input
-                        type='switch'
+                        type="switch"
                         checked={row.is_print}
                         id={`invoice_${row.id}_${row.is_print}`}
                         name={`invoice_${row.id}_${row.is_print}`}
                         className="cursor-pointer"
                         onChange={(event) => event.preventDefault()}
                     />
-                    <Label className='form-check-label' htmlFor="icon-primary">
-                        <span className='switch-icon-left'>
+                    <Label className="form-check-label" htmlFor="icon-primary">
+                        <span className="switch-icon-left">
                             <Check size={14} />
                         </span>
-                        <span className='switch-icon-right'>
+                        <span className="switch-icon-right">
                             <X size={14} />
                         </span>
                     </Label>
                 </div>
-            )
+            ),
+            /* Custom placeholder vars */
+            loaderContent: "Printed",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: 'Done?',
+            name: "Done?",
             sortable: true,
-            cellClass: 'text-uppercase',
-            minWidth: '120px',
-            sortField: 'is_archived',
+            minWidth: "12%",
+            sortField: "is_archived",
             cell: (row) => (
-                <Badge className="text-capitalize cursor-pointer" color="light-success" pill onClick={() => onLetterArchive(row.id, 'letter')}>
+                <Badge className="text-capitalize cursor-pointer" color="light-success" pill onClick={() => onLetterArchive(row.id, "letter")}>
                     Done
                 </Badge>
-            )
+            ),
+            /* Custom placeholder vars */
+            loaderContent: "Status",
+            customLoaderCellClass: "",
+            customLoaderContentClass: "rounded-pill"
+            /* /Custom placeholder vars */
         },
         {
-            name: 'View',
-            cellClass: 'text-uppercase',
-            minWidth: '50px',
+            name: "View",
+            center: true,
+            minWidth: "10%",
             cell: (row) => <a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.pdf_path}`} target="_blank" className="d-flex align-items-center" onClick={(event) => {
                 event.preventDefault()
                 onLetterPrint(row)
             }} rel="noopener noreferrer">
                 <Eye size={14} />
-            </a>
+            </a>,
+            /* Custom placeholder vars */
+            loaderContent: "--",
+            customLoaderCellClass: "text-center",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         }
     ]
 
@@ -285,30 +309,30 @@ const LetterList = () => {
                 <CardTitle tag="h4">Outbox</CardTitle>
             </CardHeader>
             {(!store.loading && !getTotalNumber(TN_OUTBOX)) ? (
-                    <DotPulse />
-                ) : (
-                    <DatatablePagination
-                        customClass="react-dataTable"
-                        columns={columns}
-                        loading={store.loading}
-                        data={store.letterItems}
-                        pagination={store.loading ? store.pagination : {
-                                ...store.pagination, 
-                                perPage: getCurrentPageNumber(TN_OUTBOX, rowsPerPage, currentPage)
-                            }
-                        }
-                        handleSort={handleSort}
-                        handlePagination={handlePagination}
-                        subHeaderComponent={
-                            <CustomHeader
-                                searchInput={searchInput}
-                                rowsPerPage={rowsPerPage}
-                                handleSearch={handleSearch}
-                                handlePerPage={handlePerPage}
-                            />
-                        }
-                    />
-                )
+                <DotPulse />
+            ) : (
+                <DatatablePagination
+                    customClass="react-dataTable"
+                    columns={columns}
+                    loading={store.loading}
+                    data={store.letterItems}
+                    pagination={store.loading ? store.pagination : {
+                        ...store.pagination,
+                        perPage: getCurrentPageNumber(TN_OUTBOX, rowsPerPage, currentPage)
+                    }
+                    }
+                    handleSort={handleSort}
+                    handlePagination={handlePagination}
+                    subHeaderComponent={
+                        <CustomHeader
+                            searchInput={searchInput}
+                            rowsPerPage={rowsPerPage}
+                            handleSearch={handleSearch}
+                            handlePerPage={handlePerPage}
+                        />
+                    }
+                />
+            )
             }
         </Card>
     </Fragment>) : null

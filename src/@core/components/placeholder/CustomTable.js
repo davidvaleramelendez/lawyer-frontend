@@ -1,10 +1,22 @@
 /* eslint-disable object-shorthand */
 
-// ** Reactstrap Imports
+// ** React Imports
 import { Fragment } from 'react'
+
+// ** Reactstrap Imports
 import {
     Table
 } from 'reactstrap'
+
+// ** Utils
+import {
+} from '@utils'
+
+// ** Icons Import
+import * as Icon from 'react-feather'
+
+// ** Custom Components
+import Avatar from '@components/avatar'
 
 const CustomTable = ({
     responsive = true,
@@ -24,13 +36,35 @@ const CustomTable = ({
             >
                 <thead
                     className={`${headerClassName}`}
+                    style={
+                        { height: `${bodyRowHeight}px` }
+                    }
                 >
                     <tr>
-                        {columns.map((col, index) => (
-                            !col.omit ? (
-                                <th key={`place-holder-head-${index}`}>{col.name || ""}</th>
-                            ) : null
-                        ))}
+                        {columns.map((col, index) => {
+                            const minWidth = col.minWidth || ""
+                            const maxWidth = col.maxWidth || ""
+                            const style = {}
+                            if (minWidth) {
+                                style.width = minWidth
+                            }
+
+                            if (maxWidth) {
+                                style.maxWidth = maxWidth
+                            }
+
+                            return (
+                                !col.omit ? (
+                                    <th
+                                        style={style}
+                                        key={`place-holder-head-${index}`}
+                                        className={`${col && col.customLoaderCellClass ? col.customLoaderCellClass : ''}`}
+                                    >
+                                        {col.name || ""}
+                                    </th>
+                                ) : null
+                            )
+                        })}
                     </tr>
                 </thead>
 
@@ -41,20 +75,22 @@ const CustomTable = ({
                         {Array.from(Array(bodyRows).keys(), (row, index) => (
                             <tr
                                 key={`place-holder-body-${index}`}
-                                style={
-                                    { height: `${bodyRowHeight}px` }
-                                }
                             >
                                 {columns.map((col, bodyIndex) => {
-                                    const minWidth = col.minWidth
-                                    const maxWidth = col.maxWidth
+                                    const minWidth = col.minWidth || ""
+                                    const maxWidth = col.maxWidth || ""
                                     const style = {}
                                     if (minWidth) {
-                                        style.minWidth = minWidth
+                                        style.width = minWidth
                                     }
 
                                     if (maxWidth) {
                                         style.maxWidth = maxWidth
+                                    }
+
+                                    let IconTag = ""
+                                    if (col && col.customLoadingWithIcon) {
+                                        IconTag = Icon[col.customLoadingWithIcon]
                                     }
 
                                     return (
@@ -64,9 +100,23 @@ const CustomTable = ({
                                             {!col.omit ? (
                                                 <td
                                                     style={style}
-                                                    className="placeholder-glow"
+                                                    className={`placeholder-glow ${col && col.customLoaderCellClass ? col.customLoaderCellClass : ''}`}
                                                 >
-                                                    <div className="placeholder w-100" />
+                                                    {IconTag ? (
+                                                        <Avatar
+                                                            size={"sm"}
+                                                            imgWidth='30'
+                                                            imgHeight='30'
+                                                            className="placeholder me-50"
+                                                            icon={<IconTag size={17} />}
+                                                        />
+                                                    ) : null}
+
+                                                    <div
+                                                        className={`placeholder ${col && col.customLoaderContentClass ? col.customLoaderContentClass : ''}`}
+                                                    >
+                                                        {col && col.loaderContent}
+                                                    </div>
                                                 </td>
                                             ) : null}
                                         </Fragment>)

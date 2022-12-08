@@ -3,13 +3,14 @@ export const adminRoot = '/apps'
 
 // Local storage variables
 export const storageUserKeyName = 'userData'
-export const storageSiteSetting = "siteSetting"
 export const storageTokenKeyName = 'accessToken'
-export const storageLoggedAtKeyName = 'loggedAt'
-export const storageRememberMeAuth = "LWY_KP_329"
-export const storageTotalNumberName = "totalNubmer"
 export const storageRefreshTokenKeyName = 'refreshToken'
 export const storageTokenExpiresKeyName = 'tokenExpires'
+export const storageLoggedAtKeyName = 'loggedAt'
+export const storageTotalNumberName = "totalNubmer"
+export const storageSiteSetting = "siteSetting"
+export const storageTimeCounter = "timecounter"
+export const storageRememberMeAuth = "LWY_KP_329"
 
 /* Hexadecimal key for encryption */
 export const cryptoKey = '731fc6d09baf51f8361fa6408f306ca9'

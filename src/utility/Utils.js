@@ -10,7 +10,6 @@ import {
   storageRefreshTokenKeyName,
   storageTokenExpiresKeyName,
   storageTotalNumberName,
-  storageSiteSetting,
   storageLanguageLabels
 } from '@constant/defaultValues'
 

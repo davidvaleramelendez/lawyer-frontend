@@ -45,6 +45,7 @@ const ModalAddEvent = props => {
     store,
     MySwal,
     dispatch,
+    calendarApi,
     createEvent,
     updateEvent,
     deleteEvent,
@@ -143,6 +144,10 @@ const ModalAddEvent = props => {
 
   // ** Reset Input Values on Close
   const handleSidebarClosed = () => {
+    if (calendarApi && calendarApi.unselect()) {
+      calendarApi.unselect()
+    }
+
     reset(addEventItem)
     dispatch(getEventItem(addEventItem))
     refetchEvents()

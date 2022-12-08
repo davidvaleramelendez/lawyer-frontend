@@ -49,13 +49,14 @@ const Calendar = (props) => {
       setCalendarApi(calendarRef.current.getApi())
     }
   }, [calendarApi])
-  
+
   // ** calendarOptions(Props)
   const calendarOptions = {
     events: store.eventItems.length ? [...store.eventItems] : [],
     plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
     initialView: 'dayGridMonth',
     selectable: true,
+    unselectAuto: false,
     headerToolbar: {
       start: 'sidebarToggle, prev,next, title',
       end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
@@ -63,7 +64,7 @@ const Calendar = (props) => {
     firstDay: 1,
     slotMinTime: '6:00:00',
     slotMaxTime: '24:00:00',
-    selectConstraint: "schedule",
+    // selectConstraint: "schedule",
     slotLabelFormat: {
       hour: '2-digit',
       minute: '2-digit',
@@ -123,15 +124,15 @@ const Calendar = (props) => {
         const rect = days_in_one_month[index].getBoundingClientRect()
         if (jsEvent.x > rect.left && jsEvent.y > rect.top && jsEvent.x < rect.right && jsEvent.y < rect.bottom) {
           break
-        }        
+        }
       }
-      
+
       if (clickedEvent._context.calendarApi.view.type === 'dayGridMonth') {
         const selected_date = days_in_one_month[index].getAttribute('data-date')
-  
+
         const start_clicked_time = `${selected_date} 00:00`
         const end_clicked_time = `${selected_date} 23:59`
-  
+
         const events_in_clicked_day = store.eventItems.filter(item => {
           return item.start <= end_clicked_time && item.end >= start_clicked_time
         })
@@ -147,11 +148,11 @@ const Calendar = (props) => {
               }
             }
           }
-  
+
           dispatch(getEventItem(evntData))
           setAddEventModalOpen(true)
         }
-      } 
+      }
 
 
       // * Only grab required field otherwise it goes in infinity loop
@@ -172,6 +173,7 @@ const Calendar = (props) => {
     },
 
     dateClick(info) {
+      console.log("dateClick >>> ", info)
       const start_clicked_time = `${info.dateStr} 00:00`
       const end_clicked_time = `${info.dateStr} 23:59`
 
@@ -187,7 +189,7 @@ const Calendar = (props) => {
         if (info.allDay) {
           evntData.allDay = info.allDay
         }
-  
+
         if (!info.allDay) {
           evntData.end_date = increaseCustomDateFormat(
             'minutes',
@@ -196,7 +198,7 @@ const Calendar = (props) => {
             info.date
           )
         }
-  
+
         dispatch(getEventItem(evntData))
         setAddEventModalOpen(true)
       }

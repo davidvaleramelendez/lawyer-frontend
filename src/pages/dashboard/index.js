@@ -36,9 +36,6 @@ import {
   cleanDashboardMessage
 } from './store'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Icons Import
 import {
   User,
@@ -62,9 +59,10 @@ import illustration from '@src/assets/images/illustration/email.svg'
 import '@styles/react/libs/charts/apex-charts.scss'
 import '@styles/base/pages/dashboard-ecommerce.scss'
 
+import { T } from '@localization'
+
 const EcommerceDashboard = () => {
   // ** Hooks
-  const { t } = useTranslation()
   const navigate = useNavigate()
 
   // ** Store Vars
@@ -108,7 +106,7 @@ const EcommerceDashboard = () => {
 
     return tags.map(item => (
       <Badge className='text-capitalize' key={item} color={badgeColor[item]} pill>
-        {item}
+        {T(item)}
       </Badge>
     ))
   }
@@ -250,7 +248,7 @@ const EcommerceDashboard = () => {
       <Row className="match-height">
         <Col xl={4} md={6} xs={12}>
           <CardMedal
-            t={t}
+            t={T}
             userName={(userData && userData.name) || ""}
             caseCount={(store.dashboardItems && store.dashboardItems.open_cases_count) || 0}
           />
@@ -258,7 +256,7 @@ const EcommerceDashboard = () => {
 
         <Col xl={8} md={6} xs={12}>
           <StatsCard
-            t={t}
+            t={T}
             cols={{ xl: "3", sm: "6" }}
             openCasesCount={(store.dashboardItems && store.dashboardItems.open_cases_count) || 0}
             holdCasesCount={(store.dashboardItems && store.dashboardItems.hold_cases) || 0}
@@ -275,7 +273,7 @@ const EcommerceDashboard = () => {
               {/* Todos */}
               <Card className='card-transaction'>
                 <CardHeader>
-                  <CardTitle tag='h4'>{t("Todo List")}</CardTitle>
+                  <CardTitle tag='h4'>{T("Todo List")}</CardTitle>
                 </CardHeader>
                 <CardBody>
                   {store.dashboardItems && store.dashboardItems.todos && store.dashboardItems.todos.length ? <>
@@ -289,7 +287,7 @@ const EcommerceDashboard = () => {
                       to={`${adminRoot}/todo`}
                       color="primary"
                     >
-                      {t("See all")}
+                      {T("See all")}
                     </Button>
                   </div>
                 </CardBody>
@@ -299,7 +297,7 @@ const EcommerceDashboard = () => {
               {/* Contacts */}
               <Card className='card-transaction'>
                 <CardHeader>
-                  <CardTitle tag='h4'>{t("New inquiry")}</CardTitle>
+                  <CardTitle tag='h4'>{T("New inquiry")}</CardTitle>
                 </CardHeader>
                 <CardBody>
                   {store.dashboardItems && store.dashboardItems.contacts && store.dashboardItems.contacts.length ? <>
@@ -313,7 +311,7 @@ const EcommerceDashboard = () => {
                       to={`${adminRoot}/contact`}
                       color="primary"
                     >
-                      {t("See all")}
+                      {T("See all")}
                     </Button>
                   </div>
                 </CardBody>
@@ -327,17 +325,17 @@ const EcommerceDashboard = () => {
           {/* Last open cases */}
           <Card className='card-company-table'>
             <CardHeader>
-              <CardTitle tag='h4'>{t("Open cases")}</CardTitle>
+              <CardTitle tag='h4'>{T("Open cases")}</CardTitle>
             </CardHeader>
 
             <Table responsive>
               <thead>
                 <tr>
-                  <th>{t("File")}</th>
-                  <th>{t("Client")}</th>
-                  <th>{t("Lawyer")}</th>
-                  <th>{t("Takeover Date")}</th>
-                  <th>{t("Stage")}</th>
+                  <th>{T("File")}</th>
+                  <th>{T("Client")}</th>
+                  <th>{T("Lawyer")}</th>
+                  <th>{T("Takeover Date")}</th>
+                  <th>{T("Stage")}</th>
                 </tr>
               </thead>
               {store.dashboardItems && store.dashboardItems.last_open_cases && store.dashboardItems.last_open_cases.length ? <>
@@ -354,18 +352,18 @@ const EcommerceDashboard = () => {
           {/* Invoices */}
           <Card className='card-company-table'>
             <CardHeader>
-              <CardTitle tag='h4'>{t("Open invoices")}</CardTitle>
+              <CardTitle tag='h4'>{T("Open invoices")}</CardTitle>
             </CardHeader>
 
             <Table responsive>
               <thead>
                 <tr>
-                  <th>{t("Invoice No.")}</th>
-                  <th>{t("File")}</th>
-                  <th>{t("Client")}</th>
-                  <th>{t("Total")}</th>
-                  <th>{t("Due date")}</th>
-                  <th>{t("Open amount")}</th>
+                  <th>{T("Invoice No.")}</th>
+                  <th>{T("File")}</th>
+                  <th>{T("Client")}</th>
+                  <th>{T("Total")}</th>
+                  <th>{T("Due date")}</th>
+                  <th>{T("Open amount")}</th>
                 </tr>
               </thead>
               {store.dashboardItems && store.dashboardItems.invoices && store.dashboardItems.invoices.length ? <>
@@ -380,7 +378,7 @@ const EcommerceDashboard = () => {
           {/* Chats */}
           <Card className='card-developer-meetup'>
             <CardHeader>
-              <CardTitle tag='h4'>{t("New Chats")}</CardTitle>
+              <CardTitle tag='h4'>{T("New Chats")}</CardTitle>
             </CardHeader>
             <div className='meetup-img-wrapper rounded-top text-center'>
               <img src={illustration} height='170' />
@@ -396,10 +394,10 @@ const EcommerceDashboard = () => {
                     className="mt-1"
                     color="primary"
                   >
-                    {t("See all")}
+                    {T("See all")}
                   </Button>
                 </div>
-              </> : `${t("No chats found")}`}
+              </> : `${T("No chats found")}`}
 
             </CardBody>
           </Card>

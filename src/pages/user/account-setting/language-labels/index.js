@@ -2,12 +2,8 @@
 
 // ** React Imports
 import { useEffect, useState } from 'react'
-import Select from 'react-select'
 
 // ** Store & Actions
-import {
-  setLanguageLabels
-} from '../../store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Reactstrap Imports
@@ -53,7 +49,7 @@ import '@styles/react/apps/app-users.scss'
 import '@styles/react/libs/editor/editor.scss'
 
 // ** localization keys
-import { L10nKeys } from '@localization'
+import { L10nKeys, L10nOrgKeys, L10nMenuItemIDKeys } from '@localization'
 
 // ** API calling components
 import axios from 'axios'
@@ -66,13 +62,15 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'react-tabs/style/react-tabs.css'
 import LabelsForm from './LabelsForm'
 
+import menuConfig from '@configs/menuConfig'
+import { updateLanguageLabels } from '../../../auth/store'
+
 const LanguageLabels = () => {
 
   // ** Store vars
   const dispatch = useDispatch()
   const store = useSelector((state) => state.user)
-
-  console.log('user language: ', store.userItem.language)
+  const userRole = useSelector(state => state.auth.userItem.role?.RoleName || null)
 
   /* State */
   const [loadFirst, setLoadFirst] = useState(true)
@@ -107,23 +105,60 @@ const LanguageLabels = () => {
   const getLanguageTranslation = (lang) => {
     axios.get(`${API_ENDPOINTS.language.labels}?language=${lang}`)
       .then((res) => {
-        console.log('---------- translation api: ', res)
-        const data = res.data.data
+        const data = res.data.data[lang] ? res.data.data[lang] : {}
+        const labels = {}
         Object.keys(L10nKeys).forEach(key => {
-          if (!data[key]) data[key] = {}
+          const origin = L10nKeys[key]
+          labels[origin] = origin
+          if (data[origin] !== undefined && data[origin] !== null && data[origin] !== '') {
+            labels[origin] = data[origin]
+          }
         })
 
-        Object.keys(L10nKeys.pages).forEach(key => {
-          if (!data[key]) data[key] = {}
-        })
-        setTranslation(data)
+        console.log('data: ', labels)
+        setTranslation(labels)
       })
       .catch((error) => {
         Notification("Error", error, "warning")
       })
   }
 
-  // ** Get user on mount based on id
+  async function setLanguageLabelsRequest(params) {
+    return axios.post(`${API_ENDPOINTS.language.labels}`, params).then((resp) => resp.data).catch((error) => error)
+  }
+
+  const setLanguageLabels = async (params) => {
+    try {
+      const response = await setLanguageLabelsRequest(params)
+      if (response && response.flag) {
+        Notification("Success", response.message, "success")
+
+        const updatedLabels = response.data     
+        const labels = {}   
+        Object.keys(updatedLabels).forEach(type => {
+          Object.keys(L10nKeys).forEach(key => {
+            if (labels[type] === undefined) labels[type] = {}
+
+            const origin = L10nKeys[key]
+            labels[type][origin] = origin
+            if (updatedLabels[type][origin] !== undefined 
+              && updatedLabels[type][origin] !== null
+              && updatedLabels[type][origin] !== '') {
+                labels[type][origin] = updatedLabels[type][origin]
+            }
+          })
+        })
+        
+        dispatch(updateLanguageLabels(labels))
+      } else {
+        Notification("Error", response.message, "warning")
+      }
+    } catch (error) {
+      Notification("Error", error, "warning")
+    }
+  }
+
+  // ** Get language labels
   useEffect(() => {
     /* Calling first time */
     if (loadFirst) {
@@ -132,6 +167,17 @@ const LanguageLabels = () => {
       setLoadFirst(false)
     }
   }, [loadFirst])
+
+  const onChangeLanguage = (value) => {
+    setSelLanguage(value)
+    getLanguageTranslation(value)
+  }
+
+  const isVisibleMenuItem = itemId => {
+    if (!userRole)  return false
+    if (menuConfig[userRole][itemId] === undefined) return true
+    return menuConfig[userRole][itemId]
+  }
 
   const toggleTab = (tab) => {
     if (active !== tab) {
@@ -143,53 +189,55 @@ const LanguageLabels = () => {
     return string.charAt(0).toUpperCase() + string.slice(1)
   }
 
-  const onChangeLanguage = (value) => {
-    setSelLanguage(value)
-    getLanguageTranslation(value)
-  }
-
-  const onChangeTranslation = (category, key, value) => {
+  const onChangeTranslation = (origin, value) => {
     const values = {...translation}
-    values[category][L10nKeys[category][key]] = value
+    values[origin] = value
     setTranslation(values)
   }
 
   const onSubmit = (category, values) => {
-    console.log(`category: ${category}`)
     console.log(`values: `, values)
     const params = {
       language: selLanguage,
-      category: category,
-      labels: []
+      labels: values
     }
-    Object.keys(values).forEach(key => {
-      params.labels.push({
-        origin: key,
-        translation: values[key]
-      })
-    })
+    console.log(`params: `, params)
 
-    dispatch(setLanguageLabels(params))
+    setLanguageLabels(params)
   }
 
   const getPageIconComponent = (page) => {
     switch (page) {
-      case "email":
+      case "Email":
         return <Mail size={14} />
-      case "documents":
+      case "Documents":
         return <Briefcase size={14} />
-      case "chat":
+      case "Chat":
         return <MessageCircle size={14} />
-      case "task":
+      case "Task":
         return <CheckSquare size={14} />
-      case "calendar":
+      case "Calendar":
         return <Calendar size={14} />
-      case "respites":
+      case "Respites":
         return <CheckCircle size={14} />
-      case "outbox":
+      case "Outbox":
         return <Send size={14} />
-      case "bills":
+      case "Bills":
         return <FileText size={14} />
+      case "Inquiry":
+        return <MessageSquare size={14} />
+      case "Contact":
+        return <FileText size={14} />
+      case "User":
+        return <User size={14} />
+      case "Account":
+        return <Settings size={14} />
+      case "Emial_Template":
+        return <Codepen size={14} />
+      case "Cloud_Server":
+        return <HardDrive size={14} />
+      case "Calendar_Setting":
+        return <Calendar size={14} />
     }
   }
 
@@ -213,64 +261,54 @@ const LanguageLabels = () => {
       </div>
       <Tabs>
         <TabList>
-          <Tab>Menu</Tab>
-          <Tab>Common</Tab>
-          <Tab>Pages</Tab>
-          <Tab>Errors</Tab>
+          {Object.keys(L10nOrgKeys).map(tabName => {
+            return <Tab key={tabName}>{tabName}</Tab>
+          })}
         </TabList>
 
-        <TabPanel>
-          <LabelsForm category={'menu'} 
-              origin={L10nKeys.menu} 
-              translation={translation ? translation['menu'] : null}
-              formId={'menu'} 
-              onChangeTranslation={onChangeTranslation}
-              onSubmitParent={onSubmit}/>
-        </TabPanel>
-        <TabPanel>
-          <LabelsForm category={'common'} 
-              origin={L10nKeys.common} 
-              translation={translation ? translation['common'] : null}
-              formId={'common'}  
-              onChangeTranslation={onChangeTranslation}
-              onSubmitParent={onSubmit}/>
-        </TabPanel>
-        <TabPanel>
-          <Nav pills className="mb-2">
-            {Object.keys(L10nKeys.pages).map((page, i) => {
-              return (
-                <NavItem key={page + i}>
-                  <NavLink active={active === i} onClick={() => toggleTab(i)}>
-                    {getPageIconComponent(page)}
-                    <span className="fw-bold d-none d-sm-block">{capitalizeFirstLetter(page)}</span>
-                  </NavLink>
-                </NavItem>
-              )
-            })}
-          </Nav>
-          <TabContent activeTab={active}>
-            {Object.keys(L10nKeys.pages).map((page, i) => {
-              return (
-                <TabPane tabId={i} key={page + i}>
-                  <LabelsForm category={page} 
-                      origin={L10nKeys.pages[page]} 
-                      translation={translation ? translation[page] : null}
-                      formId={page}  
-                      onChangeTranslation={onChangeTranslation}
-                      onSubmitParent={onSubmit}/>
-                </TabPane>
-              )
-            })}
-          </TabContent>
-        </TabPanel>
-        <TabPanel>
-          <LabelsForm category={'errors'} 
-              translation={translation ? translation['errors'] : null}
-              origin={L10nKeys.errors} 
-              formId={'errors'} 
-              onChangeTranslation={onChangeTranslation}
-              onSubmitParent={onSubmit}/>
-        </TabPanel>
+        {Object.keys(L10nOrgKeys).map((tabName) => {
+          return Array.isArray(L10nOrgKeys[tabName]) ? (
+              <TabPanel key={tabName}>
+                <LabelsForm category={tabName} 
+                    originKeys={L10nOrgKeys[tabName]} 
+                    translation={translation}
+                    formId={tabName}
+                    isVisibleMenuItem={isVisibleMenuItem}
+                    onChangeTranslation={onChangeTranslation}
+                    onSubmitParent={onSubmit}/>
+              </TabPanel>
+            ) : (
+              <TabPanel key={tabName}>
+                <Nav pills className="mb-2">
+                  {Object.keys(L10nOrgKeys[tabName]).map((subTabName, i) => {
+                    return isVisibleMenuItem(L10nMenuItemIDKeys[subTabName]) ? (
+                      <NavItem key={subTabName + i}>
+                        <NavLink active={active === i} onClick={() => toggleTab(i)}>
+                          {getPageIconComponent(subTabName)}
+                          <span className="fw-bold d-none d-sm-block">{capitalizeFirstLetter(subTabName)}</span>
+                        </NavLink>
+                      </NavItem>
+                    ) : null
+                  })}
+                </Nav>
+                <TabContent activeTab={active}>
+                  {Object.keys(L10nOrgKeys[tabName]).map((subTabName, i) => {
+                    return isVisibleMenuItem(L10nMenuItemIDKeys[subTabName]) ? (
+                      <TabPane tabId={i} key={subTabName + i}>
+                        <LabelsForm category={subTabName} 
+                            originKeys={L10nOrgKeys[tabName][subTabName]} 
+                            translation={translation}
+                            formId={subTabName}
+                            isVisibleMenuItem={isVisibleMenuItem}
+                            onChangeTranslation={onChangeTranslation}
+                            onSubmitParent={onSubmit}/>
+                      </TabPane>
+                    ) : null
+                  })}
+                </TabContent>
+              </TabPanel>
+          )          
+        })}
       </Tabs>
     </div>
   </>)

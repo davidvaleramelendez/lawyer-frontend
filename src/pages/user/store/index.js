@@ -25,6 +25,7 @@ import {
 import axios from 'axios'
 
 import { TN_USER } from '@constant/defaultValues'
+import { L10nKeys } from '../../../utility/Localization'
 
 /* User */
 async function getUserStatsListRequest(params) {
@@ -392,6 +393,9 @@ export const saveAccount = createAsyncThunk('appUser/saveAccount', async (payloa
     if (response && response.flag) {
       response.data.userData.ability = [{ action: "manage", subject: "all" }]
       setCurrentUser(response.data.userData)
+      if (response.data.languageChanged) {
+        location.reload()
+      }
       return {
         userItem: response.data.userData,
         roleItems: response.data.roles,
@@ -552,77 +556,6 @@ export const getUserDeviceLogs = createAsyncThunk('appUser/getUserDeviceLogs', a
 })
 /* /Login History */
 
-/* Language & Labels */
-async function getLanguageLabelsRequest(params) {
-  return axios.get(`${API_ENDPOINTS.language.labels}`, { params }).then((user) => user.data).catch((error) => error)
-}
-
-export const getLanguageLabels = createAsyncThunk('appUser/getLanguageLabels', async (params) => {
-  try {
-    const response = await getLanguageLabelsRequest(params)
-    if (response && response.flag) {
-      return {
-        languageLabels: response.data,
-        actionFlag: "",
-        success: response.message,
-        error: ""
-      }
-    } else {
-      return {
-        languageLabels: [],
-        actionFlag: "",
-        success: "",
-        error: ""
-      }
-    }
-  } catch (error) {
-    console.log("getLanguageLabels catch ", error)
-    return {
-      languageLabels: [],
-      actionFlag: "",
-      success: "",
-      error: error
-    }
-  }
-})
-
-async function setLanguageLabelsRequest(params) {
-  return axios.post(`${API_ENDPOINTS.language.labels}`, params).then((resp) => resp.data).catch((error) => error)
-}
-
-export const setLanguageLabels = createAsyncThunk('appUser/setLanguageLabels', async (params) => {
-  try {
-    const response = await setLanguageLabelsRequest(params)
-    if (response && response.flag) {
-      return {
-        logParams: params,
-        languageLabels: response.data,
-        actionFlag: "",
-        success: response.message,
-        error: ""
-      }
-    } else {
-      return {
-        logParams: params,
-        languageLabels: null,
-        actionFlag: "",
-        success: "",
-        error: ""
-      }
-    }
-  } catch (error) {
-    console.log("setLanguageLabels catch ", error)
-    return {
-      logParams: params,
-      languageLabels: null,
-      actionFlag: "",
-      success: "",
-      error: error
-    }
-  }
-})
-/* /Language & Labels */
-
 export const appUserSlice = createSlice({
   name: 'appUser',
   initialState: {
@@ -781,23 +714,6 @@ export const appUserSlice = createSlice({
         state.error = action.payload.error
       })
     /* /Login History */
-
-      /* Language & Labels */
-      .addCase(getLanguageLabels.fulfilled, (state, action) => {
-        state.languageLabels = action.payload.languageLabels
-        state.loading = true
-        state.success = action.payload.success
-        state.error = action.payload.error
-      })
-      .addCase(setLanguageLabels.fulfilled, (state, action) => {
-        if (action.payload.languageLabels && action.payload.logParams.language === state.userItem.language) {
-          state.languageLabels = action.payload.languageLabels
-        }
-        state.loading = true
-        state.success = action.payload.success
-        state.error = action.payload.error
-      })
-    /* /Language & Labels */
   }
 })
 

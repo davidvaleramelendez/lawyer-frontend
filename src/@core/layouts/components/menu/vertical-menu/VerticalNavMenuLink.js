@@ -3,20 +3,21 @@ import { NavLink } from 'react-router-dom'
 
 // ** Third Party Components
 import classnames from 'classnames'
-import { useTranslation } from 'react-i18next'
 
 // ** Reactstrap Imports
 import { Badge, UncontrolledTooltip  } from 'reactstrap'
 
 import { useSelector } from 'react-redux'
+import { T } from '@localization'
 
 const VerticalNavMenuLink = ({ item, activeItem }) => {
   // ** Conditional Link Tag, if item has newTab or externalLink props use <a> tag else use NavLink
   const LinkTag = item.externalLink ? 'a' : NavLink
 
+
   // ** Hooks
-  const { t } = useTranslation()
   const layoutStore = useSelector(state => state.layout)
+
   return (
     <li
       id={item.title.split(' ').join('-')}
@@ -49,7 +50,7 @@ const VerticalNavMenuLink = ({ item, activeItem }) => {
         }}
       >
         {item.icon}
-        <span className='menu-item text-truncate'>{t(item.title)}</span>
+        <span className='menu-item text-truncate'>{T(item.title)}</span>
 
         {item.badge && item.badgeText ? (
           <Badge className='ms-auto me-1' color={item.badge} pill>
@@ -59,7 +60,7 @@ const VerticalNavMenuLink = ({ item, activeItem }) => {
       </LinkTag>
       { layoutStore.menuCollapsed === true ? (
           <UncontrolledTooltip placement='left' target={item.title.split(' ').join('-')}>
-            {item.title}
+            {T(item.title)}
           </UncontrolledTooltip> 
         ) : ''
       }

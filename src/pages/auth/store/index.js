@@ -25,11 +25,14 @@ import {
   getTokenExpires,
   getRefreshToken,
   setRefreshToken,
-  getTransformDate
+  getTransformDate,
+  getLanguageLabels,
+  setLanguageLabels
 } from '@utils'
 
 // ** Axios Imports
 import axios from 'axios'
+import { L10nKeys, getDefaultLanguageLabels } from '../../../utility/Localization'
 
 async function loginRequest(payload) {
   return axios.post(`${API_ENDPOINTS.auth.login}`, payload).then((auth) => auth.data).catch((error) => error)
@@ -48,11 +51,30 @@ export const login = createAsyncThunk('appAuth/login', async (payload) => {
       await setTokenExpires(tokenExpires)
       await setLoggedAt(loggedAt)
 
+      const labels = getDefaultLanguageLabels()
+      const respLangLabels = response.data.languageLabels
+      if (Object.keys(respLangLabels).length) {
+        Object.keys(respLangLabels).forEach(type => {
+          if (labels[type] === undefined) labels[type] = {}
+
+          Object.keys(L10nKeys).forEach(key => {
+            const origin = L10nKeys[key]
+            if (respLangLabels[type][origin] !== undefined 
+              && respLangLabels[type][origin] !== null
+              && respLangLabels[type][origin] !== '') {
+              labels[type][origin] = respLangLabels[type][origin]
+            }
+          })
+        })
+      }
+      await setLanguageLabels(labels)
+
       return {
         userItem: response.data.userData,
         accessToken: response.data.accessToken,
         refreshToken: getRefreshToken(),
         tokenExpires: tokenExpires,
+        languageLabels: labels,
         loggedAt: loggedAt,
         actionFlag: "LOGGED",
         success: response.message,
@@ -91,6 +113,7 @@ export const refreshToken = createAsyncThunk('appAuth/refreshToken', async () =>
       return {
         accessToken: response.data.accessToken,
         refreshToken: response.data.accessToken,
+        languageLabels: response.data.languageLabels,
         tokenExpires: tokenExpires,
         actionFlag: "REFRESH",
         success: response.message,
@@ -162,6 +185,7 @@ export const appAuthSlice = createSlice({
     refreshToken: getRefreshToken(),
     tokenExpires: getTokenExpires(),
     loggedAt: getLoggedAt(),
+    languageLabels: getLanguageLabels() ? getLanguageLabels() : getDefaultLanguageLabels(),
     actionFlag: "",
     loading: true,
     success: "",
@@ -176,6 +200,11 @@ export const appAuthSlice = createSlice({
       state.actionFlag = ""
       state.success = ""
       state.error = ""
+    }, 
+
+    updateLanguageLabels: (state, action) => {
+      state.languageLabels = action.payload
+      setLanguageLabels(action.payload)
     }
   },
   extraReducers: (builder) => {
@@ -186,6 +215,11 @@ export const appAuthSlice = createSlice({
         state.refreshToken = action.payload.refreshToken
         state.tokenExpires = action.payload.tokenExpires
         state.loggedAt = action.payload.loggedAt
+        
+        if (action.payload.languageLabels !== undefined) {
+          state.languageLabels = action.payload.languageLabels
+        }
+
         state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success
@@ -206,7 +240,7 @@ export const appAuthSlice = createSlice({
         state.accessToken = getAccessToken()
         state.refreshToken = getRefreshToken()
         state.tokenExpires = getTokenExpires()
-        state.loggedAt = getLoggedAt()
+        state.loggedAt = getLoggedAt()        
         state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success
@@ -217,7 +251,8 @@ export const appAuthSlice = createSlice({
 
 export const {
   updateAuthLoader,
-  cleanAuthMessage
+  cleanAuthMessage,
+  updateLanguageLabels
 } = appAuthSlice.actions
 
 export default appAuthSlice.reducer

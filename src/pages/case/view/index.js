@@ -126,7 +126,7 @@ const CaseView = () => {
 
   // Check TimeCounterModal 
   useEffect(() => {
-    const time_modal_status = getTimeCounter().status
+    const time_modal_status = getTimeCounter()?.status
     if (time_modal_status === true) {
       setTimeCounterTerminalOpen(true)
     }

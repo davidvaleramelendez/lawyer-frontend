@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux'
-import { updateTimeCaseRecord, deleteTimeCaseRecord } from '../store'
+import { updateTimeCaseRecord, deleteTimeCaseRecord, setStartTime } from '../store'
 
 // ** Reactstrap Imports
 import {
@@ -43,8 +43,8 @@ const TerminalCaseTimeTrackingCounter = ({
   const { t } = useTranslation()
 
   // ** Store vars
-  const [currentTime, setCurrentTime] = useState(getTimeCounter().current_time ?? 0)
-  const [status, setStatus] = useState(getTimeCounter().state ?? false)
+  const [currentTime, setCurrentTime] = useState(getTimeCounter()?.current_time ?? 0)
+  const [status, setStatus] = useState(getTimeCounter()?.state ?? false)
   const [alarmModal, setAlarmModal] = useState(false)
   const [stopModal, setStopModal] = useState(false)
 
@@ -55,6 +55,9 @@ const TerminalCaseTimeTrackingCounter = ({
     if (open) {
       setAlarmModal(false)
       setStopModal(false)
+      if (!start_time) {
+        dispatch(setStartTime(getTimeCounter().start_time))
+      }
       myInterval = setInterval(() => {
         if (stopModal) {
           return prevTime
@@ -63,11 +66,11 @@ const TerminalCaseTimeTrackingCounter = ({
           if (!prevStop) {
             setCurrentTime(prevTime => {
               const timeCounter = getTimeCounter()
-              if ((getTimeCounter().interval_time - prevTime) === 5) {
+              if ((getTimeCounter()?.interval_time - prevTime) === 5) {
                 setAlarmModal(true)
               }
       
-              if (prevTime === getTimeCounter().interval_time) {
+              if (prevTime === getTimeCounter()?.interval_time) {
                 clearInterval(myInterval)
                 setTimeCounter({
                   ...getTimeCounter(),
@@ -75,7 +78,7 @@ const TerminalCaseTimeTrackingCounter = ({
                 })
               }
     
-              if (timeCounter.status && prevTime < timeCounter.interval_time) {
+              if (timeCounter.status && prevTime < timeCounter?.interval_time) {
                 setStatus(true)
                 setTimeCounter({
                   ...timeCounter,
@@ -132,11 +135,11 @@ const TerminalCaseTimeTrackingCounter = ({
         <CardBody>
           <h3>{t("Terminal")}</h3>
           <hr />
-          <div className='row align-items-center'>
+          <div className='row align-items-center mt-3'>
             <div className="col-7">
               <div className="mx-auto time-tracking">
                 <CircularProgressbar 
-                  value={currentTime * 100 / getTimeCounter().interval_time} 
+                  value={currentTime * 100 / getTimeCounter()?.interval_time} 
                   text={`${toTimeString(currentTime)}`}
                   styles={buildStyles({
                     textSize: '12px'
@@ -148,17 +151,17 @@ const TerminalCaseTimeTrackingCounter = ({
               <div className='d-flex'>
                 <Clock size={16} className="me-1"/> <h5 className='mb-0'>Recorded Time</h5>
               </div>
-              <h2 className='mt-2'>{toTimeString(currentTime, 'min')}</h2>
-              <div className='mt-5 d-flex'>
+              <h2 className='mt-1'>{toTimeString(currentTime, 'min')}</h2>
+              <div className='mt-3 d-flex'>
                 <Clock size={16} className="me-1"/> <h5 className='mb-0'>Started Time</h5>
               </div>
-              <h2 className='mt-2'>{`${start_time ?? ''}`}</h2>
+              <h2 className='mt-1'>{`${start_time ?? ''}`}</h2>
             </div>
           </div>
 
           <Row className="mt-5 mb-1">
             <div className="d-flex justify-content-center">
-              {!status && currentTime === getTimeCounter().interval_time ? (
+              {!status && currentTime === getTimeCounter()?.interval_time ? (
                 <>
                   <Button type="submit" size='lg' color="primary" className='me-3' onClick={handleSave}>
                     {t("Save")}

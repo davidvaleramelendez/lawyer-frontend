@@ -17,8 +17,8 @@ import {
 
 // ** Axios Imports
 import axios from 'axios'
-import { setTotalNumber } from '@src/utility/Utils'
 import { TN_CASES } from '@constant/defaultValues'
+import { setTotalNumber, getTimeCounter, setTimeCounter } from '@utils'
 
 async function getCaseListRequest(params) {
   return axios.get(`${API_ENDPOINTS.cases.list}`, { params }).then((cases) => cases.data).catch((error) => error)
@@ -782,7 +782,10 @@ export const createTimeCaseRecord = createAsyncThunk('appCase/createTimeCaseReco
     const response = await createTimeCaseRecordRequest(payload)
     if (response && response.flag) {
       await dispatch(getTimeCaseRecords(getState().cases.id))
-      console.log(response.data.start_time)
+      setTimeCounter({
+        ...getTimeCounter(),
+        start_time: response.data.start_time
+      })
       return {
         attachments: [],
         actionFlag: "TIME_CREATED",
@@ -917,6 +920,10 @@ export const appCaseSlice = createSlice({
 
     updateSelectedDetails: (state, action) => {
       state.selectedItem = action.payload || null
+    },
+    
+    setStartTime: (state, action) => {
+      state.start_time = action.payload || null
     }
   },
   extraReducers: (builder) => {
@@ -1114,7 +1121,8 @@ export const appCaseSlice = createSlice({
 export const {
   updateCaseLoader,
   clearCaseMessage,
-  updateSelectedDetails
+  updateSelectedDetails,
+  setStartTime
 } = appCaseSlice.actions
 
 export default appCaseSlice.reducer

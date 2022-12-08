@@ -3,8 +3,8 @@
 const authenticationConfig = {
   LoginTemplate: {
     basic: false,
-    cover: false,
-    simple: true
+    cover: true,
+    simple: false
   }
 }
 

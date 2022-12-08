@@ -15,8 +15,8 @@ import {
 // ** Utils
 import {
     isUserLoggedIn,
-    getRandColorClass,
     getTotalNumber,
+    getRandColorClass,
     getCurrentPageNumber
 } from '@utils'
 
@@ -24,9 +24,9 @@ import {
 import {
     root,
     adminRoot,
+    TN_CONTACT,
     perPageRowItems,
-    defaultPerPageRow,
-    TN_CONTACT
+    defaultPerPageRow
 } from '@constant/defaultValues'
 
 // ** Store & Actions
@@ -46,9 +46,9 @@ import ModalAddContact from '../modals/ModalAddContact'
 
 // ** Custom Components
 import Avatar from '@components/avatar'
+import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
-import DotPulse from '@components/dotpulse'
 
 const CustomHeader = ({
     searchInput,
@@ -201,97 +201,131 @@ const ContactList = () => {
         if (store && store.error) {
             Notification("Error", store.error, "warning")
         }
-    }, [dispatch, store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
+    }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
     // console.log("store >>> ", store)
 
     // ** renders contact column
     const renderContact = (row) => {
         if (row.image && row.image.length) {
-            return <Avatar className='me-1' img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.image}`} width='32' height='32' />
+            return (
+                <Avatar
+                    width='32'
+                    height='32'
+                    className='me-50'
+                    img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.image}`}
+                />
+            )
         } else {
-            return <Avatar color={getRandColorClass()} className='me-50' content={row ? row.Name : 'John Doe'} initials />
+            return (
+                <Avatar
+                    initials
+                    className='me-50'
+                    color={getRandColorClass()}
+                    content={row ? row.Name : 'John Doe'}
+                />
+            )
         }
     }
 
     const columns = [
         {
-            name: 'Ticket#',
+            name: "Ticket#",
             sortable: true,
-            sortField: 'ContactID',
-            cellClass: 'text-uppercase',
-            minWidth: '100px',
-            cell: row => <Link to={`${adminRoot}/contact/view/${row.ContactID}`}>{`#${row.ContactID}`}</Link>
+            minWidth: "20%",
+            sortField: "ContactID",
+            cell: (row) => <Link to={`${adminRoot}/contact/view/${row.ContactID}`}>{`#${row.ContactID}`}</Link>,
+            /* Custom placeholder vars */
+            loaderContent: "Ticket#",
+            customLoadingWithIcon: "",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: 'Name',
+            name: "Name",
             sortable: true,
-            cellClass: 'text-uppercase',
-            minWidth: '250px',
-            sortField: 'Name',
-            cell: row => {
-                const name = row ? row.Name : 'John Doe'
+            minWidth: "30%",
+            sortField: "Name",
+            cell: (row) => {
+                const name = row ? row.Name : "John Doe"
                 return (
-                    <div className='d-flex justify-content-left align-items-center'>
+                    <div className="d-flex justify-content-left align-items-center">
                         {renderContact(row)}
-                        <div className='d-flex flex-column'>
-                            <h6 className='user-name text-truncate mb-0'>{name}</h6>
+                        <div className="d-flex flex-column">
+                            <h6 className="user-name text-truncate mb-0">{name}</h6>
                         </div>
                     </div>
                 )
-            }
+            },
+            /* Custom placeholder vars */
+            loaderContent: "John Doe",
+            customLoadingWithIcon: "User",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: 'Email',
+            name: "Email",
             sortable: true,
-            cellClass: 'text-uppercase',
-            minWidth: '350px',
-            sortField: 'Email',
-            cell: row => row.Email
+            minWidth: "40%",
+            sortField: "Email",
+            cell: row => row.Email,
+            /* Custom placeholder vars */
+            loaderContent: "johndoe@example.com",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: 'Action',
-            minWidth: '110px',
+            name: "Action",
+            center: true,
+            minWidth: "10%",
             cell: row => (
-                <div className='column-action d-flex align-items-center'>
+                <div className="column-action d-flex align-items-center">
                     <Link to={`${adminRoot}/contact/view/${row.ContactID}`} id={`pw-tooltip-${row.ContactID}`}>
-                        <Eye size={17} className='mx-1' />
+                        <Eye size={17} className="mx-1" />
                     </Link>
-                    <UncontrolledTooltip placement='top' target={`pw-tooltip-${row.ContactID}`}>
+                    <UncontrolledTooltip placement="top" target={`pw-tooltip-${row.ContactID}`}>
                         View Contact
                     </UncontrolledTooltip>
                 </div>
-            )
+            ),
+            /* Custom placeholder vars */
+            loaderContent: "---",
+            customLoaderCellClass: "text-center",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         }
     ]
 
     return store ? (<>
         <Card className="overflow-hidden">
             {(!store.loading && !getTotalNumber(TN_CONTACT)) ? (
-                    <DotPulse />
-                ) : (
-                    <DatatablePagination
-                        customClass="react-dataTable"
-                        columns={columns}
-                        loading={store.loading}
-                        data={store.contactItems}
-                        pagination={store.loading ? store.pagination : {
-                                ...store.pagination, 
-                                perPage: getCurrentPageNumber(TN_CONTACT, rowsPerPage, currentPage)
-                            }
-                        }
-                        handleSort={handleSort}
-                        handlePagination={handlePagination}
-                        subHeaderComponent={
-                            <CustomHeader
-                                searchInput={searchInput}
-                                rowsPerPage={rowsPerPage}
-                                handleSearch={handleSearch}
-                                handlePerPage={handlePerPage}
-                                setModalOpen={setModalOpen}
-                            />
-                        }
-                    />
-                )
+                <DotPulse />
+            ) : (
+                <DatatablePagination
+                    customClass="react-dataTable"
+                    columns={columns}
+                    loading={store.loading}
+                    data={store.contactItems}
+                    pagination={store.loading ? store.pagination : {
+                        ...store.pagination,
+                        perPage: getCurrentPageNumber(TN_CONTACT, rowsPerPage, currentPage)
+                    }
+                    }
+                    handleSort={handleSort}
+                    handlePagination={handlePagination}
+                    subHeaderComponent={
+                        <CustomHeader
+                            searchInput={searchInput}
+                            rowsPerPage={rowsPerPage}
+                            handleSearch={handleSearch}
+                            handlePerPage={handlePerPage}
+                            setModalOpen={setModalOpen}
+                        />
+                    }
+                />
+            )
             }
             <ModalAddContact
                 toggleModal={() => setModalOpen(!modalOpen)}

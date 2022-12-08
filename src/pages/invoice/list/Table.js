@@ -24,21 +24,21 @@ import Select from 'react-select'
 // ** Utils
 import {
     isUserLoggedIn,
+    getTotalNumber,
     getDecimalFormat,
     getTransformDate,
     getRandColorClass,
-    capitalizeWordFirstLetter,
-    getCurrentPageNumber, 
-    getTotalNumber
+    getCurrentPageNumber,
+    capitalizeWordFirstLetter
 } from '@utils'
 
 // Constant
 import {
     root,
     adminRoot,
+    TN_INVOICE,
     perPageRowItems,
-    defaultPerPageRow,
-    TN_INVOICE
+    defaultPerPageRow
 } from '@constant/defaultValues'
 import {
     invoiceItem
@@ -76,9 +76,9 @@ import withReactContent from 'sweetalert2-react-content'
 
 // ** Custom Components
 import Avatar from '@components/avatar'
+import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
-import DotPulse from '@components/dotpulse'
 
 // Modal
 import ModalSendInvoice from '../modals/ModalSendInvoice'
@@ -338,15 +338,29 @@ const InvoiceList = () => {
         return () => {
             window.removeEventListener('resize', handleWindowResize)
         }
-    }, [dispatch, store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, windowSize, loadFirst])
+    }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, windowSize, loadFirst])
     // console.log("store >>> ", store)
 
     // ** renders contact column
     const renderUser = (row) => {
         if (row && row.profile_photo_path && row.profile_photo_path.length) {
-            return <Avatar className='me-1' img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`} width='32' height='32' />
+            return (
+                <Avatar
+                    width='32'
+                    height='32'
+                    className='me-50'
+                    img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`}
+                />
+            )
         } else {
-            return <Avatar color={getRandColorClass()} className='me-50' content={row ? row.name : 'John Doe'} initials />
+            return (
+                <Avatar
+                    initials
+                    className='me-50'
+                    color={getRandColorClass()}
+                    content={row ? row.name : 'John Doe'}
+                />
+            )
         }
     }
 
@@ -362,12 +376,12 @@ const InvoiceList = () => {
 
     const columns = [
         {
-            name: '',
-            minWidth: '60px',
-            maxWidth: '60px',
+            name: "",
+            minWidth: "15%",
+            maxWidth: "15%",
             omit: plusIconAction,
             cell: (row) => (
-                <div className='d-flex align-items-center'>
+                <div className="d-flex align-items-center">
                     <PlusCircle
                         size={17}
                         color="#7367f0"
@@ -378,71 +392,99 @@ const InvoiceList = () => {
             )
         },
         {
-            name: 'Invoice Number',
+            name: "Invoice Number",
             sortable: true,
-            sortField: 'invoice_no',
-            minWidth: '190px',
-            cell: (row) => <Link to={`${adminRoot}/invoice/view/${row.id}`}>{`#${row.invoice_no}`}</Link>
+            sortField: "invoice_no",
+            minWidth: "20%",
+            cell: (row) => <Link to={`${adminRoot}/invoice/view/${row.id}`}>{`#${row.invoice_no}`}</Link>,
+            /* Custom placeholder vars */
+            loaderContent: "Invoice No",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: 'Status',
+            name: "Status",
             sortable: true,
-            sortField: 'status',
-            minWidth: '70px',
+            sortField: "status",
+            minWidth: "13%",
             cell: (row) => {
-                const color = invoiceStatus[row.status] ? invoiceStatus[row.status].color : 'primary',
+                const color = invoiceStatus[row.status] ? invoiceStatus[row.status].color : "primary",
                     Icon = invoiceStatus[row.status] ? invoiceStatus[row.status].icon : Edit
                 return (
                     <Fragment>
                         <Avatar color={color} icon={<Icon size={14} />} id={`av-tooltip-${row.id}`} />
-                        <UncontrolledTooltip placement='top' target={`av-tooltip-${row.id}`}>
-                            <span className='fw-bold'>{row.status && capitalizeWordFirstLetter(row.status)}</span>
+                        <UncontrolledTooltip placement="top" target={`av-tooltip-${row.id}`}>
+                            <span className="fw-bold">{row.status && capitalizeWordFirstLetter(row.status)}</span>
                             <br />
-                            <span className='fw-bold'>Balance:</span> {row && row.remaining_amount && getDecimalFormat(row.remaining_amount)}
+                            <span className="fw-bold">Balance:</span> {row && row.remaining_amount && getDecimalFormat(row.remaining_amount)}
                             <br />
-                            <span className='fw-bold'>Due Date:</span> {row.invoice_due_date && getTransformDate(row.invoice_due_date, "DD/MM/YYYY")}
+                            <span className="fw-bold">Due Date:</span> {row.invoice_due_date && getTransformDate(row.invoice_due_date, "DD/MM/YYYY")}
                         </UncontrolledTooltip>
                     </Fragment>
                 )
-            }
+            },
+            /* Custom placeholder vars */
+            loaderContent: "Status",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: 'Client',
+            name: "Client",
             sortable: true,
-            minWidth: '240px',
-            sortField: 'customer_id',
+            minWidth: "25%",
+            sortField: "customer_id",
             cell: (row) => {
-                const name = row && row.customer ? row.customer.name : 'John Doe'
+                const name = row && row.customer ? row.customer.name : "John Doe"
                 return (
-                    <div className='d-flex justify-content-left align-items-center'>
+                    <div className="d-flex justify-content-left align-items-center">
                         {renderUser(row.customer)}
-                        <div className='d-flex flex-column'>
-                            <h6 className='user-name text-truncate mb-0'>{name}</h6>
-                            <small className='text-truncate text-muted text-wrap mb-0'>{row && row.customer && row.customer.email}</small>
+                        <div className="d-flex flex-column">
+                            <h6 className="user-name text-truncate mb-0">{name}</h6>
+                            <small className="text-truncate text-muted text-wrap mb-0">{row && row.customer && row.customer.email}</small>
                         </div>
                     </div>
                 )
-            }
+            },
+            /* Custom placeholder vars */
+            loaderContent: "johndoe@example.com",
+            customLoadingWithIcon: "User",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: 'Total',
+            name: "Total",
             sortable: true,
-            sortField: 'total_price',
-            minWidth: '100px',
-            cell: (row) => `€ ${row && row.total_price && getDecimalFormat(row.total_price)}`
+            sortField: "total_price",
+            minWidth: "12%",
+            cell: (row) => `€ ${row && row.total_price && getDecimalFormat(row.total_price)}`,
+            /* Custom placeholder vars */
+            loaderContent: "€ Total",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: 'Due Date',
+            name: "Due Date",
             sortable: true,
-            sortField: 'invoice_due_date',
-            minWidth: '140px',
-            cell: (row) => row.invoice_due_date && getTransformDate(row.invoice_due_date, "DD MMM YYYY")
+            sortField: "invoice_due_date",
+            minWidth: "15%",
+            cell: (row) => row.invoice_due_date && getTransformDate(row.invoice_due_date, "DD MMM YYYY"),
+            /* Custom placeholder vars */
+            loaderContent: "Due Date",
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: 'Action',
+            name: "Action",
+            center: true,
             omit: dotIconAction,
+            minWidth: "15%",
             cell: (row) => (
-                <div className='column-action d-flex align-items-center'>
+                <div className="column-action d-flex align-items-center">
                     <Send
                         className="cursor-pointer"
                         size={17}
@@ -521,14 +563,19 @@ const InvoiceList = () => {
                         setInvoiceRowData={setInvoiceRowData}
                     />
                 </div>
-            )
+            ),
+            /* Custom placeholder vars */
+            loaderContent: "----------",
+            customLoaderCellClass: "text-center",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         }
     ]
 
     return store ? (<>
         <div className='invoice-list-wrapper'>
             <Card className="overflow-hidden">
-            {(!store.loading && !getTotalNumber(TN_INVOICE)) ? (
+                {(!store.loading && !getTotalNumber(TN_INVOICE)) ? (
                     <DotPulse />
                 ) : (
                     <DatatablePagination
@@ -537,9 +584,9 @@ const InvoiceList = () => {
                         loading={store.loading}
                         data={store.invoiceItems}
                         pagination={store.loading ? store.pagination : {
-                                ...store.pagination, 
-                                perPage: getCurrentPageNumber(TN_INVOICE, rowsPerPage, currentPage)
-                            }
+                            ...store.pagination,
+                            perPage: getCurrentPageNumber(TN_INVOICE, rowsPerPage, currentPage)
+                        }
                         }
                         handleSort={handleSort}
                         handlePagination={handlePagination}
@@ -556,7 +603,7 @@ const InvoiceList = () => {
                         }
                     />
                 )
-            }
+                }
 
                 <ModalInvoiceDetail
                     toggleModal={() => setDetailModalOpen(!detailModalOpen)}

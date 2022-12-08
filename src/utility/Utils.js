@@ -11,7 +11,8 @@ import {
   storageLoggedAtKeyName,
   storageTotalNumberName,
   storageRefreshTokenKeyName,
-  storageTokenExpiresKeyName
+  storageTokenExpiresKeyName,
+  storageTimeCounter
 } from '@constant/defaultValues'
 
 import {
@@ -481,4 +482,49 @@ export {
   decryptData,
   setRememberMeAuthData,
   getRememberMeAuthData
+}
+
+/* Get time counter from local storage */
+export const getTimeCounter = () => {
+  let timecounter = null
+  try {
+    timecounter = localStorage.getItem(storageTimeCounter) !== null ? JSON.parse(localStorage.getItem(storageTimeCounter)) : {
+      interval_time: 0,
+      current_time: 0,
+      status: false
+    }
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js  : getTimeCounter -> error', error)
+    timecounter = null
+  }
+  return timecounter
+}
+
+/* Set time counter on local storage  */
+export const setTimeCounter = (timecounter) => {
+  try {
+    if (timecounter) {
+      localStorage.setItem(storageTimeCounter, JSON.stringify(timecounter))
+    } else {
+      localStorage.removeItem(storageTimeCounter)
+    }
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js : setTimeCounter -> error', error)
+  }
+}
+
+export const toTimeString = (seconds, mode = 'second') => {
+  try {
+    let hour = Math.floor(seconds / 3600)
+    let min = Math.floor((seconds % 3600) / 60)
+    let second = seconds % 60
+    
+    hour = (hour < 10 ? '0' : '') + hour
+    min = (min < 10 ? '0' : '') + min
+    second = (second < 10 ? '0' : '') + second
+    if (mode === 'min') return `${hour} : ${min}`
+    else return `${hour} : ${min} : ${second}`
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js : toTimeString -> error', error)
+  }
 }

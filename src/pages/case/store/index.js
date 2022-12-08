@@ -782,9 +782,46 @@ export const createTimeCaseRecord = createAsyncThunk('appCase/createTimeCaseReco
     const response = await createTimeCaseRecordRequest(payload)
     if (response && response.flag) {
       await dispatch(getTimeCaseRecords(getState().cases.id))
+      console.log(response.data.start_time)
       return {
         attachments: [],
         actionFlag: "TIME_CREATED",
+        success: response.message,
+        start_time: response.data.start_time,
+        error: ""
+      }
+    } else {
+      return {
+        attachments: [],
+        actionFlag: "",
+        success: "",
+        start_time: null,
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("createTimeCaseRecord catch ", error)
+    return {
+      attachments: [],
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function updateTimeCaseRecordRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.cases.updateTimeRecord}`, payload).then((cases) => cases.data).catch((error) => error)
+}
+
+export const updateTimeCaseRecord = createAsyncThunk('appCase/updateTimeCaseRecord', async (payload, { dispatch, getState }) => {
+  try {
+    const response = await updateTimeCaseRecordRequest(payload)
+    if (response && response.flag) {
+      await dispatch(getTimeCaseRecords(getState().cases.id))
+      return {
+        attachments: [],
+        actionFlag: "TIME_UPDATED",
         success: response.message,
         error: ""
       }
@@ -797,7 +834,41 @@ export const createTimeCaseRecord = createAsyncThunk('appCase/createTimeCaseReco
       }
     }
   } catch (error) {
-    console.log("createTimeCaseRecord catch ", error)
+    console.log("updateTimeCaseRecord catch ", error)
+    return {
+      attachments: [],
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function deleteTimeCaseRecordRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.cases.deleteTimeRecord}`, payload).then((cases) => cases.data).catch((error) => error)
+}
+
+export const deleteTimeCaseRecord = createAsyncThunk('appCase/deleteTimeCaseRecord', async (payload, { dispatch, getState }) => {
+  try {
+    const response = await deleteTimeCaseRecordRequest(payload)
+    if (response && response.flag) {
+      await dispatch(getTimeCaseRecords(getState().cases.id))
+      return {
+        attachments: [],
+        actionFlag: "TIME_DELETED",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        attachments: [],
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("deleteTimeCaseRecord catch ", error)
     return {
       attachments: [],
       actionFlag: "",
@@ -829,6 +900,7 @@ export const appCaseSlice = createSlice({
     selectedItem: null,
     actionFlag: "",
     loading: false,
+    start_time: null,
     success: "",
     error: ""
   },
@@ -1017,6 +1089,19 @@ export const appCaseSlice = createSlice({
         state.error = action.payload.error
       })
       .addCase(createTimeCaseRecord.fulfilled, (state, action) => {
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+        state.start_time = action.payload.start_time
+      })
+      .addCase(updateTimeCaseRecord.fulfilled, (state, action) => {
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(deleteTimeCaseRecord.fulfilled, (state, action) => {
         state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success

@@ -7,6 +7,7 @@ export const storageTokenKeyName = 'accessToken'
 export const storageRefreshTokenKeyName = 'refreshToken'
 export const storageTokenExpiresKeyName = 'tokenExpires'
 export const storageLoggedAtKeyName = 'loggedAt'
+export const storageRememberMeAuth = "LWY_KP_329"
 export const storageTotalNumberName = "totalNubmer"
 export const storageSiteSetting = "siteSetting"
 export const storageTimeCounter = "timecounter"

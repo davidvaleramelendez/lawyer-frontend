@@ -37,7 +37,7 @@ import '@styles/base/pages/app-invoice.scss'
 const ModalCaseTimeTracking = ({
   open,
   caseId,
-  onRecordSubmit,
+  onTimeRecordStart,
   toggleModal
 }) => {
   // ** Hooks for tanslation
@@ -81,7 +81,7 @@ const ModalCaseTimeTracking = ({
 
   /* Submitting data */
   const onSubmit = async (values) => {
-    onRecordSubmit(values, caseId)
+    onTimeRecordStart(values, caseId)
     toggleModal()
   }
 
@@ -114,7 +114,7 @@ const ModalCaseTimeTracking = ({
 
               <Col md={12} sm={12} className='mb-1'>
                 <Label className='form-label' for='interval_time'>
-                  Enter the time
+                  Enter the time (min)
                 </Label>
                 <Controller
                   defaultValue=""

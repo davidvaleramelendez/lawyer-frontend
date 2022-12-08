@@ -11,6 +11,7 @@ export const storageTotalNumberName = "totalNubmer"
 export const storageSiteSetting = "siteSetting"
 export const storageTimeCounter = "timecounter"
 export const storageRememberMeAuth = "LWY_KP_329"
+export const storageLanguageLabels = "languageLabels"
 
 /* Hexadecimal key for encryption */
 export const cryptoKey = '731fc6d09baf51f8361fa6408f306ca9'

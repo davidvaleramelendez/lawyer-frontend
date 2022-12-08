@@ -4,14 +4,14 @@
 import {
   cryptoIv,
   cryptoKey,
+  storageSiteSetting,
   storageUserKeyName,
   storageTokenKeyName,
+  storageRememberMeAuth,
   storageLoggedAtKeyName,
-  storageRefreshTokenKeyName,
-  storageTokenExpiresKeyName,
   storageTotalNumberName,
-  storageSiteSetting,
-  storageTimeCounter
+  storageRefreshTokenKeyName,
+  storageTokenExpiresKeyName
 } from '@constant/defaultValues'
 
 import {

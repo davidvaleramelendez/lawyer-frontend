@@ -9,7 +9,6 @@ export const storageTokenExpiresKeyName = 'tokenExpires'
 export const storageLoggedAtKeyName = 'loggedAt'
 export const storageTotalNumberName = "totalNubmer"
 export const storageSiteSetting = "siteSetting"
-export const storageLanguageLabels = "languageLabels"
 
 /* Hexadecimal key for encryption */
 export const cryptoKey = '731fc6d09baf51f8361fa6408f306ca9'

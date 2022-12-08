@@ -111,7 +111,7 @@ const getRoutes = (layout) => {
       children: LayoutRoutes
     })
   })
-  
+
   return AllRoutes
 }
 

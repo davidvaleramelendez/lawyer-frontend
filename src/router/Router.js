@@ -15,14 +15,30 @@ import {
   getCurrentUser
 } from '@utils'
 
+import authenticationConfig from '@src/configs/authenticationConfig'
+
 // ** GetRoutes
 import { getRoutes } from './routes'
 
 // ** Components
 const Error = lazy(() => import('@src/pages/auth/Error'))
-const Login = lazy(() => import('@src/pages/auth/Login'))
 const ForgotPassword = lazy(() => import('@src/pages/auth/ForgotPassword'))
 const NotAuthorized = lazy(() => import('@src/pages/auth/NotAuthorized'))
+
+let Login = lazy(() => import('@src/pages/auth/login/LoginCover'))
+if (authenticationConfig && authenticationConfig.LoginTemplate) {
+  if (authenticationConfig.LoginTemplate.basic) {
+    Login = lazy(() => import('@src/pages/auth/login/LoginBasic'))
+  }
+
+  if (authenticationConfig.LoginTemplate.cover) {
+    Login = lazy(() => import('@src/pages/auth/login/LoginCover'))
+  }
+
+  if (authenticationConfig.LoginTemplate.simple) {
+    Login = lazy(() => import('@src/pages/auth/login/LoginSimple'))
+  }
+}
 
 const Router = () => {
   // ** Hooks

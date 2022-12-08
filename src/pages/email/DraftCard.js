@@ -9,6 +9,9 @@ import { Star, Paperclip } from 'react-feather'
 // ** Reactstrap Imports
 import { Input, Label } from 'reactstrap'
 
+// ** Translation
+import { T } from '@localization'
+
 const DraftCard = (props) => {
   // ** Props
   const {
@@ -50,7 +53,7 @@ const DraftCard = (props) => {
           <div className='mail-items'>
             <h5 className='mb-25'>
               <span className='text-truncate'>
-              {draftItem && draftItem.subject && draftItem.subject !== "" ? draftItem.subject : "(no subject)"}
+              {draftItem && draftItem.subject && draftItem.subject !== "" ? draftItem.subject : `(${T('no subject')})`}
               </span>
             </h5>
           </div>

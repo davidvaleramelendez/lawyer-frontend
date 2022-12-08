@@ -43,9 +43,6 @@ import {
   CardBody
 } from 'reactstrap'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Icons Import
 import {
   X,
@@ -92,10 +89,12 @@ import ModalCaseTimeTracking from '../modals/ModalCaseTimeTracking'
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const CaseView = () => {
   // ** Hooks
   const { id } = useParams()
-  const { t } = useTranslation()
   const dispatch = useDispatch()
 
   const MySwal = withReactContent(Swal)
@@ -289,7 +288,7 @@ const CaseView = () => {
                         <h4
                           className={`mb-25 ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                         >
-                          Details on file {store.caseItem && store.caseItem.CaseID}
+                          {T('Details on file')} {store.caseItem && store.caseItem.CaseID}
                         </h4>
                       </div>
                     </Col>
@@ -298,7 +297,7 @@ const CaseView = () => {
                       <div className='mt-md-0 mt-2'>
                         <div className='invoice-date-wrapper'>
                           <User size={14} />
-                          <p className="ms-1 invoice-date-title">{t("Lawyer")}</p>
+                          <p className="ms-1 invoice-date-title">{T("Lawyer")}</p>
                           <p
                             className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                           >
@@ -329,12 +328,12 @@ const CaseView = () => {
                     >
                       <div className='mt-md-0 mt-2'>
                         <div className="user-info">
-                          <h4 className='mb-10'>{t("Client")}</h4>
+                          <h4 className='mb-10'>{T("Client")}</h4>
                         </div>
 
                         <div className='invoice-date-wrapper'>
                           <User size={14} />
-                          <p className='invoice-date-title ms-1'>Name</p>
+                          <p className='invoice-date-title ms-1'>{T('Name')}</p>
                           <p
                             className={`me-2 invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                           >
@@ -358,7 +357,7 @@ const CaseView = () => {
 
                         <div className='invoice-date-wrapper'>
                           <Check size={14} />
-                          <p className='invoice-date-title ms-1'>Stadium</p>
+                          <p className='invoice-date-title ms-1'>{T('Stadium')}</p>
                           <p
                             className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                           >
@@ -368,7 +367,7 @@ const CaseView = () => {
 
                         <div className='invoice-date-wrapper'>
                           <Star size={14} />
-                          <p className='invoice-date-title ms-1'>Group</p>
+                          <p className='invoice-date-title ms-1'>{T('Group')}</p>
                           <p
                             className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                           >
@@ -378,7 +377,7 @@ const CaseView = () => {
 
                         <div className='invoice-date-wrapper'>
                           <Flag size={14} />
-                          <p className='invoice-date-title ms-1'>Land</p>
+                          <p className='invoice-date-title ms-1'>{T('Land')}</p>
                           <p
                             className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                           >
@@ -388,7 +387,7 @@ const CaseView = () => {
 
                         <div className='invoice-date-wrapper'>
                           <Phone size={14} />
-                          <p className='invoice-date-title ms-1'>Telephone</p>
+                          <p className='invoice-date-title ms-1'>{T('Telephone')}</p>
                           <p
                             className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                           >
@@ -398,7 +397,7 @@ const CaseView = () => {
 
                         <div className='invoice-date-wrapper'>
                           <Mail size={14} />
-                          <p className='invoice-date-title ms-1'>E-Mail</p>
+                          <p className='invoice-date-title ms-1'>{T('E-Mail')}</p>
                           <p
                             className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                           >
@@ -408,7 +407,7 @@ const CaseView = () => {
 
                         <div className='invoice-date-wrapper'>
                           <Calendar size={14} />
-                          <p className='invoice-date-title ms-1'>Datum</p>
+                          <p className='invoice-date-title ms-1'>{T('Date')}</p>
                           <p
                             className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                           >
@@ -443,7 +442,7 @@ const CaseView = () => {
                           </div>
 
                           <div className="ml-1 ms-1">
-                            <h5 className="mb-0">{t("Address")}</h5>
+                            <h5 className="mb-0">{T("Address")}</h5>
                             <small
                               className={`${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-100'}`}
                             >
@@ -462,11 +461,11 @@ const CaseView = () => {
                     <Col xl={3} md={3} sm={3}>
                       <div className='mt-md-0 mt-2'>
                         <div className="user-info">
-                          <h4 className='mb-10'>{t("Opponent")}</h4>
+                          <h4 className='mb-10'>{T("Opponent")}</h4>
                         </div>
                         <div className='invoice-date-wrapper'>
                           <User size={14} />
-                          <p className='invoice-date-title ms-1'>Name</p>
+                          <p className='invoice-date-title ms-1'>{T('Name')}</p>
                           <p className='invoice-date'>{store.fighterItem && store.fighterItem.name}</p>
                           <Button.Ripple
                                 color="flat-primary"
@@ -485,31 +484,31 @@ const CaseView = () => {
 
                         <div className='invoice-date-wrapper'>
                           <User size={14} />
-                          <p className='invoice-date-title ms-1'>Surname</p>
+                          <p className='invoice-date-title ms-1'>{T('Surname')}</p>
                           <p className='invoice-date'>{store.fighterItem && store.fighterItem.last_name}</p>
                         </div>
 
                         <div className='invoice-date-wrapper'>
                           <Phone size={14} />
-                          <p className='invoice-date-title ms-1'>Telephone</p>
+                          <p className='invoice-date-title ms-1'>{T('Telephone')}</p>
                           <p className='invoice-date'>{store.fighterItem && store.fighterItem.telefone}</p>
                         </div>
 
                         <div className='invoice-date-wrapper'>
                           <Mail size={14} />
-                          <p className='invoice-date-title ms-1'>E-Mail</p>
+                          <p className='invoice-date-title ms-1'>{T('E-Mail')}</p>
                           <p className='invoice-date'>{store.fighterItem && store.fighterItem.email}</p>
                         </div>
 
                         <div className='invoice-date-wrapper'>
                           <Calendar size={14} />
-                          <p className='invoice-date-title ms-1'>Updated</p>
+                          <p className='invoice-date-title ms-1'>{T('Updated')}</p>
                           <p className='invoice-date'>{store.fighterItem && store.fighterItem.created_at && getTransformDate(store.fighterItem.created_at, "DD.MM.YYYY")}</p>
                         </div>
 
                         <div className='invoice-date-wrapper'>
                           <Flag size={14} />
-                          <p className='invoice-date-title ms-1'>Land</p>
+                          <p className='invoice-date-title ms-1'>{T('Land')}</p>
                           <p className='invoice-date'>{store.fighterItem && store.fighterItem.country}</p>
                         </div>
                       </div>
@@ -520,7 +519,7 @@ const CaseView = () => {
                           </div>
 
                           <div className="ml-1 ms-1">
-                            <h5 className="mb-0">{t("Address")}</h5>
+                            <h5 className="mb-0">{T("Address")}</h5>
                             <small>
                               {store.fighterItem && store.fighterItem.id ? <>
                                 {store.fighterItem.address ? `${store.fighterItem.address}, ` : ''}
@@ -547,7 +546,7 @@ const CaseView = () => {
                   <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
                     <div className="d-flex flex-wrap">
                       <Button className="mt-1" color="primary" onClick={() => setNoteFileModalOpen(true)}>
-                        {t("Add a note")}
+                        {T("Add a note")}
                       </Button>
 
                       <ModalCaseNoteFile
@@ -557,7 +556,7 @@ const CaseView = () => {
                       />
 
                       <Button className="ms-2 mt-1" color="primary" onClick={() => setTimeTrackModalOpen(true)}>
-                        {t("Add Time Tracking")}
+                        {T("Add Time Tracking")}
                       </Button>
 
                       <ModalCaseTimeTracking
@@ -567,7 +566,7 @@ const CaseView = () => {
                       />
 
                       <Button className="ms-2 mt-1" color="primary" onClick={() => setLetterModalOpen(true)}>
-                        {t("Write a letter now")}
+                        {T("Write a letter now")}
                       </Button>
 
                       <ModalCaseLetter
@@ -580,7 +579,7 @@ const CaseView = () => {
                       />
 
                       <Button className="ms-2 mt-1" color="primary" onClick={() => setDocUploadModalOpen(true)}>
-                        {t("Upload document")}
+                        {T("Upload document")}
                       </Button>
 
                       <ModalCaseDocument
@@ -594,7 +593,7 @@ const CaseView = () => {
                     </div>
 
                     <div className="d-flex flex-wrap mt-1">
-                      <h3 className="invoice-date">{t("History")}</h3>
+                      <h3 className="invoice-date">{T("History")}</h3>
                     </div>
                   </div>
 
@@ -604,10 +603,10 @@ const CaseView = () => {
                         <thead>
                           <tr>
                             <th />
-                            <th>Date</th>
-                            <th>Subject</th>
-                            <th>Done?</th>
-                            <th>Action</th>
+                            <th>{T('Date')}</th>
+                            <th>{T('Subject')}</th>
+                            <th>{T('Done')}?</th>
+                            <th>{T('Action')}</th>
                           </tr>
                         </thead>
                           <tbody>
@@ -741,7 +740,7 @@ const CaseView = () => {
               <Card className='case-details-card'>
               <CardBody className='invoice-padding pb-0'>
                 <div className='d-flex justify-content-between' >
-                  <h3  className='mt-1'>{t("Details")}</h3>
+                  <h3  className='mt-1'>{T("Details")}</h3>
                   <Button.Ripple className='btn-icon rounded-circle' color='flat-grey' onClick={() => onRecordCloseClick()}>
                     <EyeOff size={16} />
                   </Button.Ripple>

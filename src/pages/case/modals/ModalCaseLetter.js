@@ -3,9 +3,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
   createCaseLetter,
@@ -60,6 +57,8 @@ import '@styles/base/pages/app-invoice.scss'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import '@styles/react/libs/editor/editor.scss'
 
+// ** Translation
+import { T } from '@localization'
 
 const ModalCaseLetter = ({
   open,
@@ -69,8 +68,6 @@ const ModalCaseLetter = ({
   letterRowData,
   setLetterRowData
 }) => {
-  // ** Hooks
-  const { t } = useTranslation()
   const MySwal = withReactContent(Swal)
 
   // ** Store vars
@@ -214,7 +211,7 @@ const ModalCaseLetter = ({
           />
         ) : null}
 
-        <ModalHeader toggle={handleReset}>{t("Write letter")}</ModalHeader>
+        <ModalHeader toggle={handleReset}>{T("Write letter")}</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <Row>
@@ -288,7 +285,7 @@ const ModalCaseLetter = ({
                     className="me-1"
                     disabled={!store.loading}
                   >
-                    {t("Update")}
+                    {T("Update")}
                   </Button>
 
                   <Button
@@ -301,7 +298,7 @@ const ModalCaseLetter = ({
                     href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${letterRowData.pdf_path}`}
                     onClick={(event) => !letterRowData.pdf_path && event.preventDefault()}
                   >
-                    {t("Download")} {t("PDF")}
+                    {T("Download")} {T("PDF")}
                   </Button>
 
                   <Button
@@ -310,7 +307,7 @@ const ModalCaseLetter = ({
                     disabled={!store.loading}
                     onClick={() => onDeleteDocument(letterRowData.id)}
                   >
-                    {t("Delete")}
+                    {T("Delete")}
                   </Button>
                 </>) : (
                   <Button
@@ -318,7 +315,7 @@ const ModalCaseLetter = ({
                     color="primary"
                     disabled={!store.loading}
                   >
-                    {t("Create")}
+                    {T("Create")}
                   </Button>
                 )}
               </div>

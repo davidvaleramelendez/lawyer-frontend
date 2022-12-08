@@ -25,6 +25,7 @@ const LabelsForm = (props) => {
   const { category, originKeys, translation, formId, isVisibleMenuItem, onSubmitParent, onChangeTranslation } = props
 
   const [errors, setErrors] = useState([])
+  console.log('translation: ', translation)
 
   /* Validation rules */
   const ValidationSchema = {}

@@ -31,9 +31,6 @@ import {
 } from 'reactstrap'
 import { useForm, Controller } from 'react-hook-form'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** React Dropdown Import
 import Select from 'react-select'
 
@@ -63,11 +60,12 @@ import '@styles/base/pages/app-invoice.scss'
 import '@styles/react/apps/app-users.scss'
 import '@styles/react/libs/editor/editor.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 import LanguageLabels from './language-labels'
 
 const AccountSettingApp = () => {
-  /* Hooks */
-  const { t } = useTranslation()
   const navigate = useNavigate()
 
   // ** Store vars
@@ -111,15 +109,15 @@ const AccountSettingApp = () => {
       }
     },
     status: {
-      placeholder: `Select ${t("Status")}...`,
-      required: `${t("Status")} is required!`
+      placeholder: `${T('Select Status')}...`,
+      required: `${T("Status is required!")}`
     },
     roleId: {
-      placeholder: `Select ${t("Role")}...`,
-      required: `${t("Role")} is required!`
+      placeholder: `${T('Select Role')}...`,
+      required: `${T("Role is required!")}`
     },
     company: {
-      placeholder: "Company",
+      placeholder: T("Company"),
       required: false
     },
     bank_information: {
@@ -304,21 +302,21 @@ const AccountSettingApp = () => {
             <NavItem>
               <NavLink active={active === "1"} onClick={() => toggleTab("1")}>
                 <User size={14} className="me-50" />
-                <span className="fw-bold d-none d-sm-block">Account</span>
+                <span className="fw-bold d-none d-sm-block">{T('Account')}</span>
               </NavLink>
             </NavItem>
 
             <NavItem>
               <NavLink active={active === "2"} onClick={() => toggleTab("2")}>
                 <Info size={14} className="me-50" />
-                <span className="fw-bold d-none d-sm-block">Language Labels</span>
+                <span className="fw-bold d-none d-sm-block">{T('Language Labels')}</span>
               </NavLink>
             </NavItem>
 
             <NavItem>
               <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
                 <Info size={14} className="me-50" />
-                <span className="fw-bold d-none d-sm-block">IMAP information</span>
+                <span className="fw-bold d-none d-sm-block">{T('IMAP information')}</span>
               </NavLink>
             </NavItem>
           </Nav>
@@ -392,7 +390,7 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="emailAddress">
-                      {t("Email")}
+                      {T("Email")}
                     </Label>
                     <Controller
                       defaultValue={store.userItem && store.userItem.email}
@@ -444,7 +442,7 @@ const AccountSettingApp = () => {
 
                 <div className="d-flex flex-wrap mb-2 mt-2">
                   <Button type="submit" className="me-1" color="primary">
-                    {t("Save Change")}
+                    {T("Save Change")}
                   </Button>
                 </div>
               </Form>
@@ -586,7 +584,7 @@ const AccountSettingApp = () => {
 
                 <div className="d-flex flex-wrap mb-2 mt-2">
                   <Button type="submit" className="me-1" color="primary">
-                    {t("Save Change")}
+                    {T("Save Change")}
                   </Button>
                 </div>
               </Form>

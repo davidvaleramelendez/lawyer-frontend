@@ -4,9 +4,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import { clearCaseMessage } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -44,14 +41,15 @@ import {
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalCaseDetail = ({
   open,
   toggleModal,
   caseRowData,
   setCaseRowData
 }) => {
-  // ** Hooks for tanslation
-  const { t } = useTranslation()
 
   // ** Store vars
   const dispatch = useDispatch()
@@ -94,7 +92,7 @@ const ModalCaseDetail = ({
         toggle={handleReset}
         backdrop="static"
       >
-        <ModalHeader toggle={handleReset}>{t("Details")} {t("of")} {caseRowData && caseRowData.Name}</ModalHeader>
+        <ModalHeader toggle={handleReset}>{T("Details")} {T("of")} {caseRowData && caseRowData.Name}</ModalHeader>
         {caseRowData && caseRowData.CaseID ? <>
           <ModalBody>
             <Table striped responsive>

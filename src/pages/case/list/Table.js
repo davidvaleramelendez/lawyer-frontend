@@ -59,6 +59,7 @@ import Avatar from "@components/avatar"
 import Notification from '@components/toast/notification'
 import DatatablePagination from "@components/datatable/DatatablePagination"
 import DotPulse from "@components/dotpulse"
+import { T } from "../../../utility/Localization"
 
 /* Get windows size */
 function getWindowSize() {
@@ -311,14 +312,14 @@ const CaseList = () => {
             )
         },
         {
-            name: "Reference Number#",
+            name: `${T("Reference Number")}#`,
             sortable: true,
             sortField: "CaseID",
             minWidth: "190px",
             cell: row => <Link to={`${adminRoot}/case/view/${row.CaseID}`}>{`#${row.CaseID}`}</Link>
         },
         {
-            name: "Client",
+            name: T("Client"),
             sortable: true,
             minWidth: "200px",
             sortField: "Name",
@@ -338,35 +339,35 @@ const CaseList = () => {
             }
         },
         {
-            name: "Attorney",
+            name: T("Attorney"),
             sortable: true,
             sortField: "LaywerID",
             minWidth: "140px",
             cell: (row) => row && row.laywer && row.laywer.id ? (<Link to={`${adminRoot}/user/view/${row.laywer.id}`}>{row.laywer.name}</Link>) : null
         },
         {
-            name: "Datum",
+            name: T("Date"),
             sortable: true,
             sortField: "Date",
             minWidth: "120px",
             cell: (row) => row.Date && getTransformDate(row.Date, "DD MMM YYYY")
         },
         {
-            name: "Status",
+            name: T("Status"),
             sortable: true,
             sortField: "Status",
             minWidth: "50px",
             cell: (row) => row.Status
         },
         {
-            name: "Group",
+            name: T("Group"),
             sortable: true,
             sortField: "CaseTypeID",
             minWidth: "50px",
             cell: (row) => row && row.type && row.type.CaseTypeName
         },
         {
-            name: 'Action',
+            name: T('Action'),
             minWidth: '90px',
             omit: dotIconAction,
             cell: (row) => (

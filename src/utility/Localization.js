@@ -16,22 +16,22 @@ export const L10nKeys = {
     Contact: 'Contact',
     Account: 'Account',
     User: 'User',
-    Emial_Template: 'Email Template',
-    Cloud_Server: 'Cloud Server',
-    Calendar_Setting: 'Calendar Setting',
+    EmailTemplate: 'Email Template',
+    CloudServer: 'Cloud Server',
+    CalendarSetting: 'Calendar Setting',
     //** /Menus
 
     //** Dashboards
     Hello: 'Hello',
-    You_Have: 'You have',
-    Open_cases: 'Open cases',
-    View_all_cases: 'View all cases',
-    Dashboard_Overview: 'Dashboard Overview',
+    YouHave: 'You have',
+    OpenCases: 'Open cases',
+    ViewAllCases: 'View all cases',
+    DashboardOverview: 'Dashboard Overview',
     Statistics: 'Statistics',
-    Open_ticket: 'Open ticket',
-    Open_invoices: 'Open invoices',
-    Amounts_outstanding: 'Amounts outstanding',
-    Todo_List: 'Todo List',
+    OpenTicket: 'Open ticket',
+    OpenInvoices: 'Open invoices',
+    AmountsOutstanding: 'Amounts outstanding',
+    TodoList: 'Todo List',
     Low: 'Low',
     Medium: 'Medium',
     High: 'High',
@@ -39,59 +39,123 @@ export const L10nKeys = {
     File: 'File',
     Client: 'Client',
     Lawyer: 'Lawyer',
-    Takeover_Date: 'Takeover Date',
+    TakeoverDate: 'Takeover Date',
     Stage: 'Stage',
-    New_inquiry: 'New inquiry',
-    Invoice_No: 'Invoice No.',
+    NewInquiry: 'New inquiry',
+    InvoiceNo: 'Invoice No.',
     Total: 'Total',
-    Due_date: 'Due date',
-    Open_amount: 'Open amount',
-    New_Chats: 'New Chats',
-    No_chats_found: 'No chats found',
+    DueDate: 'Due date',
+    OpenAmount: 'Open amount',
+    NewChats: 'New Chats',
+    NoChatsFound: 'No chats found',
     //** /Dashboard
 
     //** Email App
     Inbox: 'Inbox',
-    Draft: 'Draft',
+    Draft: 'Drafts',
     Important: 'Important',
     Spam: 'Spam',
     Sent: 'Sent',
     Trash: 'Trash',
     Compose: 'Compose',
-    Search_email: 'Search email',
-    Select_All: 'Select All',
-    No_Items_Found: 'No Items Found',
-    no_subject: 'no subject',
-    Compose_Mail: 'Compose Mail',
+    SearchEmail: 'Search email',
+    SelectAll: 'Select All',
+    NoItemsFound: 'No Items Found',
+    NoSubject: 'no subject',
+    ComposeMail: 'Compose Mail',
     Subject: 'Subject',
     To: 'To',
     Message: 'Message',
     Select: 'Select',
     Send: 'Send',
     Save: 'Save',
+    ToEmailIsRequired: 'To email is required!',
     //** /Email App
 
     //** Documents App
     Show: 'Show',
     Search: 'Search',
-    Search_Case: 'Search Case',
-    Select_Status: 'Select Status',
+    SearchCase: 'Search Case',
+    SelectStatus: 'Select Status',
     Hold: 'Hold',
     Open: 'Open',
-    REFERENCE_NUMBER: 'REFERENCE NUMBER',
-    ATTORNEY: 'ATTORNEY',
-    DATUM: 'DATUM',
-    STATUS: 'STATUS',
-    GROUP: 'GROUP',
-    ACTION: 'ACTION',
-    // CLIENT: 'CLIENT', // already defined
+
+    Name: 'Name',
+    LastName: 'Last Name',
+    Client: 'Client',
+    Stadium: 'Stadium',
+    Group: 'Group',
+    Land: 'Land',
+    Telephone: 'Telephone',
+    E_Mail: 'E-Mail',
+    Date: 'Date',
+    Address: 'Address',
+    Surname: 'Surname',
+    Updated: 'Updated',
+    UploadDocument: 'Upload document',
+    WriteALetterNow: 'Write a letter now',
+    AddTimeTracking: 'Add Time Tracking',
+    AddANote: 'Add a note',
+    DetailsOnFile: 'Details on file',
+
+    Subject: 'Subject',
+    Done: 'Done',
+    Action: 'Action',
+
+    Opponent: 'Opponent',
+    History: 'History',
+    Details: 'Details',
+    Lawyer: 'Lawyer',
+
+    Title: 'Title',
+    Content: 'Content',
+    Message: 'Message',
+    Files: 'Files',
+    File: 'File',
+
+    Add: 'Add',
+    Record: 'Record',
+    of: 'of',
+    View: 'View',
+    Upload: 'Upload',
+    Download: 'Download',
+    document: 'document',
+    Create: 'Create',
+    Delete: 'Delete',
+    WriteLetter: 'Write letter',
+    AddNotesOrFile: 'Add notes or file',
+    AddNotes: 'Add notes',
+    AddFile: 'Add file',
+    SendEMail: 'Send E-Mail',
+    Now: 'now',
+    EnterTheTime: 'Enter the time',
+    NameIsRequired: 'Name is required!',
+    InvalidEmailAddress: 'Invalid email address!',
+    TelephoneIsRequired: 'Telephone is required!',
+    AttorneyIsRequired: 'Attorney is required!',
+    GroupIsRequired: 'Group is required!',
+    StatusIsRequired: 'Status is required!',
+    LastNameIsRequired: 'Last Name is required!',
+    EmailIsRequired: 'Email is required!',
+    Attorney: 'Attorney',
+    TelephoneMustBe10Digit: 'Telephone must be 10 digit!',
+    City: 'City',
+    PostalCode: 'Postal code',
+    SelectAttorney: 'Select Attorney',
+    SelectGroup: 'Select Group',
+    Submit: 'Submit',
+    Cancel: 'Cancel',
+    Country: 'Country',
+
+    ReferenceNumber: 'Reference Number',
+    Status: 'Status',
     //** /Documents App
 
     //** Chat App
     Chats: 'Chats',
     Contacts: 'Contacts',
-    Search_Or_Start_New_A_Chat: 'Search or start new a chat',
-    Start_Converation: 'Start Conversation',
+    SearchOrStartNewAChat: 'Search or start new a chat',
+    StartConversation: 'Start Conversation',
     //** /Chat App
     
     //** Task App
@@ -101,12 +165,12 @@ export const L10nKeys = {
     Tags: 'Tags',
     Team: 'Team',
     Update: 'Update',
-    Search_Task: 'Search Task',
-    Sort_A_Z: 'Sort A-Z',
-    Sort_Z_A: 'Sort Z-A',
-    Sort_Assignee: 'Sort Assignee',
-    Sort_Due_Date: 'Sort Due Date',
-    Reset_Sort: 'Reset Sort',
+    SearchTask: 'Search Task',
+    SortAZ: 'Sort A-Z',
+    SortZA: 'Sort Z-A',
+    SortAssignee: 'Sort Assignee',
+    SortDueDate: 'Sort Due Date',
+    ResetSort: 'Reset Sort',
     // Important: 'Important', // already defined
     // Low: 'Low', // already defined
     // Medium: 'Medium', // already defined
@@ -116,8 +180,8 @@ export const L10nKeys = {
     //** Calendar App
     Register: 'Register',
     Filter: 'Filter',
-    View_All: 'View All',
-    My_Appointments: 'My Appointments',
+    ViewAll: 'View All',
+    MyAppointments: 'My Appointments',
     CourtDate: 'Court Date',
     Holiday: 'Holiday',
     Month: 'Month',
@@ -127,17 +191,17 @@ export const L10nKeys = {
     //** /Calendar App
 
     //** Respites App
-    Letter_Deadline: 'Letter Deadline',
-    Invoice_Deadline: 'Invoice Deadline',
-    Search_Letter: 'Search Letter',
-    Search_Invoice: 'Search Invoice',
+    LetterDeadline: 'Letter Deadline',
+    InvoiceDeadline: 'Invoice Deadline',
+    SearchLetter: 'Search Letter',
+    SearchInvoice: 'Search Invoice',
     Case: 'Case',
-    Case_Type: 'Case Type',
-    First_anniversary: 'First anniversary',
-    PDF_document: 'PDF document',
-    Deadline_Date: 'Deadline Date',
-    Reference_number: 'Reference number',
-    Done: 'Done',
+    CaseType: 'Case Type',
+    FirstAnniversary: 'First anniversary',
+    PDFDocument: 'PDF document',
+    DeadlineDate: 'Deadline Date',
+    // ReferenceNumber: 'Reference Number', // already defined
+    // Done: 'Done', // already defined
     Amount: 'Amount',
     // File: 'File', // already defined
     // Subject: 'Subject', // already defined
@@ -151,23 +215,23 @@ export const L10nKeys = {
     VIEW: 'VIEW',
     // Show: 'Show', // already defined
     // Search: 'Search', // already defined
-    // Search_Letter: 'Search Letter', // already defined
-    // REFERENCE_NUMBER: 'REFERENCE NUMBER', // already defined
+    // SearchLetter: 'Search Letter', // already defined
+    // ReferenceNumber: 'REFERENCE NUMBER', // already defined
     //** /Outbox App
     
     //** Bills App
-    Create_Invoice: 'Create Invoice',
+    CreateInvoice: 'Create Invoice',
     INVOICE_NUMBER: 'INVOICE_NUMBER',
     DUE_DATE: 'DUE DATE', // already defined
     Showing: 'Showing',
     to: 'to',
     of: 'of',
     entries: 'entries',
-    Due_Date: 'Due Date',
+    // DueDate: 'Due Date', // already defined
     // Total: 'Total', // already defined
     // Show: 'Show', // already defined
     // Search: 'Search', // already defined
-    // Select_Status: 'Select Status', // already defined
+    // SelectStatus: 'Select Status', // already defined
     // STATUS: 'STATUS', // already defined
     // CLIENT: 'CLIENT', // already defined
     // TOTAL: 'TOTAL', // already defined
@@ -175,12 +239,12 @@ export const L10nKeys = {
     //** /Bills App
 
     //** Inquiry App
-    Add_Contact: 'Add Contact',
-    Search_Contact: 'Search Contact',
+    AddContact: 'Add Contact',
+    SearchContact: 'Search Contact',
     TICKET: 'TICKET',
     NAME: 'NAME',
     EMAIL: 'EMAIL',
-    There_are_no_records_to_display: 'There are no records to display',
+    ThereAreNoRecordsToDisplay: 'There are no records to display',
     // Show: 'Show', // already defined
     // Search: 'Search', // already defined
     // ACTION: 'ACTION', // already defined
@@ -193,11 +257,11 @@ export const L10nKeys = {
     Admin: 'Admin',
     Partner: 'Partner',
     Customer: 'Customer',
-    Search_Filter: 'Search & Filter',
+    SearchFilter: 'Search & Filter',
     Entries: 'Entries',
-    Search_User: 'Search User',
-    Select_Role: 'Select Role',
-    Add_New_User: 'Add New User',
+    SearchUser: 'Search User',
+    SelectRole: 'Select Role',
+    AddNewUser: 'Add New User',
     NAME: 'NAME',
     EMAIL: 'EMAIL', // already defined
     ROLE: 'ROLE',
@@ -216,25 +280,27 @@ export const L10nKeys = {
     Name: 'Name',
     Company: 'Company',
     Language: 'Language',
-    Save_Change: 'Save Change',
-    Language_Labels: 'Language Labels',
+    SaveChange: 'Save Change',
+    LanguageLabels: 'Language Labels',
     Menu: 'Menu',
     Pages: 'Pages',
     Common: 'Common',
     Errors: 'Errors',
-    IMAP_information: 'IMAP information',
-    IMAP_Host: 'IMAP Host',
-    IMAP_Port: 'IMAP Port',
+    IMAPInformation: 'IMAP information',
+    IMAPHost: 'IMAP Host',
+    IMAPPort: 'IMAP Port',
     Secure: 'Secure',
-    Use_SSL: 'Use SSL',
-    IMAP_Email: 'IMAP Email',
-    IMAP_Password: 'IMAP Password',
+    UseSSL: 'Use SSL',
+    IMAPEmail: 'IMAP Email',
+    IMAPPassword: 'IMAP Password',
     // Email: 'Email', // already defined
+    SelectRole: 'Select Role',
+    RoleIsRequired: 'Role is required!',
     //** /Account App
 
     //** Email Template App
-    Add_Email_Template: 'Add Email Template',
-    Search_Email_Template: 'Search Email Template',
+    AddEmailTemplate: 'Add Email Template',
+    SearchEmailTemplate: 'Search Email Template',
     // Show: 'Show', // already defined
     // Search: 'Search', // already defined
     // SUBJECT: 'SUBJECT', // already defined
@@ -247,11 +313,11 @@ export const L10nKeys = {
     //** /Email Template App
 
     //** Cloud Server App
-    Add_New: 'Add New',
-    My_Drive: 'My Drive',
+    AddNew: 'Add New',
+    MyDrive: 'My Drive',
     Recents: 'Recents',
     STOREAGE_STATUS: 'STORAGE STATUS',
-    used_of: 'used of',
+    usedOf: 'used of',
     Filename: 'Filename',
     Created: 'Created',
     Actions: 'Actions',
@@ -261,25 +327,25 @@ export const L10nKeys = {
     //** /Cloud Server App
 
     //** UI Setting
-    Theme_Customizer: 'Theme Customizer',
-    Customize_Preview_in_Real_Time: 'Customize & Preview in Real Time',
+    ThemeCustomizer: 'Theme Customizer',
+    CusomizePreviewInRealTime: 'Customize & Preview in Real Time',
     Skin: 'Skin',
     Bordered: 'Bordered',
     Dark: 'Dark',
-    Semi_Dark: 'Semi Dark',
-    Content_Width: 'Content Width',
-    Full_Width: 'Full Width',
+    SemiDark: 'Semi Dark',
+    ContentWidth: 'Content Width',
+    FullWidth: 'Full Width',
     Boxed: 'Boxed',
-    Menu_Collapsed: 'Menu Collapsed',
-    Menu_Hidden: 'Menu Hidden',
-    Navbar_Color: 'Navbar Color',
-    Navbar_Type: 'Navbar Type',
+    MenuCollapsed: 'Menu Collapsed',
+    MenuHidden: 'Menu Hidden',
+    NavbarColor: 'Navbar Color',
+    NavbarType: 'Navbar Type',
     Floating: 'Floating',
     Sticky: 'Sticky',
     Static: 'Static',
     Hidden: 'Hidden',
-    Footer_Type: 'Footer Type',
-    Apply_Save: 'Apply & Save',
+    FooterType: 'Footer Type',
+    ApplySave: 'Apply & Save',
 
     //** /UI Setting
 
@@ -297,34 +363,52 @@ export const L10nKeys = {
     Warning: 'Warning',
     //** /Error
 
-    Date: 'Date',
-    Showing: 'Showing',
-    entries: 'entries',
     Status: 'Status',
     Action: 'Action'
 }
 
 export const L10nOrgKeys = {
-    Menu: ['Email', 'Documents', 'Chat', 'Task', 'Calendar', 'Respites', 'Outbox', 'Bills', 'Inquiry', 'Contact', 'User', 'Account', 'Emial_Template', 'Cloud_Server', 'Calendar_Setting'],
-    Dashboards: ['Hello', 'You_Have', 'Open_cases', 'View_all_cases', 'Dashboard_Overview', 'Statistics', 'Open_ticket', 'Open_invoices', 'Amounts_outstanding', 'Todo_List', 'Low', 'Medium', 'High', 'See_All', 'File', 'Client', 'Lawyer', 'Takeover_Date', 'Stage', 'New_inquiry', 'Invoice_No', 'Total', 'Due_date', 'Open_amount', 'New_Chats', 'No_chats_found'],
+    Menu: ['Email', 'Documents', 'Chat', 'Task', 'Calendar', 'Respites', 'Outbox', 'Bills', 'Inquiry', 'Contact', 'User', 'Account', 'EmailTemplate', 'CloudServer', 'CalendarSetting'],
+    Dashboards: ['Hello', 'YouHave', 'OpenCases', 'ViewAllCases', 'DashboardOverview', 'Statistics', 'OpenTicket', 'OpenInvoices', 'AmountsOutstanding', 'TodoList', 'Low', 'Medium', 'High', 'See_All', 'File', 'Client', 'Lawyer', 'TakeoverDate', 'Stage', 'NewInquiry', 'InvoiceNo', 'Total', 'DueDate', 'OpenAmount', 'NewChats', 'NoChatsFound'],
     Pages: {
-        Email: ['Inbox', 'Draft', 'Important', 'Spam', 'Sent', 'Trash', 'Compose', 'Search_email', 'Select_All', 'No_Items_Found', 'no_subject', 'Compose_Mail', 'Subject', 'To', 'Message', 'Select', 'Send', 'Save'],
-        Documents: ['Show', 'Search', 'Search_Case', 'Select_Status', 'Hold', 'Open', 'REFERENCE_NUMBER', 'ATTORNEY', 'DATUM', 'STATUS', 'GROUP', 'ACTION', 'CLIENT'],
-        Chat: ['Chats', 'Contacts', 'Search_Or_Start_New_A_Chat', 'Start_Converation'],
-        Task: ['MyTask', 'Completed', 'Deleted', 'Tags', 'Team', 'Update', 'Search_Task', 'Sort_A_Z', 'Sort_Z_A', 'Sort_Assignee', 'Sort_Due_Date', 'Reset_Sort', 'Important', 'Low', 'Medium', 'High'],
-        Calendar: ['Register', 'Filter', 'View_All', 'My_Appointments', 'CourtDate', 'Holiday', 'Month', 'Week', 'Day', 'List'],
-        Respites: ['Letter_Deadline', 'Invoice_Deadline', 'Search_Letter', 'Search_Invoice', 'Case', 'Case_Type', 'First_anniversary', 'PDF_document', 'Deadline_Date', 'Reference_number', 'Done', 'File', 'Amount', 'Subject'],
-        Outbox: ['DATE', 'SUBJECT', 'PRINTED', 'DONE', 'VIEW', 'Show', 'Search', 'Search_Letter', 'REFERENCE_NUMBER'],
-        Bills: ['Create_Invoice', 'INVOICE_NUMBER', 'DUE_DATE', 'Showing', 'to', 'of', 'entries', 'Total', 'Due_Date', 'Show', 'Search', 'Select_Status', 'STATUS', 'CLIENT', 'TOTAL', 'ACTION'],
-        Inquiry: ['Add_Contact', 'Search_Contact', 'TICKET', 'NAME', 'EMAIL', 'There_are_no_records_to_display', 'Show', 'Search', 'ACTION'],
+        Email: ['Inbox', 'Draft', 'Important', 'Spam', 'Sent', 'Trash', 'Compose', 'SearchEmail', 'SelectAll', 'NoItemsFound', 'NoSubject', 'ComposeMail', 'Subject', 'To', 'Message', 'Select', 'Send', 'Save', 'ToEmailIsRequired'],
+        Documents: [
+                'Show', 'Search', 'SearchCase', 'SelectStatus', 'Hold', 
+                'Open', 'Name', 'LastName', 'Client', 'Stadium', 
+                'Group', 'Land', 'Telephone', 'E_Mail', 'Date', 
+                'Address', 'Surname', 'Updated', 'UploadDocument', 'WriteALetterNow', 
+                'AddTimeTracking', 'AddANote', 'DetailsOnFile', 'Subject', 'Done', 
+                'Action', 'Opponent', 'History', 'Details', 'Lawyer', 
+                'Title', 'Content', 'Message', 'Files', 'File', 
+                'Add', 'Record', 'of', 'View', 'Upload', 
+                'Download', 'document', 'Create', 'Delete', 'WriteLetter', 
+                'AddNotesOrFile', 'AddNotes', 'AddFile', 'SendEMail', 'Now', 
+                'EnterTheTime', 'NameIsRequired', 'InvalidEmailAddress', 'TelephoneIsRequired', 'AttorneyIsRequired', 
+                'GroupIsRequired', 'StatusIsRequired', 'LastNameIsRequired', 'EmailIsRequired', 'Attorney', 
+                'TelephoneMustBe10Digit', 'City', 'PostalCode', 'SelectAttorney', 'SelectGroup', 
+                'Submit', 'Cancel', 'Country', 'ReferenceNumber', 'Status'
+        ],
+        Chat: ['Chats', 'Contacts', 'SearchOrStartNewAChat', 'StartConversation'],
+        Task: ['MyTask', 'Completed', 'Deleted', 'Tags', 'Team', 'Update', 'SearchTask', 'SortAZ', 'SortZA', 'SortAssignee', 'SortDueDate', 'ResetSort', 'Important', 'Low', 'Medium', 'High'],
+        Calendar: ['Register', 'Filter', 'ViewAll', 'MyAppointments', 'CourtDate', 'Holiday', 'Month', 'Week', 'Day', 'List'],
+        Respites: ['LetterDeadline', 'InvoiceDeadline', 'SearchLetter', 'SearchInvoice', 'Case', 'CaseType', 'FirstAnniversary', 'PDFDocument', 'DeadlineDate', 'ReferenceNumber', 'Done', 'File', 'Amount', 'Subject'],
+        Outbox: ['DATE', 'SUBJECT', 'PRINTED', 'DONE', 'VIEW', 'Show', 'Search', 'SearchLetter', 'ReferenceNumber'],
+        Bills: ['CreateInvoice', 'INVOICE_NUMBER', 'DUE_DATE', 'Showing', 'to', 'of', 'entries', 'Total', 'DueDate', 'Show', 'Search', 'SelectStatus', 'STATUS', 'CLIENT', 'TOTAL', 'ACTION'],
+        Inquiry: ['AddContact', 'SearchContact', 'TICKET', 'NAME', 'EMAIL', 'ThereAreNoRecordsToDisplay', 'Show', 'Search', 'ACTION'],
         Contact: [],
-        User: ['Admin', 'Lawyer', 'Partner', 'Customer', 'Search_Filter', 'Entries', 'Search_User', 'Select_Role', 'Add_New_User', 'NAME', 'EMAIL', 'ROLE', 'CONTACT', 'Show', 'Search', 'STATUS', 'ACTION'],
-        Account: ['Change', 'Username', 'Name', 'Company', 'Language', 'Save_Change', 'Language_Labels', 'Menu', 'Dashboards', 'Pages', 'Common', 'Errors', 'IMAP_information', 'IMAP_Host', 'IMAP_Port', 'Secure', 'Use_SSL', 'IMAP_Email', 'IMAP_Password', 'Email'],
-        Emial_Template: ['Add_Email_Template', 'Search_Email_Template', 'Show', 'Search', 'SUBJECT', 'STATUS', 'ACTION', 'Showing', 'to', 'of', 'entries'],
-        Cloud_Server: ['Add_New', 'My_Drive', 'Recents', 'STOREAGE_STATUS', 'used_of', 'Filename', 'Created', 'Actions', 'Important', 'Trash', 'Search'],
-        Calendar_Setting: []
+        User: ['Admin', 'Lawyer', 'Partner', 'Customer', 'SearchFilter', 'Entries', 'SearchUser', 'SelectRole', 'AddNewUser', 'NAME', 'EMAIL', 'ROLE', 'CONTACT', 'Show', 'Search', 'STATUS', 'ACTION'],
+        Account: [
+            'Change', 'Username', 'Name', 'Company', 'Language', 
+            'SaveChange', 'LanguageLabels', 'Menu', 'Dashboards', 'Pages', 
+            'Common', 'Errors', 'IMAPInformation', 'IMAPHost', 'IMAPPort', 
+            'Secure', 'UseSSL', 'IMAPEmail', 'IMAPPassword', 'Email', 
+            'SelectRole', 'RoleIsRequired'
+        ],
+        EmailTemplate: ['AddEmailTemplate', 'SearchEmailTemplate', 'Show', 'Search', 'SUBJECT', 'STATUS', 'ACTION', 'Showing', 'to', 'of', 'entries'],
+        CloudServer: ['AddNew', 'MyDrive', 'Recents', 'STOREAGE_STATUS', 'usedOf', 'Filename', 'Created', 'Actions', 'Important', 'Trash', 'Search'],
+        CalendarSetting: []
     },
-    'UI Setting': ['Theme_Customizer', 'Customize_Preview_in_Real_Time', 'Skin', 'Bordered', 'Dark', 'Semi_Dark', 'Content_Width', 'Full_Width', 'Boxed', 'Menu_Collapsed', 'Menu_Hidden', 'Navbar_Color', 'Navbar_Type', 'Floating', 'Sticky', 'Static', 'Hidden', 'Footer_Type', 'Apply_Save'],
+    'UI Setting': ['ThemeCustomizer', 'CusomizePreviewInRealTime', 'Skin', 'Bordered', 'Dark', 'SemiDark', 'ContentWidth', 'FullWidth', 'Boxed', 'MenuCollapsed', 'MenuHidden', 'NavbarColor', 'NavbarType', 'Floating', 'Sticky', 'Static', 'Hidden', 'FooterType', 'ApplySave'],
     Common: ['APPS_MENU', 'REQUEST_SETTINGS', 'Profile', 'Logout'],
     Errors: ['Success', 'Failed', 'Error', 'Warning']
 }
@@ -341,8 +425,8 @@ export const L10nMenuItemIDKeys = {
     Contact: 'contactApp',
     User: 'userApp',
     Account: 'accountApp',
-    Email_Template: 'emailTemplateApp',
-    Cloud_Server: 'cloudServerApp'
+    EmailTemplate: 'emailTemplateApp',
+    CloudServer: 'cloudServerApp'
 }
 
 export const getDefaultLanguageLabels = () => {

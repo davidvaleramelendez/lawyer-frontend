@@ -4,9 +4,6 @@ import {
   Label
 } from 'reactstrap'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Utils
 import { getTransformDate } from '@utils'
 
@@ -17,16 +14,17 @@ import {
   Check 
 } from 'react-feather'
 
+// ** Translation
+import { T } from '@localization'
+
 const CaseDetails = ({details}) => {
-  // ** Hooks
-  const { t } = useTranslation()
   
   return (
     <div>
       {(details.subject || details.Subject) &&
         <div className="row mb-1">
           <div className="col-3">
-            <strong>{t("Subject")}: </strong>
+            <strong>{T("Subject")}: </strong>
           </div>
           <div className="col-9">
             {details.subject ?? details.Subject}
@@ -36,7 +34,7 @@ const CaseDetails = ({details}) => {
       {details.title &&
         <div className="row mb-1">
           <div className="col-3">
-            <strong>{t("Title")}: </strong>
+            <strong>{T("Title")}: </strong>
           </div>
           <div className="col-9">
             {details.title}
@@ -46,7 +44,7 @@ const CaseDetails = ({details}) => {
       {details.Content &&
         <div className="row mb-1">
           <div className="col-3">
-            <strong>{t("Content")}: </strong>
+            <strong>{T("Content")}: </strong>
           </div>
           <div className="col-9">
             {details.Content}
@@ -56,7 +54,7 @@ const CaseDetails = ({details}) => {
       {details.description &&
         <div className="row mb-1">
           <div className="col-3">
-            <strong>{t("Content")}: </strong>
+            <strong>{T("Content")}: </strong>
           </div>
           <div className="col-9">
             {details.description}
@@ -66,7 +64,7 @@ const CaseDetails = ({details}) => {
       {details.message &&
         <div className="row mb-1">
           <div className="col-3">
-            <strong>{t("Message")}: </strong>
+            <strong>{T("Message")}: </strong>
           </div>
           <div className="col-9">
             <div dangerouslySetInnerHTML={{__html: details.message}} />
@@ -76,7 +74,7 @@ const CaseDetails = ({details}) => {
       {(details.CreatedAt || details.created_at) &&
         <div className="row mb-1">
           <div className="col-3">
-            <strong>{t("Date")}: </strong>
+            <strong>{T("Date")}: </strong>
           </div>
           <div className="col-9">
             {getTransformDate(details.CreatedAt ?? details.created_at, "DD.MM.YYYY")}
@@ -86,7 +84,7 @@ const CaseDetails = ({details}) => {
       {details.attachment && typeof (details.attachment) === 'object' && details.attachment.length > 0 &&
         <div className="row mb-1">
           <div className="col-3">
-            <strong>{t("Files")}: </strong>
+            <strong>{T("Files")}: </strong>
           </div>
           <div className="col-9">
             {details.attachment.map((item, index) => {
@@ -103,7 +101,7 @@ const CaseDetails = ({details}) => {
       {details.attachment && typeof (details.attachment) === 'string' &&
         <div className="row mb-1">
           <div className="col-3">
-            <strong>{t("File")}: </strong>
+            <strong>{T("File")}: </strong>
           </div>
           <div className="col-9">
             <div className="inline">
@@ -116,7 +114,7 @@ const CaseDetails = ({details}) => {
       {details.isErledigt &&
         <div className="row mb-1">
           <div className="col-3">
-            <strong>{t("Done?")}: </strong>
+            <strong>{T("Done?")}: </strong>
           </div>
           <div className="col-9">
             <div className='form-switch form-check-primary'>

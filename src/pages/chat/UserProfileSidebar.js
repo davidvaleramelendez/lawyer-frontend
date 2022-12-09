@@ -13,6 +13,9 @@ import {
   PhoneCall
 } from 'react-feather'
 
+// ** Translation
+import { T } from '@localization'
+
 const UserProfileSidebar = (props) => {
   // ** Props
   const { user, handleUserSidebarRight, userSidebarRight } = props

@@ -47,6 +47,9 @@ import {
 /* Blank avatar image */
 import avatarBlank from '@src/assets/images/avatars/avatar-blank.png'
 
+// ** Translation
+import { T } from '@localization'
+
 const SidebarLeft = (props) => {
   // ** Props & Store
   const {

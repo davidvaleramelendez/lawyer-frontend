@@ -43,7 +43,9 @@ import {
   resetSelectedDraft,
   resetComposeModal
 } from './store'
-import { T } from '../../utility/Localization'
+
+// ** Translation
+import { T } from '@localization'
 
 const Mails = (props) => {
   // ** Props

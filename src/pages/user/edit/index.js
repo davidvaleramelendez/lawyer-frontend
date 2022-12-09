@@ -38,6 +38,9 @@ import UserTabs from './Tabs'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import '@styles/react/pages/page-account-settings.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const UserEditApp = () => {
   // ** Hooks
   const { id } = useParams()

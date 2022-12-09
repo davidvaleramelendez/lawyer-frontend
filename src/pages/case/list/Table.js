@@ -59,7 +59,9 @@ import Avatar from "@components/avatar"
 import DotPulse from "@components/dotpulse"
 import Notification from '@components/toast/notification'
 import DatatablePagination from "@components/datatable/DatatablePagination"
-import { T } from "@localization"
+
+// ** Translation
+import { T } from '@localization'
 
 /* Get windows size */
 function getWindowSize() {

@@ -782,8 +782,10 @@ export const createTimeCaseRecord = createAsyncThunk('appCase/createTimeCaseReco
     const response = await createTimeCaseRecordRequest(payload)
     if (response && response.flag) {
       await dispatch(getTimeCaseRecords(getState().cases.id))
+      const timeData = getTimeCounter()
       setTimeCounter({
-        ...getTimeCounter(),
+        ...timeData,
+        record_id: response.data.RecordID,
         start_time: response.data.start_time
       })
       return {
@@ -791,6 +793,7 @@ export const createTimeCaseRecord = createAsyncThunk('appCase/createTimeCaseReco
         actionFlag: "TIME_CREATED",
         success: response.message,
         start_time: response.data.start_time,
+        record_id: response.data.RecordID,
         error: ""
       }
     } else {
@@ -799,6 +802,7 @@ export const createTimeCaseRecord = createAsyncThunk('appCase/createTimeCaseReco
         actionFlag: "",
         success: "",
         start_time: null,
+        record_id: null,
         error: response.message
       }
     }
@@ -904,6 +908,7 @@ export const appCaseSlice = createSlice({
     actionFlag: "",
     loading: false,
     start_time: null,
+    record_id: null,
     success: "",
     error: ""
   },
@@ -1101,6 +1106,7 @@ export const appCaseSlice = createSlice({
         state.success = action.payload.success
         state.error = action.payload.error
         state.start_time = action.payload.start_time
+        state.record_id = action.payload.record_id
       })
       .addCase(updateTimeCaseRecord.fulfilled, (state, action) => {
         state.actionFlag = action.payload.actionFlag

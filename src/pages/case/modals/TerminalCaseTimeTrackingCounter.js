@@ -7,8 +7,12 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 // Redux
-import { useDispatch, useSelector } from 'react-redux'
-import { updateTimeCaseRecord, deleteTimeCaseRecord, setStartTime } from '../store'
+
+import { useDispatch } from 'react-redux'
+import { updateTimeCaseRecord, deleteTimeCaseRecord } from '../store'
+
+// ** draggable Import
+import Draggable from 'react-draggable'
 
 // ** Reactstrap Imports
 import {
@@ -31,7 +35,7 @@ import { setTimeCounter, getTimeCounter, toTimeString } from '@utils'
 // ** Styles
 import 'react-circular-progressbar/dist/styles.css'
 import '@styles/base/pages/app-invoice.scss'
-import { Clock } from 'react-feather'
+import { Clock, Minus, Square } from 'react-feather'
 
 let myInterval = null
 
@@ -44,23 +48,26 @@ const TerminalCaseTimeTrackingCounter = ({
 
   // ** Store vars
   const [currentTime, setCurrentTime] = useState(getTimeCounter()?.current_time ?? 0)
-  const [status, setStatus] = useState(getTimeCounter()?.state ?? false)
+  const [status, setStatus] = useState(getTimeCounter()?.status ?? false)
   const [alarmModal, setAlarmModal] = useState(false)
   const [stopModal, setStopModal] = useState(false)
+  const [draggable, setDraggable] = useState(false)
+  const [completed, setCompleted] = useState(false)
 
   const dispatch = useDispatch()
-  const start_time = useSelector(state => state.cases.start_time)
 
   useEffect(() => {
     if (open) {
       setAlarmModal(false)
       setStopModal(false)
-      if (!start_time) {
-        dispatch(setStartTime(getTimeCounter().start_time))
-      }
+      setDraggable(false)
+
       myInterval = setInterval(() => {
         if (stopModal) {
-          return prevTime
+          return
+        }
+        if (completed) {
+          return
         }
         setStopModal(prevStop => {
           if (!prevStop) {
@@ -71,11 +78,12 @@ const TerminalCaseTimeTrackingCounter = ({
               }
       
               if (prevTime === getTimeCounter()?.interval_time) {
-                clearInterval(myInterval)
+                // clearInterval(myInterval)
                 setTimeCounter({
                   ...getTimeCounter(),
-                  status: false
+                  completed: true
                 })
+                setCompleted(true)
               }
     
               if (timeCounter.status && prevTime < timeCounter?.interval_time) {
@@ -104,117 +112,198 @@ const TerminalCaseTimeTrackingCounter = ({
     setTimeCounter({
       ...localTime,
       status: false,
-      current_time: 0,
+      completed: true,
+      manual: false,
       interval_time: currentTime
     })
+    setCompleted(false)
+
   }
 
   const handleSave = async () => {
     const localTime = getTimeCounter()
     dispatch(updateTimeCaseRecord({
-      RecordID: localTime.CaseID
+      RecordID: localTime.record_id,
+      interval_time: localTime.interval_time
     }))
     closeTimer()
     setCurrentTime(0)
+    setTimeCounter({
+      ...localTime,
+      manual: true,
+      completed: false,
+      status: false,
+      current_time: 0
+    })
     closeTerminal()
+  }
+
+  const handleTimeIncrease = (increasetime) => () => {
+    const localTime = getTimeCounter()
+    setTimeCounter({
+      ...localTime,
+      interval_time: localTime.interval_time + (increasetime * 60),
+      status: true
+    })
+    setStatus(true)
   }
 
   const handleDelete = () => {
     const localTime = getTimeCounter()
     dispatch(deleteTimeCaseRecord({
-      RecordID: localTime.CaseID
+      RecordID: localTime.record_id
     }))
     closeTimer()
     setCurrentTime(0)
+    setTimeCounter({
+      ...localTime,
+      manual: true,
+      completed: false,
+      status: false,
+      current_time: 0
+    })
     closeTerminal()
   }
 
-  return (
-    <div className={`${open ? '' : 'd-none'}`}>
-      <Card>
-        <CardBody>
-          <h3>{t("Terminal")}</h3>
-          <hr />
-          <div className='row align-items-center mt-3'>
-            <div className="col-7">
-              <div className="mx-auto time-tracking">
-                <CircularProgressbar 
-                  value={currentTime * 100 / getTimeCounter()?.interval_time} 
-                  text={`${toTimeString(currentTime)}`}
-                  styles={buildStyles({
-                    textSize: '12px'
-                  })}                
-                /> 
-              </div>
-            </div>
-            <div className='col-5'>
-              <div className='d-flex'>
-                <Clock size={16} className="me-1"/> <h5 className='mb-0'>Recorded Time</h5>
-              </div>
-              <h2 className='mt-1'>{toTimeString(currentTime, 'min')}</h2>
-              <div className='mt-3 d-flex'>
-                <Clock size={16} className="me-1"/> <h5 className='mb-0'>Started Time</h5>
-              </div>
-              <h2 className='mt-1'>{`${start_time ?? ''}`}</h2>
-            </div>
-          </div>
+  const toggleDraggable = (status) => () => {
+    setDraggable(status)
+  }
 
-          <Row className="mt-5 mb-1">
-            <div className="d-flex justify-content-center">
-              {!status && currentTime === getTimeCounter()?.interval_time ? (
-                <>
-                  <Button type="submit" size='lg' color="primary" className='me-3' onClick={handleSave}>
-                    {t("Save")}
-                  </Button>
-                  <Button type="submit" size='lg' color="danger" onClick={handleDelete}>
-                    {t("Delete")}
-                  </Button>
-                </>
-                ) : (
-                <Button type="submit" size='lg' color="danger" onClick={() => setStopModal(true)}>
-                  {t("Stop")}
-                </Button>
-              )}
+  const renderTerminal = () => {
+    return (
+      <div className={`${open ? '' : 'd-none'}`}>
+        <Card>
+          <CardBody className='card-body'>
+            <div className='d-flex justify-content-between'>
+              <h3>{t("Terminal")}</h3>
+              {draggable ? (
+                <button className='btn btn-default' onClick={toggleDraggable(false)}>
+                  <Minus size={14} />
+                </button>) : (
+                <button className='btn btn-default' onClick={toggleDraggable(true)}>
+                  <Square size={14} />
+                </button>
+                )
+              }
             </div>
-          </Row>
-        </CardBody>
-      </Card>
-      <Modal
-          isOpen={alarmModal}
-          toggle={() => setAlarmModal(!alarmModal)}
-          modalClassName="modal-warning"
-          className='modal-dialog-centered'
-        >
-        <ModalHeader toggle={() => setAlarmModal(!alarmModal)}>Warning</ModalHeader>
-        <ModalBody>
-          Time is about to expired.
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={() => setAlarmModal(!alarmModal)}>
-            Confirm
-          </Button>
-        </ModalFooter>
-      </Modal>
-      <Modal
-          isOpen={stopModal}
-          toggle={() => setStopModal(!stopModal)}
-          modalClassName="modal-warning"
-          className='modal-dialog-centered'
-        >
-        <ModalHeader toggle={() => setStopModal(!stopModal)}>Warning</ModalHeader>
-        <ModalBody>
-          Do you want to continue?
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={() => setStopModal(false)}>
-            Continue
-          </Button>
-          <Button color="danger" onClick={closeTimer}>
-            Stop
-          </Button>
-        </ModalFooter>
-      </Modal>
-    </div>
+            <hr />
+            <div className='row align-items-center'>
+              <div className="col-7">
+                <div className="mx-auto time-tracking">
+                  <CircularProgressbar 
+                    value={currentTime * 100 / getTimeCounter().interval_time} 
+                    text={`${toTimeString(currentTime)}`}
+                    styles={buildStyles({
+                      textSize: '12px'
+                    })}                
+                  /> 
+                </div>
+              </div>
+              <div className='col-5'>
+                <div className='d-flex'>
+                  <Clock size={16} className="me-1"/> <h5 className='mb-0'>Recorded Time</h5>
+                </div>
+                <h2 className='mt-2'>{toTimeString(currentTime, 'min')}</h2>
+                <div className='mt-5 d-flex'>
+                  <Clock size={16} className="me-1"/> <h5 className='mb-0'>Started Time</h5>
+                </div>
+                <h2 className='mt-2'>{`${getTimeCounter().start_time ?? ''}`}</h2>
+              </div>
+            </div>
+
+            <Row className="mt-5 mb-1">
+              <div className="d-flex justify-content-center">
+                {!status && currentTime === getTimeCounter().interval_time ? (
+                  <div>
+                    {getTimeCounter().manual ? (<div className='d-flex justify-content-between'>
+                      <Button type="submit" size='lg' color="primary" className='me-3' onClick={handleTimeIncrease(5)}>
+                        {t("5")}
+                      </Button>
+                      <Button type="submit" size='lg' color="primary" className='me-3' onClick={handleTimeIncrease(10)}>
+                        {t("10")}
+                      </Button>
+                      <Button type="submit" size='lg' color="primary" className='me-3' onClick={handleTimeIncrease(15)}>
+                        {t("15")}
+                      </Button>
+                      <Button type="submit" size='lg' color="primary" className='me-3' onClick={handleTimeIncrease(20)}>
+                        {t("20")}
+                      </Button>
+                      <Button type="submit" size='lg' color="primary" className='me-3'  onClick={handleTimeIncrease(25)}>
+                        {t("25")}
+                      </Button>                      
+                    </div>) : <></>
+                    }
+                    <div className='mt-2 d-flex justify-content-center'>
+                      <Button type="submit" size='lg' color="primary" className='me-3' onClick={handleSave}>
+                        {t("Save")}
+                      </Button>
+                      <Button type="submit" size='lg' color="danger" onClick={handleDelete}>
+                        {t("Delete")}
+                      </Button>
+                    </div>
+                  </div>
+                  ) : (
+                  <Button className='d-flex justify-content-center' type="submit" size='lg' color="danger" onClick={() => setStopModal(true)}>
+                    {t("Stop")}
+                  </Button>
+                )}
+              </div>
+            </Row>
+          </CardBody>
+        </Card>
+        <Modal
+            isOpen={alarmModal}
+            toggle={() => setAlarmModal(!alarmModal)}
+            modalClassName="modal-warning"
+            className='modal-dialog-centered'
+          >
+          <ModalHeader toggle={() => setAlarmModal(!alarmModal)}>Warning</ModalHeader>
+          <ModalBody>
+            Time is about to expired.
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={() => setAlarmModal(!alarmModal)}>
+              Confirm
+            </Button>
+          </ModalFooter>
+        </Modal>
+        <Modal
+            isOpen={stopModal}
+            toggle={() => setStopModal(!stopModal)}
+            modalClassName="modal-warning"
+            className='modal-dialog-centered'
+          >
+          <ModalHeader toggle={() => setStopModal(!stopModal)}>Warning</ModalHeader>
+          <ModalBody>
+            Do you want to continue?
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={() => setStopModal(false)}>
+              Continue
+            </Button>
+            <Button color="danger" onClick={closeTimer}>
+              Stop
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </div>
+    )
+  }
+
+  return (
+    <>
+      {draggable ? (
+        <div className='time-tracking-draggable mx-auto col-sm-8 col-md-6 col-xl-5'>
+        <Draggable handle='.card-body' className='time-tracking-draggable'>
+          {renderTerminal()}
+        </Draggable>
+        </div>
+      ) : (
+        <>
+          {renderTerminal()}
+        </>
+      )}
+    </>
   )
 }
 

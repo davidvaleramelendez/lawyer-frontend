@@ -6,6 +6,8 @@ import {
   handleContentWidth
 } from '@store/layout'
 
+import moment from "moment"
+
 // ** Store & Actions
 import {
   closeCase,
@@ -126,8 +128,13 @@ const CaseView = () => {
 
   // Check TimeCounterModal 
   useEffect(() => {
-    const time_modal_status = getTimeCounter()?.status
+
+    const time_modal_status = getTimeCounter().status
+    const time_completed_status = getTimeCounter().completed
     if (time_modal_status === true) {
+      setTimeCounterTerminalOpen(true)
+    }
+    if (time_completed_status === true) {
       setTimeCounterTerminalOpen(true)
     }
   }, [])
@@ -294,9 +301,13 @@ const CaseView = () => {
       Subject: values.Subject,
       interval_time: values.interval_time * 60
     }
+    const startTime = moment(new Date()).format('hh:mm:ss')
+
     setTimeCounter({
       ...timeData,
       current_time: 0,
+      start_time: startTime,
+      manual: true,
       status: true
     })
     dispatch(createTimeCaseRecord({
@@ -656,7 +667,7 @@ const CaseView = () => {
                         </thead>
                           <tbody>
                             {store.timeCaseRecord.map((record, index) => (
-                              <tr key={`record_${index}`} onClick={onRecordClick(record)} className="cursor-pointer">
+                              record.end_time !== null ? <tr key={`record_${index}`} onClick={onRecordClick(record)} className="cursor-pointer">
                                 <td/>
 
                                 <td>{record.CreatedAt && getTransformDate(record.CreatedAt, "DD.MM.YYYY")}</td>
@@ -686,7 +697,7 @@ const CaseView = () => {
                                 <td>
                                   <Eye size={18} className="cursor-pointer" onClick={() => onRecordClick(record)} />
                                 </td>
-                              </tr>
+                              </tr> : null
                             ))}
                             {store.caseRecords.map((record, index) => (
                               <tr key={`record_${index}`} onClick={onRecordClick(record)} className="cursor-pointer">

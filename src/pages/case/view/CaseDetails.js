@@ -141,10 +141,30 @@ const CaseDetails = ({details}) => {
       {(details.interval_time) &&
         <div className="row mb-1">
           <div className="col-3">
-            <strong>{t("Interval Tiime")}: </strong>
+            <strong>{t("Interval Time")}: </strong>
           </div>
           <div className="col-9">
             {details.interval_time} S
+          </div>
+        </div>
+      }
+      {(details.start_time) &&
+        <div className="row mb-1">
+          <div className="col-3">
+            <strong>{t("Start Time")}: </strong>
+          </div>
+          <div className="col-9">
+            {details.start_time}
+          </div>
+        </div>
+      }
+      {(details.end_time) &&
+        <div className="row mb-1">
+          <div className="col-3">
+            <strong>{t("End Time")}: </strong>
+          </div>
+          <div className="col-9">
+            {details.end_time}
           </div>
         </div>
       }

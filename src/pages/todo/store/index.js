@@ -5,7 +5,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 // Constant
 import {
-  todoItem
+  todoItem,
+  todosMeta
 } from '@constant/reduxConstant'
 
 // ** Api endpoints
@@ -64,6 +65,7 @@ export const getTodoList = createAsyncThunk('appTodo/getTodoList', async (params
       return {
         params,
         taskItems: response.data,
+        todosMeta: response.todosMeta || todosMeta,
         pagination: response.pagination,
         todoItem: todoItem,
         actionFlag: "",
@@ -76,6 +78,7 @@ export const getTodoList = createAsyncThunk('appTodo/getTodoList', async (params
         taskItems: [],
         pagination: null,
         todoItem: todoItem,
+        todosMeta: todosMeta,
         actionFlag: "",
         success: "",
         error: ""
@@ -88,6 +91,7 @@ export const getTodoList = createAsyncThunk('appTodo/getTodoList', async (params
       taskItems: [],
       pagination: null,
       todoItem: todoItem,
+      todosMeta: todosMeta,
       actionFlag: "",
       success: "",
       error: error
@@ -288,6 +292,7 @@ export const appTodoSlice = createSlice({
     taskItems: [],
     pagination: null,
     todoItem: todoItem,
+    todosMeta: todosMeta,
     params: {
       filter: '',
       search: '',
@@ -331,6 +336,7 @@ export const appTodoSlice = createSlice({
         state.taskItems = action.payload.taskItems
         state.pagination = action.payload.pagination
         state.todoItem = action.payload.todoItem
+        state.todosMeta = action.payload.todosMeta
         state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success

@@ -15,6 +15,7 @@ import {
 
 // ** Reactstrap Imports
 import {
+  Badge,
   Button,
   ListGroup,
   ListGroupItem
@@ -26,6 +27,7 @@ import { T } from '@localization'
 const TodoSidebar = (props) => {
   // ** Props
   const {
+    store,
     params,
     dispatch,
     mainSidebar,

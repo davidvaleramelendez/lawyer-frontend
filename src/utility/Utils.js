@@ -534,4 +534,22 @@ export const setLanguageLabels = (labels) => {
   } catch (error) {
     console.log('>>>>: src/utility/Utils.js : setLanguageLabels -> error', error)
   }
+  return rememberMe
+}
+/* /Decrypting auth remember me and getting from storage */
+
+export const toTimeString = (seconds, mode = 'second') => {
+  try {
+    let hour = Math.floor(seconds / 3600)
+    let min = Math.floor((seconds % 3600) / 60)
+    let second = seconds % 60
+    
+    hour = (hour < 10 ? '0' : '') + hour
+    min = (min < 10 ? '0' : '') + min
+    second = (second < 10 ? '0' : '') + second
+    if (mode === 'min') return `${hour} : ${min}`
+    else return `${hour} : ${min} : ${second}`
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js : toTimeString -> error', error)
+  }
 }

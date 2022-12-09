@@ -59,9 +59,6 @@ $calendar-night-color: rgb(215 215 215 / 34%);
 
 .time-tracking {
 	width: 200px;
-	margin: auto;
-    margin-top: 40px;
-    margin-bottom: 40px;
 }
 
 /* Bootstrap table override */
@@ -71,4 +68,10 @@ $calendar-night-color: rgb(215 215 215 / 34%);
 		padding: 0.72rem 1.5rem;
 	}
 }
+
+.time-tracking-draggable {
+	position: absolute;
+	z-index: 1;
+}
+
 /* /Bootstrap table override */

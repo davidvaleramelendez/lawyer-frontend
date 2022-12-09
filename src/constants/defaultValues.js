@@ -7,6 +7,7 @@ export const storageTokenKeyName = 'accessToken'
 export const storageRefreshTokenKeyName = 'refreshToken'
 export const storageTokenExpiresKeyName = 'tokenExpires'
 export const storageLoggedAtKeyName = 'loggedAt'
+export const storageRememberMeAuth = "LWY_KP_329"
 export const storageTotalNumberName = "totalNubmer"
 export const storageSiteSetting = "siteSetting"
 export const storageTimeCounter = "timecounter"
@@ -85,3 +86,10 @@ export const TN_EMAIL_TEMPLATE = "email_template"
 export const TN_CHAT = "chat"
 export const TN_CHAT_CONTACT = "chat_contact"
 export const TN_TASK = "task"
+
+/* Continue Modal Status */
+export const CONTINUE_MODAL = {
+    INITIAL_STATE: 'initial',
+    OPENED_STATE: 'opened',
+    CONFIRMED_STATE: 'confirmed'
+}

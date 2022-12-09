@@ -6,6 +6,8 @@ import {
   handleContentWidth
 } from '@store/layout'
 
+import moment from "moment"
+
 // ** Store & Actions
 import {
   closeCase,
@@ -18,13 +20,15 @@ import {
   statusCaseDocument,
   clearCaseMessage,
   updateSelectedDetails,
-  getTimeCaseRecords
+  getTimeCaseRecords,
+  createTimeCaseRecord
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // Constant
 import {
-  adminRoot
+  adminRoot,
+  CONTINUE_MODAL
 } from '@constant/defaultValues'
 import {
   recordItem,
@@ -88,7 +92,7 @@ import ModalCaseRecordDetail from '../modals/ModalCaseRecordDetail'
 import ModalCaseDocument from '../modals/ModalCaseDocument'
 import ModalCaseLetter from '../modals/ModalCaseLetter'
 import ModalCaseTimeTracking from '../modals/ModalCaseTimeTracking'
-import ModalCaseTimeTrackingCounter from '../modals/ModalCaseTimeTrackingCounter'
+import TerminalCaseTimeTrackingCounter from '../modals/TerminalCaseTimeTrackingCounter'
 
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
@@ -120,13 +124,18 @@ const CaseView = () => {
   const [letterModalOpen, setLetterModalOpen] = useState(false)
   const [letterRowData, setLetterRowData] = useState(letterItem)
   const [timeTrackModalOpen, setTimeTrackModalOpen] = useState(false)
-  const [timeCounterModalOpen, setTimeCounterModalOpen] = useState(false)
+  const [timeCounterTerminalOpen, setTimeCounterTerminalOpen] = useState(false)
 
   // Check TimeCounterModal 
   useEffect(() => {
+
     const time_modal_status = getTimeCounter().status
+    const time_completed_status = getTimeCounter().completed
     if (time_modal_status === true) {
-      setTimeCounterModalOpen(true)
+      setTimeCounterTerminalOpen(true)
+    }
+    if (time_completed_status === true) {
+      setTimeCounterTerminalOpen(true)
     }
   }, [])
 
@@ -286,18 +295,26 @@ const CaseView = () => {
     dispatch(updateSelectedDetails(null))
   }
 
-  const onRecordSubmit = (values, caseId) => {
+  const handleTimeRecordStart = (values, caseId) => {
     const timeData = {
       CaseID: caseId,
       Subject: values.Subject,
-      interval_time: values.interval_time * 1,
-      current_time: 0,
-      status: true
+      interval_time: values.interval_time * 60
     }
+    const startTime = moment(new Date()).format('hh:mm:ss')
 
-    setTimeCounter(timeData)
-    
-    setTimeCounterModalOpen(true)
+    setTimeCounter({
+      ...timeData,
+      current_time: 0,
+      start_time: startTime,
+      manual: CONTINUE_MODAL.INITIAL_STATE,
+      status: true
+    })
+    dispatch(createTimeCaseRecord({
+      ...timeData,
+      IsShare: 0
+    }))
+    setTimeCounterTerminalOpen(true)
   }
 
   return store ? (
@@ -566,9 +583,18 @@ const CaseView = () => {
             </Col>
           </Row>
           {/* /Client && Opponent detail */}
+          <Row>
+            <Col xl={5} md={6} sm={8} className="mx-auto">
+              <TerminalCaseTimeTrackingCounter
+                open={timeCounterTerminalOpen}
+                caseId={store.caseItem.CaseID}
+                closeTerminal={() => setTimeCounterTerminalOpen(false)}
+              />
+            </Col>
+          </Row>
 
           {/* Notes && Time Recording && Letter && Document History */}
-          <Row className='invoice-preview match-height'>
+          <Row className='invoice-preview'>
             <Col xl={12} md={12} sm={12}>
               <Card className='invoice-preview-card'>
                 <CardBody className='invoice-padding pb-0'>
@@ -592,7 +618,7 @@ const CaseView = () => {
                         open={timeTrackModalOpen}
                         toggleModal={() => setTimeTrackModalOpen(!timeTrackModalOpen)}
                         caseId={store.caseItem.CaseID}
-                        onRecordSubmit={onRecordSubmit}
+                        onTimeRecordStart={handleTimeRecordStart}
                       />
 
                       <Button className="ms-2 mt-1" color="primary" onClick={() => setLetterModalOpen(true)}>
@@ -641,7 +667,7 @@ const CaseView = () => {
                         </thead>
                           <tbody>
                             {store.timeCaseRecord.map((record, index) => (
-                              <tr key={`record_${index}`} onClick={onRecordClick(record)} className="cursor-pointer">
+                              record.end_time !== null ? <tr key={`record_${index}`} onClick={onRecordClick(record)} className="cursor-pointer">
                                 <td/>
 
                                 <td>{record.CreatedAt && getTransformDate(record.CreatedAt, "DD.MM.YYYY")}</td>
@@ -671,7 +697,7 @@ const CaseView = () => {
                                 <td>
                                   <Eye size={18} className="cursor-pointer" onClick={() => onRecordClick(record)} />
                                 </td>
-                              </tr>
+                              </tr> : null
                             ))}
                             {store.caseRecords.map((record, index) => (
                               <tr key={`record_${index}`} onClick={onRecordClick(record)} className="cursor-pointer">
@@ -783,12 +809,6 @@ const CaseView = () => {
                           </tbody>
                       </Table>
                     </Col>
-                    <ModalCaseTimeTrackingCounter
-                        open={timeCounterModalOpen}
-                        toggleModal={() => setTimeCounterModalOpen(!timeCounterModalOpen)}
-                        caseId={store.caseItem.CaseID}
-                      />
-
                     <ModalCaseRecordDetail
                       open={recordDetailModalOpen}
                       toggleModal={() => setRecordDetailModalOpen(!recordDetailModalOpen)}

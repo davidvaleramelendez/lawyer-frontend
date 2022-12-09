@@ -94,11 +94,6 @@ const TodoSidebar = (props) => {
                 >
                   <Star className='me-75' size={18} />
                   <span className='align-middle'>Important</span>
-                  {store && store.todosMeta && store.todosMeta.important ? (
-                    <Badge className='float-end' color='light-warning' pill>
-                      {store.todosMeta.important}
-                    </Badge>
-                  ) : null}
                 </ListGroupItem>
 
                 <ListGroupItem

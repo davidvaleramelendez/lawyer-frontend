@@ -26,6 +26,9 @@ import {
   ModalFooter
 } from 'reactstrap'
 
+// Constant
+import { CONTINUE_MODAL } from '@constant/defaultValues'
+
 // Component
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
 
@@ -53,6 +56,7 @@ const TerminalCaseTimeTrackingCounter = ({
   const [stopModal, setStopModal] = useState(false)
   const [draggable, setDraggable] = useState(false)
   const [completed, setCompleted] = useState(false)
+  const [continueModal, setContinueModal] = useState(getTimeCounter()?.manual ?? CONTINUE_MODAL.INITIAL_STATE)
 
   const dispatch = useDispatch()
 
@@ -84,6 +88,12 @@ const TerminalCaseTimeTrackingCounter = ({
                   completed: true
                 })
                 setCompleted(true)
+                setContinueModal(prevContinue => {
+                  if (prevContinue === CONTINUE_MODAL.INITIAL_STATE) {
+                    setContinueModal(CONTINUE_MODAL.OPENED_STATE)
+                  }
+                  return prevContinue
+                })
               }
     
               if (timeCounter.status && prevTime < timeCounter?.interval_time) {
@@ -113,11 +123,32 @@ const TerminalCaseTimeTrackingCounter = ({
       ...localTime,
       status: false,
       completed: true,
-      manual: false,
       interval_time: currentTime
     })
+    
     setCompleted(false)
 
+  }
+
+  const handleConfirm = () => {
+    setContinueModal(CONTINUE_MODAL.CONFIRMED_STATE)
+    const localTime = getTimeCounter()
+    setTimeCounter({
+      ...localTime,
+      manual: CONTINUE_MODAL.CONFIRMED_STATE
+    })
+  }
+
+  const handleTimeIncrease = (increasetime) => () => {
+    const localTime = getTimeCounter()
+    setContinueModal(CONTINUE_MODAL.INITIAL_STATE)
+    setTimeCounter({
+      ...localTime,
+      interval_time: localTime.interval_time + (increasetime * 60),
+      manual: CONTINUE_MODAL.INITIAL_STATE,
+      status: true
+    })
+    setStatus(true)
   }
 
   const handleSave = async () => {
@@ -127,25 +158,16 @@ const TerminalCaseTimeTrackingCounter = ({
       interval_time: localTime.interval_time
     }))
     closeTimer()
+    setContinueModal(CONTINUE_MODAL.INITIAL_STATE)
     setCurrentTime(0)
     setTimeCounter({
       ...localTime,
-      manual: true,
       completed: false,
       status: false,
-      current_time: 0
+      current_time: 0,
+      manual: CONTINUE_MODAL.INITIAL_STATE
     })
     closeTerminal()
-  }
-
-  const handleTimeIncrease = (increasetime) => () => {
-    const localTime = getTimeCounter()
-    setTimeCounter({
-      ...localTime,
-      interval_time: localTime.interval_time + (increasetime * 60),
-      status: true
-    })
-    setStatus(true)
   }
 
   const handleDelete = () => {
@@ -155,12 +177,13 @@ const TerminalCaseTimeTrackingCounter = ({
     }))
     closeTimer()
     setCurrentTime(0)
+    setContinueModal(CONTINUE_MODAL.INITIAL_STATE)
     setTimeCounter({
       ...localTime,
-      manual: true,
       completed: false,
       status: false,
-      current_time: 0
+      current_time: 0,
+      manual: CONTINUE_MODAL.INITIAL_STATE
     })
     closeTerminal()
   }
@@ -169,6 +192,15 @@ const TerminalCaseTimeTrackingCounter = ({
     setDraggable(status)
   }
 
+  const handleForceStop = () => {
+    closeTimer()
+    setContinueModal(CONTINUE_MODAL.CONFIRMED_STATE)
+    setTimeCounter({
+      ...getTimeCounter(),
+      manual: CONTINUE_MODAL.CONFIRMED_STATE
+    })
+  }
+  
   const renderTerminal = () => {
     return (
       <div className={`${open ? '' : 'd-none'}`}>
@@ -215,26 +247,8 @@ const TerminalCaseTimeTrackingCounter = ({
               <div className="d-flex justify-content-center">
                 {!status && currentTime === getTimeCounter().interval_time ? (
                   <div>
-                    {getTimeCounter().manual ? (<div className='d-flex justify-content-between'>
-                      <Button type="submit" size='lg' color="primary" className='me-3' onClick={handleTimeIncrease(5)}>
-                        {t("5")}
-                      </Button>
-                      <Button type="submit" size='lg' color="primary" className='me-3' onClick={handleTimeIncrease(10)}>
-                        {t("10")}
-                      </Button>
-                      <Button type="submit" size='lg' color="primary" className='me-3' onClick={handleTimeIncrease(15)}>
-                        {t("15")}
-                      </Button>
-                      <Button type="submit" size='lg' color="primary" className='me-3' onClick={handleTimeIncrease(20)}>
-                        {t("20")}
-                      </Button>
-                      <Button type="submit" size='lg' color="primary" className='me-3'  onClick={handleTimeIncrease(25)}>
-                        {t("25")}
-                      </Button>                      
-                    </div>) : <></>
-                    }
                     <div className='mt-2 d-flex justify-content-center'>
-                      <Button type="submit" size='lg' color="primary" className='me-3' onClick={handleSave}>
+                      <Button type="submit" size='lg' color="success" className='me-3' onClick={handleSave}>
                         {t("Save")}
                       </Button>
                       <Button type="submit" size='lg' color="danger" onClick={handleDelete}>
@@ -281,9 +295,49 @@ const TerminalCaseTimeTrackingCounter = ({
             <Button color="primary" onClick={() => setStopModal(false)}>
               Continue
             </Button>
-            <Button color="danger" onClick={closeTimer}>
+            <Button color="danger" onClick={handleForceStop}>
               Stop
             </Button>
+          </ModalFooter>
+        </Modal>
+        <Modal
+            isOpen={continueModal === CONTINUE_MODAL.OPENED_STATE}
+            toggle={() => {}}
+            modalClassName="modal-warning"
+            className='modal-dialog-centered'
+          >
+          <ModalHeader>Warning</ModalHeader>
+          <ModalBody className='mt-2'>
+            <div>
+              Your time is expired.
+              Do you want to continue?
+            </div>
+            <div className='mt-2 d-flex'>
+            <Button type="submit" size='lg' color="primary" className='me-2 ms-auto' onClick={handleTimeIncrease(5)}>
+                {t("5")}
+              </Button>
+              <Button type="submit" size='lg' color="primary" className='me-2' onClick={handleTimeIncrease(10)}>
+                {t("10")}
+              </Button>
+              <Button type="submit" size='lg' color="primary" className='me-2' onClick={handleTimeIncrease(15)}>
+                {t("15")}
+              </Button>
+              <Button type="submit" size='lg' color="primary" className='me-2' onClick={handleTimeIncrease(20)}>
+                {t("20")}
+              </Button>
+              <Button type="submit" size='lg' color="primary" className='me-auto'  onClick={handleTimeIncrease(25)}>
+                {t("25")}
+              </Button>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+
+            <div>
+              <Button color="danger" onClick={() => handleConfirm()}>
+                Stop
+              </Button>
+            </div>
+
           </ModalFooter>
         </Modal>
       </div>

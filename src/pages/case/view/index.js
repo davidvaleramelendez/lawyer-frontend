@@ -27,7 +27,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // Constant
 import {
-  adminRoot
+  adminRoot,
+  CONTINUE_MODAL
 } from '@constant/defaultValues'
 import {
   recordItem,
@@ -74,7 +75,8 @@ import {
 import {
   isUserLoggedIn,
   getTransformDate,
-  getTimeCounter
+  getTimeCounter,
+  setTimeCounter
 } from '@utils'
 
 // ** Custom Components
@@ -97,7 +99,6 @@ import TerminalCaseTimeTrackingCounter from '../modals/TerminalCaseTimeTrackingC
 
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
-import { setTimeCounter } from '../../../utility/Utils'
 
 const CaseView = () => {
   // ** Hooks
@@ -307,7 +308,7 @@ const CaseView = () => {
       ...timeData,
       current_time: 0,
       start_time: startTime,
-      manual: true,
+      manual: CONTINUE_MODAL.INITIAL_STATE,
       status: true
     })
     dispatch(createTimeCaseRecord({

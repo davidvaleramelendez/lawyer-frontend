@@ -64,6 +64,9 @@ import ModalCloudUploadFile from './modals/ModalCloudUploadFile'
 import '@src/assets/scss/antd.css'
 import '@styles/base/pages/app-file-manager.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const CloudStorageApp = () => {
     // ** Hooks
     const { t } = useTranslation()
@@ -127,12 +130,12 @@ const CloudStorageApp = () => {
 
         /* Succes toast notification */
         if (store && store.success) {
-            Notification("Success", store.success, "success")
+            Notification(T("Success"), store.success, "success")
         }
 
         /* Error toast notification */
         if (store && store.error) {
-            Notification("Error", store.error, "warning")
+            Notification(T("Error"), store.error, "warning")
         }
     }, [store.success, store.error, store.actionFlag, loadFirst])
     // console.log("store >>> ", store)
@@ -140,8 +143,8 @@ const CloudStorageApp = () => {
     /* Move to trash folder */
     const onTrashFolder = (folderId) => {
         MySwal.fire({
-            title: 'Are you sure?',
-            text: "You revert this from trash!",
+            title: T('Are you sure?'),
+            text: T("You revert this from trash!"),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -162,11 +165,11 @@ const CloudStorageApp = () => {
     /* Move to trash file */
     const onTrashFile = (fileId) => {
         MySwal.fire({
-            title: 'Are you sure?',
-            text: "You revert this from trash!",
+            title: T('Are you sure?'),
+            text: T("You revert this from trash!"),
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
+            confirmButtonText: T('Yes, delete it!'),
             customClass: {
                 confirmButton: 'btn btn-primary',
                 cancelButton: 'btn btn-outline-danger ms-1'
@@ -190,8 +193,8 @@ const CloudStorageApp = () => {
     /* Permanent delete folder */
     const handleDeleteFolder = (folder) => {
         MySwal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: T('Are you sure?'),
+            text: T("You won't be able to revert this!"),
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -211,11 +214,11 @@ const CloudStorageApp = () => {
     /* Permanent delete file */
     const handleDeleteFile = (file) => {
         MySwal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: T('Are you sure?'),
+            text: T("You won't be able to revert this!"),
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
+            confirmButtonText: T('Yes, delete it!'),
             customClass: {
                 confirmButton: 'btn btn-primary',
                 cancelButton: 'btn btn-outline-danger ms-1'

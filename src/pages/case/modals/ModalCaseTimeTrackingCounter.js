@@ -3,9 +3,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 import { useDispatch } from 'react-redux'
 
 // ** Reactstrap Imports
@@ -31,14 +28,15 @@ import 'react-circular-progressbar/dist/styles.css'
 import '@styles/base/pages/app-invoice.scss'
 import { setTimeCounter, getTimeCounter } from '../../../utility/Utils'
 
+// ** Translation
+import { T } from '@localization'
+
 let myInterval = null
 
 const ModalCaseTimeTrackingCounter = ({
   open,
   toggleModal
 }) => {
-  // ** Hooks for tanslation
-  const { t } = useTranslation()
 
   // ** Store vars
   const [currentTime, setCurrentTime] = useState(getTimeCounter().current_time ?? 0)
@@ -50,7 +48,7 @@ const ModalCaseTimeTrackingCounter = ({
   useEffect(() => {
     if (alarm) {
       setAlarm(false)
-      Notification("Warning", "Time counter will be expired soon", "warning")
+      Notification(T("Warning"), T("Time counter will be expired soon"), "warning")
     }
   }, [alarm])
 
@@ -129,7 +127,7 @@ const ModalCaseTimeTrackingCounter = ({
         className='modal-dialog-centered modal-md'
         backdrop="static"
       >
-        <ModalHeader toggle={handleReset}>{t("Terminal")}</ModalHeader>
+        <ModalHeader toggle={handleReset}>{T("Terminal")}</ModalHeader>
         <ModalBody>
           <Row className='text-center'>
             <div className="d-flex justify-content-center time-tracking">
@@ -142,15 +140,15 @@ const ModalCaseTimeTrackingCounter = ({
               {!status && currentTime === getTimeCounter().interval_time ? (
                 <>
                   <Button type="submit" color="primary" className='me-3' onClick={handleSave}>
-                    {t("Save")}
+                    {T("Save")}
                   </Button>
                   <Button type="submit" color="danger" onClick={handleReset}>
-                    {t("Delete")}
+                    {T("Delete")}
                   </Button>
                 </>
                 ) : (
                 <Button type="submit" color="danger" onClick={closeTimer}>
-                  {t("Stop")}
+                  {T("Stop")}
                 </Button>
               )}
             </div>

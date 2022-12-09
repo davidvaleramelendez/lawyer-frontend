@@ -3,9 +3,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import { clearCaseMessage } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -27,6 +24,9 @@ import ModalCaseAddNoteFile from './ModalCaseAddNoteFile'
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalCaseNoteFile = ({
   open,
   caseId,
@@ -35,9 +35,6 @@ const ModalCaseNoteFile = ({
   //** State Constant */
   const [noteModalOpen, setNoteModalOpen] = useState(false)
   const [fileModalOpen, setFileModalOpen] = useState(false)
-
-  // ** Hooks for tanslation
-  const { t } = useTranslation()
 
   // ** Store vars
   const dispatch = useDispatch()
@@ -64,7 +61,7 @@ const ModalCaseNoteFile = ({
         className='modal-dialog-centered'
         backdrop="static"
       >
-        <ModalHeader toggle={handleReset}>{t("Add notes or file")}</ModalHeader>
+        <ModalHeader toggle={handleReset}>{T("Add notes or file")}</ModalHeader>
         <ModalBody>
           <Row>
             <Col xl={6} md={6} lg={6}>
@@ -73,7 +70,7 @@ const ModalCaseNoteFile = ({
                 className="btn btn-primary w-100"
                 onClick={() => setNoteModalOpen(true)}
               >
-                {t("Add notes")}
+                {T("Add notes")}
               </Button>
 
               <ModalCaseAddNoteText
@@ -90,7 +87,7 @@ const ModalCaseNoteFile = ({
                 className="btn btn-primary w-100"
                 onClick={() => setFileModalOpen(true)}
               >
-                {t("Add file")}
+                {T("Add file")}
               </Button>
 
               <ModalCaseAddNoteFile

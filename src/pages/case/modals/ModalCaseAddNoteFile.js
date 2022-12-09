@@ -3,9 +3,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
   createCaseAttachment,
@@ -48,6 +45,9 @@ import {
   adminRoot
 } from '@constant/defaultValues'
 
+// ** Translation
+import { T } from '@localization'
+
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
@@ -60,8 +60,6 @@ const ModalCaseAddNoteFile = ({
   // * State Constant
   const [uploadedFiles, setUploadedFiles] = useState([])
 
-  // ** Hooks
-  const { t } = useTranslation()
   const MySwal = withReactContent(Swal)
 
   // ** Store vars
@@ -140,7 +138,7 @@ const ModalCaseAddNoteFile = ({
       const fileSizeKiloBytes = fileSize / 1024
       const uploadLimit = process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE * 1024
       if (fileSizeKiloBytes > uploadLimit) {
-        onAlertMessage('File limit exceeded!', `Please upload max ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb files!`, 'warning')
+        onAlertMessage(T('File limit exceeded!'), `${T('Please upload max')} ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb ${T('files')}!`, 'warning')
         return
       }
 
@@ -239,7 +237,7 @@ const ModalCaseAddNoteFile = ({
           />
         ) : null}
 
-        <ModalHeader toggle={handleReset}>{t("Add")} {t("Record")}</ModalHeader>
+        <ModalHeader toggle={handleReset}>{T("Add")} {T("Record")}</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <Row>
@@ -322,7 +320,7 @@ const ModalCaseAddNoteFile = ({
                   color='primary'
                   disabled={!store.loading}
                 >
-                  {t("Add")}
+                  {T("Add")}
                 </Button>
               </div>
             </Row>

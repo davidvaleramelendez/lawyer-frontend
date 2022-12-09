@@ -34,6 +34,9 @@ import {
   UncontrolledDropdown
 } from 'reactstrap'
 
+// ** Translation
+import { T } from '@localization'
+
 const Tasks = (props) => {
   // ** Props
   const {
@@ -121,11 +124,11 @@ const Tasks = (props) => {
   // ** Function to delete task
   const handleDeleteTask = (todoId) => {
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      title: T('Are you sure?'),
+      text: T("You won't be able to revert this!"),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonText: T('Yes, delete it!'),
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-danger ms-1'
@@ -141,11 +144,11 @@ const Tasks = (props) => {
   // ** Function to restore task
   const handleRestoreTask = (todoId) => {
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You can also revert this!",
+      title: T('Are you sure?'),
+      text: T("You can also revert this!"),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, restore it!',
+      confirmButtonText: T('Yes, restore it!'),
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-danger ms-1'
@@ -254,7 +257,7 @@ const Tasks = (props) => {
           </ReactSortable>
         ) : (
           <div className="no-results show">
-            <h5>No Items Found</h5>
+            <h5>{T('No Items Found')}</h5>
           </div>
         )}
       </PerfectScrollbar>
@@ -293,7 +296,7 @@ const Tasks = (props) => {
               <Search className="text-muted" size={14} />
             </InputGroupText>
 
-            <Input id="search-todo" placeholder="Search task" value={searchInput} onChange={(event) => handleSearchFilter(event.target.value)} />
+            <Input id="search-todo" placeholder={T("Search task")} value={searchInput} onChange={(event) => handleSearchFilter(event.target.value)} />
 
             <Input id="date-todo" type="date" placeholder="YYYY-MM-DD" value={dateInput} onChange={(event) => handleDateFilter(event.target.value)} />
           </InputGroup>
@@ -305,23 +308,23 @@ const Tasks = (props) => {
           </DropdownToggle>
           <DropdownMenu end>
             <DropdownItem tag={Link} to="/" onClick={(event) => handleSort(event, "title-asc")}>
-              Sort A-Z
+              {T('Sort A-Z')}
             </DropdownItem>
 
             <DropdownItem tag={Link} to="/" onClick={(event) => handleSort((event), "title-desc")}>
-              Sort Z-A
+            {T('Sort Z-A')}
             </DropdownItem>
 
             <DropdownItem tag={Link} to="/" onClick={(event) => handleSort(event, "Assign-asc")}>
-              Sort Assignee
+            {T('Sort Assignee')}
             </DropdownItem>
 
             <DropdownItem tag={Link} to="/" onClick={(event) => handleSort(event, "due_date-desc")}>
-              Sort Due Date
+            {T('Sort Due Date')}
             </DropdownItem>
 
             <DropdownItem tag={Link} to="/" onClick={(event) => handleSort(event, "")}>
-              Reset Sort
+            {T('Reset Sort')}
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>

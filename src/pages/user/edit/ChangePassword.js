@@ -3,9 +3,6 @@
 // ** React Imports
 import { Fragment, useEffect } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
     updateUser,
@@ -33,21 +30,22 @@ import * as yup from "yup"
 // ** Custom Components
 import InputPasswordToggle from '@components/input-password-toggle'
 
+// ** Translation
+import { T } from '@localization'
+
 const ChangePassword = ({
     id,
     encryptData,
     PlaceholderSchema
 }) => {
-    // ** Hooks
-    const { t } = useTranslation()
 
     // ** Store vars
     const dispatch = useDispatch()
     const store = useSelector((state) => state.user)
 
     const UserPswdSchema = yup.object({
-        password: yup.string().required('Password is required!').min(6, "Password Must be 6 digit!"),
-        retypePassword: yup.string().oneOf([yup.ref('password'), null], 'Retype Password must match with Password!').required('Retype Password is required!')
+        password: yup.string().required('Password is required!').min(6, T("Password Must be 6 digit!")),
+        retypePassword: yup.string().oneOf([yup.ref('password'), null], T('Retype Password must match with Password!')).required(T('Retype Password is required!'))
     }).required()
 
     /* pswd => information */
@@ -99,7 +97,7 @@ const ChangePassword = ({
         <Fragment>
             <Card>
                 <CardHeader className='border-bottom'>
-                    <CardTitle tag='h4'>{t("Change Password")}</CardTitle>
+                    <CardTitle tag='h4'>{T("Change Password")}</CardTitle>
                 </CardHeader>
 
                 <CardBody className="py-2 my-25">
@@ -107,7 +105,7 @@ const ChangePassword = ({
                         <Row>
                             <Col sm={6} className="mb-1">
                                 <Label className="form-label" for="address">
-                                    Password
+                                    {T('Password')}
                                 </Label>
                                 <Controller
                                     defaultValue=""
@@ -129,7 +127,7 @@ const ChangePassword = ({
 
                             <Col sm={6} className="mb-1">
                                 <Label className="form-label" for="address1">
-                                    Retype Password
+                                    {T('Retype Password')}
                                 </Label>
                                 <Controller
                                     defaultValue=""
@@ -157,7 +155,7 @@ const ChangePassword = ({
                                 color="primary"
                                 disabled={!store.loading}
                             >
-                                {t("Save Change")}
+                                {T("Save Change")}
                             </Button>
                         </div>
                     </Form>

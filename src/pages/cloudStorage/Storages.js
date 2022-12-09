@@ -1,8 +1,5 @@
 // ** React Imports
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Reactstrap Imports
 import {
   Card,
@@ -53,6 +50,9 @@ import docPng from '@src/assets/images/icons/doc.png'
 import txtPng from '@src/assets/images/icons/txt.png'
 import videoSvg from '@src/assets/images/icons/svg/video.svg'
 
+// ** Translation
+import { T } from '@localization'
+
 const Storages = (props) => {
   // ** Props
   const {
@@ -78,9 +78,6 @@ const Storages = (props) => {
     handleFolderItemMove,
     handleBreadcrumbNavigate
   } = props
-
-  // ** Hooks
-  const { t } = useTranslation()
 
   const fileExtensions = {
     attachment: attachmentSvg,
@@ -128,7 +125,7 @@ const Storages = (props) => {
                 className="cursor-pointer"
                 onClick={() => handleBreadcrumbNavigate("", true)}
               >
-                My Drive
+                {T('My Drive')}
               </h5>
               <ChevronRight
                 className="ms-1 me-1"
@@ -183,11 +180,11 @@ const Storages = (props) => {
           className={`view-container ${hashParam === "#list" ? 'list-view' : ''}`}
         >
           <div className="files-header">
-            <h6 className="fw-bold mb-0">Filename</h6>
+            <h6 className="fw-bold mb-0">{T('Filename')}</h6>
             <div>
-              <h6 className="fw-bold file-last-modified d-inline-block mb-0">Created
+              <h6 className="fw-bold file-last-modified d-inline-block mb-0">{T('Created')}
               </h6>
-              <h6 className="fw-bold d-inline-block me-1 mb-0">Actions</h6>
+              <h6 className="fw-bold d-inline-block me-1 mb-0">{T('Actions')}</h6>
             </div>
           </div>
 
@@ -214,7 +211,7 @@ const Storages = (props) => {
           {/* Folder */}
           {store.cloudStorageItems.folders && store.cloudStorageItems.folders.length ? (<>
             {hashParam === "#grid" ? (
-              <h6 className="files-section-title mt-25 mb-75">{t("Folders")}</h6>
+              <h6 className="files-section-title mt-25 mb-75">{T("Folders")}</h6>
             ) : null}
 
             {store.cloudStorageItems.folders.map((folder, index) => (
@@ -236,7 +233,7 @@ const Storages = (props) => {
                             onClick={() => handleFolderItem(folder)}
                           >
                             <Edit size={17} className="me-50" />
-                            <span className="align-middle">{t("Edit")}</span>
+                            <span className="align-middle">{T("Edit")}</span>
                           </DropdownItem>
 
                           <DropdownItem
@@ -244,7 +241,7 @@ const Storages = (props) => {
                             onClick={() => handleFolderItemMove(folder)}
                           >
                             <Move size={17} className="me-50" />
-                            <span className="align-middle">{t("Move")}</span>
+                            <span className="align-middle">{T("Move")}</span>
                           </DropdownItem>
 
                           <DropdownItem
@@ -257,7 +254,7 @@ const Storages = (props) => {
                                 'text-warning': (folder && folder.important_at !== null) || ""
                               })}
                             />
-                            <span className="align-middle">{t("Important")}</span>
+                            <span className="align-middle">{T("Important")}</span>
                           </DropdownItem>
 
                           <DropdownItem
@@ -265,7 +262,7 @@ const Storages = (props) => {
                             onClick={() => onTrashFolder(folder.id)}
                           >
                             <Trash2 size={17} className="me-50" />
-                            <span className="align-middle">{t("Delete")}</span>
+                            <span className="align-middle">{T("Delete")}</span>
                           </DropdownItem>
                         </>) : (<>
                           <DropdownItem
@@ -273,7 +270,7 @@ const Storages = (props) => {
                             onClick={() => handleMarkRestore(folder)}
                           >
                             <RefreshCw size={17} className="me-50" />
-                            <span className="align-middle">{t("Restore")}</span>
+                            <span className="align-middle">{T("Restore")}</span>
                           </DropdownItem>
 
                           <DropdownItem
@@ -281,7 +278,7 @@ const Storages = (props) => {
                             onClick={() => handleDeleteFolder(folder)}
                           >
                             <Trash2 size={17} className="me-50" />
-                            <span className="align-middle">{t("Delete forever")}</span>
+                            <span className="align-middle">{T("Delete forever")}</span>
                           </DropdownItem>
                         </>)}
                       </DropdownMenu>
@@ -335,7 +332,7 @@ const Storages = (props) => {
                       placement="top"
                       target={`cs-tooltip-folder-date-${folder.id}`}
                     >
-                      {t("Folder")} {t("Created")}
+                      {T("Folder Created")}
                     </UncontrolledTooltip>
                   </small>
                 </CardBody>
@@ -347,7 +344,7 @@ const Storages = (props) => {
           {/* File */}
           {store.cloudStorageItems.files && store.cloudStorageItems.files.length ? (<>
             {hashParam === "#grid" ? (
-              <h6 className="files-section-title mt-25 mb-75">{t("Files")}</h6>
+              <h6 className="files-section-title mt-25 mb-75">{T("Files")}</h6>
             ) : null}
 
             {store.cloudStorageItems.files.map((file, index) => {
@@ -372,7 +369,7 @@ const Storages = (props) => {
                               onClick={() => handleFileItem(file)}
                             >
                               <Edit size={17} className="me-50" />
-                              <span className="align-middle">{t("Edit")}</span>
+                              <span className="align-middle">{T("Edit")}</span>
                             </DropdownItem>
 
                             <DropdownItem
@@ -380,7 +377,7 @@ const Storages = (props) => {
                               onClick={() => handleFileItemMove(file)}
                             >
                               <Move size={17} className="me-50" />
-                              <span className="align-middle">{t("Move")}</span>
+                              <span className="align-middle">{T("Move")}</span>
                             </DropdownItem>
 
                             <DropdownItem
@@ -393,7 +390,7 @@ const Storages = (props) => {
                                   'text-warning': (file && file.important_at !== null) || ""
                                 })}
                               />
-                              <span className="align-middle">{t("Important")}</span>
+                              <span className="align-middle">{T("Important")}</span>
                             </DropdownItem>
 
                             <DropdownItem
@@ -401,7 +398,7 @@ const Storages = (props) => {
                               onClick={() => onTrashFile(file.id)}
                             >
                               <Trash2 size={17} className="me-50" />
-                              <span className="align-middle">{t("Delete")}</span>
+                              <span className="align-middle">{T("Delete")}</span>
                             </DropdownItem>
                           </>) : (<>
                             <DropdownItem
@@ -409,7 +406,7 @@ const Storages = (props) => {
                               onClick={() => handleMarkRestore(file)}
                             >
                               <RefreshCw size={17} className="me-50" />
-                              <span className="align-middle">{t("Restore")}</span>
+                              <span className="align-middle">{T("Restore")}</span>
                             </DropdownItem>
 
                             <DropdownItem
@@ -417,7 +414,7 @@ const Storages = (props) => {
                               onClick={() => handleDeleteFile(file)}
                             >
                               <Trash2 size={17} className="me-50" />
-                              <span className="align-middle">{t("Delete forever")}</span>
+                              <span className="align-middle">{T("Delete forever")}</span>
                             </DropdownItem>
                           </>)}
                         </DropdownMenu>
@@ -472,7 +469,7 @@ const Storages = (props) => {
                         placement="top"
                         target={`cs-tooltip-file-date-${file.id}`}
                       >
-                        {t("File")} {t("Created")}
+                        {T("File Created")}
                       </UncontrolledTooltip>
                     </small>
                   </CardBody>
@@ -524,7 +521,7 @@ const Storages = (props) => {
                 placement="top"
                 target={`cs-tooltip-grid`}
               >
-                Grid view
+                {T('Grid view')}
               </UncontrolledTooltip>
             </Button>
 
@@ -544,7 +541,7 @@ const Storages = (props) => {
                 placement="top"
                 target={`cs-tooltip-list`}
               >
-                List view
+                {T('List view')}
               </UncontrolledTooltip>
             </Button>
           </ButtonGroup>

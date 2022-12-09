@@ -4,9 +4,6 @@
 import { Fragment, useEffect, useState } from "react"
 import { Link, useNavigate } from 'react-router-dom'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
     getInvoiceList
@@ -58,6 +55,9 @@ import {
     defaultPerPageRow
 } from '@constant/defaultValues'
 
+// ** Translation
+import { T } from '@localization'
+
 /* Invoice header */
 const CustomInvoiceHeader = ({
     searchInput,
@@ -71,7 +71,7 @@ const CustomInvoiceHeader = ({
         <Row>
             <Col lg={4} className="d-flex align-items-center px-0 px-lg-1">
                 <div className="d-flex align-items-center me-2">
-                    <label htmlFor="rows-per-page">Show</label>
+                    <label htmlFor="rows-per-page">{T('Show')}</label>
                     <Input
                         type="select"
                         id="rows-per-page"
@@ -90,13 +90,13 @@ const CustomInvoiceHeader = ({
 
             <Col lg={8} className="actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0">
                 <div className="d-flex align-items-center">
-                    <label htmlFor="search-invoice">Search</label>
+                    <label htmlFor="search-invoice">{T('Search')}</label>
                     <Input
                         id="search-invoice"
                         className="ms-50 me-2 w-100"
                         type="text"
                         value={searchInput}
-                        placeholder="Search Invoice"
+                        placeholder={T("Search Invoice")}
                         onChange={(event) => handleSearch(event.target.value)}
                     />
                 </div>
@@ -104,8 +104,8 @@ const CustomInvoiceHeader = ({
                 <div className="status">
                     <Select
                         id='status-filter'
-                        placeholder="Select Status..."
-                        options={[{ label: "Paid", value: "paid" }]}
+                        placeholder={`${T('Select Status')}...`}
+                        options={[{ label: T("Paid"), value: "paid" }]}
                         className='react-select'
                         classNamePrefix='select'
                         isClearable={true}
@@ -122,8 +122,6 @@ const CustomInvoiceHeader = ({
 const BillingsTab = ({
     id
 }) => {
-    // ** Hooks
-    const { t } = useTranslation()
     const navigate = useNavigate()
 
     // ** Store vars
@@ -252,14 +250,14 @@ const BillingsTab = ({
     /* Invoice columns */
     const invoiceColumns = [
         {
-            name: 'Invoice Number',
+            name: T('Invoice Number'),
             sortable: true,
             sortField: 'invoice_no',
             minWidth: '190px',
             cell: (row) => <Link to={`${adminRoot}/invoice/view/${row.id}`}>{`#${row.invoice_no}`}</Link>
         },
         {
-            name: 'Status',
+            name: T('Status'),
             sortable: true,
             sortField: 'status',
             minWidth: '70px',
@@ -281,7 +279,7 @@ const BillingsTab = ({
             }
         },
         {
-            name: 'Client',
+            name: T('Client'),
             sortable: true,
             minWidth: '240px',
             sortField: 'customer_id',
@@ -299,21 +297,21 @@ const BillingsTab = ({
             }
         },
         {
-            name: 'Total',
+            name: T('Total'),
             sortable: true,
             sortField: 'total_price',
             minWidth: '100px',
             cell: (row) => `€ ${row && row.total_price && getDecimalFormat(row.total_price)}`
         },
         {
-            name: 'Due Date',
+            name: T('Due Date'),
             sortable: true,
             sortField: 'invoice_due_date',
             minWidth: '140px',
             cell: (row) => row.invoice_due_date && getTransformDate(row.invoice_due_date, "DD MMM YYYY")
         },
         {
-            name: 'Action',
+            name: T('Action'),
             cell: (row) => (
                 <div className='column-action d-flex align-items-center'>
                     <Link
@@ -324,7 +322,7 @@ const BillingsTab = ({
                     </Link>
 
                     <UncontrolledTooltip placement="top" target={`pw-view-tooltip-${row.id}`}>
-                        View Invoice
+                        {T('View Invoice')}
                     </UncontrolledTooltip>
                 </div>
             )
@@ -337,7 +335,7 @@ const BillingsTab = ({
             {/* Invoice listing */}
             <Card>
                 <CardHeader className="border-bottom">
-                    <CardTitle tag="h4">{t("Bills")}</CardTitle>
+                    <CardTitle tag="h4">{T("Bills")}</CardTitle>
                 </CardHeader>
 
                 <DatatablePagination

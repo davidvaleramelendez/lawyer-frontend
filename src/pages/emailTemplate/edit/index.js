@@ -4,9 +4,6 @@
 import { Fragment, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Reactstrap Imports
 import {
     Col,
@@ -88,9 +85,11 @@ import ModalEmailSortCodes from '../modals/ModalEmailSortCodes'
 // ** Styles
 import '@styles/react/libs/editor/editor.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const EmailTemplateEdit = () => {
     // ** Hooks
-    const { t } = useTranslation()
     const { id } = useParams()
     const MySwal = withReactContent(Swal)
 
@@ -105,13 +104,13 @@ const EmailTemplateEdit = () => {
     const store = useSelector((state) => state.emailTemplate)
 
     const EmailTemplateSchema = yup.object({
-        subject: yup.string().required('Subject is required!'),
+        subject: yup.string().required(T('Subject is required!')),
         template: yup.object().shape({
             blocks: yup.array().of(yup.object().shape({
-                text: yup.string().required('Content is required!')
-            }).required('Content is required!').nullable())
-        }).required('Content is required!').nullable(),
-        status: yup.object().required(`${t("Status")} is required!`).nullable()
+                text: yup.string().required(T('Content is required!'))
+            }).required(T('Content is required!')).nullable())
+        }).required(T('Content is required!')).nullable(),
+        Status: yup.object().required(T(`Status is required!`)).nullable()
     }).required()
 
     const {
@@ -127,9 +126,9 @@ const EmailTemplateEdit = () => {
 
     /* Placeholder texts */
     const PlaceholderSchema = {
-        subject: t("Subject"),
-        template: t("Content"),
-        status: `Select ${t("Status")}...`
+        subject: T("Subject"),
+        template: T("Content"),
+        status: `${T("Select Status")}...`
     }
 
     const handleEditorStateChange = (state) => {
@@ -172,11 +171,11 @@ const EmailTemplateEdit = () => {
     /* Swal Alert */
     const onAlertMessage = (title, text, icon) => {
         MySwal.fire({
-            title: title ?? 'File limit exceeded!',
-            text: text ?? 'File uploading size exceeded!',
+            title: title ?? T('File limit exceeded!'),
+            text: text ?? T('File uploading size exceeded!'),
             icon: icon ?? 'warning',
             showCancelButton: false,
-            confirmButtonText: 'Okay',
+            confirmButtonText: T('Okay'),
             customClass: {
                 confirmButton: 'btn btn-primary'
             },
@@ -230,12 +229,12 @@ const EmailTemplateEdit = () => {
 
         /* Succes toast notification */
         if (store && store.success) {
-            Notification("Success", store.success, "success")
+            Notification(T("Success"), store.success, "success")
         }
 
         /* Error toast notification */
         if (store && store.error) {
-            Notification("Error", store.error, "warning")
+            Notification(T("Error"), store.error, "warning")
         }
     }, [store.success, store.error, store.actionFlag, loadFirst])
     // console.log("store >>> ", store)
@@ -260,7 +259,7 @@ const EmailTemplateEdit = () => {
                 const fileSizeKiloBytes = files[0].size / 1024
                 const uploadLimit = process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE * 1024
                 if (fileSizeKiloBytes > uploadLimit) {
-                    onAlertMessage('File limit exceeded!', `Please upload max ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb file!`, 'warning')
+                    onAlertMessage(T('File limit exceeded!'), `${T('Please upload max')} ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb ${T('file')}!`, 'warning')
                     return false
                 }
             }
@@ -320,7 +319,7 @@ const EmailTemplateEdit = () => {
 
             <CardHeader>
                 <CardTitle>
-                    {t("Edit Email Template")}
+                    {T("Edit Email Template")}
                 </CardTitle>
             </CardHeader>
 
@@ -332,7 +331,7 @@ const EmailTemplateEdit = () => {
                     <Row>
                         <Col md={12} sm={12} className="mb-1">
                             <Label className='form-label' for='subject'>
-                                Subject
+                                {T('Subject')}
                             </Label>
                             <Controller
                                 defaultValue=""
@@ -347,9 +346,9 @@ const EmailTemplateEdit = () => {
                         <Col md={12} sm={12} className="mb-1">
                             <Label className='form-label w-100' for='template'>
                                 <div className="d-flex justify-content-between">
-                                    <div className="me-1">Content</div>
+                                    <div className="me-1">{T('Content')}</div>
                                     <div>
-                                        {t("Sort codes")} :
+                                        {T("Sort codes")} :
 
                                         <Briefcase
                                             size={17}
@@ -361,7 +360,7 @@ const EmailTemplateEdit = () => {
                                             placement="top"
                                             target={`case-sortcodes-edit-${id}`}
                                         >
-                                            {t("Case")} {t("Sort codes")}
+                                            {T("Case")} {T("Sort codes")}
                                         </UncontrolledTooltip>
 
                                         <MessageSquare
@@ -374,7 +373,7 @@ const EmailTemplateEdit = () => {
                                             placement="top"
                                             target={`contact-sortcodes-edit-${id}`}
                                         >
-                                            {t("Contact")} {t("Sort codes")}
+                                            {T("Contact")} {T("Sort codes")}
                                         </UncontrolledTooltip>
 
                                         <User
@@ -387,7 +386,7 @@ const EmailTemplateEdit = () => {
                                             placement="top"
                                             target={`user-sortcodes-edit-${id}`}
                                         >
-                                            {t("User")} {t("Sort codes")}
+                                            {T("User")} {T("Sort codes")}
                                         </UncontrolledTooltip>
 
                                         <ModalEmailSortCodes
@@ -430,7 +429,7 @@ const EmailTemplateEdit = () => {
 
                         <Col md={6} sm={12} className="mb-1">
                             <Label className='form-label' for="status">
-                                {t("Status")}
+                                {T("Status")}
                             </Label>
                             <Controller
                                 defaultValue={null}
@@ -454,7 +453,7 @@ const EmailTemplateEdit = () => {
 
                         <Col md={6} sm={12} className="mb-1">
                             <Label className="form-label" for="attachment">
-                                {t("Attachment")}
+                                {T("Attachment")}
                             </Label>
                             <InputGroup>
                                 <Input
@@ -505,7 +504,7 @@ const EmailTemplateEdit = () => {
                                 color="primary"
                                 disabled={!store.loading}
                             >
-                                {t("Submit")}
+                                {T("Submit")}
                             </Button>
 
                             <Button
@@ -515,7 +514,7 @@ const EmailTemplateEdit = () => {
                                 disabled={!store.loading}
                                 onClick={handleBack}
                             >
-                                {t("Back")}
+                                {T("Back")}
                             </Button>
                         </div>
                     </Row>

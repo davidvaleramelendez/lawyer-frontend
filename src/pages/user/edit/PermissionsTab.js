@@ -1,9 +1,6 @@
 // ** React Imports
 import { Fragment, useState, useEffect } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
     updateUserLoader,
@@ -21,11 +18,12 @@ import {
     CardHeader
 } from 'reactstrap'
 
+// ** Translation
+import { T } from '@localization'
+
 const PermissionsTab = ({
     id
 }) => {
-    // ** Hooks
-    const { t } = useTranslation()
 
     // ** Store vars
     const dispatch = useDispatch()
@@ -86,19 +84,19 @@ const PermissionsTab = ({
         <Fragment>
             <Card>
                 <CardHeader className="border-bottom">
-                    <CardTitle tag="h4">{t("Permissions")}</CardTitle>
+                    <CardTitle tag="h4">{T("Permissions")}</CardTitle>
                 </CardHeader>
 
                 <Table className='text-nowrap text-center border-bottom' responsive>
                     <thead>
                         <tr>
-                            <th className='text-start'>Type</th>
+                            <th className='text-start'>{T('Type')}</th>
                             <th>Allow</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td className='text-start'>Delete Users</td>
+                            <td className='text-start'>{T('Delete Users')}</td>
                             <td>
                                 <div className='d-flex form-check justify-content-center'>
                                     <Input
@@ -113,7 +111,7 @@ const PermissionsTab = ({
                         </tr>
 
                         <tr>
-                            <td className='text-start'>See All Users</td>
+                            <td className='text-start'>{T('See All Users')}</td>
                             <td>
                                 <div className='d-flex form-check justify-content-center'>
                                     <Input
@@ -128,7 +126,7 @@ const PermissionsTab = ({
                         </tr>
 
                         <tr>
-                            <td className='text-start'>See Contacts</td>
+                            <td className='text-start'>{T('See Contacts')}</td>
                             <td>
                                 <div className='d-flex form-check justify-content-center'>
                                     <Input
@@ -143,7 +141,7 @@ const PermissionsTab = ({
                         </tr>
 
                         <tr>
-                            <td className='text-start'>See All Cases</td>
+                            <td className='text-start'>{T('See All Cases')}</td>
                             <td>
                                 <div className='d-flex form-check justify-content-center'>
                                     <Input
@@ -158,7 +156,7 @@ const PermissionsTab = ({
                         </tr>
 
                         <tr>
-                            <td className='text-start'>Update Cases</td>
+                            <td className='text-start'>{T('Update Cases')}</td>
                             <td>
                                 <div className='d-flex form-check justify-content-center'>
                                     <Input
@@ -173,7 +171,7 @@ const PermissionsTab = ({
                         </tr>
 
                         <tr>
-                            <td className='text-start'>See Letters</td>
+                            <td className='text-start'>{T('See Letters')}</td>
                             <td>
                                 <div className='d-flex form-check justify-content-center'>
                                     <Input
@@ -196,7 +194,7 @@ const PermissionsTab = ({
                         disabled={!store.loading}
                         onClick={() => onPermissionSubmit()}
                     >
-                        {t("Update")}
+                        {T("Update")}
                     </Button>
                 </div>
             </Card>

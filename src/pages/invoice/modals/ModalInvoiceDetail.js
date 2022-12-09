@@ -4,9 +4,6 @@
 import { useEffect, Fragment, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
   deleteInvoice,
@@ -66,6 +63,9 @@ import ModalSendInvoice from './ModalSendInvoice'
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalInvoiceDetail = ({
   open,
   toggleModal,
@@ -73,8 +73,6 @@ const ModalInvoiceDetail = ({
   invoiceRowData,
   setInvoiceRowData
 }) => {
-  /* Hook */
-  const { t } = useTranslation()
 
   const MySwal = withReactContent(Swal)
 
@@ -124,11 +122,11 @@ const ModalInvoiceDetail = ({
 
   const onDeleteInvoice = (id) => {
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      title: T('Are you sure?'),
+      text: T("You won't be able to revert this!"),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonText: T('Yes, delete it!'),
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-danger ms-1'
@@ -151,13 +149,13 @@ const ModalInvoiceDetail = ({
         toggle={handleReset}
         backdrop="static"
       >
-        <ModalHeader toggle={handleReset}>{t("Details")} {t("of")} {invoiceRowData && invoiceRowData.customer && invoiceRowData.customer.name}</ModalHeader>
+        <ModalHeader toggle={handleReset}>{T("Details")} {T("of")} {invoiceRowData && invoiceRowData.customer && invoiceRowData.customer.name}</ModalHeader>
         {invoiceRowData && invoiceRowData.id ? <>
           <ModalBody>
             <Table striped responsive>
               <tbody>
                 <tr>
-                  <td>{t("Invoice number")}:</td>
+                  <td>{T("Invoice number")}:</td>
                   <td>
                     <Link to={`${adminRoot}/invoice/view/${invoiceRowData && invoiceRowData.id}`} className="font-weight-bold">
                       #{invoiceRowData.invoice_no}
@@ -173,16 +171,16 @@ const ModalInvoiceDetail = ({
                       <UncontrolledTooltip placement="top" target={`av-tooltip-${invoiceRowData.id}`}>
                         <span className="fw-bold text-capitalize">{invoiceRowData && invoiceRowData.status}</span>
                         <br />
-                        <span className="fw-bold">Balance:</span> {invoiceRowData && invoiceRowData.remaining_amount && getDecimalFormat(invoiceRowData.remaining_amount)}
+                        <span className="fw-bold">{T('Balance')}:</span> {invoiceRowData && invoiceRowData.remaining_amount && getDecimalFormat(invoiceRowData.remaining_amount)}
                         <br />
-                        <span className="fw-bold">Due Date:</span> {invoiceRowData.invoice_due_date && getTransformDate(invoiceRowData.invoice_due_date, "DD/MM/YYYY")}
+                        <span className="fw-bold">{T('Due Date')}:</span> {invoiceRowData.invoice_due_date && getTransformDate(invoiceRowData.invoice_due_date, "DD/MM/YYYY")}
                       </UncontrolledTooltip>
                     </Fragment>
                   </td>
                 </tr>
 
                 <tr>
-                  <td>{t("Client")}:</td>
+                  <td>{T("Client")}:</td>
                   <td>
                     <div className="d-flex justify-content-left align-items-center">
                       {renderCustomer(invoiceRowData && invoiceRowData.customer)}
@@ -195,22 +193,22 @@ const ModalInvoiceDetail = ({
                 </tr>
 
                 <tr>
-                  <td>{t("Total")}:</td>
+                  <td>{T("Total")}:</td>
                   <td>€ {invoiceRowData && invoiceRowData.total_price && getDecimalFormat(invoiceRowData.total_price)}</td>
                 </tr>
 
                 <tr>
-                  <td>{t("Due date")}:</td>
+                  <td>{T("Due date")}:</td>
                   <td>{invoiceRowData && invoiceRowData.invoice_due_date && getTransformDate(invoiceRowData.invoice_due_date, "DD MMM YYYY")}</td>
                 </tr>
 
                 <tr>
-                  <td>Balance:</td>
+                  <td>{T("Balance")}:</td>
                   <td>€ {invoiceRowData && invoiceRowData.remaining_amount && getDecimalFormat(invoiceRowData.remaining_amount)}</td>
                 </tr>
 
                 <tr>
-                  <td>{t("Invoice status")}:</td>
+                  <td>{T("Invoice status")}:</td>
                   <td className="text-capitalize">{invoiceRowData && invoiceRowData.status}</td>
                 </tr>
 
@@ -220,14 +218,14 @@ const ModalInvoiceDetail = ({
                     <div className="column-action d-flex align-items-center">
                       <Send className="cursor-pointer" size={17} id={`send-tooltip-${invoiceRowData.id}`} onClick={() => setSendInvoiceModalOpen(true)} />
                       <UncontrolledTooltip placement="top" target={`send-tooltip-${invoiceRowData.id}`}>
-                        Send Mail
+                        {T('Send Mail')}
                       </UncontrolledTooltip>
 
                       <Link to={`${adminRoot}/invoice/view/${invoiceRowData.id}`} id={`pw-tooltip-${invoiceRowData.id}`}>
                         <Eye size={17} className="mx-1" />
                       </Link>
                       <UncontrolledTooltip placement="top" target={`pw-tooltip-${invoiceRowData.id}`}>
-                        Preview Invoice
+                      {T('Preview Invoice')}
                       </UncontrolledTooltip>
 
                       <UncontrolledButtonDropdown>
@@ -243,7 +241,7 @@ const ModalInvoiceDetail = ({
                             className="w-100"
                           >
                             <Download size={17} className="me-50" />
-                            <span className="align-middle">Download</span>
+                            <span className="align-middle">{T('Download')}</span>
                           </DropdownItem>
 
                           <DropdownItem
@@ -252,7 +250,7 @@ const ModalInvoiceDetail = ({
                             className="w-100"
                           >
                             <Edit size={17} className="me-50" />
-                            <span className="align-middle">Edit</span>
+                            <span className="align-middle">{T('Edit')}</span>
                           </DropdownItem>
 
                           <DropdownItem
@@ -265,7 +263,7 @@ const ModalInvoiceDetail = ({
                             }}
                           >
                             <Trash2 size={17} className="me-50" />
-                            <span className="align-middle">Delete</span>
+                            <span className="align-middle">{T('Delete')}</span>
                           </DropdownItem>
 
                           <DropdownItem
@@ -274,7 +272,7 @@ const ModalInvoiceDetail = ({
                             className="w-100"
                           >
                             <Copy size={17} className="me-50" />
-                            <span className="align-middle">Duplicate</span>
+                            <span className="align-middle">{T('Duplicate')}</span>
                           </DropdownItem>
                         </DropdownMenu>
                       </UncontrolledButtonDropdown>

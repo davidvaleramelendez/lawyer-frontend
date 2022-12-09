@@ -37,9 +37,6 @@ import {
   MessageSquare
 } from 'react-feather'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Utils
 import {
   setInnerHtml,
@@ -61,10 +58,12 @@ import ModalAcceptRequest from '../modals/ModalAcceptRequest'
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ContactView = () => {
   // ** Hooks
   const { id } = useParams()
-  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const MySwal = withReactContent(Swal)
@@ -104,12 +103,12 @@ const ContactView = () => {
 
     /* Succes toast notification */
     if (store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
 
     /* If contact deleted then redirect */
@@ -126,11 +125,11 @@ const ContactView = () => {
 
   const onDeleteContact = (contId) => {
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      title: T('Are you sure?'),
+      text: T("You won't be able to revert this!"),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonText: T('Yes, delete it!'),
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-danger ms-1'
@@ -177,7 +176,7 @@ const ContactView = () => {
                         className={`me-1 mb-1 ${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder'}`}
                         onClick={() => setAcceptModalOpen(true)}
                       >
-                        {t("Accept")}
+                        {T("Accept")}
                       </Button>
 
                       <Button
@@ -185,7 +184,7 @@ const ContactView = () => {
                         className={`me-1 mb-1 ${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder'}`}
                         onClick={() => setModalOpen(true)}
                       >
-                        {t("Notes")}
+                        {T("Notes")}
                       </Button>
 
                       <Button
@@ -193,7 +192,7 @@ const ContactView = () => {
                         className={`mb-1 ${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder'}`}
                         onClick={() => onDeleteContact(id)}
                       >
-                        {t("Clear")}
+                        {T("Clear")}
                       </Button>
                     </div>
                     {/* /Buttons */}
@@ -262,7 +261,7 @@ const ContactView = () => {
           {/* News */}
           <Card>
             <CardHeader>
-              <CardTitle>{t("News")}</CardTitle>
+              <CardTitle>{T("News")}</CardTitle>
             </CardHeader>
 
             <CardBody>
@@ -282,7 +281,7 @@ const ContactView = () => {
           {/* Notes */}
           <Card>
             <CardHeader>
-              <CardTitle>{t("Notes")}</CardTitle>
+              <CardTitle>{T("Notes")}</CardTitle>
             </CardHeader>
 
             <CardBody

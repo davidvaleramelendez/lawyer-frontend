@@ -1,9 +1,6 @@
 // ** React Imports
 import { Link } from 'react-router-dom'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Reactstrap Imports
 import {
     Card,
@@ -16,13 +13,15 @@ import {
     adminRoot
 } from '@constant/defaultValues'
 
+// ** Translation
+import { T } from '@localization'
+
+
 const ViewActions = ({
     invoiceItem,
     setPaymentModalOpen,
     setSendInvoiceModalOpen
 }) => {
-    // ** Hooks
-    const { t } = useTranslation()
 
     return (
         <Card className="invoice-action-wrapper">
@@ -35,7 +34,7 @@ const ViewActions = ({
                     className={`mb-75 ${invoiceItem && invoiceItem.id ? '' : 'placeholder'}`}
                     onClick={() => setSendInvoiceModalOpen(true)}
                 >
-                    {t("Send invoice by e-mail")}
+                    {T("Send invoice by e-mail")}
                 </Button>
 
                 <Button
@@ -49,7 +48,7 @@ const ViewActions = ({
                     href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${invoiceItem.pdf_path}`}
                     onClick={(event) => invoiceItem && !invoiceItem.pdf_path && event.preventDefault()}
                 >
-                    {t("Download")}
+                    {T("Download")}
                 </Button>
 
                 <Button
@@ -63,7 +62,7 @@ const ViewActions = ({
                     href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${invoiceItem.pdf_path}`}
                     onClick={(event) => invoiceItem && !invoiceItem.pdf_path && event.preventDefault()}
                 >
-                    {t("Print out")}
+                    {T("Print out")}
                 </Button>
 
                 <Button
@@ -74,7 +73,7 @@ const ViewActions = ({
                     className={`mb-75 ${invoiceItem && invoiceItem.id ? '' : 'placeholder'}`}
                     to={`${adminRoot}/invoice/edit/${invoiceItem.id}`}
                 >
-                    {t("Edit")}
+                    {T("Edit")}
                 </Button>
 
                 {invoiceItem && parseFloat(invoiceItem.remaining_amount) ? (
@@ -84,7 +83,7 @@ const ViewActions = ({
                         className={`${invoiceItem && invoiceItem.id ? '' : 'placeholder'}`}
                         onClick={() => setPaymentModalOpen(true)}
                     >
-                        {t("Add")} {t("Payment")}
+                        {T("Add Payment")}
                     </Button>
                 ) : null}
             </CardBody>

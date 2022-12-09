@@ -4,9 +4,6 @@
 import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import { clearUserMessage } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -50,14 +47,15 @@ import {
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalUserDetail = ({
   open,
   toggleModal,
   userRowData,
   setUserRowData
 }) => {
-  // ** Hooks for tanslation
-  const { t } = useTranslation()
 
   // ** Store vars
   const dispatch = useDispatch()
@@ -101,13 +99,13 @@ const ModalUserDetail = ({
         toggle={handleReset}
         backdrop="static"
       >
-        <ModalHeader toggle={handleReset}>{t("Details")} {t("of")} {userRowData && userRowData.name}</ModalHeader>
+        <ModalHeader toggle={handleReset}>{T("Details of")} {userRowData && userRowData.name}</ModalHeader>
         {userRowData && userRowData.id ? <>
           <ModalBody>
             <Table striped responsive>
               <tbody>
                 <tr>
-                  <td>User:</td>
+                  <td>{T('User')}:</td>
                   <td>
                     <div className='d-flex justify-content-left align-items-center'>
                       {renderUser(userRowData)}
@@ -124,19 +122,19 @@ const ModalUserDetail = ({
                   </td>
                 </tr>
                 <tr>
-                  <td>Email:</td>
+                  <td>{T('Email')}:</td>
                   <td>{userRowData && userRowData.email}</td>
                 </tr>
                 <tr>
-                  <td>Role:</td>
+                  <td>{T('Role')}:</td>
                   <td>{userRowData && userRowData.role && userRowData.role.RoleName}</td>
                 </tr>
                 <tr>
-                  <td>Contact:</td>
+                  <td>{T('Contact')}:</td>
                   <td>{userRowData && userRowData.Contact}</td>
                 </tr>
                 <tr>
-                  <td>Status:</td>
+                  <td>{T('Status')}:</td>
                   <td>
                     <Badge className='text-capitalize' color="light-success" pill>
                       {userRowData && userRowData.Status}
@@ -144,7 +142,7 @@ const ModalUserDetail = ({
                   </td>
                 </tr>
                 <tr>
-                  <td>Actions:</td>
+                  <td>{T('Actions')}:</td>
                   <td>
                     <UncontrolledButtonDropdown>
                       <DropdownToggle color="#FFFFFF">

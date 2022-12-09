@@ -42,6 +42,9 @@ import {
 // ** Custom Components
 import Notification from '@components/toast/notification'
 
+// ** Translation
+import { T } from '@localization'
+
 const NavbarBookmarks = (props) => {
   // ** Props
   const { setMenuVisibility } = props
@@ -71,12 +74,12 @@ const NavbarBookmarks = (props) => {
 
     /* Succes toast notification */
     if (store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
   }, [store.success, store.error, store.actionFlag, loadFirst])
   // console.log("store >>> ", store)

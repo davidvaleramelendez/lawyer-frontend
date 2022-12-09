@@ -2,9 +2,6 @@
 import { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Reactstrap Imports
 import {
     Card,
@@ -24,13 +21,14 @@ import {
     roleColors
 } from '@constant/defaultValues'
 
+// ** Translation
+import { T } from '@localization'
+
 const UserInfoCard = ({
     id,
     userItem,
     onDeleteUser
 }) => {
-    /* Hook */
-    const { t } = useTranslation()
 
     return (
         <Fragment>
@@ -81,13 +79,13 @@ const UserInfoCard = ({
                         </div>
                     </div>
 
-                    <h4 className="fw-bolder border-bottom pb-50 mb-1">{t("Details")}</h4>
+                    <h4 className="fw-bolder border-bottom pb-50 mb-1">{T("Details")}</h4>
                     <div
                         className={`info-container ${userItem && userItem.id ? '' : 'placeholder-glow'}`}
                     >
                         <ul className="list-unstyled">
                             <li className='mb-75'>
-                                <span className='fw-bolder me-25'>Username:</span>
+                                <span className='fw-bolder me-25'>{T("Username")}:</span>
                                 <span
                                     className={`${userItem && userItem.id ? '' : 'placeholder w-50'}`}
                                 >
@@ -96,7 +94,7 @@ const UserInfoCard = ({
                             </li>
 
                             <li className='mb-75'>
-                                <span className='fw-bolder me-25'>Email:</span>
+                                <span className='fw-bolder me-25'>{T("Email")}:</span>
                                 <span
                                     className={`${userItem && userItem.id ? '' : 'placeholder w-50'}`}
                                 >
@@ -106,7 +104,7 @@ const UserInfoCard = ({
 
                             {userItem && userItem.Status ? (
                                 <li className='mb-75'>
-                                    <span className='fw-bolder me-25'>Status:</span>
+                                    <span className='fw-bolder me-25'>{T("Status")}:</span>
                                     <Badge
                                         className={`text-capitalize ${userItem && userItem.id ? '' : 'placeholder'}`}
                                         color={`${userItem.Status === "Active" ? 'light-success' : 'light-warning'}`}>
@@ -116,7 +114,7 @@ const UserInfoCard = ({
                             ) : null}
 
                             <li className='mb-75'>
-                                <span className='fw-bolder me-25'>Role:</span>
+                                <span className='fw-bolder me-25'>{T("Role")}:</span>
                                 <span
                                     className={`text-capitalize ${userItem && userItem.id ? '' : 'placeholder w-50'}`}
                                 >
@@ -125,7 +123,7 @@ const UserInfoCard = ({
                             </li>
 
                             <li className='mb-75'>
-                                <span className='fw-bolder me-25'>Contact:</span>
+                                <span className='fw-bolder me-25'>{T("Contact")}:</span>
                                 <span
                                     className={`${userItem && userItem.id ? '' : 'placeholder w-50'}`}
                                 >
@@ -134,7 +132,7 @@ const UserInfoCard = ({
                             </li>
 
                             <li className='mb-75'>
-                                <span className='fw-bolder me-25'>{t("Address")}:</span>
+                                <span className='fw-bolder me-25'>{T("Address")}:</span>
                                 <span
                                     className={`${userItem && userItem.id ? '' : 'placeholder w-50'}`}
                                 >
@@ -144,7 +142,7 @@ const UserInfoCard = ({
                             </li>
 
                             <li className='mb-75'>
-                                <span className='fw-bolder me-25'>City:</span>
+                                <span className='fw-bolder me-25'>{T("City")}:</span>
                                 <span
                                     className={`text-capitalize ${userItem && userItem.id ? '' : 'placeholder w-50'}`}
                                 >
@@ -153,7 +151,7 @@ const UserInfoCard = ({
                             </li>
 
                             <li className='mb-75'>
-                                <span className='fw-bolder me-25'>State:</span>
+                                <span className='fw-bolder me-25'>{T("State")}:</span>
                                 <span
                                     className={`text-capitalize ${userItem && userItem.id ? '' : 'placeholder w-50'}`}
                                 >
@@ -162,7 +160,7 @@ const UserInfoCard = ({
                             </li>
 
                             <li className='mb-75'>
-                                <span className='fw-bolder me-25'>Country:</span>
+                                <span className='fw-bolder me-25'>{T("Country")}:</span>
                                 <span
                                     className={`text-capitalize ${userItem && userItem.id ? '' : 'placeholder w-50'}`}
                                 >
@@ -181,7 +179,7 @@ const UserInfoCard = ({
                             className={`me-1 mb-1 ${userItem && userItem.id ? '' : 'placeholder'}`}
                             to={`${adminRoot}/user/edit/${userItem.id}`}
                         >
-                            {t("Edit")}
+                            {T("Edit")}
                         </Button>
 
                         <Button
@@ -189,7 +187,7 @@ const UserInfoCard = ({
                             className={`mb-1 ${userItem && userItem.id ? '' : 'placeholder'}`}
                             onClick={() => onDeleteUser(id)}
                         >
-                            {t("Clear")}
+                            {T("Clear")}
                         </Button>
                     </div>
                 </CardBody>

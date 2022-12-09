@@ -50,6 +50,9 @@ import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
 
+// ** Translation
+import { T } from '@localization'
+
 const CustomHeader = ({
     searchInput,
     rowsPerPage,
@@ -61,7 +64,7 @@ const CustomHeader = ({
         <Row>
             <Col lg={6} className="d-flex align-items-center px-0 px-lg-1">
                 <div className="d-flex align-items-center me-2">
-                    <label htmlFor="rows-per-page">Show</label>
+                    <label htmlFor="rows-per-page">{T('Show')}</label>
                     <Input
                         type="select"
                         id="rows-per-page"
@@ -77,19 +80,19 @@ const CustomHeader = ({
                     </Input>
                 </div>
                 <Button color="primary" onClick={() => setModalOpen(true)}>
-                    Add Contact
+                    {T('Add Contact')}
                 </Button>
             </Col>
 
             <Col lg={6} className="actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0">
                 <div className="d-flex align-items-center">
-                    <label htmlFor="search-contact">Search</label>
+                    <label htmlFor="search-contact">{T('Search')}</label>
                     <Input
                         id="search-contact"
                         className="ms-50 me-2 w-100"
                         type="text"
                         value={searchInput}
-                        placeholder="Search Contact"
+                        placeholder={T('Search Contact')}
                         onChange={(event) => handleSearch(event.target.value)}
                     />
                 </div>
@@ -194,12 +197,12 @@ const ContactList = () => {
 
         /* Succes toast notification */
         if (store && store.success) {
-            Notification("Success", store.success, "success")
+            Notification(T("Success"), store.success, "success")
         }
 
         /* Error toast notification */
         if (store && store.error) {
-            Notification("Error", store.error, "warning")
+            Notification(T("Error"), store.error, "warning")
         }
     }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
     // console.log("store >>> ", store)
@@ -229,20 +232,20 @@ const ContactList = () => {
 
     const columns = [
         {
-            name: "Ticket#",
+            name: `${T('Ticket')}#`,
             sortable: true,
             minWidth: "20%",
             sortField: "ContactID",
             cell: (row) => <Link to={`${adminRoot}/contact/view/${row.ContactID}`}>{`#${row.ContactID}`}</Link>,
             /* Custom placeholder vars */
-            loaderContent: "Ticket#",
+            loaderContent: `${T('Ticket')}#`,
             customLoadingWithIcon: "",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
         },
         {
-            name: "Name",
+            name: T("Name"),
             sortable: true,
             minWidth: "30%",
             sortField: "Name",
@@ -265,7 +268,7 @@ const ContactList = () => {
             /* /Custom placeholder vars */
         },
         {
-            name: "Email",
+            name: T("Email"),
             sortable: true,
             minWidth: "40%",
             sortField: "Email",
@@ -277,7 +280,7 @@ const ContactList = () => {
             /* /Custom placeholder vars */
         },
         {
-            name: "Action",
+            name: T("Action"),
             center: true,
             minWidth: "10%",
             cell: row => (
@@ -286,7 +289,7 @@ const ContactList = () => {
                         <Eye size={17} className="mx-1" />
                     </Link>
                     <UncontrolledTooltip placement="top" target={`pw-tooltip-${row.ContactID}`}>
-                        View Contact
+                        {T('View Contact')}
                     </UncontrolledTooltip>
                 </div>
             ),

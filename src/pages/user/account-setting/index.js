@@ -31,12 +31,6 @@ import {
 } from 'reactstrap'
 import { useForm, Controller } from 'react-hook-form'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
-// ** React Dropdown Import
-import Select from 'react-select'
-
 // ** API calling components
 import axios from 'axios'
 import {
@@ -63,11 +57,12 @@ import '@styles/base/pages/app-invoice.scss'
 import '@styles/react/apps/app-users.scss'
 import '@styles/react/libs/editor/editor.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 import LanguageLabels from './language-labels'
 
 const AccountSettingApp = () => {
-  /* Hooks */
-  const { t } = useTranslation()
   const navigate = useNavigate()
 
   // ** Store vars
@@ -92,7 +87,7 @@ const AccountSettingApp = () => {
   const ValidationSchema = {
     username: {
       placeholder: "john.doe@example.com",
-      required: "Username is required!",
+      required: T("Username is required!"),
       pattern: {
         value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
         message: "Invalid username!"
@@ -100,26 +95,26 @@ const AccountSettingApp = () => {
     },
     fullname: {
       placeholder: "John Doe",
-      required: "Name is required!"
+      required: T("Name is required!")
     },
     emailAddress: {
       placeholder: "john.doe@example.com",
-      required: "Email is required!",
+      required: T("Email is required!"),
       pattern: {
         value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
         message: "Invalid username!"
       }
     },
     status: {
-      placeholder: `Select ${t("Status")}...`,
-      required: `${t("Status")} is required!`
+      placeholder: `${T('Select Status')}...`,
+      required: `${T("Status is required!")}`
     },
     roleId: {
-      placeholder: `Select ${t("Role")}...`,
-      required: `${t("Role")} is required!`
+      placeholder: `${T('Select Role')}...`,
+      required: `${T("Role is required!")}`
     },
     company: {
-      placeholder: "Company",
+      placeholder: T("Company"),
       required: false
     },
     bank_information: {
@@ -198,7 +193,7 @@ const AccountSettingApp = () => {
           setLanguages(langList)
         })
         .catch((error) => {
-          Notification("Error", error, "Error")
+          Notification(T("Error"), error, "Error")
         })
   }
 
@@ -224,12 +219,12 @@ const AccountSettingApp = () => {
 
     /* Succes toast notification */
     if (store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
   }, [dispatch, store.roleItems, store.accountItem, store.success, store.error, store.actionFlag, loadFirst])
   
@@ -304,21 +299,21 @@ const AccountSettingApp = () => {
             <NavItem>
               <NavLink active={active === "1"} onClick={() => toggleTab("1")}>
                 <User size={14} className="me-50" />
-                <span className="fw-bold d-none d-sm-block">Account</span>
+                <span className="fw-bold d-none d-sm-block">{T('Account')}</span>
               </NavLink>
             </NavItem>
 
             <NavItem>
               <NavLink active={active === "2"} onClick={() => toggleTab("2")}>
                 <Info size={14} className="me-50" />
-                <span className="fw-bold d-none d-sm-block">Language Labels</span>
+                <span className="fw-bold d-none d-sm-block">{T('Language Labels')}</span>
               </NavLink>
             </NavItem>
 
             <NavItem>
               <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
                 <Info size={14} className="me-50" />
-                <span className="fw-bold d-none d-sm-block">IMAP information</span>
+                <span className="fw-bold d-none d-sm-block">{T('IMAP information')}</span>
               </NavLink>
             </NavItem>
           </Nav>
@@ -347,7 +342,7 @@ const AccountSettingApp = () => {
                         </h4>
 
                         <Button type="button" tag={Label} className="mb-75 me-75" color="primary">
-                          Change
+                          {T('Change')}
                           <Input type="file" hidden accept="image/*" onChange={(event) => onFileChange(event)} />
                         </Button>
                       </div>
@@ -358,7 +353,7 @@ const AccountSettingApp = () => {
                 <Row>
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="username">
-                      Username
+                      {T('Username')}
                     </Label>
                     <Controller
                       defaultValue={store.userItem && store.userItem.email}
@@ -375,7 +370,7 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="fullname">
-                      Name
+                      {T('Name')}
                     </Label>
                     <Controller
                       defaultValue={store.userItem && store.userItem.name}
@@ -392,7 +387,7 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="emailAddress">
-                      {t("Email")}
+                      {T("Email")}
                     </Label>
                     <Controller
                       defaultValue={store.userItem && store.userItem.email}
@@ -409,7 +404,7 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="company">
-                      Company
+                      {T('Company')}
                     </Label>
                     <Controller
                       defaultValue={store.userItem && store.userItem.Company ? store.userItem.Company : ""}
@@ -425,7 +420,7 @@ const AccountSettingApp = () => {
                   </Col>
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
-                    <label className="form-label" htmlFor="language-select">Language</label>
+                    <label className="form-label" htmlFor="language-select">{T('Language')}</label>
                     <Input
                       type="select"
                       name="language"
@@ -444,7 +439,7 @@ const AccountSettingApp = () => {
 
                 <div className="d-flex flex-wrap mb-2 mt-2">
                   <Button type="submit" className="me-1" color="primary">
-                    {t("Save Change")}
+                    {T("Save Change")}
                   </Button>
                 </div>
               </Form>
@@ -459,7 +454,7 @@ const AccountSettingApp = () => {
                 <Row>
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="imapName">
-                      Name
+                    {T('Name')}
                     </Label>
                     <Controller
                       defaultValue={store.userItem && store.userItem.name}
@@ -476,7 +471,7 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="imapEmail">
-                      Email
+                      {T('Email')}
                     </Label>
                     <Controller
                       defaultValue={store.userItem && store.userItem.email}
@@ -493,7 +488,7 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="imap_host">
-                      IMAP Host
+                      {T('IMAP Host')}
                     </Label>
                     <Controller
                       defaultValue={store.imapItem && store.imapItem.imap_host ? store.imapItem.imap_host : ""}
@@ -510,7 +505,7 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="imap_port">
-                      IMAP Port
+                      {T('IMAP Port')}
                     </Label>
                     <Controller
                       defaultValue={store.imapItem && store.imapItem.imap_port ? store.imapItem.imap_port : ""}
@@ -527,7 +522,7 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="imap_ssl">
-                      Secure
+                      {T('Secure')}
                     </Label>
                     <Controller
                       defaultValue={store.imapItem && store.imapItem.imap_ssl ? store.imapItem.imap_ssl : ""}
@@ -539,7 +534,7 @@ const AccountSettingApp = () => {
                         <div className="form-check">
                           <Input {...field} type="checkbox" id="imap_ssl" defaultChecked={field && field.value} />
                           <Label for="imap_ssl" className="form-check-label">
-                            Use SSL
+                            {T('Use SSL')}
                           </Label>
                         </div>
                       )}
@@ -551,7 +546,7 @@ const AccountSettingApp = () => {
                 <Row>
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="imap_email">
-                      IMAP Email
+                      {T('IMAP Email')}
                     </Label>
                     <Controller
                       defaultValue={store.imapItem && store.imapItem.imap_email ? store.imapItem.imap_email : ""}
@@ -568,7 +563,7 @@ const AccountSettingApp = () => {
 
                   <Col xl={4} md={4} sm={4} className="mb-1">
                     <Label className="form-label" for="imap_password">
-                      IMAP Password
+                      {T('IMAP Password')}
                     </Label>
                     <Controller
                       defaultValue={store.imapItem && store.imapItem.imap_password ? store.imapItem.imap_password : ""}
@@ -586,7 +581,7 @@ const AccountSettingApp = () => {
 
                 <div className="d-flex flex-wrap mb-2 mt-2">
                   <Button type="submit" className="me-1" color="primary">
-                    {t("Save Change")}
+                    {T("Save Change")}
                   </Button>
                 </div>
               </Form>

@@ -3,9 +3,6 @@
 // ** React Imports
 import { useEffect } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
   createNoteCaseRecord,
@@ -35,14 +32,15 @@ import Spinner from '@components/spinner/Simple-grow-spinner'
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalCaseAddNoteText = ({
   open,
   caseId,
   toggleModal,
   recordRowData
 }) => {
-  // ** Hooks for tanslation
-  const { t } = useTranslation()
 
   // ** Store vars
   const dispatch = useDispatch()
@@ -118,7 +116,7 @@ const ModalCaseAddNoteText = ({
           />
         ) : null}
 
-        <ModalHeader toggle={handleReset}>{t("Add")} {t("Record")}</ModalHeader>
+        <ModalHeader toggle={handleReset}>{T("Add")} {T("Record")}</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <Row>
@@ -160,7 +158,7 @@ const ModalCaseAddNoteText = ({
                   color='primary'
                   disabled={!store.loading}
                 >
-                  {t("Add")}
+                  {T("Add")}
                 </Button>
               </div>
             </Row>

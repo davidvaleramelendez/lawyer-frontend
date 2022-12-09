@@ -60,6 +60,9 @@ import DotPulse from "@components/dotpulse"
 import Notification from '@components/toast/notification'
 import DatatablePagination from "@components/datatable/DatatablePagination"
 
+// ** Translation
+import { T } from '@localization'
+
 /* Get windows size */
 function getWindowSize() {
     const { innerWidth: width, innerHeight: height } = window
@@ -272,12 +275,12 @@ const CaseList = () => {
 
         /* Succes toast notification */
         if (store && store.success) {
-            Notification("Success", store.success, "success")
+            Notification(T("Success"), store.success, "success")
         }
 
         /* Error toast notification */
         if (store && store.error) {
-            Notification("Error", store.error, "warning")
+            Notification(T("Error"), store.error, "warning")
         }
     }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
     // console.log("store >>> ", store)
@@ -329,7 +332,7 @@ const CaseList = () => {
             /* /Custom placeholder vars */
         },
         {
-            name: "Reference Number#",
+            name: `${T("Reference Number")}#`,
             sortable: true,
             sortField: "CaseID",
             minWidth: "17%",
@@ -341,7 +344,7 @@ const CaseList = () => {
             /* /Custom placeholder vars */
         },
         {
-            name: "Client",
+            name: T("Client"),
             sortable: true,
             minWidth: "20%",
             sortField: "Name",
@@ -367,7 +370,7 @@ const CaseList = () => {
             /* /Custom placeholder vars */
         },
         {
-            name: "Attorney",
+            name: T("Attorney"),
             sortable: true,
             sortField: "LaywerID",
             minWidth: "14%",
@@ -379,7 +382,7 @@ const CaseList = () => {
             /* /Custom placeholder vars */
         },
         {
-            name: "Date",
+            name: T("Date"),
             sortable: true,
             sortField: "Date",
             minWidth: "13%",
@@ -391,7 +394,7 @@ const CaseList = () => {
             /* /Custom placeholder vars */
         },
         {
-            name: "Status",
+            name: T("Status"),
             sortable: true,
             sortField: "Status",
             minWidth: "12%",
@@ -403,7 +406,7 @@ const CaseList = () => {
             /* /Custom placeholder vars */
         },
         {
-            name: "Group",
+            name: T("Group"),
             sortable: true,
             sortField: "CaseTypeID",
             minWidth: "14%",
@@ -415,7 +418,8 @@ const CaseList = () => {
             /* /Custom placeholder vars */
         },
         {
-            name: "Action",
+            name: T('Action'),
+            minWidth: '90px',
             center: true,
             minWidth: "10%",
             omit: dotIconAction,

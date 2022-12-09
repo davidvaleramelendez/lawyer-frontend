@@ -6,9 +6,6 @@ import React, { useEffect, useState } from 'react'
 // ** Custom Components
 import Avatar from '@components/avatar'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Third Party Components
 import { Editor } from 'react-draft-wysiwyg'
 import { EditorState, convertToRaw, ContentState } from 'draft-js'
@@ -21,6 +18,9 @@ import ResizeObserver from 'resize-observer-polyfill'
 
 // ** Idle timer
 import { useIdleTimer } from 'react-idle-timer'
+
+// ** Translation
+import { T } from '@localization'
 
 // ** Icons Import
 import {
@@ -97,7 +97,6 @@ import '@styles/react/libs/react-select/_react-select.scss'
 
 const ModalComposeMail = () => {
   // ** Hooks
-  const { t } = useTranslation()
   const MySwal = withReactContent(Swal)
 
   // ** Store vars
@@ -113,23 +112,23 @@ const ModalComposeMail = () => {
 
   const ValidationSchema = {
     email_to: {
-      placeholder: `Select...`,
+      placeholder: `${T('Select')}...`,
       required: false
     },
     email_cc: {
-      placeholder: `Select...`,
+      placeholder: `${T('Select')}...`,
       required: false
     },
     email_bcc: {
-      placeholder: `Select...`,
+      placeholder: `${T('Select')}...`,
       required: false
     },
     subject: {
-      placeholder: "Subject",
+      placeholder: T("Subject"),
       required: false
     },
     body: {
-      placeholder: t("Message"),
+      placeholder: T("Message"),
       required: false
     }
   }
@@ -289,7 +288,7 @@ const ModalComposeMail = () => {
       const fileSizeKiloBytes = fileSize / 1024
       const uploadLimit = process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE * 1024
       if (fileSizeKiloBytes > uploadLimit) {
-        onAlertMessage('File limit exceeded!', `Please upload max ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb files!`, 'warning')
+        onAlertMessage(T('File limit exceeded!'), `${T('Please upload max')} ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb ${T('files')}!`, 'warning')
         return
       }
 
@@ -505,7 +504,7 @@ const ModalComposeMail = () => {
         ) : null}
 
         <div className='modal-header modal-movable'>
-          <h5 className='modal-title'>Compose Mail</h5>
+          <h5 className='modal-title'>{T('Compose Mail')}</h5>
           <div className='modal-actions'>
             <a
               href='/'
@@ -541,7 +540,7 @@ const ModalComposeMail = () => {
         <ModalBody className='flex-grow-1 p-0'>
           <Form className='compose-form' onSubmit={handleSubmit(onSubmit)}>
             <div className='compose-mail-form-field'>
-              <Label for='email_to' className='form-label'>To:</Label>
+              <Label for='email_to' className='form-label'>{T('To')}:</Label>
               <div className='flex-grow-1 w-100'>
                 <Controller
                   defaultValue={emailItem.email_to}
@@ -570,7 +569,7 @@ const ModalComposeMail = () => {
                 />
               </div>
               {!mailToValid ? (
-                <div className="invalid-feedback d-block">To email is required!</div>
+                <div className="invalid-feedback d-block">{T('To email is required!')}</div>
               ) : null}
               <div>
                 <a href='/' className='toggle-cc text-body me-1' onClick={toggleCC}>Cc</a>
@@ -659,7 +658,7 @@ const ModalComposeMail = () => {
             ) : null}
 
             <div className='compose-mail-form-field'>
-              <Label for='subject' className='form-label'>Subject:</Label>
+              <Label for='subject' className='form-label'>{T('Subject')}:</Label>
               <Controller
                 defaultValue=""
                 id='subject'
@@ -746,7 +745,7 @@ const ModalComposeMail = () => {
                     color='primary'
                     disabled={!store.loading}
                   >
-                    Send
+                    {T('Send')}                    
                   </Button>
                 </UncontrolledButtonDropdown>
 
@@ -756,7 +755,7 @@ const ModalComposeMail = () => {
                     disabled={!store.loading || !canSave()}
                     onClick={saveDraft}
                   >
-                    Save
+                    {T('Save')}
                   </Button>
                 </UncontrolledButtonDropdown>
 

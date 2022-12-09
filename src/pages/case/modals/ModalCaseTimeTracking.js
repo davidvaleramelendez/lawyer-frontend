@@ -3,9 +3,6 @@
 // ** React Imports
 import { useEffect } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import { clearCaseMessage } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -34,14 +31,15 @@ import {
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalCaseTimeTracking = ({
   open,
   caseId,
   onRecordSubmit,
   toggleModal
 }) => {
-  // ** Hooks for tanslation
-  const { t } = useTranslation()
 
   // ** Store vars
   const dispatch = useDispatch()
@@ -93,13 +91,13 @@ const ModalCaseTimeTracking = ({
         className='modal-dialog-centered modal-lg'
         backdrop="static"
       >
-        <ModalHeader toggle={handleReset}>{t("Add Time Tracking")}</ModalHeader>
+        <ModalHeader toggle={handleReset}>{T("Add Time Tracking")}</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <Row>
               <Col md={12} sm={12} className='mb-1'>
                 <Label className='form-label' for='Subject'>
-                  Subject
+                  {T('Subject')}
                 </Label>
                 <Controller
                   defaultValue=""
@@ -114,7 +112,7 @@ const ModalCaseTimeTracking = ({
 
               <Col md={12} sm={12} className='mb-1'>
                 <Label className='form-label' for='interval_time'>
-                  Enter the time
+                  {T('Enter the time')}
                 </Label>
                 <Controller
                   defaultValue=""
@@ -130,8 +128,8 @@ const ModalCaseTimeTracking = ({
 
             <Row className="mt-2 mb-2">
               <div className="d-flex justify-content-end">
-                <Button type="submit" color="primary" className="btn btn-primary" >
-                  {t("Record")} {t("now")}
+                <Button type="submit" color="primary" className="btn btn-primary">
+                  {T("Record")} {T("now")}
                 </Button>
               </div>
             </Row>

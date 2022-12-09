@@ -49,7 +49,7 @@ import '@styles/react/apps/app-users.scss'
 import '@styles/react/libs/editor/editor.scss'
 
 // ** localization keys
-import { L10nKeys, L10nOrgKeys, L10nMenuItemIDKeys } from '@localization'
+import { L10nKeys, L10nOrgKeys, L10nMenuItemIDKeys, T } from '@localization'
 
 // ** API calling components
 import axios from 'axios'
@@ -98,7 +98,7 @@ const LanguageLabels = () => {
           setLanguages(langList)
         })
         .catch((error) => {
-          Notification("Error", error, "Error")
+          Notification(T("Error"), error, "Error")
         })
   }
 
@@ -119,7 +119,7 @@ const LanguageLabels = () => {
         setTranslation(labels)
       })
       .catch((error) => {
-        Notification("Error", error, "warning")
+        Notification(T("Error"), error, "warning")
       })
   }
 
@@ -131,7 +131,7 @@ const LanguageLabels = () => {
     try {
       const response = await setLanguageLabelsRequest(params)
       if (response && response.flag) {
-        Notification("Success", response.message, "success")
+        Notification(T("Success"), response.message, "success")
 
         const updatedLabels = response.data     
         const labels = {}   
@@ -151,10 +151,10 @@ const LanguageLabels = () => {
         
         dispatch(updateLanguageLabels(labels))
       } else {
-        Notification("Error", response.message, "warning")
+        Notification(T("Error"), response.message, "warning")
       }
     } catch (error) {
-      Notification("Error", error, "warning")
+      Notification(T("Error"), error, "warning")
     }
   }
 
@@ -185,10 +185,6 @@ const LanguageLabels = () => {
     }
   }
 
-  const capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1)
-  }
-
   const onChangeTranslation = (origin, value) => {
     const values = {...translation}
     values[origin] = value
@@ -207,44 +203,30 @@ const LanguageLabels = () => {
   }
 
   const getPageIconComponent = (page) => {
-    switch (page) {
-      case "Email":
-        return <Mail size={14} />
-      case "Documents":
-        return <Briefcase size={14} />
-      case "Chat":
-        return <MessageCircle size={14} />
-      case "Task":
-        return <CheckSquare size={14} />
-      case "Calendar":
-        return <Calendar size={14} />
-      case "Respites":
-        return <CheckCircle size={14} />
-      case "Outbox":
-        return <Send size={14} />
-      case "Bills":
-        return <FileText size={14} />
-      case "Inquiry":
-        return <MessageSquare size={14} />
-      case "Contact":
-        return <FileText size={14} />
-      case "User":
-        return <User size={14} />
-      case "Account":
-        return <Settings size={14} />
-      case "Emial_Template":
-        return <Codepen size={14} />
-      case "Cloud_Server":
-        return <HardDrive size={14} />
-      case "Calendar_Setting":
-        return <Calendar size={14} />
+    const pageIcons = {
+      Email: <Mail size={14} />,
+      Documents: <Briefcase size={14} />,
+      Chat: <MessageCircle size={14} />,
+      Task: <CheckSquare size={14} />,
+      Calendar: <Calendar size={14} />,
+      Respites: <CheckCircle size={14} />,
+      Outbox: <Send size={14} />,
+      Bills: <FileText size={14} />,
+      Inquiry: <MessageSquare size={14} />,
+      Contact: <FileText size={14} />,
+      User: <User size={14} />,
+      Account: <Settings size={14} />,
+      "Email Template": <Codepen size={14} />,
+      "Cloud-Server": <HardDrive size={14} />,
+      "Calendar Setting": <Calendar size={14} />
     }
+    return pageIcons[page]
   }
 
   return (<>
     <div className="app-user-view">
       <div className="d-flex align-items-center me-2" style={{ width: '300px', marginBottom: '30px' }}>
-        <label htmlFor="language-select">Language</label>
+        <label htmlFor="language-select">{T('Language')}</label>
         <Input
           type="select"
           id="language-select"
@@ -262,7 +244,7 @@ const LanguageLabels = () => {
       <Tabs>
         <TabList>
           {Object.keys(L10nOrgKeys).map(tabName => {
-            return <Tab key={tabName}>{tabName}</Tab>
+            return <Tab key={tabName}>{T(tabName)}</Tab>
           })}
         </TabList>
 
@@ -285,7 +267,7 @@ const LanguageLabels = () => {
                       <NavItem key={subTabName + i}>
                         <NavLink active={active === i} onClick={() => toggleTab(i)}>
                           {getPageIconComponent(subTabName)}
-                          <span className="fw-bold d-none d-sm-block">{capitalizeFirstLetter(subTabName)}</span>
+                          <span className="fw-bold d-none d-sm-block">{T(subTabName)}</span>
                         </NavLink>
                       </NavItem>
                     ) : null

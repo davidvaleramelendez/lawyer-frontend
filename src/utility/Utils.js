@@ -534,7 +534,6 @@ export const setLanguageLabels = (labels) => {
   } catch (error) {
     console.log('>>>>: src/utility/Utils.js : setLanguageLabels -> error', error)
   }
-  return rememberMe
 }
 /* /Decrypting auth remember me and getting from storage */
 

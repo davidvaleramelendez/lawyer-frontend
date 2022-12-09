@@ -37,6 +37,8 @@ export const caseDocItem = { id: "", case_id: "", user_id: "", title: "", descri
 export const letterItem = { id: "", case_id: "", user_id: "", subject: "", message: "", last_date: "", is_print: 0, deleted: 0, is_archived: 0, word_file: "", pdf_file: "", frist_date: "", isErledigt: 0 }
 
 // Todo
+export const todosMeta = { important: 0 }
+
 export const todoItem = { id: "", title: "", Assign: "", due_date: new Date(), tag: "", description: "", UserId: "", is_important: 0, is_completed: 0, is_deleted: 0 }
 
 // Add Events

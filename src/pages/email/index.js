@@ -44,6 +44,9 @@ import {
 // ** Styles
 import '@styles/react/apps/app-email.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const EmailApp = () => {
   // ** Hooks
   const navigate = useNavigate()
@@ -96,12 +99,12 @@ const EmailApp = () => {
 
     /* Succes toast notification */
     if (store && store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store && store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
 
     /* Updating uploaded files */

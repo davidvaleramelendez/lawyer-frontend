@@ -62,6 +62,8 @@ import ModalSendInvoice from './ModalSendInvoice'
 
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
+
+// ** Translation
 import { T } from '@localization'
 
 const ModalInvoiceDetail = ({

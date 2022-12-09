@@ -50,6 +50,9 @@ import { AbilityContext } from '@src/utility/context/Can'
 // ** Styles
 import '@styles/react/pages/page-authentication.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const LoginBasic = () => {
   // ** Hooks
   const { t } = useTranslation()
@@ -120,12 +123,12 @@ const LoginBasic = () => {
 
     /* Succes toast notification */
     if (store && store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store && store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
   }, [store.success, store.error, store.actionFlag])
 

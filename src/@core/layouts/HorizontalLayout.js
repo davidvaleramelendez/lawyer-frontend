@@ -45,6 +45,9 @@ import { useNavbarColor } from '@hooks/useNavbarColor'
 // ** Styles
 import '@styles/base/core/menu/menu-types/horizontal-menu.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const HorizontalLayout = (props) => {
   // ** Props
   const { navbar, menuData, footer, children, menu } = props
@@ -126,12 +129,12 @@ const HorizontalLayout = (props) => {
 
     /* Succes toast notification */
     if (layoutStore && layoutStore.success) {
-      Notification("Success", layoutStore.success, "success")
+      Notification(T("Success"), layoutStore.success, "success")
     }
 
     /* Error toast notification */
     if (layoutStore && layoutStore.error) {
-      Notification("Error", layoutStore.error, "warning")
+      Notification(T("Error"), layoutStore.error, "warning")
     }
   }, [layoutStore.success, layoutStore.error, layoutStore.actionFlag, loadFirst])
 

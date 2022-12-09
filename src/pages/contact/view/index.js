@@ -57,7 +57,9 @@ import ModalAcceptRequest from '../modals/ModalAcceptRequest'
 
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
-import { T } from '../../../utility/Localization'
+
+// ** Translation
+import { T } from '@localization'
 
 const ContactView = () => {
   // ** Hooks
@@ -101,12 +103,12 @@ const ContactView = () => {
 
     /* Succes toast notification */
     if (store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
 
     /* If contact deleted then redirect */

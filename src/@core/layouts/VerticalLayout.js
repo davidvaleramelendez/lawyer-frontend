@@ -47,6 +47,9 @@ import { useNavbarColor } from '@hooks/useNavbarColor'
 import '@styles/base/core/menu/menu-types/vertical-menu.scss'
 import '@styles/base/core/menu/menu-types/vertical-overlay-menu.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const VerticalLayout = (props) => {
   // ** Props
   const { menu, navbar, footer, children, menuData } = props
@@ -140,12 +143,12 @@ const VerticalLayout = (props) => {
 
     /* Succes toast notification */
     if (layoutStore && layoutStore.success) {
-      Notification("Success", layoutStore.success, "success")
+      Notification(T("Success"), layoutStore.success, "success")
     }
 
     /* Error toast notification */
     if (layoutStore && layoutStore.error) {
-      Notification("Error", layoutStore.error, "warning")
+      Notification(T("Error"), layoutStore.error, "warning")
     }
   }, [layoutStore.success, layoutStore.error, layoutStore.actionFlag, loadFirst])
   // console.log("layoutStore >>> ", layoutStore)

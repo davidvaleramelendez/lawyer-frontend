@@ -53,6 +53,9 @@ import Notification from '@components/toast/notification'
 // ** Styles
 import '@styles/react/apps/app-email.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const EmailDetailView = () => {
   // ** Hooks
   const { id } = useParams()
@@ -127,12 +130,12 @@ const EmailDetailView = () => {
 
     /* Succes toast notification */
     if (store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
   }, [dispatch, store.success, store.error, store.actionFlag, loadFirst])
 

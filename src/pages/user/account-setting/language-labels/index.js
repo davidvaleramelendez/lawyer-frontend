@@ -98,7 +98,7 @@ const LanguageLabels = () => {
           setLanguages(langList)
         })
         .catch((error) => {
-          Notification("Error", error, "Error")
+          Notification(T("Error"), error, "Error")
         })
   }
 
@@ -119,7 +119,7 @@ const LanguageLabels = () => {
         setTranslation(labels)
       })
       .catch((error) => {
-        Notification("Error", error, "warning")
+        Notification(T("Error"), error, "warning")
       })
   }
 
@@ -131,7 +131,7 @@ const LanguageLabels = () => {
     try {
       const response = await setLanguageLabelsRequest(params)
       if (response && response.flag) {
-        Notification("Success", response.message, "success")
+        Notification(T("Success"), response.message, "success")
 
         const updatedLabels = response.data     
         const labels = {}   
@@ -151,10 +151,10 @@ const LanguageLabels = () => {
         
         dispatch(updateLanguageLabels(labels))
       } else {
-        Notification("Error", response.message, "warning")
+        Notification(T("Error"), response.message, "warning")
       }
     } catch (error) {
-      Notification("Error", error, "warning")
+      Notification(T("Error"), error, "warning")
     }
   }
 
@@ -203,38 +203,24 @@ const LanguageLabels = () => {
   }
 
   const getPageIconComponent = (page) => {
-    switch (page) {
-      case "Email":
-        return <Mail size={14} />
-      case "Documents":
-        return <Briefcase size={14} />
-      case "Chat":
-        return <MessageCircle size={14} />
-      case "Task":
-        return <CheckSquare size={14} />
-      case "Calendar":
-        return <Calendar size={14} />
-      case "Respites":
-        return <CheckCircle size={14} />
-      case "Outbox":
-        return <Send size={14} />
-      case "Bills":
-        return <FileText size={14} />
-      case "Inquiry":
-        return <MessageSquare size={14} />
-      case "Contact":
-        return <FileText size={14} />
-      case "User":
-        return <User size={14} />
-      case "Account":
-        return <Settings size={14} />
-      case "Email Template":
-        return <Codepen size={14} />
-      case "Cloud-Server":
-        return <HardDrive size={14} />
-      case "Calendar Setting":
-        return <Calendar size={14} />
+    const pageIcons = {
+      Email: <Mail size={14} />,
+      Documents: <Briefcase size={14} />,
+      Chat: <MessageCircle size={14} />,
+      Task: <CheckSquare size={14} />,
+      Calendar: <Calendar size={14} />,
+      Respites: <CheckCircle size={14} />,
+      Outbox: <Send size={14} />,
+      Bills: <FileText size={14} />,
+      Inquiry: <MessageSquare size={14} />,
+      Contact: <FileText size={14} />,
+      User: <User size={14} />,
+      Account: <Settings size={14} />,
+      "Email Template": <Codepen size={14} />,
+      "Cloud-Server": <HardDrive size={14} />,
+      "Calendar Setting": <Calendar size={14} />
     }
+    return pageIcons[page]
   }
 
   return (<>

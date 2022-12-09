@@ -68,7 +68,8 @@ import {
 import {
   isUserLoggedIn,
   getTransformDate,
-  getTimeCounter
+  getTimeCounter,
+  setTimeCounter
 } from '@utils'
 
 // ** Custom Components
@@ -91,7 +92,6 @@ import ModalCaseTimeTrackingCounter from '../modals/ModalCaseTimeTrackingCounter
 
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
-import { setTimeCounter } from '../../../utility/Utils'
 
 // ** Translation
 import { T } from '@localization'
@@ -159,12 +159,12 @@ const CaseView = () => {
 
     /* Succes toast notification */
     if (store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
 
     /* If contact deleted then redirected */
@@ -177,8 +177,8 @@ const CaseView = () => {
   /* Delete case */
   const onDeleteFile = (caseId) => {
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You want to Close this Case?",
+      title: T('Are you sure?'),
+      text: T("You want to Close this Case?"),
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes',
@@ -197,11 +197,11 @@ const CaseView = () => {
   /* Change note history done status */
   const onShareCaseRecord = (id) => {
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You want to Share this case record?",
+      title: T('Are you sure?'),
+      text: T("You want to Share this case record?"),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes',
+      confirmButtonText: T('Yes'),
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-danger ms-1'
@@ -224,11 +224,11 @@ const CaseView = () => {
   const onDocumentDone = (id) => {
     // console.log("onDocumentDone >>> ", id)
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You want to Done this document?",
+      title: T('Are you sure?'),
+      text: T("You want to Done this document?"),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes',
+      confirmButtonText: T('Yes'),
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-danger ms-1'
@@ -251,11 +251,11 @@ const CaseView = () => {
   const onLetterDone = (id) => {
     // console.log("onLetterDone >>> ", id)
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You want to Done this letter?",
+      title: T('Are you sure?'),
+      text: T("You want to Done this letter?"),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes',
+      confirmButtonText: T('Yes'),
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-danger ms-1'

@@ -193,7 +193,7 @@ const AccountSettingApp = () => {
           setLanguages(langList)
         })
         .catch((error) => {
-          Notification("Error", error, "Error")
+          Notification(T("Error"), error, "Error")
         })
   }
 
@@ -219,12 +219,12 @@ const AccountSettingApp = () => {
 
     /* Succes toast notification */
     if (store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
   }, [dispatch, store.roleItems, store.accountItem, store.success, store.error, store.actionFlag, loadFirst])
   

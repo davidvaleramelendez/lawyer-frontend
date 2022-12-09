@@ -48,6 +48,9 @@ import PaymentHistory from './PaymentHistory'
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const InvoiceView = () => {
   // ** HooksVars
   const { id } = useParams()
@@ -88,12 +91,12 @@ const InvoiceView = () => {
 
     /* Succes toast notification */
     if (store && store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store && store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
   }, [dispatch, store.success, store.error, store.actionFlag, loadFirst])
   // console.log("View store >>> ", store)

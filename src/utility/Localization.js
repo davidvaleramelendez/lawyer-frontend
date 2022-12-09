@@ -142,6 +142,14 @@ export const L10nKeys = {
     Country: 'Country',
     ReferenceNumber: 'Reference Number',
     Status: 'Status',
+    TimeCounterWillBeExpiredSoon: 'Time counter will be expired soon',
+    Stop: 'Stop',
+    Terminal: 'Terminal',
+    AreYouSure: 'Are you sure?', 
+    YouWantToCloseThisCase: 'You want to Close this Case?',  
+    YouWantToShareThisCaseRecord: 'You want to Share this case record?',
+    YouWantToDoneThisDocument: 'You want to Done this document?',
+    YouWantToDoneThisLetter: 'You want to Done this letter?',
     //** /Documents App
 
     //** Chat App
@@ -154,7 +162,7 @@ export const L10nKeys = {
     ClearChat: 'Clear Chat',
     // Send: 'Send',
     NoChatsFound2: 'No Chats Found',
-    Settings: 'Settings',
+    // Settings: 'Settings',
     Notification: 'Notification',
     InviceFriends: 'Invite Friends',
     PersonalInformation: 'Personal Information',
@@ -174,7 +182,7 @@ export const L10nKeys = {
     SortDueDate: 'Sort Due Date',
     ResetSort: 'Reset Sort',
     AddTask: 'Add Task',
-    AreYouSure: 'Are you sure?',
+    // AreYouSure: 'Are you sure?',
     YouWontBeAbleToRevertThis: "You won't be able to revert this!",
     YouCanAlsoRevertThis: 'You can also revert this!',
     YesDeleteIt: 'Yes, delete it!',
@@ -546,24 +554,44 @@ export const L10nKeys = {
     // User: 'User',
     // Submit: 'Submit',
     Back: 'Back',
-    FileLimitExceeded: 'File limit exceeded!',
-    FileUploadingSizeExceeded: 'File uploading size exceeded!',
-    Okay: 'Okay',
-    PleaseUploadMax: 'Please upload max',
-    file: 'file',
     Attachment: 'Attachment',
     //** /Email Template App
 
     //** Cloud Server App
-    AddNew: 'Add New',
+    // AreYouSure: 'Are you sure?',
+    YouRevertThisFromTrash: 'You revert this from trash!',
+    // YesDeleteIt: 'Yes, delete it!',
+    // YouWontBeAbleToRevertThis: "You won't be able to revert this!",
+    // NameIsRequired: 'Name is required!',
+    MoveFolder: 'Move Folder',
+    EditFolder: 'Edit Folder',
+    CreateNewFolder: 'Create New Folder',
+    FolderName: 'Folder Name',
+    MoveFile: 'Move File',
+    EditFile: 'Edit File',
+    // Submit: 'Submit',
+    // Cancel: 'Cancel',
+    UploadNewFile: 'Upload New File',
+    SelectParent: 'Select Parent',
+    FileName: 'File Name',
+    StorageStatus: 'Storage Status',
+    UsedOf: 'used of',
     MyDrive: 'My Drive',
-    Recents: 'Recents',
-    STOREAGE_STATUS: 'STORAGE STATUS',
-    usedOf: 'used of',
     Filename: 'Filename',
     Created: 'Created',
-    Actions: 'Actions',
+    // Actions: 'Actions',
     // Important: 'Important',
+    // Delete: 'Delete',
+    Restore: 'Restore',
+    DeleteForever: 'Delete forever',
+    FolderCreated: 'Folder Created',
+    Move: 'Move',
+    FileCreated: 'File Created',
+    GridView: 'Grid view',
+    ListView: 'List View',
+    Recents: 'Recents',
+    AddNew: 'Add New',
+    Folder: 'Folder',
     // Trash: 'Trash',
     // Search: 'Search',
     //** /Cloud Server App
@@ -589,14 +617,19 @@ export const L10nKeys = {
     Hidden: 'Hidden',
     FooterType: 'Footer Type',
     ApplySave: 'Apply & Save',
-
     //** /UI Setting
 
     //** Common
-    APPS_MENU: 'APPS & MENU',
-    REQUEST_SETTINGS: 'REQUEST & SETTINGS',
+    AppsMenu: 'Apps & Menu',
+    RequestSettings: 'Request & Settings',
+    Settings: 'Settings',
     Profile: 'Profile',
     Logout: 'Logout',
+    FileLimitExceeded: 'File limit exceeded!',
+    FileUploadingSizeExceeded: 'File uploading size exceeded!',
+    Okay: 'Okay',
+    PleaseUploadMax: 'Please upload max',
+    files: 'files',
     //** /Common
 
     //** Error    
@@ -643,7 +676,9 @@ export const L10nOrgKeys = {
                 'EnterTheTime', 'NameIsRequired', 'InvalidEmailAddress', 'TelephoneIsRequired', 'AttorneyIsRequired', 
                 'GroupIsRequired', 'StatusIsRequired', 'LastNameIsRequired', 'EmailIsRequired', 'Attorney', 
                 'TelephoneMustBe10Digit', 'City', 'PostalCode', 'SelectAttorney', 'SelectGroup', 
-                'Submit', 'Cancel', 'Country', 'ReferenceNumber', 'Status'
+                'Submit', 'Cancel', 'Country', 'ReferenceNumber', 'Status', 
+                'Terminal', 'Stop', 'TimeCounterWillBeExpiredSoon', 'AreYouSure', 'YouWantToCloseThisCase',
+                'YouWantToShareThisCaseRecord', 'YouWantToDoneThisDocument', 'YouWantToDoneThisLetter'
         ],
         Chat: [
             'Chats', 'Contacts', 'SearchOrStartNewAChat', 'StartConversation', 'LoadMore',
@@ -740,10 +775,18 @@ export const L10nOrgKeys = {
             'Action', 'Edit', 'View', 'Delete', 'HasAttachment', 
             'SubjectIsRequired', 'StatusIsRequired', 'ContentIsRequired', 'SelectStatus', 'Content', 
             'Sortcodes', 'Case', 'Contact', 'User', 'Submit', 
-            'Back', 'FileLimitExceeded', 'FileUploadingSizeExceeded', 'Okay', 'PleaseUploadMax', 
-            'file', 'Attachment'
+            'Back', 'Attachment'
         ],
-        'Cloud-Server': ['AddNew', 'MyDrive', 'Recents', 'STOREAGE_STATUS', 'usedOf', 'Filename', 'Created', 'Actions', 'Important', 'Trash', 'Search'],
+        'Cloud-Server': [
+            'AreYouSure', 'YouRevertThisFromTrash', 'YesDeleteIt', 'YouWontBeAbleToRevertThis', 'NameIsRequired', 
+            'MoveFolder', 'EditFolder', 'CreateNewFolder', 'FolderName', 'MoveFile', 
+            'EditFile', 'Submit', 'Cancel', 'UploadNewFile', 'SelectParent', 
+            'FileName', 'StorageStatus', 'UsedOf', 'MyDrive', 'Filename', 
+            'Created', 'Actions', 'Important', 'Delete', 'Restore', 
+            'DeleteForever', 'FolderCreated', 'Move', 'FileCreated', 'GridView', 
+            'ListView', 'Recents', 'AddNew', 'Folder', 'Trash',
+            'Search'
+        ],
         'Calendar Setting': []
     },
     'UI Setting': [
@@ -752,7 +795,10 @@ export const L10nOrgKeys = {
         'MenuCollapsed', 'MenuHidden', 'NavbarColor', 'NavbarType', 'Floating', 
         'Sticky', 'Static', 'Hidden', 'FooterType', 'ApplySave'
     ],
-    Common: ['APPS_MENU', 'REQUEST_SETTINGS', 'Profile', 'Logout'],
+    Common: [
+        'AppsMenu', 'RequestSettings', 'Profile', 'Logout',
+        'FileLimitExceeded', 'FileUploadingSizeExceeded', 'Okay', 'PleaseUploadMax', 'files'
+    ],
     Errors: ['Success', 'Failed', 'Error', 'Warning']
 }
 

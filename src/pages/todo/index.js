@@ -49,6 +49,9 @@ import {
 // ** Styles
 import '@styles/react/apps/app-todo.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const TodoApp = () => {
   // ** Hooks
   const navigate = useNavigate()
@@ -137,12 +140,12 @@ const TodoApp = () => {
 
     /* Succes toast notification */
     if (store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
   }, [store.userItems, paramsURL.filter, paramsURL.tag, store.success, store.error, store.actionFlag, searchInput, sort, loadFirst])
   // console.log("store >>> ", store)

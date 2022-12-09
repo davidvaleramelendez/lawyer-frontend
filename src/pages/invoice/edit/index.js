@@ -230,12 +230,12 @@ const InvoiceEdit = () => {
 
     /* Succes toast notification */
     if (store && store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store && store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
   }, [dispatch, store.casesItems, store.customerItems, store.success, store.error, store.actionFlag, loadFirst])
   // console.log("Edit store >>> ", store)

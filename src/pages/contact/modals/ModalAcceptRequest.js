@@ -177,8 +177,15 @@ const ModalAcceptRequest = ({
           />
         ) : null}
 
-        <ModalHeader toggle={handleReset}>{t("Accept")} {t("the")} {t("request")}</ModalHeader>
-        <ModalBody>
+        <ModalHeader
+          toggle={handleReset}
+          className="bg-transparent"
+        />
+        <ModalBody className="px-5 pb-5">
+          <div className='text-center mb-4'>
+            <h1>{t("Accept")} {t("the")} {t("request")}</h1>
+          </div>
+
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <Row>
               <Col md={6} sm={12} className="mb-1">
@@ -317,7 +324,7 @@ const ModalAcceptRequest = ({
             </Row>
 
             <Row className="mt-2 mb-2">
-              <div className="d-flex justify-content-end">
+              <div className="text-center">
                 <Button
                   type="submit"
                   color="primary"

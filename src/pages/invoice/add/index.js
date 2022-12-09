@@ -31,6 +31,10 @@ import {
   resetCalculationVatPrice,
   clearInvoiceMessage
 } from '../store'
+import {
+  getCompanyDetail,
+  clearUserMessage
+} from '../../user/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // Translation
@@ -80,6 +84,7 @@ const InvoiceAdd = () => {
   // ** Store vars
   const dispatch = useDispatch()
   const store = useSelector((state) => state.invoice)
+  const userStore = useSelector((state) => state.user)
 
   const search = useLocation().search
   const copyId = new URLSearchParams(search).get('copyId')
@@ -196,6 +201,7 @@ const InvoiceAdd = () => {
 
     if (loadFirst) {
       dispatch(resetCalculationVatPrice())
+      dispatch(getCompanyDetail({}))
       if (copyId) {
         dispatch(getInvoiceItem(copyId))
         dispatch(invoiceInfo({ from: "COPY" }))
@@ -248,6 +254,10 @@ const InvoiceAdd = () => {
       dispatch(clearInvoiceMessage())
     }
 
+    if (userStore && (userStore.success || userStore.error || userStore.actionFlag)) {
+      dispatch(clearUserMessage())
+    }
+
     /* Succes toast notification */
     if (store && store.success) {
       Notification("Success", store.success, "success")
@@ -257,7 +267,7 @@ const InvoiceAdd = () => {
     if (store && store.error) {
       Notification("Error", store.error, "warning")
     }
-  }, [dispatch, store.invoiceItem, store.casesItems, store.caseTypeItems, store.customerItems, store.success, store.error, store.actionFlag, loadFirst])
+  }, [store.invoiceItem, store.casesItems, store.caseTypeItems, store.customerItems, store.success, store.error, store.actionFlag, userStore.success, userStore.error, userStore.actionFlag, loadFirst])
   // console.log("Add store >>> ", store)
 
   const renderOnSelectCustomer = (customer) => {
@@ -374,6 +384,19 @@ const InvoiceAdd = () => {
     }
   }
 
+  const concateTwoValue = (value1 = "", value2 = "") => {
+    let name = ""
+    if (value1) {
+      name = value1
+    }
+
+    if (value2) {
+      name = name ? `${name} ${value2}` : value2
+    }
+
+    return name
+  }
+
   const Tag = fields && fields.length === 0 ? 'div' : SlideDown
   return store ? (
     <div className="invoice-add-wrapper">
@@ -444,15 +467,20 @@ const InvoiceAdd = () => {
                       </svg>
                       <h3 className="text-primary invoice-logo">Logo</h3>
                     </div>
-                    <p className="card-text mb-25">
-                      {store && store.userItem && store.userItem.Address}
-                    </p>
+                    <CardText className="mb-25">
+                      {userStore.companyItem && userStore.companyItem.id ? concateTwoValue(userStore.companyItem.name, userStore.companyItem.last_name) : null}
+                    </CardText>
 
-                    <p className="card-text mb-25">
-                      {store && store.userItem && store.userItem.Postcode} {" "}
-                      {store && store.userItem && store.userItem.City}
-                    </p>
-                    <p className="card-text mb-0" />
+                    <CardText className="mb-25">
+                      {userStore.companyItem && userStore.companyItem.id ? <>
+                        {userStore.companyItem && userStore.companyItem.address}
+                        {userStore.companyItem.city ? `, ${userStore.companyItem.city}` : ''}
+                      </> : null}
+                    </CardText>
+
+                    <CardText className="mb-0">
+                      {userStore.companyItem && userStore.companyItem.id ? userStore.companyItem.zip_code : null}
+                    </CardText>
                   </div>
 
                   <div className="invoice-number-date mt-md-0 mt-2">

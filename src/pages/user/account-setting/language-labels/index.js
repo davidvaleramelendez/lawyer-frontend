@@ -8,14 +8,9 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // ** Reactstrap Imports
 import {
-  Col,
   Nav,
-  Row,
   Card,
-  Form,
-  Label,
   Input,
-  Button,
   NavLink,
   TabPane,
   NavItem,
@@ -82,24 +77,24 @@ const LanguageLabels = () => {
   // ** Get languages 
   const getLanguages = () => {
     axios.get(`${API_ENDPOINTS.language.languages}`)
-        .then((res) => {
-          let langList = res.data.data
-          if (langList === undefined || langList === null) {
-            langList = []
-          }
+      .then((res) => {
+        let langList = res.data.data
+        if (langList === undefined || langList === null) {
+          langList = []
+        }
 
-          if (!langList.includes('English')) {
-            langList.push('English')
-          }
+        if (!langList.includes('English')) {
+          langList.push('English')
+        }
 
-          if (!langList.includes('Dutch')) {
-            langList.push('Dutch')
-          }
-          setLanguages(langList)
-        })
-        .catch((error) => {
-          Notification("Error", error, "Error")
-        })
+        if (!langList.includes('Dutch')) {
+          langList.push('Dutch')
+        }
+        setLanguages(langList)
+      })
+      .catch((error) => {
+        Notification("Error", error, "Error")
+      })
   }
 
   const getLanguageTranslation = (lang) => {
@@ -133,22 +128,22 @@ const LanguageLabels = () => {
       if (response && response.flag) {
         Notification("Success", response.message, "success")
 
-        const updatedLabels = response.data     
-        const labels = {}   
+        const updatedLabels = response.data
+        const labels = {}
         Object.keys(updatedLabels).forEach(type => {
           Object.keys(L10nKeys).forEach(key => {
             if (labels[type] === undefined) labels[type] = {}
 
             const origin = L10nKeys[key]
             labels[type][origin] = origin
-            if (updatedLabels[type][origin] !== undefined 
+            if (updatedLabels[type][origin] !== undefined
               && updatedLabels[type][origin] !== null
               && updatedLabels[type][origin] !== '') {
-                labels[type][origin] = updatedLabels[type][origin]
+              labels[type][origin] = updatedLabels[type][origin]
             }
           })
         })
-        
+
         dispatch(updateLanguageLabels(labels))
       } else {
         Notification("Error", response.message, "warning")
@@ -174,7 +169,7 @@ const LanguageLabels = () => {
   }
 
   const isVisibleMenuItem = itemId => {
-    if (!userRole)  return false
+    if (!userRole) return false
     if (menuConfig[userRole][itemId] === undefined) return true
     return menuConfig[userRole][itemId]
   }
@@ -190,7 +185,7 @@ const LanguageLabels = () => {
   }
 
   const onChangeTranslation = (origin, value) => {
-    const values = {...translation}
+    const values = { ...translation }
     values[origin] = value
     setTranslation(values)
   }
@@ -243,73 +238,77 @@ const LanguageLabels = () => {
 
   return (<>
     <div className="app-user-view">
-      <div className="d-flex align-items-center me-2" style={{ width: '300px', marginBottom: '30px' }}>
-        <label htmlFor="language-select">Language</label>
-        <Input
-          type="select"
-          id="language-select"
-          value={selLanguage}
-          onChange={(event) => onChangeLanguage(event.target.value)}
-          className="form-control ms-50 pe-3"
-        >
-          {languages && languages.length ? (<>
-              {languages.map((item, index) => (
+      <Card className="user-edit-card">
+        <CardBody className="user-edit-card-body pl-4 pr-4">
+          <div className="d-flex align-items-center me-2" style={{ width: '300px', marginBottom: '30px' }}>
+            <label htmlFor="language-select">Language</label>
+            <Input
+              type="select"
+              id="language-select"
+              value={selLanguage}
+              onChange={(event) => onChangeLanguage(event.target.value)}
+              className="form-control ms-50 pe-3"
+            >
+              {languages && languages.length ? (<>
+                {languages.map((item, index) => (
                   <option key={`row-${index}`} value={item}>{item}</option>
-              ))}
-          </>) : null}
-        </Input>
-      </div>
-      <Tabs>
-        <TabList>
-          {Object.keys(L10nOrgKeys).map(tabName => {
-            return <Tab key={tabName}>{tabName}</Tab>
-          })}
-        </TabList>
+                ))}
+              </>) : null}
+            </Input>
+          </div>
+          <Tabs>
+            <TabList>
+              {Object.keys(L10nOrgKeys).map(tabName => {
+                return <Tab key={tabName}>{tabName}</Tab>
+              })}
+            </TabList>
 
-        {Object.keys(L10nOrgKeys).map((tabName) => {
-          return Array.isArray(L10nOrgKeys[tabName]) ? (
-              <TabPanel key={tabName}>
-                <LabelsForm category={tabName} 
-                    originKeys={L10nOrgKeys[tabName]} 
+            {Object.keys(L10nOrgKeys).map((tabName) => {
+              return Array.isArray(L10nOrgKeys[tabName]) ? (
+                <TabPanel key={tabName}>
+                  <LabelsForm category={tabName}
+                    originKeys={L10nOrgKeys[tabName]}
                     translation={translation}
                     formId={tabName}
                     isVisibleMenuItem={isVisibleMenuItem}
                     onChangeTranslation={onChangeTranslation}
-                    onSubmitParent={onSubmit}/>
-              </TabPanel>
-            ) : (
-              <TabPanel key={tabName}>
-                <Nav pills className="mb-2">
-                  {Object.keys(L10nOrgKeys[tabName]).map((subTabName, i) => {
-                    return isVisibleMenuItem(L10nMenuItemIDKeys[subTabName]) ? (
-                      <NavItem key={subTabName + i}>
-                        <NavLink active={active === i} onClick={() => toggleTab(i)}>
-                          {getPageIconComponent(subTabName)}
-                          <span className="fw-bold d-none d-sm-block">{capitalizeFirstLetter(subTabName)}</span>
-                        </NavLink>
-                      </NavItem>
-                    ) : null
-                  })}
-                </Nav>
-                <TabContent activeTab={active}>
-                  {Object.keys(L10nOrgKeys[tabName]).map((subTabName, i) => {
-                    return isVisibleMenuItem(L10nMenuItemIDKeys[subTabName]) ? (
-                      <TabPane tabId={i} key={subTabName + i}>
-                        <LabelsForm category={subTabName} 
-                            originKeys={L10nOrgKeys[tabName][subTabName]} 
+                    onSubmitParent={onSubmit} />
+                </TabPanel>
+              ) : (
+                <TabPanel key={tabName}>
+                  <Nav pills className="mb-2">
+                    {Object.keys(L10nOrgKeys[tabName]).map((subTabName, i) => {
+                      return isVisibleMenuItem(L10nMenuItemIDKeys[subTabName]) ? (
+                        <NavItem key={subTabName + i}>
+                          <NavLink active={active === i} onClick={() => toggleTab(i)}>
+                            {getPageIconComponent(subTabName)}
+                            <span className="fw-bold d-none d-sm-block">{capitalizeFirstLetter(subTabName)}</span>
+                          </NavLink>
+                        </NavItem>
+                      ) : null
+                    })}
+                  </Nav>
+                  <TabContent activeTab={active}>
+                    {Object.keys(L10nOrgKeys[tabName]).map((subTabName, i) => {
+                      return isVisibleMenuItem(L10nMenuItemIDKeys[subTabName]) ? (
+                        <TabPane tabId={i} key={subTabName + i}>
+                          <LabelsForm category={subTabName}
+                            originKeys={L10nOrgKeys[tabName][subTabName]}
                             translation={translation}
                             formId={subTabName}
                             isVisibleMenuItem={isVisibleMenuItem}
                             onChangeTranslation={onChangeTranslation}
-                            onSubmitParent={onSubmit}/>
-                      </TabPane>
-                    ) : null
-                  })}
-                </TabContent>
-              </TabPanel>
-          )          
-        })}
-      </Tabs>
+                            onSubmitParent={onSubmit} />
+                        </TabPane>
+                      ) : null
+                    })}
+                  </TabContent>
+                </TabPanel>
+              )
+            })}
+          </Tabs>
+        </CardBody>
+      </Card>
     </div>
   </>)
 

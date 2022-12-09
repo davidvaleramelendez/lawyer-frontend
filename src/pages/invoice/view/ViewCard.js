@@ -13,6 +13,7 @@ import {
 
 const ViewCard = ({
     invoiceItem,
+    companyItem,
     getDecimalFormat,
     getTransformDate
 }) => {
@@ -21,6 +22,19 @@ const ViewCard = ({
 
     const onNetValueCost = (total = 0, vat = 0) => {
         return getDecimalFormat(total - vat)
+    }
+
+    const concateTwoValue = (value1 = "", value2 = "") => {
+        let name = ""
+        if (value1) {
+            name = value1
+        }
+
+        if (value2) {
+            name = name ? `${name} ${value2}` : value2
+        }
+
+        return name
     }
 
     return invoiceItem ? (
@@ -86,22 +100,22 @@ const ViewCard = ({
                         <CardText
                             className={`mb-25 ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}
                         >
-                            {invoiceItem && invoiceItem.user_data && invoiceItem.user_data.name}
+                            {companyItem && companyItem.id ? concateTwoValue(companyItem.name, companyItem.last_name) : null}
                         </CardText>
 
                         <CardText
                             className={`mb-25 ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}
                         >
-                            {invoiceItem && invoiceItem.user_data && invoiceItem.user_data.id ? <>
-                                {invoiceItem.user_data.Address},
-                                {invoiceItem.user_data.State}
-                            </> : "N/A"}
+                            {companyItem && companyItem.id ? <>
+                                {companyItem.address}
+                                {companyItem.city ? `, ${companyItem.city}` : ''}
+                            </> : null}
                         </CardText>
 
                         <CardText
                             className={`mb-0 ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}
                         >
-                            {invoiceItem && invoiceItem.user_data && invoiceItem.user_data.Contact ? invoiceItem.user_data.Contact : "N/A"}
+                            {companyItem && companyItem.id ? companyItem.zip_code : null}
                         </CardText>
                     </div>
 

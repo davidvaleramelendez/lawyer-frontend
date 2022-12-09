@@ -31,6 +31,10 @@ import {
   updateInvoiceLoader,
   clearInvoiceMessage
 } from '../store'
+import {
+  getCompanyDetail,
+  clearUserMessage
+} from '../../user/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // Translation
@@ -81,6 +85,7 @@ const InvoiceEdit = () => {
   // ** Store vars
   const dispatch = useDispatch()
   const store = useSelector((state) => state.invoice)
+  const userStore = useSelector((state) => state.user)
 
   // ** States
   const [loadFirst, setLoadFirst] = useState(true)
@@ -185,6 +190,7 @@ const InvoiceEdit = () => {
 
     if (loadFirst) {
       dispatch(resetCalculationVatPrice())
+      dispatch(getCompanyDetail({}))
       dispatch(invoiceInfo({ from: "Edit" }))
       dispatch(getInvoiceItem(id))
       setLoadFirst(false)
@@ -229,6 +235,10 @@ const InvoiceEdit = () => {
       dispatch(clearInvoiceMessage())
     }
 
+    if (userStore && (userStore.success || userStore.error || userStore.actionFlag)) {
+      dispatch(clearUserMessage())
+    }
+
     /* Succes toast notification */
     if (store && store.success) {
       Notification("Success", store.success, "success")
@@ -238,7 +248,7 @@ const InvoiceEdit = () => {
     if (store && store.error) {
       Notification("Error", store.error, "warning")
     }
-  }, [dispatch, store.casesItems, store.customerItems, store.success, store.error, store.actionFlag, loadFirst])
+  }, [store.casesItems, store.customerItems, store.success, store.error, store.actionFlag, userStore.success, userStore.error, userStore.actionFlag, loadFirst])
   // console.log("Edit store >>> ", store)
 
   const renderOnSelectCustomer = (customer) => {
@@ -356,6 +366,19 @@ const InvoiceEdit = () => {
     }
   }
 
+  const concateTwoValue = (value1 = "", value2 = "") => {
+    let name = ""
+    if (value1) {
+      name = value1
+    }
+
+    if (value2) {
+      name = name ? `${name} ${value2}` : value2
+    }
+
+    return name
+  }
+
   const Tag = fields && fields.length === 0 ? 'div' : SlideDown
   return store ? (
     <div className="invoice-add-wrapper">
@@ -426,15 +449,20 @@ const InvoiceEdit = () => {
                       </svg>
                       <h3 className="text-primary invoice-logo">Logo</h3>
                     </div>
-                    <p className="card-text mb-25">
-                      {store && store.userItem && store.userItem.Address}
-                    </p>
+                    <CardText className="mb-25">
+                      {userStore.companyItem && userStore.companyItem.id ? concateTwoValue(userStore.companyItem.name, userStore.companyItem.last_name) : null}
+                    </CardText>
 
-                    <p className="card-text mb-25">
-                      {store && store.userItem && store.userItem.Postcode} {" "}
-                      {store && store.userItem && store.userItem.City}
-                    </p>
-                    <p className="card-text mb-0" />
+                    <CardText className="mb-25">
+                      {userStore.companyItem && userStore.companyItem.id ? <>
+                        {userStore.companyItem && userStore.companyItem.address}
+                        {userStore.companyItem.city ? `, ${userStore.companyItem.city}` : ''}
+                      </> : null}
+                    </CardText>
+
+                    <CardText className="mb-0">
+                      {userStore.companyItem && userStore.companyItem.id ? userStore.companyItem.zip_code : null}
+                    </CardText>
                   </div>
 
                   <div className="invoice-number-date mt-md-0 mt-2">

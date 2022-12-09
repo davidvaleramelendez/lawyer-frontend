@@ -14,6 +14,10 @@ import {
   resetCalculationVatPrice,
   clearInvoiceMessage
 } from '../store'
+import {
+  getCompanyDetail,
+  clearUserMessage
+} from '../../user/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Utils
@@ -56,6 +60,7 @@ const InvoiceView = () => {
   // ** Store vars
   const dispatch = useDispatch()
   const store = useSelector((state) => state.invoice)
+  const userStore = useSelector((state) => state.user)
 
   // ** States
   const [loadFirst, setLoadFirst] = useState(true)
@@ -77,6 +82,7 @@ const InvoiceView = () => {
 
     if (loadFirst) {
       dispatch(resetCalculationVatPrice({}))
+      dispatch(getCompanyDetail({}))
       dispatch(getInvoiceItem(id))
       setLoadFirst(false)
     }
@@ -84,6 +90,10 @@ const InvoiceView = () => {
     /* For blank message api called inside */
     if (store && (store.success || store.error || store.actionFlag)) {
       dispatch(clearInvoiceMessage())
+    }
+
+    if (userStore && (userStore.success || userStore.error || userStore.actionFlag)) {
+      dispatch(clearUserMessage())
     }
 
     /* Succes toast notification */
@@ -95,7 +105,7 @@ const InvoiceView = () => {
     if (store && store.error) {
       Notification("Error", store.error, "warning")
     }
-  }, [dispatch, store.success, store.error, store.actionFlag, loadFirst])
+  }, [store.success, store.error, store.actionFlag, userStore.success, userStore.error, userStore.actionFlag, loadFirst])
   // console.log("View store >>> ", store)
 
   return store ? (
@@ -110,6 +120,7 @@ const InvoiceView = () => {
         <Col xl={8} md={8} sm={12}>
           <ViewCard
             invoiceItem={store.invoiceItem}
+            companyItem={userStore.companyItem}
             getDecimalFormat={getDecimalFormat}
             getTransformDate={getTransformDate}
           />

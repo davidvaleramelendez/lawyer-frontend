@@ -191,7 +191,8 @@ const ModalEditCaseClient = ({
         contact: values.Contact,
         address: values.Address,
         city: values.City,
-        pincode: values.Pincode
+        pincode: values.Pincode,
+        UserID: caseData.UserID
       }
 
       if (caseData && caseData.user && caseData.user.id) {

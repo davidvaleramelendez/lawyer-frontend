@@ -14,6 +14,7 @@ import {
   getCaseView,
   getCaseLetters,
   getCaseDocuments,
+  getCaseRecord,
   getNoteCaseRecords,
   shareCaseRecord,
   statusCaseLetter,
@@ -93,6 +94,7 @@ import ModalCaseDocument from '../modals/ModalCaseDocument'
 import ModalCaseLetter from '../modals/ModalCaseLetter'
 import ModalCaseTimeTracking from '../modals/ModalCaseTimeTracking'
 import TerminalCaseTimeTrackingCounter from '../modals/TerminalCaseTimeTrackingCounter'
+import ModalComposeMail from '../modals/ModalComposeMail'
 
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
@@ -115,6 +117,7 @@ const CaseView = () => {
   /* Constant */
   const [loadFirst, setLoadFirst] = useState(true)
   const [editModalOpen, setEditModalOpen] = useState(false)
+  const [sendMailModalOpen, setSendMailModalOpen] = useState(false)
   const [opponentModalOpen, setOpponentModalOpen] = useState(false)
   const [noteFileModalOpen, setNoteFileModalOpen] = useState(false)
   const [recordDetailModalOpen, setRecordDetailModalOpen] = useState(false)
@@ -157,6 +160,7 @@ const CaseView = () => {
       dispatch(getCaseLetters({ case_id: id }))
       dispatch(getCaseDocuments({ case_id: id }))
       dispatch(getNoteCaseRecords({ CaseID: id }))
+      dispatch(getCaseRecord(id))
       dispatch(getTimeCaseRecords(id))
       setLoadFirst(false)
     }
@@ -201,6 +205,12 @@ const CaseView = () => {
         dispatch(closeCase(caseId))
       }
     })
+  }
+
+  /* Case Send Mail */
+  const onSendCaseMail = (caseId) => {
+    console.log(caseId)
+    setSendMailModalOpen(true)
   }
 
   /* Change note history done status */
@@ -317,6 +327,7 @@ const CaseView = () => {
     setTimeCounterTerminalOpen(true)
   }
 
+  console.log(store)
   return store ? (
     <div className='invoice-preview-wrapper'>
       <Row className='match-height'>
@@ -475,9 +486,18 @@ const CaseView = () => {
                             outline
                             color="primary"
                             className={`btn-icon rounded-circle mb-1 ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder'}`}
+                            onClick={() => onSendCaseMail(id)}
                           >
                             <Send size={16} />
                           </Button.Ripple>
+                          <ModalComposeMail
+                              open={sendMailModalOpen}
+                              toggleModal={() => setSendMailModalOpen(!sendMailModalOpen)}
+                              caseData={store.caseItem}
+                              fighterData={store.fighterItem}
+                              letterRowData={letterRowData}
+                              setLetterRowData={setLetterRowData}
+                          />
 
                         </div>
                       </div>
@@ -815,6 +835,74 @@ const CaseView = () => {
                       caseRecordRowData={caseRecordRowData}
                       setCaseRecordRowData={setCaseRecordRowData}
                     />
+                  </Row>
+                </CardBody>
+              </Card>
+            </Col>
+            
+          </Row>
+          {/* /Notes && Time Recording && Letter && Document History */}
+          {/* Notes && Time Recording && Letter && Document History */}
+          <Row className='invoice-preview'>
+            <Col xl={12} md={12} sm={12}>
+              <Card className='invoice-preview-card'>
+                <CardBody className='invoice-padding pb-0'>
+                  <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
+                  <div className="d-flex flex-wrap">
+                    <h3 className="invoice-date">{T("Email History")}</h3>
+                  </div>
+                  </div>
+                  <Row className='mb-2'>
+                    <Col xl={12} md={12} sm={12}>
+                      <Table responsive>
+                        <thead>
+                          <tr>
+                            <th />
+                            <th>{T('Date')}</th>
+                            <th>{T('Subject')}</th>
+                            <th>{T('Done')}?</th>
+                            <th>{T('Action')}</th>
+                          </tr>
+                        </thead>
+                          <tbody>
+
+                            {store.mailCaseRecords.map((record, index) => (
+                              record.type === 'Email' ? <tr key={`docs_${index}`} onClick={onRecordClick(doc)} className="cursor-pointer">
+                                <td/>
+                                <td>{doc.created_at && getTransformDate(doc.created_at, "DD.MM.YYYY")}</td>
+
+                                <td>{doc.title}</td>
+
+                                <td>
+                                  <div className='form-switch form-check-primary'>
+                                    <Input
+                                      type='switch'
+                                      checked={doc.isErledigt}
+                                      id={`docs_${index}_${doc.isErledigt}`}
+                                      name={`docs_${index}_${doc.isErledigt}`}
+                                      className="cursor-pointer"
+                                      onChange={() => onDocumentDone(doc.id)}
+                                    />
+                                    <Label className='form-check-label' htmlFor="icon-primary">
+                                      <span className='switch-icon-left'>
+                                        <Check size={14} />
+                                      </span>
+                                      <span className='switch-icon-right'>
+                                        <X size={14} />
+                                      </span>
+                                    </Label>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  {/* <Eye size={18} className="cursor-pointer" onClick={() => onCaseDocumentDetail(doc)} /> */}
+                                  <Eye size={18} className="cursor-pointer" onClick={() => onRecordClick(doc)} />
+                                </td>
+                              </tr> : null
+                            ))}
+                          </tbody>
+                      </Table>
+                    </Col>
                   </Row>
                 </CardBody>
               </Card>

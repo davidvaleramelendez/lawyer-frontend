@@ -126,6 +126,7 @@ const CaseView = () => {
   const [documentRowData, setDocumentRowData] = useState(caseDocItem)
   const [letterModalOpen, setLetterModalOpen] = useState(false)
   const [letterRowData, setLetterRowData] = useState(letterItem)
+  const [messageRowData, setMessageRowData] = useState(recordItem)
   const [timeTrackModalOpen, setTimeTrackModalOpen] = useState(false)
   const [timeCounterTerminalOpen, setTimeCounterTerminalOpen] = useState(false)
 
@@ -495,8 +496,8 @@ const CaseView = () => {
                               toggleModal={() => setSendMailModalOpen(!sendMailModalOpen)}
                               caseData={store.caseItem}
                               fighterData={store.fighterItem}
-                              letterRowData={letterRowData}
-                              setLetterRowData={setLetterRowData}
+                              messageRowData={messageRowData}
+                              setMessageRowData={setMessageRowData}
                           />
 
                         </div>

@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react'
 import {
   createCaseLetter,
   updateCaseLetter,
-  deleteCaseLetter,
   updateCaseLoader,
   clearCaseMessage
 } from '../store'
@@ -35,7 +34,7 @@ import { useForm, Controller } from 'react-hook-form'
 
 // Constant
 import {
-  letterItem
+  recordItem
 } from '@constant/reduxConstant'
 
 // ** Custom Components
@@ -65,8 +64,8 @@ const ModalComposeMail = ({
   caseData,
   toggleModal,
   fighterData,
-  letterRowData,
-  setLetterRowData
+  messageRowData,
+  setMessageRowData
 }) => {
   const MySwal = withReactContent(Swal)
 
@@ -75,8 +74,8 @@ const ModalComposeMail = ({
   const store = useSelector((state) => state.cases)
 
   // ** States
-  const [editorStateContent, setEditorStateContent] = useState(letterRowData.message)
-  const [editorHtmlContent, setEditorHtmlContent] = useState(letterRowData.message)
+  const [editorStateContent, setEditorStateContent] = useState(messageRowData.Content)
+  const [editorHtmlContent, setEditorHtmlContent] = useState(messageRowData.Content)
 
   const getInitialHTML = (value) => {
     const contentBlock = htmlToDraft(value)
@@ -107,16 +106,16 @@ const ModalComposeMail = ({
     formState: { errors }
   } = useForm({
     mode: 'all',
-    defaultValues: letterRowData
+    defaultValues: messageRowData
   })
 
   const handleReset = async () => {
     setEditorHtmlContent('')
-    if (letterItem && letterItem.message) {
-      letterItem.message = await getInitialHTML(letterItem.message)
+    if (recordItem && recordItem.Content) {
+      recordItem.Content = await getInitialHTML(recordItem.Content)
     }
-    reset(letterItem)
-    setLetterRowData(letterItem)
+    reset(recordItem)
+    setMessageRowData(recordItem)
     toggleModal()
   }
 
@@ -138,11 +137,11 @@ const ModalComposeMail = ({
       handleReset()
     }
 
-    if (letterRowData && letterRowData.id) {
-      reset(letterRowData)
+    if (messageRowData && messageRowData.id) {
+      reset(messageRowData)
     }
-    getInitialHTML(letterRowData.message)
-  }, [dispatch, letterRowData, store.success, store.error, store.actionFlag])
+    getInitialHTML(messageRowData.Content)
+  }, [dispatch, messageRowData, store.success, store.error, store.actionFlag])
   // console.log("store >>> ", store)
 
   /* Submitting data */
@@ -177,25 +176,6 @@ const ModalComposeMail = ({
     }
   }
 
-  /* Delete case document */
-  const onDeleteDocument = (docId) => {
-    MySwal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes',
-      customClass: {
-        confirmButton: 'btn btn-primary',
-        cancelButton: 'btn btn-outline-danger ms-1'
-      },
-      buttonsStyling: false
-    }).then(function (result) {
-      if (result.isConfirmed) {
-        dispatch(deleteCaseLetter(docId))
-      }
-    })
-  }
 
   return store ? (
     <div className='disabled-backdrop-modal'>
@@ -220,7 +200,7 @@ const ModalComposeMail = ({
                   Subject
                 </Label>
                 <Controller
-                  defaultValue={letterRowData && letterRowData.subject ? letterRowData.subject : `Case ID: ${caseData.CaseID}${caseData && caseData.type && caseData.type.CaseTypeID ? `, Case Type: ${caseData.type.CaseTypeName}` : ''}${fighterData && fighterData.name ? `, fighting Against: ${fighterData.name} ${fighterData.last_name}` : ''}`}
+                  defaultValue={`[Ticket#:${(new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3)}]Case ID: ${caseData.CaseID}${caseData && caseData.type && caseData.type.CaseTypeID ? `, Case Type: ${caseData.type.CaseTypeName}` : ''}${fighterData && fighterData.name ? `, fighting Against: ${fighterData.name} ${fighterData.last_name}` : ''}`}
                   id='Subject'
                   name='Subject'
                   control={control}
@@ -251,65 +231,11 @@ const ModalComposeMail = ({
                 <FormFeedback>{errors.message?.message}</FormFeedback>
               </div>
 
-              {letterRowData && !letterRowData.id ? (
-                <div className='mb-1'>
-                  <Label className='form-label' for='frist_date'>
-                    Date
-                  </Label>
-                  <Controller
-                    defaultValue={letterRowData.frist_date ? new Date(letterRowData.frist_date) : new Date()}
-                    id='fristDate'
-                    name='fristDate'
-                    control={control}
-                    render={({ field }) => <Flatpickr
-                      {...field}
-                      id='fristDate'
-                      className='form-control'
-                      options={{
-                        enableTime: false,
-                        dateFormat: "Y-m-d"
-                      }}
-                    />}
-                  />
-                  <FormFeedback>{errors.fristDate?.message}</FormFeedback>
-                </div>
-              ) : null}
+
             </Row>
 
             <Row className='mb-2 mt-2'>
               <div className="d-flex justify-content-end">
-                {letterRowData && letterRowData.id ? (<>
-                  <Button
-                    type='submit'
-                    color="primary"
-                    className="me-1"
-                    disabled={!store.loading}
-                  >
-                    {T("Update")}
-                  </Button>
-
-                  <Button
-                    tag="a"
-                    type='button'
-                    target="_blank"
-                    color="success"
-                    className="me-1"
-                    disabled={!store.loading}
-                    href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${letterRowData.pdf_path}`}
-                    onClick={(event) => !letterRowData.pdf_path && event.preventDefault()}
-                  >
-                    {T("Download")} {T("PDF")}
-                  </Button>
-
-                  <Button
-                    type='button'
-                    color="danger"
-                    disabled={!store.loading}
-                    onClick={() => onDeleteDocument(letterRowData.id)}
-                  >
-                    {T("Delete")}
-                  </Button>
-                </>) : (
                   <Button
                     type='submit'
                     color="primary"
@@ -317,7 +243,6 @@ const ModalComposeMail = ({
                   >
                     {T("Send E-Mail")}
                   </Button>
-                )}
               </div>
             </Row>
           </Form>

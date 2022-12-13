@@ -64,3 +64,6 @@ export const siteSettingItem = { id: "", user_id: "", name: "", value: "" }
 
 // CloudStorage
 export const cloudStorageItem = { id: "", name: "", slug: "", parent_id: "", user_id: "", roll_id: "", type: "", file_name: "", extension: "", path: "" }
+
+// Companies
+export const companyItem = { id: "", user_id: "", company: "", name: "", last_name: "", address: "", city: "", zip_code: "" }

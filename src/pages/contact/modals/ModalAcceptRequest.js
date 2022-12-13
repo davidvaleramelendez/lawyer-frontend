@@ -24,7 +24,8 @@ import {
   Input,
   Button,
   ModalBody,
-  ModalHeader
+  ModalHeader,
+  FormFeedback
 } from 'reactstrap'
 
 import { useForm, Controller } from 'react-hook-form'
@@ -174,13 +175,21 @@ const ModalAcceptRequest = ({
           />
         ) : null}
 
-        <ModalHeader toggle={handleReset}>{T("Accept the request")}</ModalHeader>
-        <ModalBody>
+        <ModalHeader
+          toggle={handleReset}
+          className="bg-transparent"
+        />
+
+        <ModalBody className="px-5 pb-5">
+          <div className='text-center mb-4'>
+            <h1>{T("Accept the request")}</h1>
+          </div>
+
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <Row>
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="Name">
-                  {T("Name")}                  
+                  {T("Name")}
                 </Label>
                 <Controller
                   defaultValue={contactData.Name}
@@ -189,7 +198,7 @@ const ModalAcceptRequest = ({
                   control={control}
                   render={({ field }) => <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.Name} invalid={errors.Name && true} />}
                 />
-                <div className="invalid-feedback">{errors.Name?.message}</div>
+                <FormFeedback>{errors.Name?.message}</FormFeedback>
               </Col>
 
               <Col md={6} sm={12} className="mb-1">
@@ -203,7 +212,7 @@ const ModalAcceptRequest = ({
                   control={control}
                   render={({ field }) => <Input {...field} type="number" placeholder={PlaceholderSchema && PlaceholderSchema.PhoneNo} invalid={errors.PhoneNo && true} />}
                 />
-                <div className="invalid-feedback">{errors.PhoneNo?.message}</div>
+                <FormFeedback>{errors.PhoneNo?.message}</FormFeedback>
               </Col>
 
               <Col md={6} sm={12} className="mb-1">
@@ -219,7 +228,7 @@ const ModalAcceptRequest = ({
                     <Input {...field} type="email" placeholder={PlaceholderSchema && PlaceholderSchema.Email} invalid={errors.Email && true} />
                   )}
                 />
-                <div className="invalid-feedback">{errors.Email?.message}</div>
+                <FormFeedback>{errors.Email?.message}</FormFeedback>
               </Col>
 
               <Col md={6} sm={12} className="mb-1">
@@ -243,12 +252,12 @@ const ModalAcceptRequest = ({
                     />
                   )}
                 />
-                <div className="invalid-feedback d-block">{errors.LaywerID?.message}</div>
+                <FormFeedback className="d-block">{errors.LaywerID?.message}</FormFeedback>
               </Col>
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="Address">
-                  {T("Address")}                  
+                  {T("Address")}
                 </Label>
                 <Controller
                   defaultValue=""
@@ -257,7 +266,7 @@ const ModalAcceptRequest = ({
                   control={control}
                   render={({ field }) => <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.Address} invalid={errors.Address && true} />}
                 />
-                <div className="invalid-feedback">{errors.Address?.message}</div>
+                <FormFeedback>{errors.Address?.message}</FormFeedback>
               </Col>
 
               <Col md={6} sm={12} className="mb-1">
@@ -271,7 +280,7 @@ const ModalAcceptRequest = ({
                   control={control}
                   render={({ field }) => <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.City} invalid={errors.City && true} />}
                 />
-                <div className="invalid-feedback">{errors.City?.message}</div>
+                <FormFeedback>{errors.City?.message}</FormFeedback>
               </Col>
 
               <Col md={6} sm={12} className="mb-1">
@@ -285,7 +294,7 @@ const ModalAcceptRequest = ({
                   control={control}
                   render={({ field }) => <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.Pincode} invalid={errors.Pincode && true} />}
                 />
-                <div className="invalid-feedback">{errors.Pincode?.message}</div>
+                <FormFeedback>{errors.Pincode?.message}</FormFeedback>
               </Col>
 
               <Col md={6} sm={12} className="mb-1">
@@ -309,12 +318,12 @@ const ModalAcceptRequest = ({
                     />
                   )}
                 />
-                <div className="invalid-feedback d-block">{errors.CaseTypeID?.message}</div>
+                <FormFeedback className="d-block">{errors.CaseTypeID?.message}</FormFeedback>
               </Col>
             </Row>
 
             <Row className="mt-2 mb-2">
-              <div className="d-flex justify-content-end">
+              <div className="text-center">
                 <Button
                   type="submit"
                   color="primary"

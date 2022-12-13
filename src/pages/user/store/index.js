@@ -7,7 +7,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import {
   userItem,
   imapItem,
-  accountItem
+  accountItem,
+  companyItem
 } from '@constant/reduxConstant'
 
 // ** Utils
@@ -354,7 +355,7 @@ export const getAccountSetting = createAsyncThunk('appUser/getAccountSetting', a
         roleItems: response.data.roles,
         accountItem: response.data.account,
         imapItem: response.data.imap,
-        actionFlag: "",
+        actionFlag: "ACCOUNT_SETTING",
         success: "",
         error: ""
       }
@@ -401,7 +402,7 @@ export const saveAccount = createAsyncThunk('appUser/saveAccount', async (payloa
         roleItems: response.data.roles,
         accountItem: response.data.account,
         imapItem: response.data.imap,
-        actionFlag: "",
+        actionFlag: "ACCOUNT_SETTING",
         success: response.message,
         error: ""
       }
@@ -485,7 +486,7 @@ export const saveAccountImap = createAsyncThunk('appUser/saveAccountImap', async
         roleItems: response.data.roles,
         accountItem: response.data.account,
         imapItem: response.data.imap,
-        actionFlag: "",
+        actionFlag: "ACCOUNT_SETTING",
         success: response.message,
         error: ""
       }
@@ -556,6 +557,74 @@ export const getUserDeviceLogs = createAsyncThunk('appUser/getUserDeviceLogs', a
 })
 /* /Login History */
 
+/* Companies */
+async function getCompanyDetailRequest() {
+  return axios.get(`${API_ENDPOINTS.companies.detail}`).then((user) => user.data).catch((error) => error)
+}
+
+export const getCompanyDetail = createAsyncThunk('appUser/getCompanyDetail', async () => {
+  try {
+    const response = await getCompanyDetailRequest()
+    if (response && response.flag) {
+      return {
+        companyItem: response.data || companyItem,
+        actionFlag: "COMPANY_DETAIL",
+        success: "",
+        error: ""
+      }
+    } else {
+      return {
+        companyItem: companyItem,
+        actionFlag: "",
+        success: "",
+        error: ""
+      }
+    }
+  } catch (error) {
+    console.log("getCompanyDetail catch ", error)
+    return {
+      companyItem: companyItem,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function createUpdateCompanyRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.companies.createUpdate}`, payload).then((user) => user.data).catch((error) => error)
+}
+
+export const createUpdateCompany = createAsyncThunk('appUser/createUpdateCompany', async (payload) => {
+  try {
+    const response = await createUpdateCompanyRequest(payload)
+    if (response && response.flag) {
+      return {
+        companyItem: response.data || companyItem,
+        actionFlag: "COMPANY_DETAIL",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        companyItem: companyItem,
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("createUpdateCompany catch ", error)
+    return {
+      companyItem: companyItem,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+/* /Companies */
+
 export const appUserSlice = createSlice({
   name: 'appUser',
   initialState: {
@@ -569,6 +638,7 @@ export const appUserSlice = createSlice({
     deviceLogPagination: null,
     accountItem: accountItem,
     imapItem: imapItem,
+    companyItem: companyItem,
     permissions: [],
     roleItems: [],
     pagination: null,
@@ -709,11 +779,30 @@ export const appUserSlice = createSlice({
         state.logParams = action.payload.logParams
         state.userDeviceLogs = action.payload.userDeviceLogs
         state.deviceLogPagination = action.payload.deviceLogPagination
+        state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success
         state.error = action.payload.error
       })
-    /* /Login History */
+      /* /Login History */
+
+      /* Companies */
+      .addCase(getCompanyDetail.fulfilled, (state, action) => {
+        state.companyItem = action.payload.companyItem
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+
+      .addCase(createUpdateCompany.fulfilled, (state, action) => {
+        state.companyItem = action.payload.companyItem
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+    /* /Companies */
   }
 })
 

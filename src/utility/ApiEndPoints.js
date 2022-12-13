@@ -114,9 +114,9 @@ export const API_ENDPOINTS = {
         updateLetter: `/api/admin/case/update_letter`,
         deleteLetter: `/api/admin/case/delete_letter`,
         isErledigtLetter: `/api/admin/case/letter_erledigt`,
-        createTimeRecord: `/api/admin/case/case_records/time/create`, 
-        updateTimeRecord: `/api/admin/case/case_records/time/update`, 
-        deleteTimeRecord: `/api/admin/case/case_records/time/delete`, 
+        createTimeRecord: `/api/admin/case/case_records/time/create`,
+        updateTimeRecord: `/api/admin/case/case_records/time/update`,
+        deleteTimeRecord: `/api/admin/case/case_records/time/delete`,
         getTimeRecord: `/api/admin/case/case_record/times`
     },
     /* /Case module */
@@ -228,6 +228,14 @@ export const API_ENDPOINTS = {
         trash: `/api/admin/todo/trash`,
         restore: `/api/admin/todo/restore`,
         delete: `/api/admin/todo/delete`
-    }
+    },
     /* /Todo module */
+
+    /* Companies */
+    companies: {
+        createUpdate: `/api/admin/companies/create_update`,
+        detail: `/api/admin/companies/detail`,
+        delete: `/api/admin/companies/delete`
+    }
+    /* /Companies */
 }

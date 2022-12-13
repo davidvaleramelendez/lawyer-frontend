@@ -37,9 +37,6 @@ import {
 } from '../../user/store'
 import { useDispatch, useSelector } from 'react-redux'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Icons Import
 import {
   X,
@@ -76,9 +73,10 @@ import '@styles/base/pages/app-invoice.scss'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import '@styles/react/libs/react-select/_react-select.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const InvoiceAdd = () => {
-  // ** Hooks
-  const { t } = useTranslation()
   const navigate = useNavigate()
 
   // ** Store vars
@@ -96,21 +94,21 @@ const InvoiceAdd = () => {
 
   /* Status options */
   const status = [
-    { value: "open", label: "Open" },
-    { value: "paid", label: "Paid" }
+    { value: "open", label: T("Open") },
+    { value: "paid", label: T("Paid") }
   ]
 
   const InvoiceSchema = yup.object({
-    invoice_date: yup.date().required("Date is required!").nullable(),
-    invoice_due_date: yup.date().required("Maturity date is required!").nullable(),
-    CaseID: yup.object().required(`${t("CaseID")} is required!`).nullable(),
-    customer_id: yup.object().required(`${t("Client")} is required!`).nullable(),
+    invoice_date: yup.date().required(T("Date is required!")).nullable(),
+    invoice_due_date: yup.date().required(T("Maturity date is required!")).nullable(),
+    CaseID: yup.object().required(T(`CaseID is required!`)).nullable(),
+    customer_id: yup.object().required(T(`Client is required!`)).nullable(),
     items: yup.array().of(yup.object().shape({
-      item_detail: yup.string().required('Description is required!'),
-      price: yup.string().required('Price is required!')
-    })).min(1, 'Pick at least 1 Item').required('Items is required!').nullable(),
-    method: yup.object().required(`${t("Method")} is required!`).nullable(),
-    status: yup.object().required(`${t("Status")} is required!`).nullable()
+      item_detail: yup.string().required(T('Description is required!')),
+      price: yup.string().required(T('Price is required!'))
+    })).min(1, T('Pick at least 1 Item')).required(T('Items is required!')).nullable(),
+    method: yup.object().required(T(`Method is required!`)).nullable(),
+    status: yup.object().required(T(`Status is required!`)).nullable()
   }).required()
 
   const {
@@ -260,12 +258,12 @@ const InvoiceAdd = () => {
 
     /* Succes toast notification */
     if (store && store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store && store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
   }, [store.invoiceItem, store.casesItems, store.caseTypeItems, store.customerItems, store.success, store.error, store.actionFlag, userStore.success, userStore.error, userStore.actionFlag, loadFirst])
   // console.log("Add store >>> ", store)
@@ -485,7 +483,7 @@ const InvoiceAdd = () => {
 
                   <div className="invoice-number-date mt-md-0 mt-2">
                     <div className="d-flex align-items-center justify-content-md-end mb-1">
-                      <h4 className="title">{t("Number")}</h4>
+                      <h4 className="title">{T("Number")}</h4>
                       <InputGroup className="input-group-merge invoice-edit-input-group disabled">
                         <InputGroupText>
                           <Hash size={14} />
@@ -509,7 +507,7 @@ const InvoiceAdd = () => {
                     </div>
 
                     <div className="d-flex align-items-center mb-1">
-                      <span className="title">{t("Date")}:</span>
+                      <span className="title">{T("Date")}:</span>
                       <div>
                         <Controller
                           defaultValue=""
@@ -532,7 +530,7 @@ const InvoiceAdd = () => {
                     </div>
 
                     <div className="d-flex align-items-center mb-1">
-                      <span className="title">{t("Maturity")}:</span>
+                      <span className="title">{T("Maturity")}:</span>
                       <div>
                         <Controller
                           defaultValue=""
@@ -565,7 +563,7 @@ const InvoiceAdd = () => {
                             <Select
                               {...field}
                               id="CaseID"
-                              placeholder={`Select ${t("CaseID")}...`}
+                              placeholder={`${T("Select CaseID")}...`}
                               options={caseOptions}
                               theme={selectThemeColors}
                               className="react-select"
@@ -588,7 +586,7 @@ const InvoiceAdd = () => {
               <CardBody className="invoice-padding pt-0">
                 <Row className="row-bill-to invoice-spacing">
                   <Col className="mb-lg-1 col-bill-to ps-0" xl={8}>
-                    <h6 className="invoice-to-title">{t("Invoice to")}:</h6>
+                    <h6 className="invoice-to-title">{T("Invoice to")}:</h6>
                     <div className="invoice-customer">
                       <Controller
                         defaultValue=""
@@ -599,7 +597,7 @@ const InvoiceAdd = () => {
                           <Select
                             {...field}
                             id="customer_id"
-                            placeholder={`Select ${t("Client")}...`}
+                            placeholder={`${T("Select Client")}...`}
                             options={customerOptions}
                             theme={selectThemeColors}
                             className="react-select"
@@ -626,7 +624,7 @@ const InvoiceAdd = () => {
                         <Col className="d-flex product-details-border position-relative pe-0">
                           <Row className="w-100 pe-lg-0 pe-1 py-2">
                             <Col className="mb-lg-0 mb-2 mt-lg-0 mt-2" lg={6}>
-                              <CardText className="col-title mb-md-50 mb-0">{t("Description")}</CardText>
+                              <CardText className="col-title mb-md-50 mb-0">{T("Description")}</CardText>
                               <Controller
                                 defaultValue=""
                                 id={`items.${index}.item_detail`}
@@ -644,7 +642,7 @@ const InvoiceAdd = () => {
                             </Col>
 
                             <Col className="my-lg-0 my-2" lg={3}>
-                              <CardText className="col-title mb-md-2 mb-0">{t("Amount")}</CardText>
+                              <CardText className="col-title mb-md-2 mb-0">{T("Amount")}</CardText>
                               <Controller
                                 defaultValue=""
                                 id={`items.${index}.price`}
@@ -663,7 +661,7 @@ const InvoiceAdd = () => {
                             </Col>
 
                             <Col className="my-lg-0 my-2" lg={3}>
-                              <CardText className="col-title mb-md-2 mb-0 text-uppercase">{t("Vat")} 19 %</CardText>
+                              <CardText className="col-title mb-md-2 mb-0 text-uppercase">{T("Vat")} 19 %</CardText>
                               <Controller
                                 defaultValue=""
                                 id={`items.${index}.vat`}
@@ -702,7 +700,7 @@ const InvoiceAdd = () => {
                       disabled={!store.loading}
                       onClick={addInvoiceItem}
                     >
-                      <Plus size={14} className="me-25" /><span className="align-middle">{t("Add invoice item")}</span>
+                      <Plus size={14} className="me-25" /><span className="align-middle">{T("Add invoice item")}</span>
                     </Button>
                   </Col>
                 </Row>
@@ -716,18 +714,18 @@ const InvoiceAdd = () => {
                   <Col className="d-flex justify-content-end" md={{ size: "6", order: 2 }} xs={{ size: 12, order: 1 }}>
                     <div className="invoice-total-wrapper">
                       <div className="invoice-total-item">
-                        <p className="invoice-total-title">{t("Net")}:</p>
+                        <p className="invoice-total-title">{T("Net")}:</p>
                         <p className="invoice-total-amount">€ {(store && store.totalPrice) || 0}</p>
                       </div>
 
                       <div className="invoice-total-item">
-                        <p className="invoice-total-title text-uppercase">{t("Vat")} 19 %:</p>
+                        <p className="invoice-total-title text-uppercase">{T("Vat")} 19 %:</p>
                         <p className="invoice-total-amount">€ {(store && store.totalVat) || 0}</p>
                       </div>
 
                       <hr className="my-50" />
                       <div className="invoice-total-item">
-                        <p className="invoice-total-title">{t("Total")}:</p>
+                        <p className="invoice-total-title">{T("Total")}:</p>
                         <p className="invoice-total-amount">€ {(store && store.finalPrice) || 0}</p>
                       </div>
                     </div>
@@ -759,14 +757,14 @@ const InvoiceAdd = () => {
                   className="mb-50"
                   disabled={!store.loading}
                 >
-                  {t("Create")} {t("Invoice")}
+                  {T("Create Invoice")}
                 </Button>
               </CardBody>
             </Card>
 
             <div className="mt-2">
               <div className="invoice-payment-option">
-                <p className="mb-50">{t("Payment methods")}</p>
+                <p className="mb-50">{T("Payment methods")}</p>
                 <Controller
                   defaultValue=""
                   name="method"
@@ -776,7 +774,7 @@ const InvoiceAdd = () => {
                     <Select
                       {...field}
                       id="method"
-                      placeholder={`Select ${t("Method")}...`}
+                      placeholder={`${T("Select Method")}...`}
                       options={[{ value: "bank_account", label: "IBAN" }, { value: "paypal", label: "Bar" }]}
                       theme={selectThemeColors}
                       className="react-select"
@@ -789,7 +787,7 @@ const InvoiceAdd = () => {
               </div>
 
               <div className="invoice-payment-option mt-1">
-                <p className="mb-50">Status</p>
+                <p className="mb-50">{T('Status')}</p>
                 <Controller
                   defaultValue=""
                   name="status"
@@ -799,7 +797,7 @@ const InvoiceAdd = () => {
                     <Select
                       {...field}
                       id="status"
-                      placeholder={`Select ${t("Status")}...`}
+                      placeholder={`${T('Select Status')}...`}
                       options={status}
                       theme={selectThemeColors}
                       className="react-select"

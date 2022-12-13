@@ -3,9 +3,6 @@
 // ** React Imports
 import { useEffect } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
   payInvoiceItem,
@@ -46,6 +43,9 @@ import {
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import '@styles/base/pages/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalInvoicePayment = ({
   open,
   toggleModal,
@@ -53,8 +53,6 @@ const ModalInvoicePayment = ({
   paymentRowData,
   setPaymentRowData
 }) => {
-  /* Hook */
-  const { t } = useTranslation()
 
   // ** Store vars
   const dispatch = useDispatch()
@@ -127,7 +125,7 @@ const ModalInvoicePayment = ({
     <Sidebar
       size="lg"
       open={open}
-      title={t("Add payment")}
+      title={T("Add payment")}
       headerClassName="mb-1"
       contentClassName="p-0"
       toggleSidebar={handleReset}
@@ -136,7 +134,7 @@ const ModalInvoicePayment = ({
       <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <div className="mb-1">
           <Label className="form-label" for="total_price">
-            {t("Total")}
+            {T("Total")}
           </Label>
           <Controller
             defaultValue={(invoiceData && invoiceData.total_price) || 0.00}
@@ -154,7 +152,7 @@ const ModalInvoicePayment = ({
 
         <div className="mb-1">
           <Label className="form-label" for="paid_amount">
-            {t("Amount for payment")}
+            {T("Amount for payment")}
           </Label>
           <Controller
             defaultValue={(invoiceData && invoiceData.remaining_amount) || 0.00}
@@ -176,7 +174,7 @@ const ModalInvoicePayment = ({
 
         <div className="mb-1">
           <Label className="form-label" for="date">
-            {t("Payment Date")}
+            {T("Payment Date")}
           </Label>
           <Controller
             defaultValue={null}
@@ -199,7 +197,7 @@ const ModalInvoicePayment = ({
 
         <div className="mb-1">
           <Label className="form-label" for="note">
-            Internal Payment Note
+            {T('Internal Payment Note')}
           </Label>
           <Controller
             defaultValue=""
@@ -218,7 +216,7 @@ const ModalInvoicePayment = ({
             className="me-1"
             disabled={!store.loading}
           >
-            {t("Add")}
+            {T("Add")}
           </Button>
 
           <Button
@@ -228,7 +226,7 @@ const ModalInvoicePayment = ({
             disabled={!store.loading}
             onClick={handleReset}
           >
-            {t("Abort")}
+            {T("Abort")}
           </Button>
         </div>
       </Form>

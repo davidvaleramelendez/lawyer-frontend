@@ -32,6 +32,9 @@ import Spinner from '@components/spinner/Simple-grow-spinner'
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalCaseRecordDetail = ({
   open,
   toggleModal,
@@ -70,7 +73,7 @@ const ModalCaseRecordDetail = ({
           />
         ) : null}
 
-        <ModalHeader toggle={handleReset}>Email</ModalHeader>
+        <ModalHeader toggle={handleReset}>{T('Email')}</ModalHeader>
         <ModalBody>
           <Row>
             <div className='mb-1'>
@@ -104,7 +107,7 @@ const ModalCaseRecordDetail = ({
                 color="primary"
                 disabled={!store.loading}
               >
-                Send E-Mail
+                {T('Send E-Mail')}
               </Button>
             </div>
           </Row>

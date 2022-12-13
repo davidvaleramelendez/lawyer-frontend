@@ -3,9 +3,6 @@
 // ** React Imports
 import { useEffect } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
   createFighter,
@@ -38,14 +35,15 @@ import Spinner from '@components/spinner/Simple-grow-spinner'
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalEditCaseOpponent = ({
   open,
   caseId,
   fighterData,
   toggleModal
 }) => {
-  // ** Hooks for tanslation
-  const { t } = useTranslation()
 
   // ** Store vars
   const dispatch = useDispatch()
@@ -53,21 +51,21 @@ const ModalEditCaseOpponent = ({
 
   /* Yup validation schema */
   const FighterSchema = yup.object({
-    name: yup.string().required('Name is required!'),
-    last_name: yup.string().required('Last Name is required!'),
-    email: yup.string().required('Email is required!').email('Invalid email address!'),
-    telefone: yup.string().required(`${t("Telephone")} is required!`).min(10, `${t("Telephone")} Must be 10 digit!`).max(10, `${t("Telephone")} Must be 10 digit!`)
+    name: yup.string().required(T('Name is required!')),
+    last_name: yup.string().required(T('Last Name is required!')),
+    email: yup.string().required(T('Email is required!')).email(T('Invalid email address!')),
+    telefone: yup.string().required(T(`Telephone is required!`)).min(10, T(`Telephone must be 10 digit!`)).max(10, T(`Telephone must be 10 digit!`))
   }).required()
 
   const PlaceholderSchema = {
-    name: "Name",
-    lastName: "Last Name",
+    name: T("Name"),
+    lastName: T("Last Name"),
     contact: "+4915901766553",
     email: "john.doe@example.com",
-    address: "Address",
-    city: `${t("City")}`,
-    pincode: "Postal code",
-    country: "Country"
+    address: T("Address"),
+    city: T(`City`),
+    pincode: T("Postal code"),
+    country: T("Country")
   }
 
   const {
@@ -150,7 +148,7 @@ const ModalEditCaseOpponent = ({
           />
         ) : null}
 
-        <ModalHeader toggle={handleReset}>{t("Opponent")}</ModalHeader>
+        <ModalHeader toggle={handleReset}>{T("Opponent")}</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <Row>
@@ -184,7 +182,7 @@ const ModalEditCaseOpponent = ({
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="email">
-                  {t("Email")}
+                  {T("Email")}
                 </Label>
                 <Controller
                   defaultValue=""
@@ -200,7 +198,7 @@ const ModalEditCaseOpponent = ({
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="telefone">
-                  {t("Telephone")}
+                  {T("Telephone")}
                 </Label>
                 <Controller
                   defaultValue=""
@@ -228,7 +226,7 @@ const ModalEditCaseOpponent = ({
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="city">
-                  {t("City")}
+                  {T("City")}
                 </Label>
                 <Controller
                   defaultValue=""
@@ -256,7 +254,7 @@ const ModalEditCaseOpponent = ({
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="country">
-                  {t("Country")}
+                  {T("Country")}
                 </Label>
                 <Controller
                   defaultValue=""
@@ -278,7 +276,7 @@ const ModalEditCaseOpponent = ({
                 className="me-1"
                 disabled={!store.loading}
               >
-                {t("Submit")}
+                {T("Submit")}
               </Button>
 
               <Button
@@ -287,7 +285,7 @@ const ModalEditCaseOpponent = ({
                 disabled={!store.loading}
                 onClick={handleReset}
               >
-                {t("Cancel")}
+                {T("Cancel")}
               </Button>
             </div>
           </Form>

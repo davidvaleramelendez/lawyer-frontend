@@ -24,8 +24,8 @@ import {
 import { useDispatch } from 'react-redux'
 import { toggleCompose, getMails, resetSelectedMail, getDraftList } from './store'
 
-// Translation
-import { useTranslation } from 'react-i18next'
+// ** Translation
+import { T } from '@localization'
 
 const Sidebar = (props) => {
   // ** Props
@@ -40,9 +40,6 @@ const Sidebar = (props) => {
 
   // ** Store Variables
   const dispatch = useDispatch()
-
-  // ** Hooks for tanslation
-  const { t } = useTranslation()
 
   // ** Functions To Handle Folder, Label & Compose
   const handleFolder = newFolder => {
@@ -72,7 +69,7 @@ const Sidebar = (props) => {
           <div className='email-app-menu'>
             <div className='form-group-compose text-center compose-btn'>
               <Button className='compose-email' color='primary' block onClick={handleComposeClick} disabled={store.composeModal.open}>
-                {t("Compose")}
+                {T("Compose")}
               </Button>
             </div>
 
@@ -84,7 +81,7 @@ const Sidebar = (props) => {
                   onClick={() => handleFolder('inbox')}
                 >
                   <Mail size={18} className='me-75' />
-                  <span className='align-middle'>{t("Inbox")}</span>
+                  <span className='align-middle'>{T("Inbox")}</span>
                   {store.emailsMeta && store.emailsMeta.inbox ? (
                     <Badge className='float-end' color='light-primary' pill>
                       {store.emailsMeta.inbox}
@@ -98,7 +95,7 @@ const Sidebar = (props) => {
                   onClick={() => handleFolder('draft')}
                 >
                   <File size={18} className='me-75' />
-                  <span className='align-middle'>{t("Drafts")}</span>
+                  <span className='align-middle'>{T("Drafts")}</span>
                   {store.emailsMeta && store.emailsMeta.draft ? (
                     <Badge className='float-end' color='light-warning' pill>
                       {store.emailsMeta.draft}
@@ -112,7 +109,7 @@ const Sidebar = (props) => {
                   onClick={() => handleFolder('important')}
                 >
                   <Star size={18} className='me-75' />
-                  <span className='align-middle'>{t("Important")}</span>
+                  <span className='align-middle'>{T("Important")}</span>
                   {store.emailsMeta && store.emailsMeta.important ? (
                     <Badge className='float-end' color='light-primary' pill>
                       {store.emailsMeta.important}
@@ -126,7 +123,7 @@ const Sidebar = (props) => {
                   onClick={() => handleFolder('spam')}
                 >
                   <Info size={18} className='me-75' />
-                  <span className='align-middle'>{t("Spam")}</span>
+                  <span className='align-middle'>{T("Spam")}</span>
                   {store.emailsMeta.spam ? (
                     <Badge className='float-end' color='light-danger' pill>
                       {store.emailsMeta.spam}
@@ -140,7 +137,7 @@ const Sidebar = (props) => {
                   onClick={() => handleFolder('sent')}
                 >
                   <Send size={18} className='me-75' />
-                  <span className='align-middle'>{t("Sent")}</span>
+                  <span className='align-middle'>{T("Sent")}</span>
                 </ListGroupItem>
 
                 <ListGroupItem
@@ -149,7 +146,7 @@ const Sidebar = (props) => {
                   onClick={() => handleFolder('trash')}
                 >
                   <Trash size={18} className='me-75' />
-                  <span className='align-middle'>{t("Trash")}</span>
+                  <span className='align-middle'>{T("Trash")}</span>
                 </ListGroupItem>
               </ListGroup>
             </PerfectScrollbar>

@@ -3,9 +3,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
   updateCase,
@@ -46,6 +43,9 @@ import {
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalEditCaseClient = ({
   open,
   groups,
@@ -57,33 +57,30 @@ const ModalEditCaseClient = ({
   const [lawyerOptions, setLawyerOptions] = useState([])
   const [typeOptions, setTypeOptions] = useState([])
 
-  // ** Hooks for tanslation
-  const { t } = useTranslation()
-
   // ** Store vars
   const dispatch = useDispatch()
   const store = useSelector((state) => state.cases)
 
   /* Yup validation schema */
   const CaseClientSchema = yup.object({
-    Name: yup.string().required('Name is required!'),
-    Email: yup.string().required('Email is required!').email('Invalid email address!'),
-    Contact: yup.string().required(`${t("Telephone")} is required!`).min(10, `${t("Telephone")} Must be 10 digit!`).max(10, `${t("Telephone")} Must be 10 digit!`),
-    laywerID: yup.object().required(`${t("Attorney")} is required!`).nullable(),
-    caseTypeID: yup.object().required(`${t("Group")} is required!`).nullable(),
-    status: yup.object().required(`Status is required!`).nullable()
+    Name: yup.string().required(T('Name is required!')),
+    Email: yup.string().required(T('Email is required!')).email(T('Invalid email address!')),
+    Contact: yup.string().required(T(`Telephone is required!`)).min(10, T(`Telephone must be 10 digit!`)).max(10, T(`Telephone must be 10 digit!`)),
+    laywerID: yup.object().required(T(`Attorney is required!`)).nullable(),
+    caseTypeID: yup.object().required(T(`Groupis required!`)).nullable(),
+    status: yup.object().required(T(`Status is required!`)).nullable()
   }).required()
 
   const PlaceholderSchema = {
     name: "John Doe",
     contact: "+4915901766553",
     email: "john.doe@example.com",
-    laywerId: `Select ${t("Attorney")}...`,
-    address: "Address",
-    city: `${t("City")}`,
-    pincode: "Postal code",
-    caseTypeID: `Select ${t("Group")}...`,
-    status: `Select Status...`
+    laywerId: `${T('Select Attorney')}...`,
+    address: T("Address"),
+    city: T(`City`),
+    pincode: T("Postal code"),
+    caseTypeID: `${T('Select Group')}...`,
+    status: `${T('Select Status')}...`
   }
 
   const {
@@ -238,7 +235,7 @@ const ModalEditCaseClient = ({
           />
         ) : null}
 
-        <ModalHeader toggle={handleReset}>{t("Update")} {t("file")}</ModalHeader>
+        <ModalHeader toggle={handleReset}>{T("Update")} {T("File")}</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <Row>
@@ -258,7 +255,7 @@ const ModalEditCaseClient = ({
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="Contact">
-                  {t("Telephone")}
+                  {T("Telephone")}
                 </Label>
                 <Controller
                   defaultValue=""
@@ -272,7 +269,7 @@ const ModalEditCaseClient = ({
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="Email">
-                  {t("Email")}
+                  {T("Email")}
                 </Label>
                 <Controller
                   defaultValue={caseData && caseData.user && caseData.user.email}
@@ -288,7 +285,7 @@ const ModalEditCaseClient = ({
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="laywerID">
-                  {t("Attorney")}
+                  {T("Attorney")}
                 </Label>
                 <Controller
                   defaultValue={null}
@@ -326,7 +323,7 @@ const ModalEditCaseClient = ({
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="City">
-                  {t("City")}
+                  {T("City")}
                 </Label>
                 <Controller
                   defaultValue=""
@@ -354,7 +351,7 @@ const ModalEditCaseClient = ({
 
               <Col md={6} sm={12} className="mb-1">
                 <Label className="form-label" for="caseTypeID">
-                  {t("Group")}
+                  {T("Group")}
                 </Label>
                 <Controller
                   defaultValue={null}
@@ -408,7 +405,7 @@ const ModalEditCaseClient = ({
                 className="me-1"
                 disabled={!store.loading}
               >
-                {t("Submit")}
+                {T("Submit")}
               </Button>
 
               <Button
@@ -417,7 +414,7 @@ const ModalEditCaseClient = ({
                 disabled={!store.loading}
                 onClick={handleReset}
               >
-                {t("Cancel")}
+                {T("Cancel")}
               </Button>
             </div>
           </Form>

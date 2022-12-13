@@ -84,6 +84,9 @@ import ModalInvoiceDetail from './modals/ModalInvoiceDetail'
 // ** Styles
 import '@styles/react/apps/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 function getWindowSize() {
   const { innerWidth: width, innerHeight: height } = window
   return {
@@ -105,7 +108,7 @@ const CustomHeader = ({
     <Row>
       <Col lg={6} className="d-flex align-items-center px-0 px-lg-1">
         <div className="d-flex align-items-center me-2">
-          <label htmlFor="rows-per-page">Show</label>
+          <label htmlFor="rows-per-page">{T('Show')}</label>
           <Input
             type="select"
             id="rows-per-page"
@@ -122,19 +125,19 @@ const CustomHeader = ({
         </div>
 
         <Button color="primary" onClick={() => navigate(`${adminRoot}/invoice/add`)}>
-          Create Invoice
+          {T('Create Invoice')}
         </Button>
       </Col>
 
       <Col lg={6} className="actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0">
         <div className="d-flex align-items-center">
-          <label htmlFor="search-invoice">Search</label>
+          <label htmlFor="search-invoice">{T('Search')}</label>
           <Input
             id="search-invoice"
             className="ms-50 me-2 w-100"
             type="text"
             value={searchInput}
-            placeholder="Search Invoice"
+            placeholder={T("Search Invoice")}
             onChange={(event) => handleSearch(event.target.value)}
           />
         </div>
@@ -142,8 +145,8 @@ const CustomHeader = ({
         <div className="status">
           <Select
             id='status-filter'
-            placeholder="Select Status..."
-            options={[{ label: "Paid", value: "paid" }]}
+            placeholder={`${T("Select Status")}...`}
+            options={[{ label: T("Paid"), value: "paid" }]}
             className='react-select'
             classNamePrefix='select'
             isClearable={true}
@@ -269,11 +272,11 @@ const InvoiceApp = () => {
 
   const onDeleteInvoice = (id) => {
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      title: T('Are you sure?'),
+      text: T("You won't be able to revert this!"),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonText: T('Yes, delete it!'),
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-danger ms-1'
@@ -305,12 +308,12 @@ const InvoiceApp = () => {
 
     /* Succes toast notification */
     if (store && store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store && store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
 
     if (windowSize && windowSize.width) {
@@ -374,14 +377,14 @@ const InvoiceApp = () => {
       )
     },
     {
-      name: 'Invoice Number',
+      name: T('Invoice Number'),
       sortable: true,
       sortField: 'invoice_no',
       minWidth: '190px',
       cell: (row) => <Link to={`${adminRoot}/invoice/view/${row.id}`}>{`#${row.invoice_no}`}</Link>
     },
     {
-      name: 'Status',
+      name: T('Status'),
       sortable: true,
       sortField: 'status',
       minWidth: '70px',
@@ -403,7 +406,7 @@ const InvoiceApp = () => {
       }
     },
     {
-      name: 'Client',
+      name: T('Client'),
       sortable: true,
       minWidth: '240px',
       sortField: 'customer_id',
@@ -421,21 +424,21 @@ const InvoiceApp = () => {
       }
     },
     {
-      name: 'Total',
+      name: T('Total'),
       sortable: true,
       sortField: 'total_price',
       minWidth: '100px',
       cell: (row) => `€ ${row && row.total_price && getDecimalFormat(row.total_price)}`
     },
     {
-      name: 'Due Date',
+      name: T('Due Date'),
       sortable: true,
       sortField: 'invoice_due_date',
       minWidth: '140px',
       cell: (row) => row.invoice_due_date && getTransformDate(row.invoice_due_date, "DD MMM YYYY")
     },
     {
-      name: 'Action',
+      name: T('Action'),
       omit: dotIconAction,
       cell: (row) => (
         <div className='column-action d-flex align-items-center'>
@@ -446,7 +449,7 @@ const InvoiceApp = () => {
             onClick={() => onSendMailClick(row)}
           />
           <UncontrolledTooltip placement="top" target={`pw-send-tooltip-${row.id}`}>
-            Send Mail
+            {T('Send Mail')}
           </UncontrolledTooltip>
 
           <Link
@@ -457,7 +460,7 @@ const InvoiceApp = () => {
           </Link>
 
           <UncontrolledTooltip placement="top" target={`pw-view-tooltip-${row.id}`}>
-            View Invoice
+          {T('View Invoice')}
           </UncontrolledTooltip>
 
           <UncontrolledButtonDropdown>
@@ -474,7 +477,7 @@ const InvoiceApp = () => {
                 onClick={(event) => row && !row.pdf_path && event.preventDefault()}
               >
                 <Download size={17} className="me-50" />
-                <span className="align-middle">Download</span>
+                <span className="align-middle">{T('Download')}</span>
               </DropdownItem>
 
               <DropdownItem
@@ -483,7 +486,7 @@ const InvoiceApp = () => {
                 className="w-100"
               >
                 <Edit size={17} className="me-50" />
-                <span className="align-middle">Edit</span>
+                <span className="align-middle">{T('Edit')}</span>
               </DropdownItem>
 
               <DropdownItem
@@ -496,7 +499,7 @@ const InvoiceApp = () => {
                 }}
               >
                 <Trash2 size={17} className="me-50" />
-                <span className="align-middle">Delete</span>
+                <span className="align-middle">{T('Delete')}</span>
               </DropdownItem>
 
               <DropdownItem
@@ -505,7 +508,7 @@ const InvoiceApp = () => {
                 className="w-100"
               >
                 <Copy size={17} className="me-50" />
-                <span className="align-middle">Duplicate</span>
+                <span className="align-middle">{T('Duplicate')}</span>
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledButtonDropdown>

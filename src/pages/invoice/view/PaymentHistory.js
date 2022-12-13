@@ -1,6 +1,3 @@
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Reactstrap Imports
 import {
     Card,
@@ -9,27 +6,28 @@ import {
     CardHeader
 } from 'reactstrap'
 
+// ** Translation
+import { T } from '@localization'
+
 const PaymentHistory = ({
     invoiceItem,
     getDecimalFormat,
     getTransformDate
 }) => {
-    // ** Hooks
-    const { t } = useTranslation()
 
     return (
         <Card className="invoice-action-wrapper">
             <CardHeader>
-                <h4>{t("Payment History")}</h4>
+                <h4>{T("Payment History")}</h4>
             </CardHeader>
 
             <CardBody>
                 <Table striped responsive>
                     <thead>
                         <tr>
-                            <th className="text-left">{t("Amount")}</th>
-                            <th className="text-center">{t("Note")}</th>
-                            <th className="text-center">{t("Date")}</th>
+                            <th className="text-left">{T("Amount")}</th>
+                            <th className="text-center">{T("Note")}</th>
+                            <th className="text-center">{T("Date")}</th>
                         </tr>
                     </thead>
                     {invoiceItem && invoiceItem.payments && invoiceItem.payments.length ? <>

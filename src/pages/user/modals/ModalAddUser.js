@@ -5,9 +5,6 @@ import { useEffect, useState } from 'react'
 import Sidebar from '@components/sidebar'
 import InputPasswordToggle from '@components/input-password-toggle'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
   addUser,
@@ -48,13 +45,14 @@ import {
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalAddUser = ({
   open,
   roleItems,
   toggleModal
 }) => {
-  // ** Hooks for tanslation
-  const { t } = useTranslation()
 
   // ** Store vars
   const dispatch = useDispatch()
@@ -62,11 +60,11 @@ const ModalAddUser = ({
 
   /* Yup validation schema */
   const UserSchema = yup.object({
-    name: yup.string().required('Name is required!'),
-    email: yup.string().required('Email is required!').email('Invalid email address!'),
-    Contact: yup.string().required('Mobile is required!').min(6, "Mobile Must be 6 digit!").max(16, "Mobile Must be 16 digit!"),
-    password: yup.string().required('Password is required!').min(6, "Password Must be 6 digit!"),
-    role_id: yup.object().required(`${t("Role")} is required!`).nullable()
+    name: yup.string().required(T('Name is required!')),
+    email: yup.string().required(T('Email is required!')).email(T('Invalid email address!')),
+    Contact: yup.string().required(T('Mobile is required!')).min(6, T("Mobile Must be 6 digit!")).max(16, T("Mobile Must be 16 digit!")),
+    password: yup.string().required(T('Password is required!')).min(6, T("Password Must be 6 digit!")),
+    role_id: yup.object().required(T(`Role is required!`)).nullable()
   }).required()
 
   /* Constant */
@@ -78,7 +76,7 @@ const ModalAddUser = ({
     Contact: "+4915901766553",
     email: "john.doe@example.com",
     password: "******",
-    role_id: `Select ${t("Role")}...`
+    role_id: `${T("Select Role")}...`
   }
 
   const {
@@ -159,7 +157,7 @@ const ModalAddUser = ({
       <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <div className="mb-1">
           <Label className="form-label" for="name">
-            Full Name
+          {T("Full Name")}
           </Label>
           <Controller
             defaultValue=""
@@ -173,7 +171,7 @@ const ModalAddUser = ({
 
         <div className="mb-1">
           <Label className="form-label" for="Contact">
-            {t("Telephone")}
+            {T("Telephone")}
           </Label>
           <Controller
             defaultValue=""
@@ -187,7 +185,7 @@ const ModalAddUser = ({
 
         <div className="mb-1">
           <Label className="form-label" for="email">
-            {t("Email")}
+            {T("Email")}
           </Label>
           <Controller
             defaultValue=""
@@ -203,7 +201,7 @@ const ModalAddUser = ({
 
         <div className="mb-1">
           <Label className="form-label" for="password">
-            {t("Password")}
+            {T("Password")}
           </Label>
           <Controller
             defaultValue=""
@@ -224,7 +222,7 @@ const ModalAddUser = ({
 
         <div className="mb-1">
           <Label className="form-label" for="role_id">
-            {t("User Role")}
+            {T("User Role")}
           </Label>
           <Controller
             defaultValue=""
@@ -253,7 +251,7 @@ const ModalAddUser = ({
             color="primary"
             disabled={!store.loading}
           >
-            {t("Submit")}
+            {T("Submit")}
           </Button>
 
           <Button
@@ -262,7 +260,7 @@ const ModalAddUser = ({
             onClick={handleReset}
             disabled={!store.loading}
           >
-            {t("Cancel")}
+            {T("Cancel")}
           </Button>
         </div>
       </Form>

@@ -3,9 +3,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Reactstrap Imports
 import {
     Row,
@@ -18,6 +15,9 @@ import {
     ModalHeader
 } from 'reactstrap'
 import { TreeSelect } from 'antd'
+
+// ** Translation
+import { T } from '@localization'
 
 const ModalCloudUploadFile = ({
     open,
@@ -35,8 +35,6 @@ const ModalCloudUploadFile = ({
     updateCloudStorageLoader,
     clearCloudStorageMessage
 }) => {
-    // ** Hooks
-    const { t } = useTranslation()
 
     // ** States
     const [fileName, setFileName] = useState('')
@@ -76,11 +74,11 @@ const ModalCloudUploadFile = ({
     /* Swal Alert */
     const onAlertMessage = (title, text, icon) => {
         MySwal.fire({
-            title: title ?? 'File limit exceeded!',
-            text: text ?? 'File uploading size exceeded!',
+            title: title ?? T('File limit exceeded!'),
+            text: text ?? T('File uploading size exceeded!'),
             icon: icon ?? 'warning',
             showCancelButton: false,
-            confirmButtonText: 'Okay',
+            confirmButtonText: T('Okay'),
             customClass: {
                 confirmButton: 'btn btn-primary'
             },
@@ -117,7 +115,7 @@ const ModalCloudUploadFile = ({
             const fileSizeKiloBytes = fileSize / 1024
             const uploadLimit = process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE * 1024
             if (fileSizeKiloBytes > uploadLimit) {
-                onAlertMessage('File limit exceeded!', `Please upload max ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb files!`, 'warning')
+                onAlertMessage(T('File limit exceeded!'), `${T('Please upload max')} ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb ${T('files')}!`, 'warning')
                 return
             }
 
@@ -212,15 +210,15 @@ const ModalCloudUploadFile = ({
                 className="modal-dialog-centered modal-md"
             >
                 <ModalHeader toggle={handleReset}>
-                    {!movItemFlag ? (<> {store.cloudStorageItem && store.cloudStorageItem.id ? (<> {t("Edit")} {t("File")} </>) : (<> {t("Upload")} {t("New File")} </>)} </>) : null}
-                    {movItemFlag ? (<> {t("Move")} {t("File")} </>) : null}
+                    {!movItemFlag ? (<> {store.cloudStorageItem && store.cloudStorageItem.id ? (<> {T("Edit File")} </>) : (<> {T("Upload New File")} </>)} </>) : null}
+                    {movItemFlag ? (<> {T("Move File")} </>) : null}
                 </ModalHeader>
 
                 <ModalBody>
                     {!movItemFlag && store.cloudStorageItem && store.cloudStorageItem.id ? (
                         <div className="mb-1">
                             <Label className="form-label" for="name">
-                                File Name
+                                {T('File Name')}
                             </Label>
                             <Input
                                 id="name"
@@ -262,7 +260,7 @@ const ModalCloudUploadFile = ({
                                 value={parentId || 0}
                                 className="form-control"
                                 style={{ width: '100%' }}
-                                placeholder="Select Parent..."
+                                placeholder={`${T('Select Parent')}...`}
                                 treeData={treeStructureData}
                                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                                 onChange={(value) => onParentChange(value)}
@@ -281,7 +279,7 @@ const ModalCloudUploadFile = ({
                                     disabled={!store.loading}
                                     onClick={handleReset}
                                 >
-                                    {t("Cancel")}
+                                    {T("Cancel")}
                                 </Button>
 
                                 <Button
@@ -290,7 +288,7 @@ const ModalCloudUploadFile = ({
                                     disabled={!store.loading}
                                     onClick={onSubmit}
                                 >
-                                    {t("Submit")}
+                                    {T("Submit")}
                                 </Button>
                             </div>
                         </Row>

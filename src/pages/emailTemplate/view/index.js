@@ -4,9 +4,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Reactstrap Imports
 import {
     Row,
@@ -39,9 +36,10 @@ import {
 // ** Styles
 import '@styles/react/libs/editor/editor.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const EmailTemplateView = () => {
-    // ** Hooks
-    const { t } = useTranslation()
     const { id } = useParams()
 
     // ** States
@@ -77,12 +75,12 @@ const EmailTemplateView = () => {
 
         /* Succes toast notification */
         if (store && store.success) {
-            Notification("Success", store.success, "success")
+            Notification(T("Success"), store.success, "success")
         }
 
         /* Error toast notification */
         if (store && store.error) {
-            Notification("Error", store.error, "warning")
+            Notification(T("Error"), store.error, "warning")
         }
     }, [dispatch, store.success, store.error, store.actionFlag, loadFirst])
     // console.log("store >>> ", store)
@@ -103,7 +101,7 @@ const EmailTemplateView = () => {
                         color="secondary"
                         onClick={() => navigate(`${adminRoot}/email-template`)}
                     >
-                        {t("Back")}
+                        {T("Back")}
                     </Button>
 
                     <Button
@@ -111,7 +109,7 @@ const EmailTemplateView = () => {
                         color="primary"
                         onClick={() => navigate(`${adminRoot}/email-template/edit/${id}`)}
                     >
-                        {t("Edit")}
+                        {T("Edit")}
                     </Button>
                 </div>
             </div>

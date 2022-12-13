@@ -1,9 +1,6 @@
 // ** React Imports
 import { Fragment } from "react"
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Reactstrap Imports
 import {
     Card,
@@ -13,11 +10,12 @@ import {
     CardHeader
 } from 'reactstrap'
 
+// ** Translation
+import { T } from '@localization'
+
 const PermissionsTab = ({
     permissions
 }) => {
-    // ** Hooks
-    const { t } = useTranslation()
 
     const getPermissionCheck = (value) => {
         if (permissions && permissions.length) {
@@ -34,21 +32,21 @@ const PermissionsTab = ({
         <Fragment>
             <Card>
                 <CardHeader className="border-bottom">
-                    <CardTitle tag="h4">{t("Permissions")}</CardTitle>
+                    <CardTitle tag="h4">{T("Permissions")}</CardTitle>
                 </CardHeader>
 
                 {permissions && permissions.length ? (
                     <Table className="text-nowrap text-center mb-3" responsive>
                         <thead>
                             <tr>
-                                <th className="text-start">Type</th>
-                                <th>Allow</th>
+                                <th className="text-start">{T('Type')}</th>
+                                <th>{T('Allow')}</th>
                             </tr>
                         </thead>
                         <tbody>
                             {getPermissionCheck(1) ? (
                                 <tr>
-                                    <td className="text-start">Delete Users</td>
+                                    <td className="text-start">{T('Delete Users')}</td>
                                     <td>
                                         <div className="d-flex form-check justify-content-center">
                                             <Input
@@ -64,7 +62,7 @@ const PermissionsTab = ({
 
                             {getPermissionCheck(2) ? (
                                 <tr>
-                                    <td className="text-start">See All Users</td>
+                                    <td className="text-start">{T('See All Users')}</td>
                                     <td>
                                         <div className="d-flex form-check justify-content-center">
                                             <Input
@@ -80,7 +78,7 @@ const PermissionsTab = ({
 
                             {getPermissionCheck(3) ? (
                                 <tr>
-                                    <td className="text-start">See Contacts</td>
+                                    <td className="text-start">{T('See Contacts')}</td>
                                     <td>
                                         <div className="d-flex form-check justify-content-center">
                                             <Input
@@ -96,7 +94,7 @@ const PermissionsTab = ({
 
                             {getPermissionCheck(4) ? (
                                 <tr>
-                                    <td className="text-start">See All Cases</td>
+                                    <td className="text-start">{T('See All Cases')}</td>
                                     <td>
                                         <div className="d-flex form-check justify-content-center">
                                             <Input
@@ -112,7 +110,7 @@ const PermissionsTab = ({
 
                             {getPermissionCheck(5) ? (
                                 <tr>
-                                    <td className="text-start">Update Cases</td>
+                                    <td className="text-start">{T('Update Cases')}</td>
                                     <td>
                                         <div className="d-flex form-check justify-content-center">
                                             <Input
@@ -128,7 +126,7 @@ const PermissionsTab = ({
 
                             {getPermissionCheck(6) ? (
                                 <tr>
-                                    <td className="text-start">See Letters</td>
+                                    <td className="text-start">{T('See Letters')}</td>
                                     <td>
                                         <div className="d-flex form-check justify-content-center">
                                             <Input
@@ -143,7 +141,7 @@ const PermissionsTab = ({
                             ) : null}
                         </tbody>
                     </Table>
-                ) : <p className="p-2">You do not have any permissions...!</p>}
+                ) : <p className="p-2">{`${T('You do not have any permissions')}...!`}</p>}
             </Card>
         </Fragment>
     )

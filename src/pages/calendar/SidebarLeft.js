@@ -20,6 +20,9 @@ import {
 // ** illustration import
 import illustration from '@src/assets/images/pages/calendar-illustration.png'
 
+// ** Translation
+import { T } from '@localization'
+
 const SidebarLeft = props => {
   // ** Props
   const {
@@ -42,12 +45,12 @@ const SidebarLeft = props => {
       <div className='sidebar-wrapper'>
         <CardBody className='card-body d-flex justify-content-center my-sm-0 mb-3'>
           <Button color='primary' block onClick={handleAddEventClick}>
-            <span className='align-middle'>Register</span>
+            <span className='align-middle'>{T('Register')}</span>
           </Button>
         </CardBody>
         <CardBody>
           <h5 className='section-label mb-1'>
-            <span className='align-middle'>Filter</span>
+            <span className='align-middle'>{T('Filter')}</span>
           </h5>
 
           <div className='form-check mb-1'>
@@ -60,7 +63,7 @@ const SidebarLeft = props => {
               onChange={(event) => dispatch(updateAllFilters(event.target.checked))}
             />
             <Label className='form-check-label' for='view-all'>
-              View All
+              {T('View All')}
             </Label>
           </div>
 
@@ -86,7 +89,7 @@ const SidebarLeft = props => {
                       }}
                     />
                     <Label className='form-check-label' for={`${filter.value}-event`}>
-                      {filter.label}
+                      {T(filter.label)}
                     </Label>
                   </div>
                 )

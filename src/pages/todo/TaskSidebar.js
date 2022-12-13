@@ -1,9 +1,6 @@
 // ** React Imports
 import { Fragment, useState } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Third Party Components
 import classnames from 'classnames'
 import Flatpickr from 'react-flatpickr'
@@ -55,6 +52,9 @@ import Spinner from '@components/spinner/Simple-grow-spinner'
 import '@styles/react/libs/editor/editor.scss'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import '@styles/react/libs/react-select/_react-select.scss'
+
+// ** Translation
+import { T } from '@localization'
 
 // ** Modal Header
 const ModalHeader = (props) => {
@@ -112,8 +112,6 @@ const TaskSidebar = (props) => {
     importantTodoItem,
     handleTaskSidebar
   } = props
-  // ** Hooks
-  const { t } = useTranslation()
 
   // ** State Constant
   const [important, setImportant] = useState(false)
@@ -122,23 +120,23 @@ const TaskSidebar = (props) => {
 
   const ValidationSchema = {
     title: {
-      placeholder: "Title",
-      required: "Title is required!"
+      placeholder: T("Title"),
+      required: T("Title is required!")
     },
     assigneeId: {
-      placeholder: `Select ${t("Assignee")}...`,
-      required: `${t("Assignee")} is required!`
+      placeholder: `${T('Select Assignee')}...`,
+      required: T(`Assignee is required!`)
     },
     due_date: {
       placeholder: "YYYY-MM-DD",
-      required: "Due date is required!"
+      required: T("Due date is required!")
     },
     tagId: {
-      placeholder: `Select ${t("Tag")}...`,
-      required: `${t("Tag")} is required!`
+      placeholder: `${T('Select Tag')}...`,
+      required: T(`Tag is required!`)
     },
     description: {
-      placeholder: "Description",
+      placeholder: T("Description"),
       required: false
     }
   }
@@ -156,11 +154,11 @@ const TaskSidebar = (props) => {
 
   // ** Tag Select Options
   const tagOptions = [
-    { value: 'team', label: 'Team' },
-    { value: 'low', label: 'Low' },
-    { value: 'medium', label: 'Medium' },
-    { value: 'high', label: 'High' },
-    { value: 'update', label: 'Update' }
+    { value: 'team', label: T('Team') },
+    { value: 'low', label: T('Low') },
+    { value: 'medium', label: T('Medium') },
+    { value: 'high', label: T('High') },
+    { value: 'update', label: T('Update') }
   ]
 
   /* set initial html while edit */
@@ -202,11 +200,11 @@ const TaskSidebar = (props) => {
           onClick={() => dispatch(completeTodoItem(store.todoItem.id))}
           color={store.todoItem.is_completed === 1 ? 'success' : 'secondary'}
         >
-          {store.todoItem.is_completed === 1 ? 'Completed' : 'Mark Complete'}
+          {store.todoItem.is_completed === 1 ? T('Completed') : T('Mark Complete')}
         </Button>
       )
     } else {
-      return 'Add Task'
+      return T('Add Task')
     }
   }
 
@@ -235,11 +233,11 @@ const TaskSidebar = (props) => {
   // ** Function to move task to trash
   const handleTrashTask = () => {
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You can also revert this!",
+      title: T('Are you sure?'),
+      text: T("You can also revert this!"),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonText: T('Yes, delete it!'),
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-danger ms-1'
@@ -262,7 +260,7 @@ const TaskSidebar = (props) => {
             disabled={!store.loading}
             className="update-btn update-todo-item"
           >
-            Update
+            {T('Update')}
           </Button>
 
           {paramsURL && paramsURL.filter !== 'deleted' ? (
@@ -272,7 +270,7 @@ const TaskSidebar = (props) => {
               disabled={!store.loading}
               outline onClick={handleTrashTask}
             >
-              Delete
+              {T('Delete')}
             </Button>
           ) : null}
         </Fragment>
@@ -285,7 +283,7 @@ const TaskSidebar = (props) => {
             disabled={!store.loading}
             className="add-todo-item me-1"
           >
-            Add Task
+            {T('Add Task')}
           </Button>
 
           <Button
@@ -294,7 +292,7 @@ const TaskSidebar = (props) => {
             disabled={!store.loading}
             onClick={handleTaskSidebar}
           >
-            Cancel
+            {T('Cancel')}
           </Button>
         </Fragment>
       )
@@ -374,7 +372,7 @@ const TaskSidebar = (props) => {
         <ModalBody className='flex-grow-1 pb-sm-0 pb-3'>
           <div className='mb-1'>
             <Label className='form-label' for='task-title'>
-              Title <span className='text-danger'>*</span>
+              {T('Title')} <span className='text-danger'>*</span>
             </Label>
             <Controller
               defaultValue=""
@@ -396,7 +394,7 @@ const TaskSidebar = (props) => {
 
           <div className='mb-1'>
             <Label className='form-label' for='tagId'>
-              Tags <span className='text-danger'>*</span>
+              {T('Tags')} <span className='text-danger'>*</span>
             </Label>
             <Controller
               defaultValue={store.todoItem && store.todoItem.tag ? { label: capitalizeFirstLetter(store.todoItem.tag), value: store.todoItem.tag } : null}
@@ -428,7 +426,7 @@ const TaskSidebar = (props) => {
 
           <div className='mb-1'>
             <Label className='form-label' for='due_date'>
-              Due Date <span className='text-danger'>*</span>
+              {T('Due Date')} <span className='text-danger'>*</span>
             </Label>
             <Controller
               defaultValue=""
@@ -452,7 +450,7 @@ const TaskSidebar = (props) => {
 
           <div className='mb-1'>
             <Label className='form-label' for='assigneeId'>
-              Assignee <span className='text-danger'>*</span>
+              {T('Assignee')} <span className='text-danger'>*</span>
             </Label>
             <Controller
               defaultValue={store.todoItem && store.todoItem.assign ? { label: store.todoItem.assign.name, value: store.todoItem.assign.id } : null}
@@ -479,7 +477,7 @@ const TaskSidebar = (props) => {
 
           <div className="mb-1">
             <Label for="description" className='form-label'>
-              Description
+              {T('Description')}
             </Label>
             <Controller
               defaultValue=""

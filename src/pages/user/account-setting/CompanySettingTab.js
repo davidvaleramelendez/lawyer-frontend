@@ -7,8 +7,8 @@ import {
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
-// Translation
-import { useTranslation } from 'react-i18next'
+// ** Translation
+import { T } from '@localization'
 
 // ** Reactstrap Imports
 import {
@@ -28,20 +28,17 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 const CompanySettingTab = ({
 }) => {
-    /* Hook */
-    const { t } = useTranslation()
-
     // ** Store vars
     const dispatch = useDispatch()
     const store = useSelector((state) => state.user)
 
     /* Validation rules */
     const CompanySchema = yup.object({
-        name: yup.string().required('Name is required!'),
-        last_name: yup.string().required('Last Name is required!'),
-        address: yup.string().required('Address is required!'),
-        zip_code: yup.string().required('Zip code is required!').required('Zip code is required!').min(4, "Zip code must be minimum 4 digit!").max(8, "Zip code must be 8 digit!"),
-        city: yup.string().required('City is required!')
+        name: yup.string().required(`${T("Name is required!")}`),
+        last_name: yup.string().required(`${T("Last Name is required!")}`),
+        address: yup.string().required(`${T("Address is required!")}`),
+        zip_code: yup.string().required(`${T("Zip code is required!")}`).min(4, "Zip code must be minimum 4 digit!").max(8, "Zip code must be 8 digit!"),
+        city: yup.string().required(`${T("City is required!")}`)
     }).required()
 
     const {
@@ -57,12 +54,12 @@ const CompanySettingTab = ({
 
     /* Placeholder texts */
     const PlaceholderSchema = {
-        company: "Company",
-        name: "Name",
-        lastName: "Last Name",
-        address: "Address",
-        zipCode: "Zip code",
-        city: "City"
+        company: `${T("Company")}`,
+        name: `${T("Name")}`,
+        lastName: `${T("Last Name")}`,
+        address: `${T("Address")}`,
+        zipCode: `${T("Zip code")}`,
+        city: `${T("City")}`
     }
 
     const handleReset = () => {
@@ -110,7 +107,7 @@ const CompanySettingTab = ({
                         <Row>
                             <Col xl={12} md={12} sm={12} className="mb-1">
                                 <Label className="form-label" for="company">
-                                    Company
+                                    {T("Company")}
                                 </Label>
                                 <Controller
                                     defaultValue=""
@@ -126,7 +123,7 @@ const CompanySettingTab = ({
 
                             <Col xl={6} md={6} sm={6} className="mb-1">
                                 <Label className="form-label" for="name">
-                                    Name
+                                    {T("Name")}
                                 </Label>
                                 <Controller
                                     defaultValue=""
@@ -142,7 +139,7 @@ const CompanySettingTab = ({
 
                             <Col xl={6} md={6} sm={6} className="mb-1">
                                 <Label className="form-label" for="last_name">
-                                    Last Name
+                                    {T("Last Name")}
                                 </Label>
                                 <Controller
                                     defaultValue=""
@@ -158,7 +155,7 @@ const CompanySettingTab = ({
 
                             <Col xl={12} md={12} sm={12} className="mb-1">
                                 <Label className="form-label" for="address">
-                                    Address
+                                    {T("Address")}
                                 </Label>
                                 <Controller
                                     defaultValue=""
@@ -174,7 +171,7 @@ const CompanySettingTab = ({
 
                             <Col xl={6} md={6} sm={6} className="mb-1">
                                 <Label className="form-label" for="zip_code">
-                                    Zipcode
+                                    {T("Zipcode")}
                                 </Label>
                                 <Controller
                                     defaultValue=""
@@ -190,7 +187,7 @@ const CompanySettingTab = ({
 
                             <Col xl={6} md={6} sm={6} className="mb-1">
                                 <Label className="form-label" for="city">
-                                    City
+                                    {T("City")}
                                 </Label>
                                 <Controller
                                     defaultValue=""
@@ -205,12 +202,12 @@ const CompanySettingTab = ({
                             </Col>
                         </Row>
 
-                        <div className="d-flex flex-wrap mb-2 mt-2">
+                        <div className="mb-2 mt-2">
                             <Button
                                 type="submit"
                                 color="primary"
                             >
-                                {t("Save Change")}
+                                {T("Save Change")}
                             </Button>
                         </div>
                     </Form>

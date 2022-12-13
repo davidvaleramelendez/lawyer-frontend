@@ -10,6 +10,9 @@ import {
     TabContent
 } from 'reactstrap'
 
+// ** Translation
+import { T } from '@localization'
+
 // ** Icons Import
 import {
     Info,
@@ -43,28 +46,28 @@ const Tabs = ({
                 <NavItem>
                     <NavLink active={active === "1"} onClick={() => toggleTab("1")}>
                         <User size={14} className="me-50" />
-                        <span className="fw-bold d-none d-sm-block">Account</span>
+                        <span className="fw-bold d-none d-sm-block">{T('Account')}</span>
                     </NavLink>
                 </NavItem>
 
                 <NavItem>
                     <NavLink active={active === "2"} onClick={() => toggleTab("2")}>
                         <Settings size={14} className="me-50" />
-                        <span className="fw-bold d-none d-sm-block">Company Setting</span>
+                        <span className="fw-bold d-none d-sm-block">{T("Company Setting")}</span>
                     </NavLink>
                 </NavItem>
 
                 <NavItem>
                     <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
                         <Info size={14} className="me-50" />
-                        <span className="fw-bold d-none d-sm-block">Language Labels</span>
+                        <span className="fw-bold d-none d-sm-block">{T('Language Labels')}</span>
                     </NavLink>
                 </NavItem>
 
                 <NavItem>
                     <NavLink active={active === "4"} onClick={() => toggleTab("4")}>
                         <Info size={14} className="me-50" />
-                        <span className="fw-bold d-none d-sm-block">IMAP information</span>
+                        <span className="fw-bold d-none d-sm-block">{T('IMAP information')}</span>
                     </NavLink>
                 </NavItem>
             </Nav>

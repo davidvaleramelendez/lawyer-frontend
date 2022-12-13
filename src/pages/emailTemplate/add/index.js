@@ -4,9 +4,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Reactstrap Imports
 import {
     Col,
@@ -73,9 +70,10 @@ import ModalEmailSortCodes from '../modals/ModalEmailSortCodes'
 // ** Styles
 import '@styles/react/libs/editor/editor.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const EmailTemplateAdd = () => {
-    // ** Hooks for tanslation
-    const { t } = useTranslation()
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -87,13 +85,13 @@ const EmailTemplateAdd = () => {
     const [editorHtmlContent, setEditorHtmlContent] = useState("")
 
     const EmailTemplateSchema = yup.object({
-        subject: yup.string().required('Subject is required!'),
+        subject: yup.string().required(T('Subject is required!')),
         template: yup.object().shape({
             blocks: yup.array().of(yup.object().shape({
-                text: yup.string().required('Content is required!')
-            }).required('Content is required!').nullable())
-        }).required('Content is required!').nullable(),
-        Status: yup.object().required(`${t("Status")} is required!`).nullable()
+                text: yup.string().required(T('Content is required!'))
+            }).required(T('Content is required!')).nullable())
+        }).required(T('Content is required!')).nullable(),
+        Status: yup.object().required(T(`Status is required!`)).nullable()
     }).required()
 
     const {
@@ -109,9 +107,9 @@ const EmailTemplateAdd = () => {
 
     /* Placeholder texts */
     const PlaceholderSchema = {
-        subject: t("Subject"),
-        template: t("Content"),
-        status: `Select ${t("Status")}...`
+        subject: T("Subject"),
+        template: T("Content"),
+        status: `${T("Select Status")}...`
     }
 
     const handleEditorStateChange = (state) => {
@@ -149,12 +147,12 @@ const EmailTemplateAdd = () => {
 
         /* Succes toast notification */
         if (store && store.success) {
-            Notification("Success", store.success, "success")
+            Notification(T("Success"), store.success, "success")
         }
 
         /* Error toast notification */
         if (store && store.error) {
-            Notification("Error", store.error, "warning")
+            Notification(T("Error"), store.error, "warning")
         }
     }, [store.success, store.error, store.actionFlag, loadFirst])
     // console.log("store >>> ", store)
@@ -195,7 +193,7 @@ const EmailTemplateAdd = () => {
 
             <CardHeader>
                 <CardTitle>
-                    {t("Add Email Template")}
+                    {T("Add Email Template")}
                 </CardTitle>
             </CardHeader>
 
@@ -207,7 +205,7 @@ const EmailTemplateAdd = () => {
                     <Row>
                         <Col md={12} sm={12} className="mb-1">
                             <Label className='form-label' for='subject'>
-                                Subject
+                                {T('Subject')}
                             </Label>
                             <Controller
                                 defaultValue=""
@@ -222,9 +220,9 @@ const EmailTemplateAdd = () => {
                         <Col md={12} sm={12} className="mb-1">
                             <Label className="form-label w-100" for='template'>
                                 <div className="d-flex justify-content-between">
-                                    <div className="me-1">Content</div>
+                                    <div className="me-1">{T('Content')}</div>
                                     <div>
-                                        {t("Sort codes")} :
+                                        {T("Sort codes")} :
 
                                         <Briefcase
                                             size={17}
@@ -236,7 +234,7 @@ const EmailTemplateAdd = () => {
                                             placement="top"
                                             target="case-sortcodes-add"
                                         >
-                                            {t("Case")} {t("Sort codes")}
+                                            {T("Case")} {T("Sort codes")}
                                         </UncontrolledTooltip>
 
                                         <MessageSquare
@@ -249,7 +247,7 @@ const EmailTemplateAdd = () => {
                                             placement="top"
                                             target="contact-sortcodes-add"
                                         >
-                                            {t("Contact")} {t("Sort codes")}
+                                            {T("Contact")} {T("Sort codes")}
                                         </UncontrolledTooltip>
 
                                         <User
@@ -262,7 +260,7 @@ const EmailTemplateAdd = () => {
                                             placement="top"
                                             target="user-sortcodes-add"
                                         >
-                                            {t("User")} {t("Sort codes")}
+                                            {T("User")} {T("Sort codes")}
                                         </UncontrolledTooltip>
 
                                         <ModalEmailSortCodes
@@ -304,7 +302,7 @@ const EmailTemplateAdd = () => {
 
                         <Col md={6} sm={12} className="mb-1">
                             <Label className='form-label' for="Status">
-                                {t("Status")}
+                                {T("Status")}
                             </Label>
                             <Controller
                                 defaultValue={store.emailTemplateItem && store.emailTemplateItem.status ? { value: store.emailTemplateItem.status, label: store.emailTemplateItem.status } : null}
@@ -334,7 +332,7 @@ const EmailTemplateAdd = () => {
                                 color="primary"
                                 disabled={!store.loading}
                             >
-                                {t("Submit")}
+                                {T("Submit")}
                             </Button>
 
                             <Button
@@ -344,7 +342,7 @@ const EmailTemplateAdd = () => {
                                 disabled={!store.loading}
                                 onClick={handleReset}
                             >
-                                {t("Back")}
+                                {T("Back")}
                             </Button>
                         </div>
                     </Row>

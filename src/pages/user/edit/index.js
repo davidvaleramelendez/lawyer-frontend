@@ -38,6 +38,9 @@ import UserTabs from './Tabs'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import '@styles/react/pages/page-account-settings.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const UserEditApp = () => {
   // ** Hooks
   const { id } = useParams()
@@ -84,12 +87,12 @@ const UserEditApp = () => {
 
     /* Succes toast notification */
     if (store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
   }, [store.roleItems, store.success, store.error, store.actionFlag, loadFirst])
   // console.log("store >>> ", store)

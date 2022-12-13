@@ -7,9 +7,6 @@ import { Fragment } from 'react'
 import classnames from 'classnames'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Reactstrap Imports
 import {
   Progress,
@@ -21,6 +18,9 @@ import {
   DropdownToggle,
   UncontrolledButtonDropdown
 } from 'reactstrap'
+
+// ** Translation
+import { T } from '@localization'
 
 // ** Icons Import
 import * as Icon from 'react-feather'
@@ -37,9 +37,6 @@ const Sidebar = (props) => {
     setFolderModalOpen,
     changeExpandedValue
   } = props
-
-  // ** Hooks
-  const { t } = useTranslation()
 
   const onExpandingToggle = async (folder) => {
     const expndTreeFoldr = [...store.expandTreeFolder]
@@ -155,7 +152,7 @@ const Sidebar = (props) => {
                   color="primary"
                   className="rounded-2"
                 >
-                  {t("Add")} {t("New")}
+                  {T("Add New")}
                 </DropdownToggle>
                 <DropdownMenu>
                   <DropdownItem
@@ -163,7 +160,7 @@ const Sidebar = (props) => {
                     onClick={() => setFolderModalOpen(true)}
                   >
                     <Folder size={17} className="me-50" />
-                    <span className="align-middle">{t("Folder")}</span>
+                    <span className="align-middle">{T("Folder")}</span>
                   </DropdownItem>
 
                   <DropdownItem
@@ -171,7 +168,7 @@ const Sidebar = (props) => {
                     onClick={() => setFileModalOpen(true)}
                   >
                     <UploadCloud size={17} className="me-50" />
-                    <span className="align-middle">{t("File Upload")}</span>
+                    <span className="align-middle">{T("File Upload")}</span>
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledButtonDropdown>
@@ -206,7 +203,7 @@ const Sidebar = (props) => {
                     size={17}
                     className="me-50 cursor-pointer"
                   />
-                  <span className="align-middle cursor-pointer">{t("Important")}</span>
+                  <span className="align-middle cursor-pointer">{T("Important")}</span>
                 </ListGroupItem>
 
                 <ListGroupItem
@@ -217,7 +214,7 @@ const Sidebar = (props) => {
                     size={17}
                     className="me-50 cursor-pointer"
                   />
-                  <span className="align-middle cursor-pointer">{t("Recents")}</span>
+                  <span className="align-middle cursor-pointer">{T("Recents")}</span>
                 </ListGroupItem>
 
                 <ListGroupItem
@@ -228,16 +225,16 @@ const Sidebar = (props) => {
                     size={17}
                     className="me-50 cursor-pointer"
                   />
-                  <span className="align-middle cursor-pointer">{t("Trash")}</span>
+                  <span className="align-middle cursor-pointer">{T("Trash")}</span>
                 </ListGroupItem>
               </ListGroup>
 
               <div className="storage-status mb-1 px-2">
-                <h6 className="section-label mb-1">Storage Status</h6>
+                <h6 className="section-label mb-1">{T('Storage Status')}</h6>
                 <div className="d-flex align-items-center cursor-pointer">
                   <Server size={17} />
                   <div className="file-manager-progress ms-1">
-                    <span>68GB used of 100GB</span>
+                    <span>68GB {T('used of')} 100GB</span>
                     <Progress
                       value={68}
                       style={{ height: '6px' }}

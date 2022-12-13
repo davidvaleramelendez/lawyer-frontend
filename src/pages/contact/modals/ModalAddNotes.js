@@ -3,9 +3,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // Constant
 import {
   contactNoteItem
@@ -46,13 +43,14 @@ import draftToHtml from 'draftjs-to-html'
 import '@styles/base/pages/app-invoice.scss'
 import '@styles/react/libs/editor/editor.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalAddNotes = ({
   open,
   ContactID,
   toggleModal
 }) => {
-  // ** Hooks
-  const { t } = useTranslation()
 
   // ** Store vars
   const dispatch = useDispatch()
@@ -62,9 +60,9 @@ const ModalAddNotes = ({
   const NoteSchema = yup.object({
     Notes: yup.object().shape({
       blocks: yup.array().of(yup.object().shape({
-        text: yup.string().required(`${t("Notes")} is required!`)
-      }).required(`${t("Notes")} is required!`).nullable()).required(`${t("Notes")} is required!`).nullable()
-    }).required(`${t("Notes")} is required!`).nullable()
+        text: yup.string().required(T(`Notes is required!`))
+      }).required(`Notes is required!`).nullable()).required(`Notes is required!`).nullable()
+    }).required(`Notes is required!`).nullable()
   }).required()
 
   const {
@@ -137,7 +135,7 @@ const ModalAddNotes = ({
           />
         ) : null}
 
-        <ModalHeader toggle={handleReset}>{t("Add")} {t("Notes")}</ModalHeader>
+        <ModalHeader toggle={handleReset}>{T("Add Notes")}</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <div className="mb-1">
@@ -162,7 +160,7 @@ const ModalAddNotes = ({
                       }
                     }}
                     onEditorStateChange={handleEditorStateChange}
-                    placeholder="Add Comment"
+                    placeholder={T("Add Comment")}
                   />
                 )}
               />
@@ -176,7 +174,7 @@ const ModalAddNotes = ({
                   color="primary"
                   disabled={!store.loading}
                 >
-                  {t("Submit")}
+                  {T("Submit")}
                 </Button>
               </div>
             </Row>

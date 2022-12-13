@@ -1,6 +1,3 @@
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Reactstrap Imports
 import {
     Col,
@@ -11,14 +8,15 @@ import {
     CardText
 } from 'reactstrap'
 
+// ** Translation
+import { T } from '@localization'
+
 const ViewCard = ({
     invoiceItem,
     companyItem,
     getDecimalFormat,
     getTransformDate
 }) => {
-    // ** Hooks
-    const { t } = useTranslation()
 
     const onNetValueCost = (total = 0, vat = 0) => {
         return getDecimalFormat(total - vat)
@@ -121,13 +119,13 @@ const ViewCard = ({
 
                     <div className="mt-md-0 mt-2">
                         <h4 className="invoice-title">
-                            {t("Invoice")} <span className={`invoice-number ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}>
+                            {T("Invoice")} <span className={`invoice-number ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}>
                                 #{invoiceItem && invoiceItem.invoice_no}
                             </span>
                         </h4>
 
                         <div className="invoice-date-wrapper">
-                            <p className="invoice-date-title">{t("Created")}:</p>
+                            <p className="invoice-date-title">{T("Created")}:</p>
                             <p
                                 className={`invoice-date ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}
                             >
@@ -136,7 +134,7 @@ const ViewCard = ({
                         </div>
 
                         <div className="invoice-date-wrapper">
-                            <p className="invoice-date-title">{t("Maturity")}:</p>
+                            <p className="invoice-date-title">{T("Maturity")}:</p>
                             <p
                                 className={`invoice-date ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}
                             >
@@ -145,7 +143,7 @@ const ViewCard = ({
                         </div>
 
                         <div className="invoice-date-wrapper">
-                            <p className="invoice-date-title">{t("Status")}:</p>
+                            <p className="invoice-date-title">{T("Status")}:</p>
                             <p
                                 className={`invoice-date text-capitalize ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}
                             >
@@ -168,7 +166,7 @@ const ViewCard = ({
                         xl={8}
                         className="p-0"
                     >
-                        <h6 className="mb-2">{t("Invoice to")}:</h6>
+                        <h6 className="mb-2">{T("Invoice to")}:</h6>
                         <h6
                             className={`mb-25 ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-50'}`}
                         >
@@ -198,11 +196,11 @@ const ViewCard = ({
                         xl={4}
                         className="p-0 mt-xl-0 mt-2"
                     >
-                        <h6 className="mb-2">{t("Payment details")}:</h6>
+                        <h6 className="mb-2">{T("Payment details")}:</h6>
                         <table>
                             <tbody>
                                 <tr>
-                                    <td>{t("Total")}:</td>
+                                    <td>{T("Total")}:</td>
                                     <td>
                                         <span
                                             className={`fw-bold ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}
@@ -213,7 +211,7 @@ const ViewCard = ({
                                 </tr>
 
                                 <tr>
-                                    <td className="">{t("Open amount")}:</td>
+                                    <td className="">{T("Open amount")}:</td>
                                     <td>
                                         <span
                                             className={`fw-bold ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}
@@ -233,8 +231,8 @@ const ViewCard = ({
             <Table responsive>
                 <thead>
                     <tr>
-                        <th>{t("Description")}</th>
-                        <th className="d-flex justify-content-end">{t("Amount")}</th>
+                        <th>{T("Description")}</th>
+                        <th className="d-flex justify-content-end">{T("Amount")}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -264,7 +262,7 @@ const ViewCard = ({
                     <Col className="d-flex justify-content-end" md={6} order={{ md: 2, lg: 1 }}>
                         <div className="invoice-total-wrapper">
                             <div className="invoice-total-item">
-                                <p className="invoice-total-title">{t("Net")}:</p>
+                                <p className="invoice-total-title">{T("Net")}:</p>
                                 <p
                                     className={`invoice-total-amount ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-50'}`}
                                 >
@@ -273,7 +271,7 @@ const ViewCard = ({
                             </div>
 
                             <div className="invoice-total-item">
-                                <p className="invoice-total-title text-uppercase">{t("Vat")} 19 %</p>
+                                <p className="invoice-total-title text-uppercase">{T("Vat")} 19 %</p>
                                 <p
                                     className={`invoice-total-amount ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-50'}`}
                                 >
@@ -283,7 +281,7 @@ const ViewCard = ({
                             <hr className="my-50" />
 
                             <div className="invoice-total-item">
-                                <p className="invoice-total-title">{("Total")}:</p>
+                                <p className="invoice-total-title">{T("Total")}:</p>
                                 <p
                                     className={`invoice-total-amount ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-50'}`}
                                 >

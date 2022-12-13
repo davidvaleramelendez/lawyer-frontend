@@ -59,6 +59,7 @@ import illustration from '@src/assets/images/illustration/email.svg'
 import '@styles/react/libs/charts/apex-charts.scss'
 import '@styles/base/pages/dashboard-ecommerce.scss'
 
+// ** Translation
 import { T } from '@localization'
 
 const EcommerceDashboard = () => {

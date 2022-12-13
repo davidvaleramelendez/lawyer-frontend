@@ -23,8 +23,8 @@ import { useForm, Controller } from 'react-hook-form'
 import * as yup from "yup"
 import { yupResolver } from '@hookform/resolvers/yup'
 
-// Translation
-import { useTranslation } from 'react-i18next'
+// ** Translation
+import { T } from '@localization'
 
 // ** Icons Import
 import {
@@ -37,9 +37,6 @@ const AccountTab = ({
     setSelLanguage,
     onImageSrcError
 }) => {
-    /* Hook */
-    const { t } = useTranslation()
-
     // ** Store vars
     const dispatch = useDispatch()
     const store = useSelector((state) => state.user)
@@ -49,9 +46,9 @@ const AccountTab = ({
 
     /* Validation rules */
     const AccountSchema = yup.object({
-        username: yup.string().required('Username is required!').email('Invalid username!'),
-        name: yup.string().required('Name is required!'),
-        email: yup.string().required('Email is required!').email('Invalid email address!')
+        username: yup.string().required(`${T("Username is required!")}`).email('Invalid username!'),
+        name: yup.string().required(`${T("Name is required!")}`),
+        email: yup.string().required(`${T("Email is required!")}`).email('Invalid email address!')
     }).required()
 
     /* acnt => account */
@@ -163,7 +160,7 @@ const AccountTab = ({
                                                 color="primary"
                                                 className="mb-75 me-75"
                                             >
-                                                Change
+                                                {T('Change')}
                                                 <Input type="file" hidden accept="image/*" onChange={(event) => onFileChange(event)} />
                                             </Button>
                                         </div>
@@ -175,7 +172,7 @@ const AccountTab = ({
                         <Row>
                             <Col xl={6} md={6} sm={6} className="mb-1">
                                 <Label className="form-label" for="username">
-                                    Username
+                                    {T('Username')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem && store.userItem.email}
@@ -191,7 +188,7 @@ const AccountTab = ({
 
                             <Col xl={6} md={6} sm={6} className="mb-1">
                                 <Label className="form-label" for="name">
-                                    Name
+                                    {T('Name')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem && store.userItem.name}
@@ -207,7 +204,7 @@ const AccountTab = ({
 
                             <Col xl={6} md={6} sm={6} className="mb-1">
                                 <Label className="form-label" for="email">
-                                    {t("Email")}
+                                    {T("Email")}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem && store.userItem.email}
@@ -222,7 +219,7 @@ const AccountTab = ({
                             </Col>
 
                             <Col xl={6} md={6} sm={6} className="mb-1">
-                                <label className="form-label" htmlFor="language-select">Language</label>
+                                <label className="form-label" htmlFor="language-select">{T('Language')}</label>
                                 <Input
                                     type="select"
                                     name="language"
@@ -239,12 +236,12 @@ const AccountTab = ({
                             </Col>
                         </Row>
 
-                        <div className="d-flex flex-wrap mb-2 mt-2">
+                        <div className="mb-2 mt-2">
                             <Button
                                 type="submit"
                                 color="primary"
                             >
-                                {t("Save Change")}
+                                {T("Save Change")}
                             </Button>
                         </div>
                     </Form>

@@ -56,6 +56,9 @@ import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
 
+// ** Translation
+import { T } from '@localization'
+
 const CustomHeader = ({
     searchInput,
     rowsPerPage,
@@ -66,7 +69,7 @@ const CustomHeader = ({
         <Row>
             <Col lg={6} className="d-flex align-items-center px-0 px-lg-1">
                 <div className="d-flex align-items-center me-2">
-                    <label htmlFor="rows-per-page">Show</label>
+                    <label htmlFor="rows-per-page">{T('Show')}</label>
                     <Input
                         type="select"
                         id="rows-per-page"
@@ -82,19 +85,19 @@ const CustomHeader = ({
                     </Input>
                 </div>
                 <Button color="primary" tag={Link} to={`${adminRoot}/email-template/add`}>
-                    Add Email Template
+                    {T('Add Email Template')}
                 </Button>
             </Col>
 
             <Col lg={6} className="actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0">
                 <div className="d-flex align-items-center">
-                    <label htmlFor="search-email-template">Search</label>
+                    <label htmlFor="search-email-template">{T('Search')}</label>
                     <Input
                         id="search-email-template"
                         className="ms-50 me-2 w-100"
                         type="text"
                         value={searchInput}
-                        placeholder="Search Email Template"
+                        placeholder={T('Search Email Template')}
                         onChange={(event) => handleSearch(event.target.value)}
                     />
                 </div>
@@ -182,11 +185,11 @@ const EmailTemplateList = () => {
 
     const handleDelete = (id) => {
         MySwal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: T('Are you sure?'),
+            text: T("You won't be able to revert this!"),
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
+            confirmButtonText: T('Yes, delete it!'),
             customClass: {
                 confirmButton: 'btn btn-primary',
                 cancelButton: 'btn btn-outline-danger ms-1'
@@ -218,19 +221,19 @@ const EmailTemplateList = () => {
 
         /* Succes toast notification */
         if (store && store.success) {
-            Notification("Success", store.success, "success")
+            Notification(T("Success"), store.success, "success")
         }
 
         /* Error toast notification */
         if (store && store.error) {
-            Notification("Error", store.error, "warning")
+            Notification(T("Error"), store.error, "warning")
         }
     }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
     // console.log("store >>> ", store)
 
     const columns = [
         {
-            name: 'Subject',
+            name: T('Subject'),
             sortable: true,
             minWidth: '40%',
             sortField: 'subject',
@@ -242,25 +245,25 @@ const EmailTemplateList = () => {
                 </Link>
             ),
             /* Custom placeholder vars */
-            loaderContent: "Subject",
+            loaderContent: T("Subject"),
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
         },
         {
-            name: 'Status',
+            name: T('Status'),
             sortable: true,
             minWidth: '20%',
             sortField: 'status',
             cell: (row) => <>{row.status === "Active" ? <Badge color='success'>{row.status}</Badge> : <Badge color='warning'>{row.status}</Badge>}</>,
             /* Custom placeholder vars */
-            loaderContent: "Active",
+            loaderContent: T("Active"),
             customLoaderCellClass: "",
             customLoaderContentClass: "rounded-pill"
             /* /Custom placeholder vars */
         },
         {
-            name: 'Action',
+            name: T('Action'),
             minWidth: '40%',
             cell: (row) => (
                 <div className='column-action d-flex align-items-center'>
@@ -271,7 +274,7 @@ const EmailTemplateList = () => {
                         <Edit size={17} className='mb-0 me-1' />
                     </Link>
                     <UncontrolledTooltip placement="top" target={`pw-edit-tooltip-${row.id}`}>
-                        Edit
+                        {T('Edit')}
                     </UncontrolledTooltip>
 
                     <Link
@@ -281,7 +284,7 @@ const EmailTemplateList = () => {
                         <Eye size={17} className='mb-0 me-1' />
                     </Link>
                     <UncontrolledTooltip placement="top" target={`pw-view-tooltip-${row.id}`}>
-                        View
+                        {T('View')}
                     </UncontrolledTooltip>
 
                     <Trash2
@@ -291,7 +294,7 @@ const EmailTemplateList = () => {
                         className='cursor-pointer mb-0 me-1'
                     />
                     <UncontrolledTooltip placement="top" target={`pw-delete-tooltip-${row.id}`}>
-                        Delete
+                        {T('Delete')}
                     </UncontrolledTooltip>
 
                     {row && row.email_template_attachment && row.email_template_attachment.length ? (<>
@@ -301,13 +304,13 @@ const EmailTemplateList = () => {
                             id={`pw-attachment-tooltip-${row.id}`}
                         />
                         <UncontrolledTooltip placement="top" target={`pw-attachment-tooltip-${row.id}`}>
-                            Has attachment
+                            {T('Has attachment')}
                         </UncontrolledTooltip>
                     </>) : null}
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: "Actions",
+            loaderContent: T("Actions"),
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */

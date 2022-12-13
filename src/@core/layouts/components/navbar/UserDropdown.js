@@ -48,6 +48,9 @@ import {
 // ** Default Avatar Image
 import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg'
 
+// ** Translation
+import { T } from '@localization'
+
 const UserDropdown = () => {
   // ** Store Vars
   const dispatch = useDispatch()
@@ -79,12 +82,12 @@ const UserDropdown = () => {
 
     /* Succes toast notification */
     if (store && store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store && store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
   }, [dispatch, store.success, store.error, store.actionFlag])
 
@@ -112,28 +115,28 @@ const UserDropdown = () => {
       <DropdownMenu end>
         <DropdownItem tag={Link} to={`${adminRoot}/account-setting`}>
           <User size={14} className='me-75' />
-          <span className='align-middle'>Profile</span>
+          <span className='align-middle'>{T('Profile')}</span>
         </DropdownItem>
 
         <DropdownItem tag={Link} to={`${adminRoot}/email`}>
           <Mail size={14} className='me-75' />
-          <span className='align-middle'>Inbox</span>
+          <span className='align-middle'>{T('Inbox')}</span>
         </DropdownItem>
 
         <DropdownItem tag={Link} to={`${adminRoot}/todo`}>
           <CheckSquare size={14} className='me-75' />
-          <span className='align-middle'>Tasks</span>
+          <span className='align-middle'>{T('Tasks')}</span>
         </DropdownItem>
 
         <DropdownItem tag={Link} to={`${adminRoot}/chat`}>
           <MessageSquare size={14} className='me-75' />
-          <span className='align-middle'>Chats</span>
+          <span className='align-middle'>{T('Chats')}</span>
         </DropdownItem>
 
         <DropdownItem divider />
         <DropdownItem tag={Link} to='/login' onClick={(event) => onLogoutHandle(event)}>
           <Power size={14} className='me-75' />
-          <span className='align-middle'>Logout</span>
+          <span className='align-middle'>{T('Logout')}</span>
         </DropdownItem>
       </DropdownMenu>
     </UncontrolledDropdown>

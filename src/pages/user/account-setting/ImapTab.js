@@ -21,14 +21,11 @@ import {
 } from 'reactstrap'
 import { useForm, Controller } from 'react-hook-form'
 
-// Translation
-import { useTranslation } from 'react-i18next'
+// ** Translation
+import { T } from '@localization'
 
 const ImapTab = ({
 }) => {
-    /* Hook */
-    const { t } = useTranslation()
-
     // ** Store vars
     const dispatch = useDispatch()
     const store = useSelector((state) => state.user)
@@ -122,7 +119,7 @@ const ImapTab = ({
                         <Row>
                             <Col xl={4} md={4} sm={4} className="mb-1">
                                 <Label className="form-label" for="imapName">
-                                    Name
+                                    {T('Name')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem && store.userItem.name}
@@ -138,7 +135,7 @@ const ImapTab = ({
 
                             <Col xl={4} md={4} sm={4} className="mb-1">
                                 <Label className="form-label" for="imapEmail">
-                                    Email
+                                    {T('Email')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.userItem && store.userItem.email}
@@ -154,7 +151,7 @@ const ImapTab = ({
 
                             <Col xl={4} md={4} sm={4} className="mb-1">
                                 <Label className="form-label" for="imap_host">
-                                    IMAP Host
+                                    {T('IMAP Host')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.imapItem && store.imapItem.imap_host ? store.imapItem.imap_host : ""}
@@ -170,7 +167,7 @@ const ImapTab = ({
 
                             <Col xl={4} md={4} sm={4} className="mb-1">
                                 <Label className="form-label" for="imap_port">
-                                    IMAP Port
+                                    {T('IMAP Port')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.imapItem && store.imapItem.imap_port ? store.imapItem.imap_port : ""}
@@ -186,7 +183,7 @@ const ImapTab = ({
 
                             <Col xl={4} md={4} sm={4} className="mb-1">
                                 <Label className="form-label" for="imap_ssl">
-                                    Secure
+                                    {T('Secure')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.imapItem && store.imapItem.imap_ssl ? store.imapItem.imap_ssl : ""}
@@ -202,7 +199,7 @@ const ImapTab = ({
                                                 checked={field?.value}
                                             />
                                             <Label for="imap_ssl" className="form-check-label">
-                                                Use SSL
+                                                {T('Use SSL')}
                                             </Label>
                                         </div>
                                     )}
@@ -214,7 +211,7 @@ const ImapTab = ({
                         <Row>
                             <Col xl={4} md={4} sm={4} className="mb-1">
                                 <Label className="form-label" for="imap_email">
-                                    IMAP Email
+                                    {T('IMAP Email')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.imapItem && store.imapItem.imap_email ? store.imapItem.imap_email : ""}
@@ -230,7 +227,7 @@ const ImapTab = ({
 
                             <Col xl={4} md={4} sm={4} className="mb-1">
                                 <Label className="form-label" for="imap_password">
-                                    IMAP Password
+                                    {T('IMAP Password')}
                                 </Label>
                                 <Controller
                                     defaultValue={store.imapItem && store.imapItem.imap_password ? store.imapItem.imap_password : ""}
@@ -245,12 +242,12 @@ const ImapTab = ({
                             </Col>
                         </Row>
 
-                        <div className="d-flex flex-wrap mb-2 mt-2">
+                        <div className="mb-2 mt-2">
                             <Button
                                 type="submit"
                                 color="primary"
                             >
-                                {t("Save Change")}
+                                {T("Save Change")}
                             </Button>
                         </div>
                     </Form>

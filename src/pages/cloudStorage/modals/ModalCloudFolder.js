@@ -1,9 +1,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Reactstrap Imports
 import {
     Row,
@@ -25,6 +22,9 @@ import * as yup from "yup"
 // ** Custom Components
 import Spinner from '@components/spinner/Simple-grow-spinner'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalCloudFolder = ({
     open,
     store,
@@ -40,12 +40,10 @@ const ModalCloudFolder = ({
     updateCloudStorageLoader,
     clearCloudStorageMessage
 }) => {
-    // ** Hooks
-    const { t } = useTranslation()
 
     /* Yup validation schema */
     const CloudSchema = yup.object({
-        name: yup.string().required('Name is required!')
+        name: yup.string().required(T('Name is required!'))
     }).required()
 
     const {
@@ -157,8 +155,8 @@ const ModalCloudFolder = ({
                 ) : null}
 
                 <ModalHeader toggle={handleReset}>
-                    {!movItemFlag ? (<> {store.cloudStorageItem && store.cloudStorageItem.id ? (<>{t("Edit")} {t("Folder")}</>) : (<> {t("Create")} {t("New Folder")} </>)} </>) : null}
-                    {movItemFlag ? (<> {t("Move")} {t("Folder")} </>) : null}
+                    {!movItemFlag ? (<> {store.cloudStorageItem && store.cloudStorageItem.id ? (<>{T("Edit Folder")}</>) : (<> {T("Create New Folder")} </>)} </>) : null}
+                    {movItemFlag ? (<> {T("Move Folder")} </>) : null}
                 </ModalHeader>
 
                 <ModalBody>
@@ -166,7 +164,7 @@ const ModalCloudFolder = ({
                         {!movItemFlag ? (
                             <div className="mb-1">
                                 <Label className="form-label" for="name">
-                                    Folder Name
+                                    {T('Folder Name')}
                                 </Label>
                                 <Controller
                                     defaultValue=""
@@ -220,11 +218,11 @@ const ModalCloudFolder = ({
                                     className="me-1"
                                     onClick={handleReset}
                                 >
-                                    {t("Cancel")}
+                                    {T("Cancel")}
                                 </Button>
 
                                 <Button type="submit" color="primary">
-                                    {t("Submit")}
+                                    {T("Submit")}
                                 </Button>
                             </div>
                         </Row>

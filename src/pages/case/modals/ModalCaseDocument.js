@@ -3,9 +3,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
   createCaseDocument,
@@ -47,6 +44,9 @@ import Spinner from '@components/spinner/Simple-grow-spinner'
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
 
+// ** Translation
+import { T } from '@localization'
+
 const ModalCaseDocument = ({
   open,
   userId,
@@ -55,8 +55,6 @@ const ModalCaseDocument = ({
   documentRowData,
   setDocumentRowData
 }) => {
-  // ** Hooks
-  const { t } = useTranslation()
   const MySwal = withReactContent(Swal)
 
   // ** Store vars
@@ -141,7 +139,7 @@ const ModalCaseDocument = ({
         const fileSizeKiloBytes = files[0].size / 1024
         const uploadLimit = process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE * 1024
         if (fileSizeKiloBytes > uploadLimit) {
-          onAlertMessage('File limit exceeded!', `Please upload max ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb files!`, 'warning')
+          onAlertMessage(T('File limit exceeded!'), `${T('Please upload max')} ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb ${T('files')}!`, 'warning')
           return
         }
       }
@@ -225,7 +223,7 @@ const ModalCaseDocument = ({
           />
         ) : null}
 
-        <ModalHeader toggle={handleReset}>{documentRowData.id ? t("View") : t("Upload")} {t("document")}</ModalHeader>
+        <ModalHeader toggle={handleReset}>{documentRowData.id ? T("View") : T("Upload")} {T("document")}</ModalHeader>
         <ModalBody>
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <Row>
@@ -283,7 +281,7 @@ const ModalCaseDocument = ({
                     className="me-1"
                     disabled={!store.loading}
                   >
-                    {t("Update")}
+                    {T("Update")}
                   </Button>
 
                   <Button
@@ -292,7 +290,7 @@ const ModalCaseDocument = ({
                     disabled={!store.loading}
                     onClick={() => onDeleteDocument(documentRowData.id)}
                   >
-                    {t("Delete")}
+                    {T("Delete")}
                   </Button>
                 </>) : (
                   <Button
@@ -300,7 +298,7 @@ const ModalCaseDocument = ({
                     color="primary"
                     disabled={!store.loading}
                   >
-                    {t("Upload")}
+                    {T("Upload")}
                   </Button>
                 )}
               </div>

@@ -3,9 +3,6 @@
 // ** React Imports
 import { Fragment, useEffect, useState } from "react"
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
 // ** Store & Actions
 import {
     getUserDeviceLogs
@@ -36,6 +33,9 @@ import {
     defaultPerPageRow
 } from '@constant/defaultValues'
 
+// ** Translation
+import { T } from '@localization'
+
 /* Device Log History header */
 const CustomLogHeader = ({
     rowsPerPage,
@@ -45,7 +45,7 @@ const CustomLogHeader = ({
         <Row>
             <Col lg={4} className="d-flex align-items-center px-0 px-lg-1">
                 <div className="d-flex align-items-center me-2">
-                    <label htmlFor="log-rows-per-page">Show</label>
+                    <label htmlFor="log-rows-per-page">{T('Show')}</label>
                     <Input
                         type="select"
                         id="log-rows-per-page"
@@ -69,8 +69,6 @@ const CustomLogHeader = ({
 const RecentDevices = ({
     id
 }) => {
-    // ** Hooks
-    const { t } = useTranslation()
 
     // ** Store vars
     const dispatch = useDispatch()
@@ -144,14 +142,14 @@ const RecentDevices = ({
     /* Device Log history columns */
     const logColumns = [
         {
-            name: 'Ip Address',
+            name: T('Ip Address'),
             sortable: true,
             sortField: 'ip_address',
             minWidth: '140px',
             cell: (row) => row.ip_address
         },
         {
-            name: 'Login Date',
+            name: T('Login Date'),
             sortable: true,
             sortField: 'login_at',
             minWidth: '140px',
@@ -165,7 +163,7 @@ const RecentDevices = ({
             {/* Device Log History listing */}
             <Card>
                 <CardHeader className="border-bottom">
-                    <CardTitle tag="h4">{t("Recent devices")}</CardTitle>
+                    <CardTitle tag="h4">{T("Recent devices")}</CardTitle>
                 </CardHeader>
 
                 <DatatablePagination

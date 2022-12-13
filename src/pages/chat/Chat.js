@@ -44,6 +44,9 @@ import {
   getTransformDate
 } from '@utils'
 
+// ** Translation
+import { T } from '@localization'
+
 const ChatLog = (props) => {
   // ** Props & Store
   const { handleUser, handleUserSidebarRight, handleSidebar, store, userSidebarLeft } = props
@@ -188,7 +191,7 @@ const ChatLog = (props) => {
           <MessageSquare />
         </div>
         <h4 className='sidebar-toggle start-chat-text' onClick={handleStartConversation}>
-          Start Conversation
+          {T('Start Conversation')}
         </h4>
       </div>
 
@@ -219,7 +222,7 @@ const ChatLog = (props) => {
                     className="btn btn-primary"
                     onClick={handleLoadMore}
                   >
-                    Load More
+                    {T('Load More')}
                   </Button>
                 </div>
               ) : null}
@@ -234,10 +237,10 @@ const ChatLog = (props) => {
                       event.preventDefault()
                       handleAvatarClick(selectedUser)
                     }}>
-                      View Contact
+                      {T('View Contact')}
                     </DropdownItem>
                     <DropdownItem href='/' onClick={(event) => event.preventDefault()}>
-                      Clear Chat
+                      {T('Clear Chat')}
                     </DropdownItem>
                   </DropdownMenu>
                 </UncontrolledDropdown>
@@ -259,7 +262,7 @@ const ChatLog = (props) => {
             </InputGroup>
             <Button className='send' color='primary'>
               <Send size={14} className='d-lg-none' />
-              <span className='d-none d-lg-block'>Send</span>
+              <span className='d-none d-lg-block'>{T('Send')}</span>
             </Button>
           </Form>
         </div>

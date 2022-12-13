@@ -44,6 +44,9 @@ import {
   resetComposeModal
 } from './store'
 
+// ** Translation
+import { T } from '@localization'
+
 const Mails = (props) => {
   // ** Props
   const {
@@ -230,7 +233,7 @@ const Mails = (props) => {
 
               <Input
                 id='email-search'
-                placeholder='Search email'
+                placeholder={T('Search email')}
                 value={searchInput}
                 onChange={(event) => handleSearch(event.target.value)}
               />
@@ -247,7 +250,7 @@ const Mails = (props) => {
               checked={getCheckedAllStatus()}
             />
             <Label className='form-check-label fw-bolder ps-25 mb-0' for='select-all'>
-              Select All
+              {T('Select All')}
             </Label>
           </div>
 
@@ -294,7 +297,7 @@ const Mails = (props) => {
             <ul className='email-media-list'>{renderDrafts()}</ul>
           ) : (
             <div className='no-results d-block'>
-              <h5>No Items Found</h5>
+              <h5>{T('No Items Found')}</h5>
             </div>
           )}
         </PerfectScrollbar>

@@ -6,6 +6,8 @@ import {
   handleContentWidth
 } from '@store/layout'
 
+import moment from "moment"
+
 // ** Store & Actions
 import {
   closeCase,
@@ -18,13 +20,15 @@ import {
   statusCaseDocument,
   clearCaseMessage,
   updateSelectedDetails,
-  getTimeCaseRecords
+  getTimeCaseRecords,
+  createTimeCaseRecord
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // Constant
 import {
-  adminRoot
+  adminRoot,
+  CONTINUE_MODAL
 } from '@constant/defaultValues'
 import {
   recordItem,
@@ -43,9 +47,6 @@ import {
   Button,
   CardBody
 } from 'reactstrap'
-
-// Translation
-import { useTranslation } from 'react-i18next'
 
 // ** Icons Import
 import {
@@ -71,7 +72,8 @@ import {
 import {
   isUserLoggedIn,
   getTransformDate,
-  getTimeCounter
+  getTimeCounter,
+  setTimeCounter
 } from '@utils'
 
 // ** Custom Components
@@ -90,16 +92,17 @@ import ModalCaseRecordDetail from '../modals/ModalCaseRecordDetail'
 import ModalCaseDocument from '../modals/ModalCaseDocument'
 import ModalCaseLetter from '../modals/ModalCaseLetter'
 import ModalCaseTimeTracking from '../modals/ModalCaseTimeTracking'
-import ModalCaseTimeTrackingCounter from '../modals/ModalCaseTimeTrackingCounter'
+import TerminalCaseTimeTrackingCounter from '../modals/TerminalCaseTimeTrackingCounter'
 
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
-import { setTimeCounter } from '../../../utility/Utils'
+
+// ** Translation
+import { T } from '@localization'
 
 const CaseView = () => {
   // ** Hooks
   const { id } = useParams()
-  const { t } = useTranslation()
   const dispatch = useDispatch()
 
   const MySwal = withReactContent(Swal)
@@ -121,13 +124,18 @@ const CaseView = () => {
   const [letterModalOpen, setLetterModalOpen] = useState(false)
   const [letterRowData, setLetterRowData] = useState(letterItem)
   const [timeTrackModalOpen, setTimeTrackModalOpen] = useState(false)
-  const [timeCounterModalOpen, setTimeCounterModalOpen] = useState(false)
+  const [timeCounterTerminalOpen, setTimeCounterTerminalOpen] = useState(false)
 
   // Check TimeCounterModal 
   useEffect(() => {
+
     const time_modal_status = getTimeCounter().status
+    const time_completed_status = getTimeCounter().completed
     if (time_modal_status === true) {
-      setTimeCounterModalOpen(true)
+      setTimeCounterTerminalOpen(true)
+    }
+    if (time_completed_status === true) {
+      setTimeCounterTerminalOpen(true)
     }
   }, [])
 
@@ -160,12 +168,12 @@ const CaseView = () => {
 
     /* Succes toast notification */
     if (store.success) {
-      Notification("Success", store.success, "success")
+      Notification(T("Success"), store.success, "success")
     }
 
     /* Error toast notification */
     if (store.error) {
-      Notification("Error", store.error, "warning")
+      Notification(T("Error"), store.error, "warning")
     }
 
     /* If contact deleted then redirected */
@@ -178,8 +186,8 @@ const CaseView = () => {
   /* Delete case */
   const onDeleteFile = (caseId) => {
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You want to Close this Case?",
+      title: T('Are you sure?'),
+      text: T("You want to Close this Case?"),
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes',
@@ -198,11 +206,11 @@ const CaseView = () => {
   /* Change note history done status */
   const onShareCaseRecord = (id) => {
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You want to Share this case record?",
+      title: T('Are you sure?'),
+      text: T("You want to Share this case record?"),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes',
+      confirmButtonText: T('Yes'),
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-danger ms-1'
@@ -225,11 +233,11 @@ const CaseView = () => {
   const onDocumentDone = (id) => {
     // console.log("onDocumentDone >>> ", id)
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You want to Done this document?",
+      title: T('Are you sure?'),
+      text: T("You want to Done this document?"),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes',
+      confirmButtonText: T('Yes'),
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-danger ms-1'
@@ -252,11 +260,11 @@ const CaseView = () => {
   const onLetterDone = (id) => {
     // console.log("onLetterDone >>> ", id)
     MySwal.fire({
-      title: 'Are you sure?',
-      text: "You want to Done this letter?",
+      title: T('Are you sure?'),
+      text: T("You want to Done this letter?"),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes',
+      confirmButtonText: T('Yes'),
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-danger ms-1'
@@ -287,18 +295,26 @@ const CaseView = () => {
     dispatch(updateSelectedDetails(null))
   }
 
-  const onRecordSubmit = (values, caseId) => {
+  const handleTimeRecordStart = (values, caseId) => {
     const timeData = {
       CaseID: caseId,
       Subject: values.Subject,
-      interval_time: values.interval_time * 1,
-      current_time: 0,
-      status: true
+      interval_time: values.interval_time * 60
     }
+    const startTime = moment(new Date()).format('hh:mm:ss')
 
-    setTimeCounter(timeData)
-    
-    setTimeCounterModalOpen(true)
+    setTimeCounter({
+      ...timeData,
+      current_time: 0,
+      start_time: startTime,
+      manual: CONTINUE_MODAL.INITIAL_STATE,
+      status: true
+    })
+    dispatch(createTimeCaseRecord({
+      ...timeData,
+      IsShare: 0
+    }))
+    setTimeCounterTerminalOpen(true)
   }
 
   return store ? (
@@ -318,7 +334,7 @@ const CaseView = () => {
                         <h4
                           className={`mb-25 ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                         >
-                          Details on file {store.caseItem && store.caseItem.CaseID}
+                          {T('Details on file')} {store.caseItem && store.caseItem.CaseID}
                         </h4>
                       </div>
                     </Col>
@@ -327,7 +343,7 @@ const CaseView = () => {
                       <div className='mt-md-0 mt-2'>
                         <div className='invoice-date-wrapper'>
                           <User size={14} />
-                          <p className="ms-1 invoice-date-title">{t("Lawyer")}</p>
+                          <p className="ms-1 invoice-date-title">{T("Lawyer")}</p>
                           <p
                             className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                           >
@@ -358,12 +374,12 @@ const CaseView = () => {
                     >
                       <div className='mt-md-0 mt-2'>
                         <div className="user-info">
-                          <h4 className='mb-10'>{t("Client")}</h4>
+                          <h4 className='mb-10'>{T("Client")}</h4>
                         </div>
 
                         <div className='invoice-date-wrapper'>
                           <User size={14} />
-                          <p className='invoice-date-title ms-1'>Name</p>
+                          <p className='invoice-date-title ms-1'>{T('Name')}</p>
                           <p
                             className={`me-2 invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                           >
@@ -387,7 +403,7 @@ const CaseView = () => {
 
                         <div className='invoice-date-wrapper'>
                           <Check size={14} />
-                          <p className='invoice-date-title ms-1'>Stadium</p>
+                          <p className='invoice-date-title ms-1'>{T('Stadium')}</p>
                           <p
                             className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                           >
@@ -397,7 +413,7 @@ const CaseView = () => {
 
                         <div className='invoice-date-wrapper'>
                           <Star size={14} />
-                          <p className='invoice-date-title ms-1'>Group</p>
+                          <p className='invoice-date-title ms-1'>{T('Group')}</p>
                           <p
                             className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                           >
@@ -407,7 +423,7 @@ const CaseView = () => {
 
                         <div className='invoice-date-wrapper'>
                           <Flag size={14} />
-                          <p className='invoice-date-title ms-1'>Land</p>
+                          <p className='invoice-date-title ms-1'>{T('Land')}</p>
                           <p
                             className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                           >
@@ -417,7 +433,7 @@ const CaseView = () => {
 
                         <div className='invoice-date-wrapper'>
                           <Phone size={14} />
-                          <p className='invoice-date-title ms-1'>Telephone</p>
+                          <p className='invoice-date-title ms-1'>{T('Telephone')}</p>
                           <p
                             className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                           >
@@ -427,7 +443,7 @@ const CaseView = () => {
 
                         <div className='invoice-date-wrapper'>
                           <Mail size={14} />
-                          <p className='invoice-date-title ms-1'>E-Mail</p>
+                          <p className='invoice-date-title ms-1'>{T('E-Mail')}</p>
                           <p
                             className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                           >
@@ -437,7 +453,7 @@ const CaseView = () => {
 
                         <div className='invoice-date-wrapper'>
                           <Calendar size={14} />
-                          <p className='invoice-date-title ms-1'>Datum</p>
+                          <p className='invoice-date-title ms-1'>{T('Date')}</p>
                           <p
                             className={`invoice-date ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-50'}`}
                           >
@@ -472,7 +488,7 @@ const CaseView = () => {
                           </div>
 
                           <div className="ml-1 ms-1">
-                            <h5 className="mb-0">{t("Address")}</h5>
+                            <h5 className="mb-0">{T("Address")}</h5>
                             <small
                               className={`${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder w-100'}`}
                             >
@@ -491,11 +507,11 @@ const CaseView = () => {
                     <Col xl={3} md={3} sm={3}>
                       <div className='mt-md-0 mt-2'>
                         <div className="user-info">
-                          <h4 className='mb-10'>{t("Opponent")}</h4>
+                          <h4 className='mb-10'>{T("Opponent")}</h4>
                         </div>
                         <div className='invoice-date-wrapper'>
                           <User size={14} />
-                          <p className='invoice-date-title ms-1'>Name</p>
+                          <p className='invoice-date-title ms-1'>{T('Name')}</p>
                           <p className='invoice-date'>{store.fighterItem && store.fighterItem.name}</p>
                           <Button.Ripple
                                 color="flat-primary"
@@ -514,31 +530,31 @@ const CaseView = () => {
 
                         <div className='invoice-date-wrapper'>
                           <User size={14} />
-                          <p className='invoice-date-title ms-1'>Surname</p>
+                          <p className='invoice-date-title ms-1'>{T('Surname')}</p>
                           <p className='invoice-date'>{store.fighterItem && store.fighterItem.last_name}</p>
                         </div>
 
                         <div className='invoice-date-wrapper'>
                           <Phone size={14} />
-                          <p className='invoice-date-title ms-1'>Telephone</p>
+                          <p className='invoice-date-title ms-1'>{T('Telephone')}</p>
                           <p className='invoice-date'>{store.fighterItem && store.fighterItem.telefone}</p>
                         </div>
 
                         <div className='invoice-date-wrapper'>
                           <Mail size={14} />
-                          <p className='invoice-date-title ms-1'>E-Mail</p>
+                          <p className='invoice-date-title ms-1'>{T('E-Mail')}</p>
                           <p className='invoice-date'>{store.fighterItem && store.fighterItem.email}</p>
                         </div>
 
                         <div className='invoice-date-wrapper'>
                           <Calendar size={14} />
-                          <p className='invoice-date-title ms-1'>Updated</p>
+                          <p className='invoice-date-title ms-1'>{T('Updated')}</p>
                           <p className='invoice-date'>{store.fighterItem && store.fighterItem.created_at && getTransformDate(store.fighterItem.created_at, "DD.MM.YYYY")}</p>
                         </div>
 
                         <div className='invoice-date-wrapper'>
                           <Flag size={14} />
-                          <p className='invoice-date-title ms-1'>Land</p>
+                          <p className='invoice-date-title ms-1'>{T('Land')}</p>
                           <p className='invoice-date'>{store.fighterItem && store.fighterItem.country}</p>
                         </div>
                       </div>
@@ -549,7 +565,7 @@ const CaseView = () => {
                           </div>
 
                           <div className="ml-1 ms-1">
-                            <h5 className="mb-0">{t("Address")}</h5>
+                            <h5 className="mb-0">{T("Address")}</h5>
                             <small>
                               {store.fighterItem && store.fighterItem.id ? <>
                                 {store.fighterItem.address ? `${store.fighterItem.address}, ` : ''}
@@ -567,16 +583,25 @@ const CaseView = () => {
             </Col>
           </Row>
           {/* /Client && Opponent detail */}
+          <Row>
+            <Col xl={5} md={6} sm={8} className="mx-auto">
+              <TerminalCaseTimeTrackingCounter
+                open={timeCounterTerminalOpen}
+                caseId={store.caseItem.CaseID}
+                closeTerminal={() => setTimeCounterTerminalOpen(false)}
+              />
+            </Col>
+          </Row>
 
           {/* Notes && Time Recording && Letter && Document History */}
-          <Row className='invoice-preview match-height'>
+          <Row className='invoice-preview'>
             <Col xl={12} md={12} sm={12}>
               <Card className='invoice-preview-card'>
                 <CardBody className='invoice-padding pb-0'>
                   <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
                     <div className="d-flex flex-wrap">
                       <Button className="mt-1" color="primary" onClick={() => setNoteFileModalOpen(true)}>
-                        {t("Add a note")}
+                        {T("Add a note")}
                       </Button>
 
                       <ModalCaseNoteFile
@@ -586,18 +611,18 @@ const CaseView = () => {
                       />
 
                       <Button className="ms-2 mt-1" color="primary" onClick={() => setTimeTrackModalOpen(true)}>
-                        {t("Add Time Tracking")}
+                        {T("Add Time Tracking")}
                       </Button>
 
                       <ModalCaseTimeTracking
                         open={timeTrackModalOpen}
                         toggleModal={() => setTimeTrackModalOpen(!timeTrackModalOpen)}
                         caseId={store.caseItem.CaseID}
-                        onRecordSubmit={onRecordSubmit}
+                        onTimeRecordStart={handleTimeRecordStart}
                       />
 
                       <Button className="ms-2 mt-1" color="primary" onClick={() => setLetterModalOpen(true)}>
-                        {t("Write a letter now")}
+                        {T("Write a letter now")}
                       </Button>
 
                       <ModalCaseLetter
@@ -610,7 +635,7 @@ const CaseView = () => {
                       />
 
                       <Button className="ms-2 mt-1" color="primary" onClick={() => setDocUploadModalOpen(true)}>
-                        {t("Upload document")}
+                        {T("Upload document")}
                       </Button>
 
                       <ModalCaseDocument
@@ -624,7 +649,7 @@ const CaseView = () => {
                     </div>
 
                     <div className="d-flex flex-wrap mt-1">
-                      <h3 className="invoice-date">{t("History")}</h3>
+                      <h3 className="invoice-date">{T("History")}</h3>
                     </div>
                   </div>
 
@@ -634,15 +659,15 @@ const CaseView = () => {
                         <thead>
                           <tr>
                             <th />
-                            <th>Date</th>
-                            <th>Subject</th>
-                            <th>Done?</th>
-                            <th>Action</th>
+                            <th>{T('Date')}</th>
+                            <th>{T('Subject')}</th>
+                            <th>{T('Done')}?</th>
+                            <th>{T('Action')}</th>
                           </tr>
                         </thead>
                           <tbody>
                             {store.timeCaseRecord.map((record, index) => (
-                              <tr key={`record_${index}`} onClick={onRecordClick(record)} className="cursor-pointer">
+                              record.end_time !== null ? <tr key={`record_${index}`} onClick={onRecordClick(record)} className="cursor-pointer">
                                 <td/>
 
                                 <td>{record.CreatedAt && getTransformDate(record.CreatedAt, "DD.MM.YYYY")}</td>
@@ -672,7 +697,7 @@ const CaseView = () => {
                                 <td>
                                   <Eye size={18} className="cursor-pointer" onClick={() => onRecordClick(record)} />
                                 </td>
-                              </tr>
+                              </tr> : null
                             ))}
                             {store.caseRecords.map((record, index) => (
                               <tr key={`record_${index}`} onClick={onRecordClick(record)} className="cursor-pointer">
@@ -784,12 +809,6 @@ const CaseView = () => {
                           </tbody>
                       </Table>
                     </Col>
-                    <ModalCaseTimeTrackingCounter
-                        open={timeCounterModalOpen}
-                        toggleModal={() => setTimeCounterModalOpen(!timeCounterModalOpen)}
-                        caseId={store.caseItem.CaseID}
-                      />
-
                     <ModalCaseRecordDetail
                       open={recordDetailModalOpen}
                       toggleModal={() => setRecordDetailModalOpen(!recordDetailModalOpen)}
@@ -809,7 +828,7 @@ const CaseView = () => {
               <Card className='case-details-card'>
               <CardBody className='invoice-padding pb-0'>
                 <div className='d-flex justify-content-between' >
-                  <h3  className='mt-1'>{t("Details")}</h3>
+                  <h3  className='mt-1'>{T("Details")}</h3>
                   <Button.Ripple className='btn-icon rounded-circle' color='flat-grey' onClick={() => onRecordCloseClick()}>
                     <EyeOff size={16} />
                   </Button.Ripple>

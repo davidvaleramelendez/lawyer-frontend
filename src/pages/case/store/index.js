@@ -17,8 +17,8 @@ import {
 
 // ** Axios Imports
 import axios from 'axios'
-import { setTotalNumber } from '@src/utility/Utils'
 import { TN_CASES } from '@constant/defaultValues'
+import { setTotalNumber, getTimeCounter, setTimeCounter } from '@utils'
 
 async function getCaseListRequest(params) {
   return axios.get(`${API_ENDPOINTS.cases.list}`, { params }).then((cases) => cases.data).catch((error) => error)
@@ -782,9 +782,53 @@ export const createTimeCaseRecord = createAsyncThunk('appCase/createTimeCaseReco
     const response = await createTimeCaseRecordRequest(payload)
     if (response && response.flag) {
       await dispatch(getTimeCaseRecords(getState().cases.id))
+      const timeData = getTimeCounter()
+      setTimeCounter({
+        ...timeData,
+        record_id: response.data.RecordID,
+        start_time: response.data.start_time
+      })
       return {
         attachments: [],
         actionFlag: "TIME_CREATED",
+        success: response.message,
+        start_time: response.data.start_time,
+        record_id: response.data.RecordID,
+        error: ""
+      }
+    } else {
+      return {
+        attachments: [],
+        actionFlag: "",
+        success: "",
+        start_time: null,
+        record_id: null,
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("createTimeCaseRecord catch ", error)
+    return {
+      attachments: [],
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function updateTimeCaseRecordRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.cases.updateTimeRecord}`, payload).then((cases) => cases.data).catch((error) => error)
+}
+
+export const updateTimeCaseRecord = createAsyncThunk('appCase/updateTimeCaseRecord', async (payload, { dispatch, getState }) => {
+  try {
+    const response = await updateTimeCaseRecordRequest(payload)
+    if (response && response.flag) {
+      await dispatch(getTimeCaseRecords(getState().cases.id))
+      return {
+        attachments: [],
+        actionFlag: "TIME_UPDATED",
         success: response.message,
         error: ""
       }
@@ -797,7 +841,41 @@ export const createTimeCaseRecord = createAsyncThunk('appCase/createTimeCaseReco
       }
     }
   } catch (error) {
-    console.log("createTimeCaseRecord catch ", error)
+    console.log("updateTimeCaseRecord catch ", error)
+    return {
+      attachments: [],
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function deleteTimeCaseRecordRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.cases.deleteTimeRecord}`, payload).then((cases) => cases.data).catch((error) => error)
+}
+
+export const deleteTimeCaseRecord = createAsyncThunk('appCase/deleteTimeCaseRecord', async (payload, { dispatch, getState }) => {
+  try {
+    const response = await deleteTimeCaseRecordRequest(payload)
+    if (response && response.flag) {
+      await dispatch(getTimeCaseRecords(getState().cases.id))
+      return {
+        attachments: [],
+        actionFlag: "TIME_DELETED",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        attachments: [],
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("deleteTimeCaseRecord catch ", error)
     return {
       attachments: [],
       actionFlag: "",
@@ -829,6 +907,8 @@ export const appCaseSlice = createSlice({
     selectedItem: null,
     actionFlag: "",
     loading: false,
+    start_time: null,
+    record_id: null,
     success: "",
     error: ""
   },
@@ -845,6 +925,10 @@ export const appCaseSlice = createSlice({
 
     updateSelectedDetails: (state, action) => {
       state.selectedItem = action.payload || null
+    },
+    
+    setStartTime: (state, action) => {
+      state.start_time = action.payload || null
     }
   },
   extraReducers: (builder) => {
@@ -1021,6 +1105,20 @@ export const appCaseSlice = createSlice({
         state.loading = true
         state.success = action.payload.success
         state.error = action.payload.error
+        state.start_time = action.payload.start_time
+        state.record_id = action.payload.record_id
+      })
+      .addCase(updateTimeCaseRecord.fulfilled, (state, action) => {
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(deleteTimeCaseRecord.fulfilled, (state, action) => {
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
       })
     /* Case RecordTime */
   }
@@ -1029,7 +1127,8 @@ export const appCaseSlice = createSlice({
 export const {
   updateCaseLoader,
   clearCaseMessage,
-  updateSelectedDetails
+  updateSelectedDetails,
+  setStartTime
 } = appCaseSlice.actions
 
 export default appCaseSlice.reducer

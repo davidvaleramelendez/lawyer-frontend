@@ -38,6 +38,7 @@ export const getCaseList = createAsyncThunk('appCase/getCaseList', async (params
         caseDocs: [],
         caseRecords: [],
         timeCaseRecord:[],
+        mailCaseRecords: [],
         caseLetters: [],
         actionFlag: "",
         success: "",
@@ -53,6 +54,7 @@ export const getCaseList = createAsyncThunk('appCase/getCaseList', async (params
         caseDocs: [],
         caseRecords: [],
         timeCaseRecord:[],
+        mailCaseRecords:[],
         caseLetters: [],
         actionFlag: "",
         success: "",
@@ -169,6 +171,7 @@ export const closeCase = createAsyncThunk('appCase/closeCase', async (id) => {
         attachments: [],
         caseRecords: [],
         timeCaseRecord:[],
+        mailCaseRecords:[],
         caseLetters: [],
         typeItems: [],
         laywerItems: [],
@@ -182,6 +185,7 @@ export const closeCase = createAsyncThunk('appCase/closeCase', async (id) => {
         attachments: [],
         caseRecords: [],
         timeCaseRecord:[],
+        mailCaseRecords:[],
         caseLetters: [],
         typeItems: [],
         laywerItems: [],
@@ -197,6 +201,7 @@ export const closeCase = createAsyncThunk('appCase/closeCase', async (id) => {
       attachments: [],
       caseRecords: [],
       timeCaseRecord:[],
+      mailCaseRecords:[],
       caseLetters: [],
       typeItems: [],
       laywerItems: [],
@@ -747,6 +752,7 @@ async function getTimeCaseRecordsRequest(id) {
 export const getTimeCaseRecords = createAsyncThunk('appCase/getTimeCase', async (id) => {
   try {
     const response = await getTimeCaseRecordsRequest(id)
+    console.log(response)
     if (response && response.flag) {
       return {
         timeCaseRecord: response.data,
@@ -887,6 +893,73 @@ export const deleteTimeCaseRecord = createAsyncThunk('appCase/deleteTimeCaseReco
 
 /* Case RecordTime */
 
+/* Case SendMail */
+async function getCaseRecordRequest(id) {
+  return axios.get(`${API_ENDPOINTS.cases.getCaseRecord}/${id}`).then((cases) => cases.data).catch((error) => error)
+}
+
+export const getCaseRecord = createAsyncThunk('appCase/getCaseRecord', async (id) => {
+  try {
+    const response = await getCaseRecordRequest(id)
+    console.log(response)
+    if (response && response.status === 'success') {
+      return {
+        mailCaseRecords: response.data,
+        actionFlag: "",
+        success: "",
+        error: ""
+      }
+    } else {
+      return {
+        mailCaseRecords: [],
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("getCaseRecord catch ", error)
+    return {
+      mailCaseRecords: [],
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function createCaseEmailSendRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.cases.createCaseEmailSend}`, payload).then((cases) => cases.data).catch((error) => error)
+}
+
+export const createCaseEmailSend = createAsyncThunk('appCase/createCaseEmailSend', async (payload, { dispatch, getState }) => {
+  try {
+    const response = await createCaseEmailSendRequest(payload)
+    if (response && response.flag) {
+      await dispatch(getCaseRecord(getState().cases.id))
+      return {
+        actionFlag: "CASE_EMAIL_UPDATED",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("updateTimeCaseRecord catch ", error)
+    return {
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+/* Case SendMail */
+
 
 export const appCaseSlice = createSlice({
   name: 'appCase',
@@ -902,6 +975,7 @@ export const appCaseSlice = createSlice({
     caseRecords: [],
     caseLetters: [],
     timeCaseRecord: [],
+    mailCaseRecords: [],
     typeItems: [],
     laywerItems: [],
     selectedItem: null,
@@ -942,6 +1016,7 @@ export const appCaseSlice = createSlice({
         state.caseDocs = action.payload.caseDocs
         state.caseRecords = action.payload.caseRecords
         state.timeCaseRecord = action.payload.timeCaseRecord
+        state.mailCaseRecords = action.payload.mailCaseRecords
         state.caseLetters = action.payload.caseLetters
         state.actionFlag = action.payload.actionFlag
         state.loading = true
@@ -965,6 +1040,7 @@ export const appCaseSlice = createSlice({
         state.caseDocs = action.payload.caseDocs
         state.caseRecords = action.payload.caseRecords
         state.timeCaseRecord = action.payload.timeCaseRecord
+        state.mailCaseRecords = action.payload.mailCaseRecords
         state.attachments = action.payload.attachments
         state.caseLetters = action.payload.caseLetters
         state.typeItems = action.payload.typeItems
@@ -1121,6 +1197,21 @@ export const appCaseSlice = createSlice({
         state.error = action.payload.error
       })
     /* Case RecordTime */
+    /* Case Mail Record */
+      .addCase(getCaseRecord.fulfilled, (state, action) => {
+        state.actionFlag = action.payload.actionFlag
+        state.mailCaseRecords = action.payload.mailCaseRecords
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(createCaseEmailSend.fulfilled, (state, action) => {
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+    /* Case Mail Record */
   }
 })
 

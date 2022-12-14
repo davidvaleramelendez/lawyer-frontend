@@ -75,3 +75,13 @@ $calendar-night-color: rgb(215 215 215 / 34%);
 }
 
 /* /Bootstrap table override */
+
+/* Timeline */
+.timeline-card {
+	transition: all 0.2s ease;
+
+	&:hover {
+		transform: scale(1.1);
+	}
+}
+/* /Timeline */

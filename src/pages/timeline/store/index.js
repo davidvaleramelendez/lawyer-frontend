@@ -60,7 +60,7 @@ export const changeTimelineStatus = createAsyncThunk('appTimeline/changeTimeline
     if (response && response.flag) {
       await dispatch(getTimelineList(getState().timeline.params))
       return {
-        actionFlag: "",
+        actionFlag: "STATUS_UPDATED",
         success: "",
         error: ""
       }

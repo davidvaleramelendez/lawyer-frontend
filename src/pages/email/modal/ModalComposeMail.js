@@ -364,7 +364,7 @@ const ModalComposeMail = () => {
       list1 = store.userItems.map(item => {
         return {
           value: item.id,
-          label: item.name,
+          label: `${item.name} (${item.email})`,
           img: item.profile_photo_path
         }
       })
@@ -667,6 +667,7 @@ const ModalComposeMail = () => {
                 rules={ValidationSchema.subject}
                 render={({ field }) => <Input
                   {...field}
+                  autoComplete="off"
                   value={store.composeModal.subject}
                   placeholder={ValidationSchema.subject && ValidationSchema.subject.placeholder}
                   invalid={errors.subject && true}
@@ -745,7 +746,7 @@ const ModalComposeMail = () => {
                     color='primary'
                     disabled={!store.loading}
                   >
-                    {T('Send')}                    
+                    {T('Send')}
                   </Button>
                 </UncontrolledButtonDropdown>
 

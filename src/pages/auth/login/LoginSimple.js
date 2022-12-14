@@ -39,6 +39,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 // ** Utils
 import {
   encryptData,
+  decryptData,
   isUserLoggedIn,
   getRememberMeAuthData,
   setRememberMeAuthData
@@ -62,14 +63,17 @@ const LoginSimple = () => {
 
   /* Checking auth user exist data */
   const checkAuthExistData = (key, data, flag) => {
-    if (data && data[key || '']) {
-      return data[key || '']
-    }
+    if (data) {
+      if (key === "password") {
+        return decryptData(data[key || ''])
+      } else if (data[key || '']) {
+        return data[key || '']
+      }
 
-    if (flag) {
-      return data !== null
+      if (flag) {
+        return data !== null
+      }
     }
-
     return ''
   }
   /* Checking auth user exist data */
@@ -129,20 +133,11 @@ const LoginSimple = () => {
     }
   }, [store.success, store.error, store.actionFlag])
 
-  /* Check password encrypted from remember me if not then encrypted returned */
-  const setPasswordEncrypted = (password) => {
-    if (getRememberMeAuthData() !== null) {
-      return password
-    }
-    return encryptData(password)
-  }
-  /* /Check password encrypted from remember me if not then encrypted returned */
-
   const onSubmit = (values) => {
     if (values) {
       const authData = {
         email: values.email,
-        password: setPasswordEncrypted(values.password)
+        password: encryptData(values.password)
       }
 
       if (values?.remember_me) {

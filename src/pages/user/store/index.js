@@ -767,6 +767,7 @@ export const appUserSlice = createSlice({
         state.userItem = action.payload.userItem
         state.roleItems = action.payload.roleItems
         state.accountItem = action.payload.accountItem
+        state.imapItem = action.payload.imapItem
         state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success

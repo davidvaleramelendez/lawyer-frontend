@@ -69,6 +69,7 @@ const TimelineApp = () => {
   const [loadFirst, setLoadFirst] = useState(true)
   const [searchLetterInput, setSearchLetterInput] = useState('')
   const [searchInvoiceInput, setSearchInvoiceInput] = useState('')
+  const [letterDeleteId, setLetterDeleteId] = useState()
 
   const handleTimelineLists = (letterSearch = searchLetterInput, invoiceSearch = searchInvoiceInput) => {
     // console.log("handleTimelineLists ", letterSearch, invoiceSearch)
@@ -96,6 +97,12 @@ const TimelineApp = () => {
       dispatch(clearTimelineMessage())
     }
 
+    /* Clear letter delete flag */
+    if (store && store.actionFlag === "STATUS_UPDATED") {
+      setLetterDeleteId()
+    }
+    /* /Clear letter delete flag */
+
     /* Succes toast notification */
     if (store && store.success) {
       Notification(T("Success"), store.success, "success")
@@ -105,7 +112,7 @@ const TimelineApp = () => {
     if (store && store.error) {
       Notification(T("Error"), store.error, "warning")
     }
-  }, [dispatch, store.success, store.error, store.actionFlag, loadFirst])
+  }, [store.success, store.error, store.actionFlag, loadFirst])
   // console.log("store >>> ", store)
 
   const handleLetterSearch = (value) => {
@@ -121,7 +128,9 @@ const TimelineApp = () => {
   const renderInvoice = (invoice) => {
     if (invoice && invoice.id) {
       return (
-        <Card>
+        <Card
+          className="timeline-card"
+        >
           <CardHeader />
           <CardBody>
             <ul className="timeline">
@@ -182,6 +191,10 @@ const TimelineApp = () => {
   }
 
   const onDoneTimelineRecord = (id, type) => {
+    if (type === "letter") {
+      setLetterDeleteId(id)
+    }
+
     MySwal.fire({
       title: T('Are you sure?'),
       text: T("You want to Done this timeline?"),
@@ -194,6 +207,10 @@ const TimelineApp = () => {
       },
       buttonsStyling: false
     }).then(function (result) {
+      if (!result.isConfirmed) {
+        setLetterDeleteId()
+      }
+
       if (result.isConfirmed) {
         dispatch(changeTimelineStatus({ id: id, type: type }))
       }
@@ -208,6 +225,7 @@ const TimelineApp = () => {
     ) : null}
 
     <Row>
+      {/* Letter */}
       <Col sm={12} md={6}>
         <h4 className="font-weight-bolder text-dark mb-2">{T("Letter Deadline")}</h4>
         <div className="d-flex align-items-center mb-2">
@@ -223,7 +241,10 @@ const TimelineApp = () => {
 
         {store.letterItems && store.letterItems.length ? <>
           {store.letterItems.map((letter, index) => (
-            <Card key={`letter_${index}`}>
+            <Card
+              key={`letter_${index}`}
+              className={`timeline-card ${letter.id === letterDeleteId ? 'bg-light-secondary' : ''}`}
+            >
               <CardHeader />
               <CardBody>
                 <ul className="timeline">
@@ -299,7 +320,9 @@ const TimelineApp = () => {
           ))}
         </> : null}
       </Col>
+      {/* /Letter */}
 
+      {/* Invoice */}
       <Col sm={12} md={6}>
         <h4 className="font-weight-bolder text-dark mb-2">{T("Invoice Deadline")}</h4>
         <div className="d-flex align-items-center mb-2">
@@ -314,25 +337,28 @@ const TimelineApp = () => {
         </div>
 
         {store.invoiceItems && store.invoiceItems.length ? <>
-          {store.invoiceItems.map((invoice, index) => (<Fragment key={`invoice_${index}`}>
-            {invoice && invoice.status === "open" ? <>
-              {renderInvoice(invoice)}
-            </> : null}
+          {store.invoiceItems.map((invoice, index) => (
+            <Fragment key={`invoice_${index}`}>
+              {invoice && invoice.status === "open" ? <>
+                {renderInvoice(invoice)}
+              </> : null}
 
-            {invoice && invoice.status === "Zahlungserinnerung" ? <>
-              {renderInvoice(invoice)}
-            </> : null}
+              {invoice && invoice.status === "Zahlungserinnerung" ? <>
+                {renderInvoice(invoice)}
+              </> : null}
 
-            {invoice && invoice.status === "Mahnung" ? <>
-              {renderInvoice(invoice)}
-            </> : null}
+              {invoice && invoice.status === "Mahnung" ? <>
+                {renderInvoice(invoice)}
+              </> : null}
 
-            {invoice && invoice.status === "3. Mahnung" ? <>
-              {renderInvoice(invoice)}
-            </> : null}
-          </Fragment>))}
+              {invoice && invoice.status === "3. Mahnung" ? <>
+                {renderInvoice(invoice)}
+              </> : null}
+            </Fragment>
+          ))}
         </> : null}
       </Col>
+      {/* /Invoice */}
     </Row>
   </>) : null
 }

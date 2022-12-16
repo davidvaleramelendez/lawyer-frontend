@@ -114,9 +114,9 @@ export const API_ENDPOINTS = {
         updateLetter: `/api/admin/case/update_letter`,
         deleteLetter: `/api/admin/case/delete_letter`,
         isErledigtLetter: `/api/admin/case/letter_erledigt`,
-        createTimeRecord: `/api/admin/case/case_records/time/create`, 
-        updateTimeRecord: `/api/admin/case/case_records/time/update`, 
-        deleteTimeRecord: `/api/admin/case/case_records/time/delete`, 
+        createTimeRecord: `/api/admin/case/case_records/time/create`,
+        updateTimeRecord: `/api/admin/case/case_records/time/update`,
+        deleteTimeRecord: `/api/admin/case/case_records/time/delete`,
         getTimeRecord: `/api/admin/case/case_record/times`,
         createCaseEmailSend: `/api/admin/case/case_records/email`,
         getCaseRecord: `/api/admin/case/case_records`
@@ -208,6 +208,7 @@ export const API_ENDPOINTS = {
     /* Letter module */
     letters: {
         list: `/api/admin/letter/get_list`,
+        view: `/api/admin/letter`,
         archive: `/api/admin/letter/update_archived`,
         updateStatus: `/api/admin/letter/update_status`
     },
@@ -238,6 +239,16 @@ export const API_ENDPOINTS = {
         createUpdate: `/api/admin/companies/create_update`,
         detail: `/api/admin/companies/detail`,
         delete: `/api/admin/companies/delete`
+    },
+    /* /Companies */
+
+    /* Letter Template */
+    letterTemplates: {
+        list: `/api/admin/letter-template/list`,
+        view: `/api/admin/letter-template`,
+        create: `/api/admin/letter-template/create`,
+        update: `/api/admin/letter-template/update`,
+        delete: `/api/admin/letter-template/delete`
     }
     /* /Companies */
 }

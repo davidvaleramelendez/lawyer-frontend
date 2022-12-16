@@ -85,6 +85,7 @@ export const TN_EMAIL_TEMPLATE = "email_template"
 export const TN_CHAT = "chat"
 export const TN_CHAT_CONTACT = "chat_contact"
 export const TN_TASK = "task"
+export const TN_LETTER_TEMPLATE = "letter_template"
 
 /* Continue Modal Status */
 export const CONTINUE_MODAL = {

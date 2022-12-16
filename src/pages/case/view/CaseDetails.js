@@ -1,5 +1,5 @@
 // ** Reactstrap Imports
-import { 
+import {
   Input,
   Label
 } from 'reactstrap'
@@ -9,16 +9,15 @@ import { getTransformDate } from '@utils'
 
 // ** Icons Import
 import {
-  X, 
+  X,
   Paperclip,
-  Check 
+  Check
 } from 'react-feather'
 
 // ** Translation
 import { T } from '@localization'
 
-const CaseDetails = ({details}) => {
-  
+const CaseDetails = ({ details }) => {
   return (
     <div>
       {(details.subject || details.Subject) &&
@@ -67,7 +66,7 @@ const CaseDetails = ({details}) => {
             <strong>{T("Message")}: </strong>
           </div>
           <div className="col-9">
-            <div dangerouslySetInnerHTML={{__html: details.message}} />
+            <div dangerouslySetInnerHTML={{ __html: details.message }} />
           </div>
         </div>
       }
@@ -139,7 +138,7 @@ const CaseDetails = ({details}) => {
       {(details.interval_time) &&
         <div className="row mb-1">
           <div className="col-3">
-            <strong>{t("Interval Time")}: </strong>
+            <strong>{T("Interval Time")}: </strong>
           </div>
           <div className="col-9">
             {details.interval_time} S
@@ -149,7 +148,7 @@ const CaseDetails = ({details}) => {
       {(details.start_time) &&
         <div className="row mb-1">
           <div className="col-3">
-            <strong>{t("Start Time")}: </strong>
+            <strong>{T("Start Time")}: </strong>
           </div>
           <div className="col-9">
             {details.start_time}
@@ -159,14 +158,13 @@ const CaseDetails = ({details}) => {
       {(details.end_time) &&
         <div className="row mb-1">
           <div className="col-3">
-            <strong>{t("End Time")}: </strong>
+            <strong>{T("End Time")}: </strong>
           </div>
           <div className="col-9">
             {details.end_time}
           </div>
         </div>
       }
-      
     </div>
   )
 }

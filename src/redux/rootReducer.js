@@ -17,6 +17,7 @@ import navGlobalSearch from '@store/navGlobalSearch'
 import cloudStorage from '@src/pages/cloudStorage/store'
 import emailTemplate from '@src/pages/emailTemplate/store'
 import navTopNotification from '@store/navTopNotification'
+import letterTemplate from '@src/pages/letterTemplate/store'
 
 const rootReducer = {
   auth,
@@ -36,7 +37,8 @@ const rootReducer = {
   cloudStorage,
   emailTemplate,
   navGlobalSearch,
-  navTopNotification
+  navTopNotification,
+  letterTemplate
 }
 
 export default rootReducer

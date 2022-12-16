@@ -14,7 +14,8 @@ const menuConfig = {
     userApp: true,
     accountApp: true,
     emailTemplateApp: true,
-    cloudServerApp: true
+    cloudServerApp: true,
+    letterTemplateApp: true
   },
   Lawyer: {
     emailApp: true,
@@ -29,7 +30,8 @@ const menuConfig = {
     userApp: true,
     accountApp: true,
     emailTemplateApp: true,
-    cloudServerApp: true
+    cloudServerApp: true,
+    letterTemplateApp: true
   },
   Partner: {
     emailApp: true,
@@ -44,7 +46,8 @@ const menuConfig = {
     userApp: true,
     accountApp: true,
     emailTemplateApp: true,
-    cloudServerApp: true
+    cloudServerApp: true,
+    letterTemplateApp: true
   },
   Customer: {
     emailApp: true,
@@ -59,7 +62,8 @@ const menuConfig = {
     userApp: true,
     accountApp: true,
     emailTemplateApp: true,
-    cloudServerApp: true
+    cloudServerApp: true,
+    letterTemplateApp: true
   }
 }
 

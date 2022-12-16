@@ -54,6 +54,13 @@ const EmailTemplateView = lazy(() => import('@src/pages/emailTemplate/view'))
 // CloudStorage
 const CloudStorage = lazy(() => import('@src/pages/cloudStorage'))
 
+// Letter Template
+const LetterTemplateList = lazy(() => import('@src/pages/letterTemplate/list'))
+const LetterTemplateAdd = lazy(() => import('@src/pages/letterTemplate/add'))
+const LetterTemplateEdit = lazy(() => import('@src/pages/letterTemplate/edit'))
+const CaseLetterTemplateAdd = lazy(() => import('@src/pages/letterTemplate/caseLetter/add'))
+const CaseLetterTemplateEdit = lazy(() => import('@src/pages/letterTemplate/caseLetter/edit'))
+
 const AppRoutes = [
   /* Contact */
   {
@@ -279,6 +286,44 @@ const AppRoutes = [
       appLayout: true,
       className: 'file-manager-application',
       id: 'cloudServerApp'
+    }
+  },
+  /* Letter Template */
+  {
+    path: `${adminRoot}/letter-template`,
+    element: <LetterTemplateList />,
+    meta: {
+      id: 'letterTemplateApp'
+    }
+  },
+  {
+    path: `${adminRoot}/letter-template/add`,
+    element: <LetterTemplateAdd />,
+    meta: {
+      id: 'letterTemplateApp'
+    }
+  },
+  {
+    path: `${adminRoot}/letter-template/edit/:id`,
+    element: <LetterTemplateEdit />,
+    meta: {
+      id: 'letterTemplateApp'
+    }
+  },
+  {
+    path: `${adminRoot}/case/letter-template/add/:caseId/:letterTemplateId`,
+    element: <CaseLetterTemplateAdd />,
+    meta: {
+      layout: 'blank',
+      id: 'letterTemplateApp'
+    }
+  },
+  {
+    path: `${adminRoot}/case/letter-template/edit/:caseId/:letterId`,
+    element: <CaseLetterTemplateEdit />,
+    meta: {
+      layout: 'blank',
+      id: 'letterTemplateApp'
     }
   }
 ]

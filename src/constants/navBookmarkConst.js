@@ -102,5 +102,13 @@ export const bookmarks = [
         title: 'Cloud Server',
         icon: "HardDrive",
         link: "cloud-storage"
+    },
+    {
+        bookmark_id: 14,
+        target: 'letterTemplateApp',
+        is_bookmarked: 0,
+        title: 'Letter Template',
+        icon: "Codesandbox",
+        link: "letter-template"
     }
 ]

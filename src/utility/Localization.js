@@ -18,6 +18,7 @@ export const L10nKeys = {
     'Email Template': 'Email Template',
     'Cloud-Server': 'Cloud Server',
     'Calendar Setting': 'Calendar Setting',
+    'Letter Template': 'Letter Template',
     //** /Menus
 
     //** Dashboards
@@ -145,8 +146,8 @@ export const L10nKeys = {
     TimeCounterWillBeExpiredSoon: 'Time counter will be expired soon',
     Stop: 'Stop',
     Terminal: 'Terminal',
-    AreYouSure: 'Are you sure?', 
-    YouWantToCloseThisCase: 'You want to Close this Case?',  
+    AreYouSure: 'Are you sure?',
+    YouWantToCloseThisCase: 'You want to Close this Case?',
     YouWantToShareThisCaseRecord: 'You want to Share this case record?',
     YouWantToDoneThisDocument: 'You want to Done this document?',
     YouWantToDoneThisLetter: 'You want to Done this letter?',
@@ -167,7 +168,7 @@ export const L10nKeys = {
     InviceFriends: 'Invite Friends',
     PersonalInformation: 'Personal Information',
     //** /Chat App
-    
+
     //** Task App
     MyTasks: 'My Tasks',
     Completed: 'Completed',
@@ -257,7 +258,7 @@ export const L10nKeys = {
     YouWantToDoneThisTimeline: 'You want to Done this timeline?',
     Yes: 'Yes',
     //** /Respites App
-    
+
     //** Outbox App
     // Show: 'Show',
     // Search: 'Search',
@@ -275,7 +276,7 @@ export const L10nKeys = {
     // Status: 'Status',
     // Outbox: 'Outbox',
     //** /Outbox App
-    
+
     //** Bills App
     Invoice: 'Invoice',
     CreateInvoice: 'Create Invoice',
@@ -364,7 +365,7 @@ export const L10nKeys = {
     Accept: 'Accept',
     Notes: 'Notes',
     Clear: 'Clear',
-    News: 'News',    
+    News: 'News',
     // AreYouSure: 'Are you sure?',
     // YouWontBeAbleToRevertThis: "You won't be able to revert this!",
     // YesDeleteIt: 'Yes, delete it!',
@@ -394,7 +395,7 @@ export const L10nKeys = {
     AddNotes: 'Add Notes',
     AddComment: 'Add Comment',
     //** /Inquiry(Contact) App
-    
+
     //** User App
     Admin: 'Admin',
     Partner: 'Partner',
@@ -636,163 +637,180 @@ export const L10nKeys = {
     Success: 'Success',
     Failed: 'Failed',
     Error: 'Error',
-    Warning: 'Warning'
+    Warning: 'Warning',
     //** /Error
 
+    /* Letter Template */
+    AddLetterTemplate: 'Add Letter Template',
+    EditLetterTemplate: 'Edit Letter Template',
+    SearchLetterTemplate: 'Search Letter Template',
+    LetterTemplateIsRequired: 'Letter Template is required!',
+    ContentHeadingIsRequired: 'Content Heading is required!',
+    BestRegardsIsRequired: 'Best Regards is required!',
+    /* /Letter Template */
+
+    WriteALetter: 'Write a letter',
+    CreateLetter: 'Create Letter',
+    UpdateLetter: 'Update Letter'
 }
 
 export const L10nOrgKeys = {
     Menu: [
-        'Email', 'Documents', 'Chat', 'Task', 'Calendar', 
-        'Respites', 'Outbox', 'Bills', 'Inquiry', 'User', 
+        'Email', 'Documents', 'Chat', 'Task', 'Calendar',
+        'Respites', 'Outbox', 'Bills', 'Inquiry', 'User',
         'Account', 'Email Template', 'Cloud-Server', 'Calendar Setting'
     ],
     Dashboards: [
-        'Hello', 'YouHave', 'OpenCases', 'ViewAllCases', 'DashboardOverview', 
-        'Statistics', 'OpenTicket', 'OpenInvoices', 'AmountsOutstanding', 'TodoList', 
-        'Low', 'Medium', 'High', 'SeeAll', 'File', 
-        'Client', 'Lawyer', 'TakeoverDate', 'Stage', 'NewInquiry', 
-        'InvoiceNo', 'Total', 'DueDate', 'OpenAmount', 'NewChats', 
+        'Hello', 'YouHave', 'OpenCases', 'ViewAllCases', 'DashboardOverview',
+        'Statistics', 'OpenTicket', 'OpenInvoices', 'AmountsOutstanding', 'TodoList',
+        'Low', 'Medium', 'High', 'SeeAll', 'File',
+        'Client', 'Lawyer', 'TakeoverDate', 'Stage', 'NewInquiry',
+        'InvoiceNo', 'Total', 'DueDate', 'OpenAmount', 'NewChats',
         'NoChatsFound1'
     ],
     Pages: {
         Email: [
-            'Inbox', 'Draft', 'Important', 'Spam', 'Sent', 
-            'Trash', 'Compose', 'SearchEmail', 'SelectAll', 'NoItemsFound', 
-            'NoSubject', 'ComposeMail', 'Subject', 'To', 'Message', 
+            'Inbox', 'Draft', 'Important', 'Spam', 'Sent',
+            'Trash', 'Compose', 'SearchEmail', 'SelectAll', 'NoItemsFound',
+            'NoSubject', 'ComposeMail', 'Subject', 'To', 'Message',
             'Select', 'Send', 'Save', 'ToEmailIsRequired'
         ],
         Documents: [
-                'Show', 'Search', 'SearchCase', 'SelectStatus', 'Hold', 
-                'Open', 'Name', 'LastName', 'Client', 'Stadium', 
-                'Group', 'Land', 'Telephone', 'E_Mail', 'Date', 
-                'Address', 'Surname', 'Updated', 'UploadDocument', 'WriteALetterNow', 
-                'AddTimeTracking', 'AddANote', 'DetailsOnFile', 'Subject', 'Done', 
-                'Action', 'Opponent', 'History', 'Details', 'Lawyer', 
-                'Title', 'Content', 'Message', 'Files', 'File', 
-                'Add', 'Record', 'of', 'View', 'Upload', 
-                'Download', 'document', 'Create', 'Delete', 'WriteLetter', 
-                'AddNotesOrFile', 'Addnotes', 'AddFile', 'SendEMail', 'Now', 
-                'EnterTheTime', 'NameIsRequired', 'InvalidEmailAddress', 'TelephoneIsRequired', 'AttorneyIsRequired', 
-                'GroupIsRequired', 'StatusIsRequired', 'LastNameIsRequired', 'EmailIsRequired', 'Attorney', 
-                'TelephoneMustBe10Digit', 'City', 'PostalCode', 'SelectAttorney', 'SelectGroup', 
-                'Submit', 'Cancel', 'Country', 'ReferenceNumber', 'Status', 
-                'Terminal', 'Stop', 'TimeCounterWillBeExpiredSoon', 'AreYouSure', 'YouWantToCloseThisCase',
-                'YouWantToShareThisCaseRecord', 'YouWantToDoneThisDocument', 'YouWantToDoneThisLetter'
+            'Show', 'Search', 'SearchCase', 'SelectStatus', 'Hold',
+            'Open', 'Name', 'LastName', 'Client', 'Stadium',
+            'Group', 'Land', 'Telephone', 'E_Mail', 'Date',
+            'Address', 'Surname', 'Updated', 'UploadDocument', 'WriteALetterNow',
+            'AddTimeTracking', 'AddANote', 'DetailsOnFile', 'Subject', 'Done',
+            'Action', 'Opponent', 'History', 'Details', 'Lawyer',
+            'Title', 'Content', 'Message', 'Files', 'File',
+            'Add', 'Record', 'of', 'View', 'Upload',
+            'Download', 'document', 'Create', 'Delete', 'WriteLetter',
+            'AddNotesOrFile', 'Addnotes', 'AddFile', 'SendEMail', 'Now',
+            'EnterTheTime', 'NameIsRequired', 'InvalidEmailAddress', 'TelephoneIsRequired', 'AttorneyIsRequired',
+            'GroupIsRequired', 'StatusIsRequired', 'LastNameIsRequired', 'EmailIsRequired', 'Attorney',
+            'TelephoneMustBe10Digit', 'City', 'PostalCode', 'SelectAttorney', 'SelectGroup',
+            'Submit', 'Cancel', 'Country', 'ReferenceNumber', 'Status',
+            'Terminal', 'Stop', 'TimeCounterWillBeExpiredSoon', 'AreYouSure', 'YouWantToCloseThisCase',
+            'YouWantToShareThisCaseRecord', 'YouWantToDoneThisDocument', 'YouWantToDoneThisLetter'
         ],
         Chat: [
             'Chats', 'Contacts', 'SearchOrStartNewAChat', 'StartConversation', 'LoadMore',
-            'ViewContact', 'ClearChat', 'Send', 'NoChatsFound2', 'Settings', 
+            'ViewContact', 'ClearChat', 'Send', 'NoChatsFound2', 'Settings',
             'Notification', 'InviceFriends', 'PersonalInformation'
         ],
         Task: [
-            'MyTasks', 'Completed', 'Deleted', 'Tags', 'Team', 
-            'Update', 'SearchTask', 'SortAZ', 'SortZA', 'SortAssignee', 
-            'SortDueDate', 'ResetSort', 'Important', 'Low', 'Medium', 
-            'High', 'AddTask', 'AreYouSure', 'YouWontBeAbleToRevertThis', 'YouCanAlsoRevertThis', 
-            'YesDeleteIt', 'NoItemsFound', 'Title', 'TitleIsRequired', 'SelectAssignee', 
-            'AssigneeIsRequired', 'DueDateIsRequired', 'SelectTag', 'TagIsRequired', 'Description', 
+            'MyTasks', 'Completed', 'Deleted', 'Tags', 'Team',
+            'Update', 'SearchTask', 'SortAZ', 'SortZA', 'SortAssignee',
+            'SortDueDate', 'ResetSort', 'Important', 'Low', 'Medium',
+            'High', 'AddTask', 'AreYouSure', 'YouWontBeAbleToRevertThis', 'YouCanAlsoRevertThis',
+            'YesDeleteIt', 'NoItemsFound', 'Title', 'TitleIsRequired', 'SelectAssignee',
+            'AssigneeIsRequired', 'DueDateIsRequired', 'SelectTag', 'TagIsRequired', 'Description',
             'MarkComplete', 'Delete', 'Cancel', 'DueDate', 'Assignee'
         ],
         Calendar: [
-            'Register', 'Filter', 'ViewAll', 'MyAppointments', 'CourtDate', 
-            'Holiday', 'Title', 'TitleIsRequired', 'StartDate', 'EndDate', 
-            'Guests', 'Label', 'SelectLabel', 'LabelIsRequired', 'StartDateIsRequired', 
-            'EndDateIsRequired', 'SelectGuest', 'GuestIsRequired', 'InvalidAppointmentUrl', 'EnterLocation', 
-            'Description', 'AreYouSure', 'YouWontBeAbleToRevertThis', 'YesDeleteIt', 'AllDay', 
-            'AppointmentURL', 'AddLocation', 'AppointmentDescription', 'Add', 'AddEvent', 
-            'UpdateEvent' 
+            'Register', 'Filter', 'ViewAll', 'MyAppointments', 'CourtDate',
+            'Holiday', 'Title', 'TitleIsRequired', 'StartDate', 'EndDate',
+            'Guests', 'Label', 'SelectLabel', 'LabelIsRequired', 'StartDateIsRequired',
+            'EndDateIsRequired', 'SelectGuest', 'GuestIsRequired', 'InvalidAppointmentUrl', 'EnterLocation',
+            'Description', 'AreYouSure', 'YouWontBeAbleToRevertThis', 'YesDeleteIt', 'AllDay',
+            'AppointmentURL', 'AddLocation', 'AppointmentDescription', 'Add', 'AddEvent',
+            'UpdateEvent'
         ],
         Respites: [
-            'FirstAnniversary', 'File', 'DeadlineDate', 'Amount', 'Done', 
-            'LetterDeadline', 'Subject', 'PDFDocuments', 'Referencenumber', 'InvoiceDeadline', 
+            'FirstAnniversary', 'File', 'DeadlineDate', 'Amount', 'Done',
+            'LetterDeadline', 'Subject', 'PDFDocuments', 'Referencenumber', 'InvoiceDeadline',
             'SearchLetter', 'SearchInvoice', 'AreYouSure', 'YouWantToDoneThisTimeline', 'Yes'
         ],
         Outbox: [
-            'Show', 'Search', 'SearchLetter', 'AreYouSure', 'YouWantToArchiveThis', 
-            'YesArchiveIt', 'ReferenceNumber', 'Date', 'LastDate', 'Subject', 
+            'Show', 'Search', 'SearchLetter', 'AreYouSure', 'YouWantToArchiveThis',
+            'YesArchiveIt', 'ReferenceNumber', 'Date', 'LastDate', 'Subject',
             'Printed', 'Done', 'View', 'Status', 'Outbox'
         ],
         Bills: [
-            'Invoice', 'CreateInvoice', 'UpdateInvoice', 'Show', 'Search', 
-            'SearchInvoice', 'SelectStatus', 'Paid', 'AreYouSure', 'YouWontBeAbleToRevertThis', 
-            'YesDeleteIt', 'InvoiceNumber', 'Status', 'Client', 'Total', 
-            'DueDate', 'Action', 'SendMail', 'ViewInvoice', 'Download', 
-            'Edit', 'Delete', 'Duplicate', 'Open', 'DateIsRequired', 
-            'MaturityDateIsRequired', 'CaseIDIsRequired', 'ClientIsRequired', 'DescriptionIsRequired', 'PriceIsRequired', 
-            'PickAtLeast1Item', 'ItemsIsRequired', 'MethodIsRequired', 'StatusIsRequired', 'Number', 
-            'Date', 'Maturity', 'SelectCaseID', 'InvoiceTo', 'Client', 
-            'Description', 'Amount', 'Vat', 'AddInvoiceItem', 'Net', 
-            'PaymentMethods', 'SelectMethod', 'SelectStatus', 'SelectClient', 'Balance', 
-            'PaymentHistory', 'Note', 'SendInvoiceByEmail', 'PrintOut', 'AddPayment', 
-            'Created', 'PaymentDetails', 'OpenAmount', 'PreviewInvoice', 'AmountForPayment', 
-            'PaymentDate', 'InternalPaymentNote', 'Abort', 'YourBill', 'SendInvoice', 
-            'To', 'Subject', 'Message', 'InvoiceAutomaticallyAttached', 'Send', 
+            'Invoice', 'CreateInvoice', 'UpdateInvoice', 'Show', 'Search',
+            'SearchInvoice', 'SelectStatus', 'Paid', 'AreYouSure', 'YouWontBeAbleToRevertThis',
+            'YesDeleteIt', 'InvoiceNumber', 'Status', 'Client', 'Total',
+            'DueDate', 'Action', 'SendMail', 'ViewInvoice', 'Download',
+            'Edit', 'Delete', 'Duplicate', 'Open', 'DateIsRequired',
+            'MaturityDateIsRequired', 'CaseIDIsRequired', 'ClientIsRequired', 'DescriptionIsRequired', 'PriceIsRequired',
+            'PickAtLeast1Item', 'ItemsIsRequired', 'MethodIsRequired', 'StatusIsRequired', 'Number',
+            'Date', 'Maturity', 'SelectCaseID', 'InvoiceTo', 'Client',
+            'Description', 'Amount', 'Vat', 'AddInvoiceItem', 'Net',
+            'PaymentMethods', 'SelectMethod', 'SelectStatus', 'SelectClient', 'Balance',
+            'PaymentHistory', 'Note', 'SendInvoiceByEmail', 'PrintOut', 'AddPayment',
+            'Created', 'PaymentDetails', 'OpenAmount', 'PreviewInvoice', 'AmountForPayment',
+            'PaymentDate', 'InternalPaymentNote', 'Abort', 'YourBill', 'SendInvoice',
+            'To', 'Subject', 'Message', 'InvoiceAutomaticallyAttached', 'Send',
             'InvoiceRegardingGoods'
         ],
         Inquiry: [
-            'Contact', 'Show', 'Search', 'AddContact', 'SearchContact', 
-            'Ticket', 'Name', 'Email', 'Action', 'ViewContact', 
+            'Contact', 'Show', 'Search', 'AddContact', 'SearchContact',
+            'Ticket', 'Name', 'Email', 'Action', 'ViewContact',
             'Accept', 'Notes', 'Clear', 'News', 'AreYouSure',
-            'YouWontBeAbleToRevertThis', 'YesDeleteIt', 'SelectAttorney', 'Address', 'City', 
-            'PostalCode', 'SelectGroup', 'AcceptTheRequest', 'Telephone', 'Attorney', 
-            'City', 'Address', 'Group', 'Create', 'Name', 
-            'NameIsRequired', 'InvalidEmailAddress', 'EmailIsRequired', 'MobileIsRequired', 'MobileMustBe10Digit', 
-            'Submit', 'Cancel', 'AddNewContact', 'FullName', 'NoteIsRequired', 
+            'YouWontBeAbleToRevertThis', 'YesDeleteIt', 'SelectAttorney', 'Address', 'City',
+            'PostalCode', 'SelectGroup', 'AcceptTheRequest', 'Telephone', 'Attorney',
+            'City', 'Address', 'Group', 'Create', 'Name',
+            'NameIsRequired', 'InvalidEmailAddress', 'EmailIsRequired', 'MobileIsRequired', 'MobileMustBe10Digit',
+            'Submit', 'Cancel', 'AddNewContact', 'FullName', 'NoteIsRequired',
             'AddNotes', 'AddComment'
         ],
         User: [
-            'Admin', 'Partner', 'SearchFilter', 'Show', 'Entries', 
-            'Search', 'SearchUser', 'SelectRole', 'AddNewUser', 'Name', 
-            'Email', 'Role', 'Customer', 'Contact', 'Lawyer', 
-            'Status', 'Active', 'Action', 'View', 'Edit', 
-            'NameIsRequired', 'InvalidUsername', 'EmailIsRequired', 'InvalidEmailAddress', 'MobileIsRequired', 
-            'PasswordIsRequired', 'RetypePasswordIsRequired', 'RoleIsRequired', 'PasswordMustBe6Digit', 'RetypePasswordMustMatchWithPassword', 
-            'MobileMustBe6Digit', 'MobileMustBe16Digit', 'Password', 'ChangePassword', 'RetypePassword', 
-            'UserRole', 'Submit', 'Cancel', 'Telephone', 'FullName', 
-            'DetailsOf', 'Actions', 'Bills', 'ViewInvoice', 'InvoiceNumber', 
-            'Client', 'Total', 'DueDate', 'SearchInvoice', 'Hold', 
-            'ReferenceNumber', 'Attorney', 'Date', 'Group', 'Documents', 
-            'SearchCase', 'AreYouSure', 'YouWontBeAbleToRevertThis', 'YesDeleteIt', 'Permissions', 
-            'Type', 'Allow', 'DeleteUsers', 'SeeAllUsers', 'SeeContacts', 
-            'SeeAllCases', 'UpdateCases', 'SeeLetters', 'YouDontHaveAnyPermissions', 'RecentDevices', 
-            'IpAddress', 'LoginDate', 'Details', 'Username', 'Address', 
-            'Clear', 'Change', 'Company', 'Gender', 'BirthDate', 
-            'Mobile', 'AddressLine', 'Postcode', 'City', 'State', 
+            'Admin', 'Partner', 'SearchFilter', 'Show', 'Entries',
+            'Search', 'SearchUser', 'SelectRole', 'AddNewUser', 'Name',
+            'Email', 'Role', 'Customer', 'Contact', 'Lawyer',
+            'Status', 'Active', 'Action', 'View', 'Edit',
+            'NameIsRequired', 'InvalidUsername', 'EmailIsRequired', 'InvalidEmailAddress', 'MobileIsRequired',
+            'PasswordIsRequired', 'RetypePasswordIsRequired', 'RoleIsRequired', 'PasswordMustBe6Digit', 'RetypePasswordMustMatchWithPassword',
+            'MobileMustBe6Digit', 'MobileMustBe16Digit', 'Password', 'ChangePassword', 'RetypePassword',
+            'UserRole', 'Submit', 'Cancel', 'Telephone', 'FullName',
+            'DetailsOf', 'Actions', 'Bills', 'ViewInvoice', 'InvoiceNumber',
+            'Client', 'Total', 'DueDate', 'SearchInvoice', 'Hold',
+            'ReferenceNumber', 'Attorney', 'Date', 'Group', 'Documents',
+            'SearchCase', 'AreYouSure', 'YouWontBeAbleToRevertThis', 'YesDeleteIt', 'Permissions',
+            'Type', 'Allow', 'DeleteUsers', 'SeeAllUsers', 'SeeContacts',
+            'SeeAllCases', 'UpdateCases', 'SeeLetters', 'YouDontHaveAnyPermissions', 'RecentDevices',
+            'IpAddress', 'LoginDate', 'Details', 'Username', 'Address',
+            'Clear', 'Change', 'Company', 'Gender', 'BirthDate',
+            'Mobile', 'AddressLine', 'Postcode', 'City', 'State',
             'Country', 'SaveChange', 'Update', 'Account', 'Security'
         ],
         Account: [
-            'Account', 'Change', 'Username', 'UsernameIsRequired', 'NameIsRequired', 
-            'InvalidUsername', 'EmailIsRequired', 'StatusIsRequired', 'SelectRole', 'RoleIsRequired', 
-            'Name', 'Company', 'Language', 'SaveChange', 'LanguageLabels', 
-            'Menu', 'Pages', 'Common', 'Errors', 'IMAPInformation', 
-            'IMAPHost', 'IMAPPort', 'Secure', 'UseSSL', 'IMAPEmail', 
+            'Account', 'Change', 'Username', 'UsernameIsRequired', 'NameIsRequired',
+            'InvalidUsername', 'EmailIsRequired', 'StatusIsRequired', 'SelectRole', 'RoleIsRequired',
+            'Name', 'Company', 'Language', 'SaveChange', 'LanguageLabels',
+            'Menu', 'Pages', 'Common', 'Errors', 'IMAPInformation',
+            'IMAPHost', 'IMAPPort', 'Secure', 'UseSSL', 'IMAPEmail',
             'IMAPPassword', 'Email', 'TranslationIsRequired'
         ],
         'Email Template': [
-            'Show', 'AddEmailTemplate', 'EditEmailTemplate', 'Search', 'SearchEmailTemplate', 
-            'AreYouSure', 'YouWontBeAbleToRevertThis', 'YesDeleteIt', 'Subject', 'Status', 
-            'Action', 'Edit', 'View', 'Delete', 'HasAttachment', 
-            'SubjectIsRequired', 'StatusIsRequired', 'ContentIsRequired', 'SelectStatus', 'Content', 
-            'Sortcodes', 'Case', 'Contact', 'User', 'Submit', 
+            'Show', 'AddEmailTemplate', 'EditEmailTemplate', 'Search', 'SearchEmailTemplate',
+            'AreYouSure', 'YouWontBeAbleToRevertThis', 'YesDeleteIt', 'Subject', 'Status',
+            'Action', 'Edit', 'View', 'Delete', 'HasAttachment',
+            'SubjectIsRequired', 'StatusIsRequired', 'ContentIsRequired', 'SelectStatus', 'Content',
+            'Sortcodes', 'Case', 'Contact', 'User', 'Submit',
             'Back', 'Attachment'
         ],
         'Cloud-Server': [
-            'AreYouSure', 'YouRevertThisFromTrash', 'YesDeleteIt', 'YouWontBeAbleToRevertThis', 'NameIsRequired', 
-            'MoveFolder', 'EditFolder', 'CreateNewFolder', 'FolderName', 'MoveFile', 
-            'EditFile', 'Submit', 'Cancel', 'UploadNewFile', 'SelectParent', 
-            'FileName', 'StorageStatus', 'UsedOf', 'MyDrive', 'Filename', 
-            'Created', 'Actions', 'Important', 'Delete', 'Restore', 
-            'DeleteForever', 'FolderCreated', 'Move', 'FileCreated', 'GridView', 
+            'AreYouSure', 'YouRevertThisFromTrash', 'YesDeleteIt', 'YouWontBeAbleToRevertThis', 'NameIsRequired',
+            'MoveFolder', 'EditFolder', 'CreateNewFolder', 'FolderName', 'MoveFile',
+            'EditFile', 'Submit', 'Cancel', 'UploadNewFile', 'SelectParent',
+            'FileName', 'StorageStatus', 'UsedOf', 'MyDrive', 'Filename',
+            'Created', 'Actions', 'Important', 'Delete', 'Restore',
+            'DeleteForever', 'FolderCreated', 'Move', 'FileCreated', 'GridView',
             'ListView', 'Recents', 'AddNew', 'Folder', 'Trash',
             'Search'
         ],
-        'Calendar Setting': []
+        'Calendar Setting': [],
+        "Letter Template": [
+            'Show', 'AddLetterTemplate', 'EditLetterTemplate', 'Search', 'SearchLetterTemplate',
+            'AreYouSure', 'YouWontBeAbleToRevertThis', 'YesDeleteIt', 'Subject', 'Status',
+            'Action', 'Edit', 'Delete', 'SubjectIsRequired', 'StatusIsRequired', 'ContentIsRequired', 'SelectStatus', 'Content', 'Submit', 'Back', 'LetterTemplateIsRequired', 'ContentHeadingIsRequired', 'BestRegardsIsRequired', 'WriteALetter', 'CreateLetter', 'UpdateLetter'
+        ]
     },
     'UI Setting': [
-        'ThemeCustomizer', 'CusomizePreviewInRealTime', 'Skin', 'Light', 'Bordered', 
-        'Dark', 'SemiDark', 'ContentWidth', 'FullWidth', 'Boxed', 
-        'MenuCollapsed', 'MenuHidden', 'NavbarColor', 'NavbarType', 'Floating', 
+        'ThemeCustomizer', 'CusomizePreviewInRealTime', 'Skin', 'Light', 'Bordered',
+        'Dark', 'SemiDark', 'ContentWidth', 'FullWidth', 'Boxed',
+        'MenuCollapsed', 'MenuHidden', 'NavbarColor', 'NavbarType', 'Floating',
         'Sticky', 'Static', 'Hidden', 'FooterType', 'ApplySave'
     ],
     Common: [
@@ -815,7 +833,8 @@ export const L10nMenuItemIDKeys = {
     User: 'userApp',
     Account: 'accountApp',
     'Email Template': 'emailTemplateApp',
-    'Cloud-Server': 'cloudServerApp'
+    'Cloud-Server': 'cloudServerApp',
+    'Letter Template': 'letterTemplateApp'
 }
 
 export const getDefaultLanguageLabels = () => {

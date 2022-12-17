@@ -13,7 +13,8 @@ import {
   CheckCircle,
   CheckSquare,
   MessageCircle,
-  MessageSquare
+  MessageSquare,
+  Codesandbox
 } from 'react-feather'
 
 // Constant
@@ -105,6 +106,12 @@ export default [
         title: 'Email Template',
         icon: <Codepen size={20} />,
         navLink: `${adminRoot}/email-template`
+      },
+      {
+        id: 'letterTemplateApp',
+        title: 'Letter Template',
+        icon: <Codesandbox size={20} />,
+        navLink: `${adminRoot}/letter-template`
       },
       {
         id: 'cloudServerApp',

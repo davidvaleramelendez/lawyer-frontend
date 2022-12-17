@@ -22,8 +22,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { AbilityContext } from '@src/utility/context/Can'
 
 // ** Custom Components
+import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
-import Spinner from '@components/spinner/Simple-grow-spinner'
 import InputPasswordToggle from '@components/input-password-toggle'
 
 // Translation
@@ -161,7 +161,7 @@ const LoginCover = () => {
   return (
     <div className="auth-wrapper auth-cover">
       {store && !store.loading ? (
-        <Spinner
+        <DotPulse
           className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
         />
       ) : null}

@@ -14,8 +14,8 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Custom Components
+import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
-import Spinner from '@components/spinner/Simple-grow-spinner'
 import InputPasswordToggle from '@components/input-password-toggle'
 
 // ** Reactstrap Imports
@@ -154,7 +154,7 @@ const LoginSimple = () => {
   return (
     <div className="auth-wrapper auth-simple px-2">
       {store && !store.loading ? (
-        <Spinner
+        <DotPulse
           className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
         />
       ) : null}

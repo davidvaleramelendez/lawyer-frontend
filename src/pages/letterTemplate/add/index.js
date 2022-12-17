@@ -16,23 +16,20 @@ import {
     CardBody,
     CardTitle,
     CardHeader,
-    FormFeedback,
-    UncontrolledTooltip
+    FormFeedback
 } from 'reactstrap'
 import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from "yup"
+import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** React Dropdown Import
 import Select from 'react-select'
 
 // ** Store & Actions
 import {
-    getSortCodes,
-    clearSortCode,
-    createEmailTemplate,
-    updateEmailTemplateLoader,
-    clearEmailTemplateMessage
+    createLetterTemplate,
+    updateLetterTemplateLoader,
+    clearLetterTemplateMessage
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -40,13 +37,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Editor } from 'react-draft-wysiwyg'
 import { convertToRaw } from 'draft-js'
 import draftToHtml from 'draftjs-to-html'
-
-// ** Icons Import
-import {
-    User,
-    Briefcase,
-    MessageSquare
-} from 'react-feather'
 
 // ** Utils
 import {
@@ -64,29 +54,27 @@ import {
     statusOptions
 } from '@constant/defaultValues'
 
-// Modal
-import ModalEmailSortCodes from '../modals/ModalEmailSortCodes'
-
 // ** Styles
 import '@styles/react/libs/editor/editor.scss'
 
 // ** Translation
 import { T } from '@localization'
 
-const EmailTemplateAdd = () => {
-
+const LetterTemplateAdd = () => {
+    // ** Hooks
     const navigate = useNavigate()
+
+    // ** Store vars
     const dispatch = useDispatch()
-    const store = useSelector((state) => state.emailTemplate)
+    const store = useSelector((state) => state.letterTemplate)
 
     // ** States
     const [loadFirst, setLoadFirst] = useState(true)
-    const [modalOpen, setModalOpen] = useState(false)
     const [editorHtmlContent, setEditorHtmlContent] = useState("")
 
-    const EmailTemplateSchema = yup.object({
+    const LetterTemplateSchema = yup.object({
         subject: yup.string().required(T('Subject is required!')),
-        template: yup.object().shape({
+        content: yup.object().shape({
             blocks: yup.array().of(yup.object().shape({
                 text: yup.string().required(T('Content is required!'))
             }).required(T('Content is required!')).nullable())
@@ -101,14 +89,15 @@ const EmailTemplateAdd = () => {
         formState: { errors }
     } = useForm({
         mode: 'all',
-        defaultValues: store.emailTemplateItem,
-        resolver: yupResolver(EmailTemplateSchema)
+        defaultValues: store.letterTemplateItem,
+        resolver: yupResolver(LetterTemplateSchema)
     })
 
     /* Placeholder texts */
     const PlaceholderSchema = {
         subject: T("Subject"),
-        template: T("Content"),
+        content: T("Content"),
+        best_regards: T("Best Regards"),
         status: `${T("Select Status")}...`
     }
 
@@ -118,10 +107,10 @@ const EmailTemplateAdd = () => {
     }
 
     const handleReset = () => {
-        const emailTemplateItem = { ...store.emailTemplateItem }
-        reset(emailTemplateItem)
+        const letterTemplateItem = { ...store.letterTemplateItem }
+        reset(letterTemplateItem)
         setEditorHtmlContent('')
-        navigate(`${adminRoot}/email-template`)
+        navigate(`${adminRoot}/letter-template`)
     }
 
     useEffect(() => {
@@ -131,7 +120,7 @@ const EmailTemplateAdd = () => {
         }
 
         if (loadFirst) {
-            dispatch(updateEmailTemplateLoader(true))
+            dispatch(updateLetterTemplateLoader(true))
             setLoadFirst(false)
         }
 
@@ -142,7 +131,7 @@ const EmailTemplateAdd = () => {
 
         /* For blank message api called inside */
         if (store && (store.success || store.error || store.actionFlag)) {
-            dispatch(clearEmailTemplateMessage())
+            dispatch(clearLetterTemplateMessage())
         }
 
         /* Succes toast notification */
@@ -157,29 +146,26 @@ const EmailTemplateAdd = () => {
     }, [store.success, store.error, store.actionFlag, loadFirst])
     // console.log("store >>> ", store)
 
-    const handleOpenModal = (type) => {
-        setModalOpen(true)
-        dispatch(getSortCodes({ type: type, sortCodeTypes: store.sortCodeTypes }))
-    }
-
     /* Submitting data */
     const onSubmit = (values) => {
         if (values) {
-            const emailTemplateData = {
-                subject: values.subject
+            const letterTemplateData = {
+                subject: values.subject,
+                main_heading: values.main_heading,
+                best_regards: values.best_regards
             }
 
             if (editorHtmlContent) {
-                emailTemplateData.template = editorHtmlContent
+                letterTemplateData.content = editorHtmlContent
             }
 
             if (values.Status && values.Status.value) {
-                emailTemplateData.status = values.Status.value
+                letterTemplateData.status = values.Status.value
             }
 
-            // console.log("onSubmit >>> ", values, emailTemplateData)
-            dispatch(updateEmailTemplateLoader(false))
-            dispatch(createEmailTemplate(emailTemplateData))
+            // console.log("onSubmit >>> ", values, letterTemplateData)
+            dispatch(clearLetterTemplateMessage(false))
+            dispatch(createLetterTemplate(letterTemplateData))
         }
     }
 
@@ -193,7 +179,7 @@ const EmailTemplateAdd = () => {
 
             <CardHeader>
                 <CardTitle>
-                    {T("Add Email Template")}
+                    {T("Add Letter Template")}
                 </CardTitle>
             </CardHeader>
 
@@ -218,66 +204,14 @@ const EmailTemplateAdd = () => {
                         </Col>
 
                         <Col md={12} sm={12} className="mb-1">
-                            <Label className="form-label w-100" for='template'>
-                                <div className="d-flex justify-content-between">
-                                    <div className="me-1">{T('Content')}</div>
-                                    <div>
-                                        {T("Sort codes")} :
-
-                                        <Briefcase
-                                            size={17}
-                                            className="cursor-pointer ms-1"
-                                            id="case-sortcodes-add"
-                                            onClick={() => handleOpenModal(store.sortCodeTypes[0].id || 'case')}
-                                        />
-                                        <UncontrolledTooltip
-                                            placement="top"
-                                            target="case-sortcodes-add"
-                                        >
-                                            {T("Case")} {T("Sort codes")}
-                                        </UncontrolledTooltip>
-
-                                        <MessageSquare
-                                            size={17}
-                                            className="cursor-pointer ms-1"
-                                            id="contact-sortcodes-add"
-                                            onClick={() => handleOpenModal(store.sortCodeTypes[1].id || 'contact')}
-                                        />
-                                        <UncontrolledTooltip
-                                            placement="top"
-                                            target="contact-sortcodes-add"
-                                        >
-                                            {T("Contact")} {T("Sort codes")}
-                                        </UncontrolledTooltip>
-
-                                        <User
-                                            size={17}
-                                            className="cursor-pointer ms-1"
-                                            id="user-sortcodes-add"
-                                            onClick={() => handleOpenModal(store.sortCodeTypes[2].id || 'user')}
-                                        />
-                                        <UncontrolledTooltip
-                                            placement="top"
-                                            target="user-sortcodes-add"
-                                        >
-                                            {T("User")} {T("Sort codes")}
-                                        </UncontrolledTooltip>
-
-                                        <ModalEmailSortCodes
-                                            store={store}
-                                            open={modalOpen}
-                                            dispatch={dispatch}
-                                            clearSortCode={clearSortCode}
-                                            toggleModal={() => setModalOpen(!modalOpen)}
-                                        />
-                                    </div>
-                                </div>
+                            <Label className="form-label w-100" for='content'>
+                                {T('Content')}
                             </Label>
                             <Controller
                                 defaultValue=""
                                 control={control}
-                                id='template'
-                                name='template'
+                                id='content'
+                                name='content'
                                 render={({ field }) => (
                                     <Editor
                                         {...field}
@@ -293,19 +227,33 @@ const EmailTemplateAdd = () => {
                                             }
                                         }}
                                         onEditorStateChange={handleEditorStateChange}
-                                        placeholder={PlaceholderSchema && PlaceholderSchema.template}
+                                        placeholder={PlaceholderSchema && PlaceholderSchema.content}
                                     />
                                 )}
                             />
-                            <FormFeedback className="d-block">{errors.template?.message || (errors.template?.blocks && errors.template.blocks[0]?.text?.message)}</FormFeedback>
+                            <FormFeedback className="d-block">{errors.content?.message || (errors.content?.blocks && errors.content.blocks[0]?.text?.message)}</FormFeedback>
                         </Col>
 
-                        <Col md={6} sm={12} className="mb-1">
+                        <Col md={6} sm={6} className="mb-1">
+                            <Label className='form-label' for='best_regards'>
+                                {T('Best Regards')}
+                            </Label>
+                            <Controller
+                                defaultValue=""
+                                id='best_regards'
+                                name='best_regards'
+                                control={control}
+                                render={({ field }) => <Input {...field} type="textarea" rows={2} placeholder={PlaceholderSchema && PlaceholderSchema.best_regards} invalid={errors.best_regards && true} />}
+                            />
+                            <FormFeedback>{errors.best_regards?.message}</FormFeedback>
+                        </Col>
+
+                        <Col md={6} sm={6} className="mb-1">
                             <Label className='form-label' for="Status">
                                 {T("Status")}
                             </Label>
                             <Controller
-                                defaultValue={store.emailTemplateItem && store.emailTemplateItem.status ? { value: store.emailTemplateItem.status, label: store.emailTemplateItem.status } : null}
+                                defaultValue={store.letterTemplateItem && store.letterTemplateItem.status ? { value: store.letterTemplateItem.status, label: store.letterTemplateItem.status } : null}
                                 name='Status'
                                 id='Status'
                                 control={control}
@@ -352,4 +300,4 @@ const EmailTemplateAdd = () => {
     ) : null
 }
 
-export default EmailTemplateAdd
+export default LetterTemplateAdd

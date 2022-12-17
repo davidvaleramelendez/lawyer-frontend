@@ -2,27 +2,15 @@
 
 // ** React Imports
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 // ** Store & Actions
-import {
-  createCaseLetter,
-  updateCaseLetter,
-  deleteCaseLetter,
-  updateCaseLoader,
-  clearCaseMessage
-} from '../store'
-import { useDispatch, useSelector } from 'react-redux'
-
-// ** Third Party Components
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-import Flatpickr from 'react-flatpickr'
+import { useSelector } from 'react-redux'
 
 // ** Reactstrap Imports
 import {
   Row,
   Form,
-  Input,
   Label,
   Modal,
   Button,
@@ -30,32 +18,23 @@ import {
   ModalHeader,
   FormFeedback
 } from 'reactstrap'
-
 import { useForm, Controller } from 'react-hook-form'
+import * as yup from "yup"
+import { yupResolver } from '@hookform/resolvers/yup'
 
-// Constant
+// ** React Dropdown Import
+import Select from 'react-select'
+
+// ** Constants
+import {
+  adminRoot
+} from '@constant/defaultValues'
 import {
   letterItem
 } from '@constant/reduxConstant'
 
 // ** Custom Components
 import Spinner from '@components/spinner/Simple-grow-spinner'
-
-// ** Utils
-import {
-  getTransformDate
-} from '@utils'
-
-// ** Office Editor Component
-import { Editor } from 'react-draft-wysiwyg'
-import draftToHtml from 'draftjs-to-html'
-import htmlToDraft from 'html-to-draftjs'
-import { EditorState, ContentState, convertToRaw } from 'draft-js'
-
-// ** Styles
-import '@styles/base/pages/app-invoice.scss'
-import '@styles/react/libs/flatpickr/flatpickr.scss'
-import '@styles/react/libs/editor/editor.scss'
 
 // ** Translation
 import { T } from '@localization'
@@ -64,41 +43,30 @@ const ModalCaseLetter = ({
   open,
   caseData,
   toggleModal,
-  fighterData,
   letterRowData,
   setLetterRowData
 }) => {
-  const MySwal = withReactContent(Swal)
+  // ** Hooks
+  const navigate = useNavigate()
 
   // ** Store vars
-  const dispatch = useDispatch()
   const store = useSelector((state) => state.cases)
+  const letterTemStore = useSelector((state) => state.letterTemplate)
 
   // ** States
-  const [editorStateContent, setEditorStateContent] = useState(letterRowData.message)
-  const [editorHtmlContent, setEditorHtmlContent] = useState(letterRowData.message)
+  const [letterTemOption, setLetterTemOption] = useState([])
 
-  const getInitialHTML = (value) => {
-    const contentBlock = htmlToDraft(value)
-    if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks)
-      const editorState = EditorState.createWithContent(contentState)
-      setEditorStateContent(editorState)
-      return editorState
-    }
-    return value
-  }
+  /* Validation schema */
+  const LetterSchema = yup.object({
+    letterTemplateId: yup.object().required(T(`Letter Template is required!`)).nullable()
+  }).required()
+  /* /Validation schema */
 
-  const ValidationSchema = {
-    subject: {
-      placeholder: "Subject",
-      required: "Subject is required!"
-    },
-    message: {
-      placeholder: "Message",
-      required: "Message is required!"
-    }
+  /* Placeholder schema */
+  const PlaceholderSchema = {
+    letterTemplateId: `Select ${T("Letter Template")}...`
   }
+  /* /Placeholder schema */
 
   const {
     reset,
@@ -107,94 +75,38 @@ const ModalCaseLetter = ({
     formState: { errors }
   } = useForm({
     mode: 'all',
-    defaultValues: letterRowData
+    defaultValues: letterRowData,
+    resolver: yupResolver(LetterSchema)
   })
 
   const handleReset = async () => {
-    setEditorHtmlContent('')
-    if (letterItem && letterItem.message) {
-      letterItem.message = await getInitialHTML(letterItem.message)
-    }
     reset(letterItem)
     setLetterRowData(letterItem)
     toggleModal()
   }
 
-  const handleEditorStateChange = (state) => {
-    // console.log("handleEditorStateChange >>> ", state)
-    setEditorStateContent(state)
-    setEditorHtmlContent(draftToHtml(convertToRaw(state.getCurrentContent())))
-  }
   // ** Get contact on mount based on id
   useEffect(() => {
-    
-    /* For blank message api called inside */
-    if (store && (store.success || store.error || store.actionFlag)) {
-      dispatch(clearCaseMessage())
+    let list1 = []
+    if (letterTemStore && letterTemStore.letterTemplateItems && letterTemStore.letterTemplateItems.length) {
+      list1 = letterTemStore.letterTemplateItems.map((item) => {
+        return {
+          label: item.subject,
+          value: item.id
+        }
+      })
     }
-
-    /* For reset form data and closing modal */
-    if (store && store.actionFlag && (store.actionFlag === "LETTER_CREATED" || store.actionFlag === "LETTER_UPDATED" || store.actionFlag === "LETTER_DELETED")) {
-      handleReset()
-    }
-
-    if (letterRowData && letterRowData.id) {
-      reset(letterRowData)
-    }
-    getInitialHTML(letterRowData.message)
-  }, [dispatch, letterRowData, store.success, store.error, store.actionFlag])
+    setLetterTemOption(list1)
+  }, [letterTemStore.letterTemplateItems])
   // console.log("store >>> ", store)
 
   /* Submitting data */
   const onSubmit = async (values) => {
     if (values) {
-      const letterData = {
-        id: values.id,
-        case_id: caseData.CaseID,
-        subject: values.Subject,
-        message: values.message
-      }
-
-      if (editorHtmlContent) {
-          letterData.message = editorHtmlContent
-      }
-
-      if (values.fristDate && values.fristDate.length) {
-        letterData.frist_date = getTransformDate(values.fristDate[0], "YYYY-MM-DD")
-      } else if (values.fristDate) {
-        letterData.frist_date = getTransformDate(values.fristDate, "YYYY-MM-DD")
-      }
-
-      // console.log("onSubmit File >>> ", letterData, values)
-      if (letterData && letterData.case_id) {
-        if (letterData.id) {
-          dispatch(updateCaseLetter(letterData))
-        } else {
-          dispatch(createCaseLetter(letterData))
-        }
-        dispatch(updateCaseLoader(false))
+      if (values.letterTemplateId && values.letterTemplateId.value) {
+        navigate(`${adminRoot}/case/letter-template/add/${caseData.CaseID}/${values.letterTemplateId.value}`)
       }
     }
-  }
-
-  /* Delete case document */
-  const onDeleteDocument = (docId) => {
-    MySwal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes',
-      customClass: {
-        confirmButton: 'btn btn-primary',
-        cancelButton: 'btn btn-outline-danger ms-1'
-      },
-      buttonsStyling: false
-    }).then(function (result) {
-      if (result.isConfirmed) {
-        dispatch(deleteCaseLetter(docId))
-      }
-    })
   }
 
   return store ? (
@@ -216,108 +128,39 @@ const ModalCaseLetter = ({
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <Row>
               <div className='mb-1'>
-                <Label className='form-label' for='subject'>
-                  Subject
+                <Label className='form-label' for='letterTemplateId'>
+                  {T("Letter Template")}
                 </Label>
                 <Controller
-                  defaultValue={letterRowData && letterRowData.subject ? letterRowData.subject : `Case ID: ${caseData.CaseID}${caseData && caseData.type && caseData.type.CaseTypeID ? `, Case Type: ${caseData.type.CaseTypeName}` : ''}${fighterData && fighterData.name ? `, fighting Against: ${fighterData.name} ${fighterData.last_name}` : ''}`}
-                  id='Subject'
-                  name='Subject'
+                  defaultValue={null}
+                  id='letterTemplateId'
+                  name='letterTemplateId'
                   control={control}
-                  rules={ValidationSchema.subject}
-                  render={({ field }) => <Input {...field} placeholder={ValidationSchema.subject && ValidationSchema.subject.placeholder} invalid={errors.Subject && true} />}
-                />
-                <FormFeedback>{errors.Subject?.message}</FormFeedback>
-              </div>
-
-              <div className='mb-1'>
-                <Label className='form-label' for='message'>
-                  Message
-                </Label>
-                <Controller
-                  defaultValue=""
-                  id='message'
-                  name='message'
-                  control={control}
-                  rules={ValidationSchema.message}
-                  render={({ field }) => <Editor
-                    {...field}
-                    editorState={editorStateContent}
-                    onEditorStateChange={handleEditorStateChange}
-                    placeholder={ValidationSchema.message && ValidationSchema.message.placeholder}
-                />
-                }
-                />
-                <FormFeedback>{errors.message?.message}</FormFeedback>
-              </div>
-
-              {letterRowData && !letterRowData.id ? (
-                <div className='mb-1'>
-                  <Label className='form-label' for='frist_date'>
-                    Date
-                  </Label>
-                  <Controller
-                    defaultValue={letterRowData.frist_date ? new Date(letterRowData.frist_date) : new Date()}
-                    id='fristDate'
-                    name='fristDate'
-                    control={control}
-                    render={({ field }) => <Flatpickr
+                  render={({ field }) => (
+                    <Select
                       {...field}
-                      id='fristDate'
-                      className='form-control'
-                      options={{
-                        enableTime: false,
-                        dateFormat: "Y-m-d"
-                      }}
-                    />}
-                  />
-                  <FormFeedback>{errors.fristDate?.message}</FormFeedback>
-                </div>
-              ) : null}
+                      id="letterTemplateId"
+                      placeholder={PlaceholderSchema && PlaceholderSchema.letterTemplateId}
+                      options={letterTemOption}
+                      className="react-select"
+                      classNamePrefix="select"
+                      isClearable={false}
+                    />
+                  )}
+                />
+                <FormFeedback className="d-block">{errors.letterTemplateId?.message}</FormFeedback>
+              </div>
             </Row>
 
             <Row className='mb-2 mt-2'>
               <div className="d-flex justify-content-end">
-                {letterRowData && letterRowData.id ? (<>
-                  <Button
-                    type='submit'
-                    color="primary"
-                    className="me-1"
-                    disabled={!store.loading}
-                  >
-                    {T("Update")}
-                  </Button>
-
-                  <Button
-                    tag="a"
-                    type='button'
-                    target="_blank"
-                    color="success"
-                    className="me-1"
-                    disabled={!store.loading}
-                    href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${letterRowData.pdf_path}`}
-                    onClick={(event) => !letterRowData.pdf_path && event.preventDefault()}
-                  >
-                    {T("Download")} {T("PDF")}
-                  </Button>
-
-                  <Button
-                    type='button'
-                    color="danger"
-                    disabled={!store.loading}
-                    onClick={() => onDeleteDocument(letterRowData.id)}
-                  >
-                    {T("Delete")}
-                  </Button>
-                </>) : (
-                  <Button
-                    type='submit'
-                    color="primary"
-                    disabled={!store.loading}
-                  >
-                    {T("Create")}
-                  </Button>
-                )}
+                <Button
+                  type='submit'
+                  color="primary"
+                  disabled={!store.loading}
+                >
+                  {T("Write a letter")}
+                </Button>
               </div>
             </Row>
           </Form>

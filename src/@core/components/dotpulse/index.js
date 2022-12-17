@@ -1,8 +1,10 @@
 import React from "react"
 
-const DotPulse = () => {
+const DotPulse = ({
+    className = "my-5"
+}) => {
     return (
-        <div className="three-dots-pulse my-5">
+        <div className={`three-dots-pulse ${className}`}>
             <div className="dot-pulse"></div>
         </div>
     )

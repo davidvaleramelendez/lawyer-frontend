@@ -34,7 +34,7 @@ export const recordItem = { RecordID: "", CaseID: "", UserID: "", Email: "", Sub
 export const caseDocItem = { id: "", case_id: "", user_id: "", title: "", description: "", attachment: "", attachment_pdf: "", deleted: 0, is_archived: 0, is_print: 0, frist_date: "", isErledigt: 0 }
 
 // Letter
-export const letterItem = { id: "", case_id: "", user_id: "", subject: "", message: "", last_date: "", is_print: 0, deleted: 0, is_archived: 0, word_file: "", pdf_file: "", frist_date: "", isErledigt: 0 }
+export const letterItem = { id: "", user_id: "", case_id: "", letter_template_id: "", subject: "", message: "", best_regards: "", last_date: "", is_print: 0, deleted: 0, is_archived: 0, word_file: "", pdf_file: "", frist_date: "", isErledigt: 0 }
 
 // Todo
 export const todosMeta = { important: 0 }
@@ -67,3 +67,6 @@ export const cloudStorageItem = { id: "", name: "", slug: "", parent_id: "", use
 
 // Companies
 export const companyItem = { id: "", user_id: "", company: "", name: "", last_name: "", address: "", city: "", zip_code: "" }
+
+// LetterTemplate
+export const letterTemplateItem = { id: "", subject: "", content: "", regard_title: "", status: "Active" }

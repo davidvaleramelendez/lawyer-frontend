@@ -69,7 +69,7 @@ import {
 } from '@utils'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-grow-spinner'
+import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 
 // Constant
@@ -110,7 +110,7 @@ const EmailTemplateEdit = () => {
                 text: yup.string().required(T('Content is required!'))
             }).required(T('Content is required!')).nullable())
         }).required(T('Content is required!')).nullable(),
-        Status: yup.object().required(T(`Status is required!`)).nullable()
+        status: yup.object().required(T(`Status is required!`)).nullable()
     }).required()
 
     const {
@@ -238,6 +238,7 @@ const EmailTemplateEdit = () => {
         }
     }, [store.success, store.error, store.actionFlag, loadFirst])
     // console.log("store >>> ", store)
+    console.log("errors >>> ", errors)
 
     const handleOpenModal = (type) => {
         setModalOpen(true)
@@ -312,7 +313,7 @@ const EmailTemplateEdit = () => {
     return store ? (
         <Card className="px-5">
             {!store.loading ? (
-                <Spinner
+                <DotPulse
                     className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
                 />
             ) : null}

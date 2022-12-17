@@ -40,7 +40,8 @@ import {
   CheckCircle,
   CheckSquare,
   MessageCircle,
-  MessageSquare
+  MessageSquare,
+  Codesandbox
 } from 'react-feather'
 
 // ** Styles
@@ -218,7 +219,8 @@ const LanguageLabels = () => {
       Account: <Settings size={14} />,
       "Email Template": <Codepen size={14} />,
       "Cloud-Server": <HardDrive size={14} />,
-      "Calendar Setting": <Calendar size={14} />
+      "Calendar Setting": <Calendar size={14} />,
+      "Letter Template": <Codesandbox size={14} />
     }
     return pageIcons[page]
   }

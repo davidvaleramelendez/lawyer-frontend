@@ -229,6 +229,7 @@ const LetterTemplateList = () => {
     }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
     // console.log("store >>> ", store)
 
+    /* Columns */
     const columns = [
         {
             name: T('Subject'),
@@ -243,7 +244,6 @@ const LetterTemplateList = () => {
                 </Link>
             ),
             /* Custom placeholder vars */
-            loaderContent: T("Subject"),
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -259,7 +259,6 @@ const LetterTemplateList = () => {
                 {row.status}
             </Badge></>,
             /* Custom placeholder vars */
-            loaderContent: T("Active"),
             customLoaderCellClass: "",
             customLoaderContentClass: "rounded-pill"
             /* /Custom placeholder vars */
@@ -291,7 +290,7 @@ const LetterTemplateList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: T("Actions"),
+            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '20%' },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -311,8 +310,7 @@ const LetterTemplateList = () => {
                     pagination={store.loading ? store.pagination : {
                         ...store.pagination,
                         perPage: getCurrentPageNumber(TN_LETTER_TEMPLATE, rowsPerPage, currentPage)
-                    }
-                    }
+                    }}
                     handleSort={handleSort}
                     handlePagination={handlePagination}
                     subHeaderComponent={
@@ -324,8 +322,7 @@ const LetterTemplateList = () => {
                         />
                     }
                 />
-            )
-            }
+            )}
         </Card>
     </Fragment>) : null
 }

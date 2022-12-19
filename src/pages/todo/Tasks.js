@@ -58,6 +58,7 @@ const Tasks = (props) => {
     deleteTodoItem,
     restoreTodoItem,
     handleTodoLists,
+    placeholderTasks,
     completeTodoItem,
     handleMainSidebar,
     setOpenTaskSidebar
@@ -162,6 +163,10 @@ const Tasks = (props) => {
   }
 
   const renderTasks = () => {
+    if (!store.loading && placeholderTasks === 0) {
+      return <DotPulse />
+    }
+
     if (!store.loading) {
       return <DotPulse />
     }
@@ -312,19 +317,19 @@ const Tasks = (props) => {
             </DropdownItem>
 
             <DropdownItem tag={Link} to="/" onClick={(event) => handleSort((event), "title-desc")}>
-            {T('Sort Z-A')}
+              {T('Sort Z-A')}
             </DropdownItem>
 
             <DropdownItem tag={Link} to="/" onClick={(event) => handleSort(event, "Assign-asc")}>
-            {T('Sort Assignee')}
+              {T('Sort Assignee')}
             </DropdownItem>
 
             <DropdownItem tag={Link} to="/" onClick={(event) => handleSort(event, "due_date-desc")}>
-            {T('Sort Due Date')}
+              {T('Sort Due Date')}
             </DropdownItem>
 
             <DropdownItem tag={Link} to="/" onClick={(event) => handleSort(event, "")}>
-            {T('Reset Sort')}
+              {T('Reset Sort')}
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>

@@ -312,6 +312,7 @@ const CaseList = () => {
         setDetailModalOpen(true)
     }
 
+    /* Columns */
     const columns = [
         {
             name: "",
@@ -326,7 +327,6 @@ const CaseList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: "--",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -338,7 +338,6 @@ const CaseList = () => {
             minWidth: "17%",
             cell: (row) => <Link to={`${adminRoot}/case/view/${row.CaseID}`}>{`#${row.CaseID}`}</Link>,
             /* Custom placeholder vars */
-            loaderContent: "Reference N#",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -363,10 +362,9 @@ const CaseList = () => {
                 )
             },
             /* Custom placeholder vars */
-            loaderContent: "Client -----------",
             customLoadingWithIcon: "User",
             customLoaderCellClass: "",
-            customLoaderContentClass: ""
+            customLoaderContentClass: "d-flex align-items-center"
             /* /Custom placeholder vars */
         },
         {
@@ -376,7 +374,6 @@ const CaseList = () => {
             minWidth: "14%",
             cell: (row) => row && row.laywer && row.laywer.id ? (<Link to={`${adminRoot}/user/view/${row.laywer.id}`}>{row.laywer.name}</Link>) : null,
             /* Custom placeholder vars */
-            loaderContent: "LaywerID ---",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -388,7 +385,6 @@ const CaseList = () => {
             minWidth: "13%",
             cell: (row) => row.Date && getTransformDate(row.Date, "DD MMM YYYY"),
             /* Custom placeholder vars */
-            loaderContent: "Date --------",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -400,7 +396,6 @@ const CaseList = () => {
             minWidth: "12%",
             cell: (row) => row.Status,
             /* Custom placeholder vars */
-            loaderContent: "Status",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -412,7 +407,6 @@ const CaseList = () => {
             minWidth: "14%",
             cell: (row) => row && row.type && row.type.CaseTypeName,
             /* Custom placeholder vars */
-            loaderContent: "CaseTypeID --",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -433,7 +427,6 @@ const CaseList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: "--",
             customLoaderCellClass: "text-center",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -468,8 +461,8 @@ const CaseList = () => {
                         />
                     }
                 />
-            )
-            }
+            )}
+
             <ModalCaseDetail
                 toggleModal={() => setDetailModalOpen(!detailModalOpen)}
                 open={detailModalOpen}

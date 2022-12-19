@@ -383,6 +383,7 @@ const UsersList = () => {
     }
     /* /User detail popup modal */
 
+    /* Columns */
     const columns = [
         {
             minWidth: "10%",
@@ -399,7 +400,6 @@ const UsersList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: "--",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -412,7 +412,6 @@ const UsersList = () => {
             cell: (row) => (
                 <div className="d-flex justify-content-left align-items-center">
                     {renderUser(row)}
-
                     <div className="d-flex flex-column">
                         <Link
                             to={`${adminRoot}/user/view/${row.id}`}
@@ -424,10 +423,9 @@ const UsersList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: "John Doe",
             customLoadingWithIcon: "User",
             customLoaderCellClass: "",
-            customLoaderContentClass: ""
+            customLoaderContentClass: "d-flex align-items-center"
             /* /Custom placeholder vars */
         },
         {
@@ -437,7 +435,6 @@ const UsersList = () => {
             minWidth: "25%",
             cell: (row) => (<div className="">{row.email}</div>),
             /* Custom placeholder vars */
-            loaderContent: 'johndoe@example.com',
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -456,10 +453,9 @@ const UsersList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: T("Customer"),
             customLoadingWithIcon: "User",
             customLoaderCellClass: "",
-            customLoaderContentClass: ""
+            customLoaderContentClass: "d-flex align-items-center"
             /* /Custom placeholder vars */
         },
         {
@@ -469,7 +465,6 @@ const UsersList = () => {
             minWidth: "15%",
             cell: (row) => row.Contact,
             /* Custom placeholder vars */
-            loaderContent: T("Contact"),
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -485,7 +480,6 @@ const UsersList = () => {
                 </Badge>
             ),
             /* Custom placeholder vars */
-            loaderContent: T("Active"),
             customLoaderCellClass: "",
             customLoaderContentClass: "rounded-pill"
             /* /Custom placeholder vars */
@@ -522,7 +516,6 @@ const UsersList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: "|",
             customLoaderCellClass: "text-center",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -543,8 +536,7 @@ const UsersList = () => {
                         pagination={store.loading ? store.pagination : {
                             ...store.pagination,
                             perPage: getCurrentPageNumber(TN_USER, rowsPerPage, currentPage)
-                        }
-                        }
+                        }}
                         handleSort={handleSort}
                         handlePagination={handlePagination}
                         subHeaderComponent={
@@ -560,8 +552,7 @@ const UsersList = () => {
                             />
                         }
                     />
-                )
-                }
+                )}
             </Card>
 
             <ModalAddUser

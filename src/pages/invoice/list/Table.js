@@ -377,6 +377,7 @@ const InvoiceList = () => {
         setSendInvoiceModalOpen(true)
     }
 
+    /* Columns */
     const columns = [
         {
             name: "",
@@ -392,7 +393,11 @@ const InvoiceList = () => {
                         onClick={() => onUserDetail(row)}
                     />
                 </div>
-            )
+            ),
+            /* Custom placeholder vars */
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: T("Invoice Number"),
@@ -401,7 +406,6 @@ const InvoiceList = () => {
             minWidth: "20%",
             cell: (row) => <Link to={`${adminRoot}/invoice/view/${row.id}`}>{`#${row.invoice_no}`}</Link>,
             /* Custom placeholder vars */
-            loaderContent: "Invoice No",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -428,7 +432,6 @@ const InvoiceList = () => {
                 )
             },
             /* Custom placeholder vars */
-            loaderContent: "Status",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -451,10 +454,9 @@ const InvoiceList = () => {
                 )
             },
             /* Custom placeholder vars */
-            loaderContent: "johndoe@example.com",
             customLoadingWithIcon: "User",
             customLoaderCellClass: "",
-            customLoaderContentClass: ""
+            customLoaderContentClass: "d-flex align-items-center"
             /* /Custom placeholder vars */
         },
         {
@@ -464,7 +466,6 @@ const InvoiceList = () => {
             minWidth: "12%",
             cell: (row) => `€ ${row && row.total_price && getDecimalFormat(row.total_price)}`,
             /* Custom placeholder vars */
-            loaderContent: "€ Total",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -476,7 +477,6 @@ const InvoiceList = () => {
             minWidth: "15%",
             cell: (row) => row.invoice_due_date && getTransformDate(row.invoice_due_date, "DD MMM YYYY"),
             /* Custom placeholder vars */
-            loaderContent: T("Due Date"),
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -568,7 +568,6 @@ const InvoiceList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: "----------",
             customLoaderCellClass: "text-center",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -589,8 +588,7 @@ const InvoiceList = () => {
                         pagination={store.loading ? store.pagination : {
                             ...store.pagination,
                             perPage: getCurrentPageNumber(TN_INVOICE, rowsPerPage, currentPage)
-                        }
-                        }
+                        }}
                         handleSort={handleSort}
                         handlePagination={handlePagination}
                         subHeaderComponent={
@@ -605,8 +603,7 @@ const InvoiceList = () => {
                             />
                         }
                     />
-                )
-                }
+                )}
 
                 <ModalInvoiceDetail
                     toggleModal={() => setDetailModalOpen(!detailModalOpen)}

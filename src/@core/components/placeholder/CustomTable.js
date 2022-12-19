@@ -17,6 +17,7 @@ import * as Icon from 'react-feather'
 
 // ** Custom Components
 import Avatar from '@components/avatar'
+import LoadingPlaceHolder from '@components/loadingPlaceHolder/LoadingPlaceHolder'
 
 const CustomTable = ({
     responsive = true,
@@ -28,17 +29,20 @@ const CustomTable = ({
     bodyRowHeight = 40
 }) => {
 
+    const headerStyle = {}
+    if (bodyRowHeight) {
+        headerStyle.height = `${bodyRowHeight}px`
+    }
+
     return columns ? (
         columns && columns.length ? (
             <Table
                 responsive={responsive}
-                className={`${tableClassName}`}
+                className={`${tableClassName || ""}`}
             >
                 <thead
-                    className={`${headerClassName}`}
-                    style={
-                        { height: `${bodyRowHeight}px` }
-                    }
+                    className={`${headerClassName || ""}`}
+                    style={headerStyle}
                 >
                     <tr>
                         {columns.map((col, index) => {
@@ -58,7 +62,7 @@ const CustomTable = ({
                                     <th
                                         style={style}
                                         key={`place-holder-head-${index}`}
-                                        className={`${col && col.customLoaderCellClass ? col.customLoaderCellClass : ''}`}
+                                        className={`${(col && col.customLoaderCellClass) || ""}`}
                                     >
                                         {col.name || ""}
                                     </th>
@@ -70,7 +74,7 @@ const CustomTable = ({
 
                 {bodyRows ? (
                     <tbody
-                        className={`${bodyClassName}`}
+                        className={`${bodyClassName || ""}`}
                     >
                         {Array.from(Array(bodyRows).keys(), (row, index) => (
                             <tr
@@ -90,7 +94,7 @@ const CustomTable = ({
 
                                     let IconTag = ""
                                     if (col && col.customLoadingWithIcon) {
-                                        IconTag = Icon[col.customLoadingWithIcon]
+                                        IconTag = Icon[col.customLoadingWithIcon] || Icon["User"]
                                     }
 
                                     return (
@@ -100,22 +104,28 @@ const CustomTable = ({
                                             {!col.omit ? (
                                                 <td
                                                     style={style}
-                                                    className={`placeholder-glow ${col && col.customLoaderCellClass ? col.customLoaderCellClass : ''}`}
+                                                    className={`${(col && col.customLoaderCellClass) || ''}`}
                                                 >
-                                                    {IconTag ? (
-                                                        <Avatar
-                                                            size={"sm"}
-                                                            imgWidth='30'
-                                                            imgHeight='30'
-                                                            className="placeholder me-50"
-                                                            icon={<IconTag size={17} />}
-                                                        />
-                                                    ) : null}
-
                                                     <div
-                                                        className={`placeholder ${col && col.customLoaderContentClass ? col.customLoaderContentClass : ''}`}
+                                                        className={`${(col && col.customLoaderContentClass) || ""}`}
                                                     >
-                                                        {col && col.loaderContent}
+                                                        {IconTag ? (
+                                                            <div className="zindex-1">
+                                                                <LoadingPlaceHolder extraStyles={{ width: '24px', height: '24px', position: 'absolute', borderRadius: '50%', zIndex: 1 }} />
+
+                                                                <Avatar
+                                                                    size={"sm"}
+                                                                    imgWidth={30}
+                                                                    imgHeight={30}
+                                                                    className="me-50"
+                                                                    icon={<IconTag size={17} />}
+                                                                />
+                                                            </div>
+                                                        ) : null}
+
+                                                        <LoadingPlaceHolder
+                                                            extraStyles={(col && col.contentExtraStyles) || { height: '15px', borderRadius: '10px' }}
+                                                        />
                                                     </div>
                                                 </td>
                                             ) : null}

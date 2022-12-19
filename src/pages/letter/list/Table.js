@@ -204,6 +204,7 @@ const LetterList = () => {
         window.open(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.pdf_path}`, '_blank', 'noopener,noreferrer')
     }
 
+    /* Columns */
     const columns = [
         {
             name: T("Reference Number"),
@@ -212,7 +213,6 @@ const LetterList = () => {
             minWidth: "17%",
             cell: (row) => row.case_id,
             /* Custom placeholder vars */
-            loaderContent: "Reference N",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -224,7 +224,6 @@ const LetterList = () => {
             minWidth: "18%",
             cell: (row) => row.last_date,
             /* Custom placeholder vars */
-            loaderContent: T("Last Date"),
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -236,7 +235,6 @@ const LetterList = () => {
             sortField: "subject",
             cell: (row) => row.subject,
             /* Custom placeholder vars */
-            loaderContent: `${T('Subject')} ------------`,
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -267,7 +265,6 @@ const LetterList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: T("Printed"),
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -283,7 +280,6 @@ const LetterList = () => {
                 </Badge>
             ),
             /* Custom placeholder vars */
-            loaderContent: T("Status"),
             customLoaderCellClass: "",
             customLoaderContentClass: "rounded-pill"
             /* /Custom placeholder vars */
@@ -299,7 +295,6 @@ const LetterList = () => {
                 <Eye size={14} />
             </a>,
             /* Custom placeholder vars */
-            loaderContent: "--",
             customLoaderCellClass: "text-center",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -322,8 +317,7 @@ const LetterList = () => {
                     pagination={store.loading ? store.pagination : {
                         ...store.pagination,
                         perPage: getCurrentPageNumber(TN_OUTBOX, rowsPerPage, currentPage)
-                    }
-                    }
+                    }}
                     handleSort={handleSort}
                     handlePagination={handlePagination}
                     subHeaderComponent={
@@ -335,8 +329,7 @@ const LetterList = () => {
                         />
                     }
                 />
-            )
-            }
+            )}
         </Card>
     </Fragment>) : null
 }

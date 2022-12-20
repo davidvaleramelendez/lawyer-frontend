@@ -230,6 +230,7 @@ const ContactList = () => {
         }
     }
 
+    /* Columns */
     const columns = [
         {
             name: `${T('Ticket')}#`,
@@ -238,7 +239,7 @@ const ContactList = () => {
             sortField: "ContactID",
             cell: (row) => <Link to={`${adminRoot}/contact/view/${row.ContactID}`}>{`#${row.ContactID}`}</Link>,
             /* Custom placeholder vars */
-            loaderContent: `${T('Ticket')}#`,
+            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '80%' },
             customLoadingWithIcon: "",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
@@ -261,10 +262,10 @@ const ContactList = () => {
                 )
             },
             /* Custom placeholder vars */
-            loaderContent: "John Doe",
+            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '70%' },
             customLoadingWithIcon: "User",
             customLoaderCellClass: "",
-            customLoaderContentClass: ""
+            customLoaderContentClass: "d-flex align-items-center"
             /* /Custom placeholder vars */
         },
         {
@@ -274,7 +275,7 @@ const ContactList = () => {
             sortField: "Email",
             cell: row => row.Email,
             /* Custom placeholder vars */
-            loaderContent: "johndoe@example.com",
+            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '75%' },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -294,7 +295,7 @@ const ContactList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: "---",
+            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '60%', margin: '0 auto' },
             customLoaderCellClass: "text-center",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -314,8 +315,7 @@ const ContactList = () => {
                     pagination={store.loading ? store.pagination : {
                         ...store.pagination,
                         perPage: getCurrentPageNumber(TN_CONTACT, rowsPerPage, currentPage)
-                    }
-                    }
+                    }}
                     handleSort={handleSort}
                     handlePagination={handlePagination}
                     subHeaderComponent={
@@ -328,8 +328,8 @@ const ContactList = () => {
                         />
                     }
                 />
-            )
-            }
+            )}
+
             <ModalAddContact
                 toggleModal={() => setModalOpen(!modalOpen)}
                 open={modalOpen}

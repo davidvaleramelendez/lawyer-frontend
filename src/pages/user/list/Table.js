@@ -18,10 +18,7 @@ import {
     Input,
     Badge,
     Button,
-    DropdownMenu,
-    DropdownItem,
-    DropdownToggle,
-    UncontrolledButtonDropdown
+    UncontrolledTooltip
 } from 'reactstrap'
 
 // ** React Dropdown Import
@@ -31,10 +28,9 @@ import Select from 'react-select'
 import {
     Eye,
     User,
+    Edit,
     Slack,
-    Archive,
-    PlusCircle,
-    MoreVertical
+    PlusCircle
 } from 'react-feather'
 
 // ** Utils
@@ -383,6 +379,7 @@ const UsersList = () => {
     }
     /* /User detail popup modal */
 
+    /* Columns */
     const columns = [
         {
             minWidth: "10%",
@@ -399,7 +396,6 @@ const UsersList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: "--",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -412,7 +408,6 @@ const UsersList = () => {
             cell: (row) => (
                 <div className="d-flex justify-content-left align-items-center">
                     {renderUser(row)}
-
                     <div className="d-flex flex-column">
                         <Link
                             to={`${adminRoot}/user/view/${row.id}`}
@@ -424,10 +419,9 @@ const UsersList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: "John Doe",
             customLoadingWithIcon: "User",
             customLoaderCellClass: "",
-            customLoaderContentClass: ""
+            customLoaderContentClass: "d-flex align-items-center"
             /* /Custom placeholder vars */
         },
         {
@@ -437,7 +431,6 @@ const UsersList = () => {
             minWidth: "25%",
             cell: (row) => (<div className="">{row.email}</div>),
             /* Custom placeholder vars */
-            loaderContent: 'johndoe@example.com',
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -456,10 +449,9 @@ const UsersList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: T("Customer"),
             customLoadingWithIcon: "User",
             customLoaderCellClass: "",
-            customLoaderContentClass: ""
+            customLoaderContentClass: "d-flex align-items-center"
             /* /Custom placeholder vars */
         },
         {
@@ -469,7 +461,6 @@ const UsersList = () => {
             minWidth: "15%",
             cell: (row) => row.Contact,
             /* Custom placeholder vars */
-            loaderContent: T("Contact"),
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -485,7 +476,7 @@ const UsersList = () => {
                 </Badge>
             ),
             /* Custom placeholder vars */
-            loaderContent: T("Active"),
+            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '60%' },
             customLoaderCellClass: "",
             customLoaderContentClass: "rounded-pill"
             /* /Custom placeholder vars */
@@ -497,32 +488,28 @@ const UsersList = () => {
             minWidth: "10%",
             cell: (row) => (
                 <div className='column-action d-flex align-items-center'>
-                    <UncontrolledButtonDropdown>
-                        <DropdownToggle color="#FFFFFF">
-                            <MoreVertical size={20} />
-                        </DropdownToggle>
-                        <DropdownMenu>
-                            <DropdownItem
-                                tag={Link}
-                                to={`${adminRoot}/user/view/${row && row.id}`}
-                            >
-                                <Eye size={20} className="mb-0 me-1" />
-                                <span className="me-2">{T('View')}</span>
-                            </DropdownItem>
+                    <Link
+                        to={`${adminRoot}/user/view/${(row && row.id) || ""}`}
+                        id={`pw-view-tooltip-${(row && row.id) || ""}`}
+                    >
+                        <Eye size={17} className="me-50" />
+                    </Link>
+                    <UncontrolledTooltip placement="top" target={`pw-view-tooltip-${row.id}`}>
+                        {T('View')}
+                    </UncontrolledTooltip>
 
-                            <DropdownItem
-                                tag={Link}
-                                to={`${adminRoot}/user/edit/${row && row.id}`}
-                            >
-                                <Archive size={20} className="mb-0 me-1" />
-                                <span className="me-2">{T('Edit')}</span>
-                            </DropdownItem>
-                        </DropdownMenu>
-                    </UncontrolledButtonDropdown>
+                    <Link
+                        to={`${adminRoot}/user/edit/${(row && row.id) || ""}`}
+                        id={`pw-edit-tooltip-${(row && row.id) || ""}`}
+                    >
+                        <Edit size={17} />
+                    </Link>
+                    <UncontrolledTooltip placement="top" target={`pw-edit-tooltip-${row.id}`}>
+                        {T('Edit')}
+                    </UncontrolledTooltip>
                 </div>
             ),
             /* Custom placeholder vars */
-            loaderContent: "|",
             customLoaderCellClass: "text-center",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -543,8 +530,7 @@ const UsersList = () => {
                         pagination={store.loading ? store.pagination : {
                             ...store.pagination,
                             perPage: getCurrentPageNumber(TN_USER, rowsPerPage, currentPage)
-                        }
-                        }
+                        }}
                         handleSort={handleSort}
                         handlePagination={handlePagination}
                         subHeaderComponent={
@@ -560,8 +546,7 @@ const UsersList = () => {
                             />
                         }
                     />
-                )
-                }
+                )}
             </Card>
 
             <ModalAddUser

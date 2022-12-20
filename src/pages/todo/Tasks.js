@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 // ** Custom Components
 import Avatar from '@components/avatar'
 import DotPulse from '@components/dotpulse'
+import LoadingPlaceHolder from '@components/loadingPlaceHolder/LoadingPlaceHolder'
 
 // ** Blank Avatar Image
 import blankAvatar from '@src/assets/images/avatars/avatar-blank.png'
@@ -24,6 +25,7 @@ import {
 
 // ** Reactstrap Imports
 import {
+  Col,
   Input,
   Badge,
   InputGroup,
@@ -47,7 +49,6 @@ const Tasks = (props) => {
     dispatch,
     dateInput,
     paramsURL,
-    taskItems,
     getTaskItem,
     searchInput,
     rowsPerPage,
@@ -58,7 +59,9 @@ const Tasks = (props) => {
     deleteTodoItem,
     restoreTodoItem,
     handleTodoLists,
+    placeholderTasks,
     completeTodoItem,
+    getTransformDate,
     handleMainSidebar,
     setOpenTaskSidebar
   } = props
@@ -108,7 +111,7 @@ const Tasks = (props) => {
     ))
   }
 
-  // ** Renders Avatar
+  // ** Renders Assignee Avatar
   const renderAssignee = (task) => {
     const item = task && task.assign ? task.assign : null
 
@@ -162,8 +165,65 @@ const Tasks = (props) => {
   }
 
   const renderTasks = () => {
-    if (!store.loading) {
+    if (!store.loading && placeholderTasks === 0) {
       return <DotPulse />
+    }
+
+    if (!store.loading) {
+      return (
+        <div className="list-group todo-task-list-wrapper">
+          <ul className="todo-task-list media-list">
+            {Array.from(Array(placeholderTasks).keys(), (row, index) => (
+              <li
+                key={`placeholder-todo-${index}`}
+                className="todo-item"
+              >
+                <div className="todo-title-wrapper">
+                  <Col lg={9} className="todo-title-area">
+                    <MoreVertical className="drag-icon" />
+                    <div className="width-5-per">
+                      <LoadingPlaceHolder
+                        extraStyles={{ height: '15px', borderRadius: '10px' }}
+                      />
+                    </div>
+
+                    <span className="todo-title width-85-per">
+                      <LoadingPlaceHolder
+                        extraStyles={{ height: '15px', borderRadius: '10px' }}
+                      />
+                    </span>
+                  </Col>
+
+                  <Col lg={3} className="todo-item-action mt-lg-0 mt-50">
+                    <div className="badge-wrapper w-25 me-1">
+                      <LoadingPlaceHolder
+                        extraStyles={{ height: '15px', borderRadius: '10px' }}
+                      />
+                    </div>
+
+                    <small className="text-nowrap text-muted width-40-per me-1">
+                      <LoadingPlaceHolder
+                        extraStyles={{ height: '15px', borderRadius: '10px' }}
+                      />
+                    </small>
+
+                    <div className="zindex-1">
+                      <LoadingPlaceHolder extraStyles={{ width: '32px', height: '32px', position: 'absolute', borderRadius: '50%', zIndex: 1 }} />
+
+                      <Avatar
+                        imgClassName=""
+                        img={blankAvatar}
+                        imgHeight={32}
+                        imgWidth={32}
+                      />
+                    </div>
+                  </Col>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
     }
 
     return (
@@ -181,15 +241,15 @@ const Tasks = (props) => {
         }}
         onScrollDown={(container) => onScrollDown(container, rowsPerPage)}
       >
-        {taskItems.length ? (
+        {store.taskItems && store.taskItems.length ? (
           <ReactSortable
             tag="ul"
-            list={taskItems}
+            list={store.taskItems}
             handle=".drag-icon"
             className="todo-task-list media-list"
             setList={(newState) => dispatch(reOrderTasks(newState))}
           >
-            {taskItems.map((item, index) => {
+            {store.taskItems.map((item, index) => {
               return (
                 <li
                   key={`${item.id}-${index}`}
@@ -237,6 +297,7 @@ const Tasks = (props) => {
                       )}
                       <span className="todo-title">{item.title}</span>
                     </div>
+
                     <div className="todo-item-action mt-lg-0 mt-50">
                       {item && item.tag ? (
                         <div className="badge-wrapper me-1">{renderTags(item.tag.split(","))}</div>
@@ -244,8 +305,7 @@ const Tasks = (props) => {
 
                       {item && item.due_date ? (
                         <small className="text-nowrap text-muted me-1">
-                          {new Date(item.due_date).toLocaleString("default", { month: "short" })}{" "}
-                          {new Date(item.due_date).getDate().toString().padStart(2, "0")}
+                          {item.due_date && getTransformDate(item.due_date, "DD.MM.YYYY")}
                         </small>
                       ) : null}
                       {item && renderAssignee(item)}
@@ -312,19 +372,19 @@ const Tasks = (props) => {
             </DropdownItem>
 
             <DropdownItem tag={Link} to="/" onClick={(event) => handleSort((event), "title-desc")}>
-            {T('Sort Z-A')}
+              {T('Sort Z-A')}
             </DropdownItem>
 
             <DropdownItem tag={Link} to="/" onClick={(event) => handleSort(event, "Assign-asc")}>
-            {T('Sort Assignee')}
+              {T('Sort Assignee')}
             </DropdownItem>
 
             <DropdownItem tag={Link} to="/" onClick={(event) => handleSort(event, "due_date-desc")}>
-            {T('Sort Due Date')}
+              {T('Sort Due Date')}
             </DropdownItem>
 
             <DropdownItem tag={Link} to="/" onClick={(event) => handleSort(event, "")}>
-            {T('Reset Sort')}
+              {T('Reset Sort')}
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>

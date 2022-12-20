@@ -27,8 +27,10 @@ async function getCaseListRequest(params) {
 export const getCaseList = createAsyncThunk('appCase/getCaseList', async (params) => {
   try {
     const response = await getCaseListRequest(params)
-    setTotalNumber(TN_CASES, response.pagination.totalRecord)
     if (response && response.flag) {
+      if (response.pagination) {
+        setTotalNumber(TN_CASES, response.pagination.totalRecord || 1)
+      }
       return {
         params,
         caseItems: response.data,
@@ -37,7 +39,7 @@ export const getCaseList = createAsyncThunk('appCase/getCaseList', async (params
         fighterItem: fighterItem,
         caseDocs: [],
         caseRecords: [],
-        timeCaseRecord:[],
+        timeCaseRecord: [],
         mailCaseRecords: [],
         caseLetters: [],
         actionFlag: "",
@@ -53,8 +55,8 @@ export const getCaseList = createAsyncThunk('appCase/getCaseList', async (params
         fighterItem: fighterItem,
         caseDocs: [],
         caseRecords: [],
-        timeCaseRecord:[],
-        mailCaseRecords:[],
+        timeCaseRecord: [],
+        mailCaseRecords: [],
         caseLetters: [],
         actionFlag: "",
         success: "",
@@ -170,8 +172,8 @@ export const closeCase = createAsyncThunk('appCase/closeCase', async (id) => {
         caseDocs: [],
         attachments: [],
         caseRecords: [],
-        timeCaseRecord:[],
-        mailCaseRecords:[],
+        timeCaseRecord: [],
+        mailCaseRecords: [],
         caseLetters: [],
         typeItems: [],
         laywerItems: [],
@@ -184,8 +186,8 @@ export const closeCase = createAsyncThunk('appCase/closeCase', async (id) => {
         caseDocs: [],
         attachments: [],
         caseRecords: [],
-        timeCaseRecord:[],
-        mailCaseRecords:[],
+        timeCaseRecord: [],
+        mailCaseRecords: [],
         caseLetters: [],
         typeItems: [],
         laywerItems: [],
@@ -200,8 +202,8 @@ export const closeCase = createAsyncThunk('appCase/closeCase', async (id) => {
       caseDocs: [],
       attachments: [],
       caseRecords: [],
-      timeCaseRecord:[],
-      mailCaseRecords:[],
+      timeCaseRecord: [],
+      mailCaseRecords: [],
       caseLetters: [],
       typeItems: [],
       laywerItems: [],
@@ -1000,7 +1002,7 @@ export const appCaseSlice = createSlice({
     updateSelectedDetails: (state, action) => {
       state.selectedItem = action.payload || null
     },
-    
+
     setStartTime: (state, action) => {
       state.start_time = action.payload || null
     }
@@ -1167,8 +1169,8 @@ export const appCaseSlice = createSlice({
         state.success = action.payload.success
         state.error = action.payload.error
       })
-    /* /Case Letters */
-    /* Case RecordTime */
+      /* /Case Letters */
+      /* Case RecordTime */
       .addCase(getTimeCaseRecords.fulfilled, (state, action) => {
         state.timeCaseRecord = action.payload.timeCaseRecord
         state.actionFlag = action.payload.actionFlag
@@ -1196,8 +1198,8 @@ export const appCaseSlice = createSlice({
         state.success = action.payload.success
         state.error = action.payload.error
       })
-    /* Case RecordTime */
-    /* Case Mail Record */
+      /* Case RecordTime */
+      /* Case Mail Record */
       .addCase(getCaseRecord.fulfilled, (state, action) => {
         state.actionFlag = action.payload.actionFlag
         state.mailCaseRecords = action.payload.mailCaseRecords

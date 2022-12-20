@@ -259,6 +259,7 @@ const LetterTemplateList = () => {
                 {row.status}
             </Badge></>,
             /* Custom placeholder vars */
+            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '40%' },
             customLoaderCellClass: "",
             customLoaderContentClass: "rounded-pill"
             /* /Custom placeholder vars */

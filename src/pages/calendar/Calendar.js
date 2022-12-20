@@ -173,7 +173,7 @@ const Calendar = (props) => {
     },
 
     dateClick(info) {
-      console.log("dateClick >>> ", info)
+      // console.log("dateClick >>> ", info)
       const start_clicked_time = `${info.dateStr} 00:00`
       const end_clicked_time = `${info.dateStr} 23:59`
 

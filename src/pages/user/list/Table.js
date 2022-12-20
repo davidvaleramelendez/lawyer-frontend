@@ -18,10 +18,7 @@ import {
     Input,
     Badge,
     Button,
-    DropdownMenu,
-    DropdownItem,
-    DropdownToggle,
-    UncontrolledButtonDropdown
+    UncontrolledTooltip
 } from 'reactstrap'
 
 // ** React Dropdown Import
@@ -31,10 +28,9 @@ import Select from 'react-select'
 import {
     Eye,
     User,
+    Edit,
     Slack,
-    Archive,
-    PlusCircle,
-    MoreVertical
+    PlusCircle
 } from 'react-feather'
 
 // ** Utils
@@ -480,6 +476,7 @@ const UsersList = () => {
                 </Badge>
             ),
             /* Custom placeholder vars */
+            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '60%' },
             customLoaderCellClass: "",
             customLoaderContentClass: "rounded-pill"
             /* /Custom placeholder vars */
@@ -491,28 +488,25 @@ const UsersList = () => {
             minWidth: "10%",
             cell: (row) => (
                 <div className='column-action d-flex align-items-center'>
-                    <UncontrolledButtonDropdown>
-                        <DropdownToggle color="#FFFFFF">
-                            <MoreVertical size={20} />
-                        </DropdownToggle>
-                        <DropdownMenu>
-                            <DropdownItem
-                                tag={Link}
-                                to={`${adminRoot}/user/view/${row && row.id}`}
-                            >
-                                <Eye size={20} className="mb-0 me-1" />
-                                <span className="me-2">{T('View')}</span>
-                            </DropdownItem>
+                    <Link
+                        to={`${adminRoot}/user/view/${(row && row.id) || ""}`}
+                        id={`pw-view-tooltip-${(row && row.id) || ""}`}
+                    >
+                        <Eye size={17} className="me-50" />
+                    </Link>
+                    <UncontrolledTooltip placement="top" target={`pw-view-tooltip-${row.id}`}>
+                        {T('View')}
+                    </UncontrolledTooltip>
 
-                            <DropdownItem
-                                tag={Link}
-                                to={`${adminRoot}/user/edit/${row && row.id}`}
-                            >
-                                <Archive size={20} className="mb-0 me-1" />
-                                <span className="me-2">{T('Edit')}</span>
-                            </DropdownItem>
-                        </DropdownMenu>
-                    </UncontrolledButtonDropdown>
+                    <Link
+                        to={`${adminRoot}/user/edit/${(row && row.id) || ""}`}
+                        id={`pw-edit-tooltip-${(row && row.id) || ""}`}
+                    >
+                        <Edit size={17} />
+                    </Link>
+                    <UncontrolledTooltip placement="top" target={`pw-edit-tooltip-${row.id}`}>
+                        {T('Edit')}
+                    </UncontrolledTooltip>
                 </div>
             ),
             /* Custom placeholder vars */

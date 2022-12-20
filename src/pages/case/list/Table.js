@@ -396,6 +396,7 @@ const CaseList = () => {
             minWidth: "12%",
             cell: (row) => row.Status,
             /* Custom placeholder vars */
+            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '70%' },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -413,7 +414,6 @@ const CaseList = () => {
         },
         {
             name: T('Action'),
-            minWidth: '90px',
             center: true,
             minWidth: "10%",
             omit: dotIconAction,
@@ -427,6 +427,7 @@ const CaseList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
+            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '50%', margin: '0 auto' },
             customLoaderCellClass: "text-center",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -446,8 +447,7 @@ const CaseList = () => {
                     pagination={store.loading ? store.pagination : {
                         ...store.pagination,
                         perPage: getCurrentPageNumber(TN_CASES, rowsPerPage, currentPage)
-                    }
-                    }
+                    }}
                     handleSort={handleSort}
                     handlePagination={handlePagination}
                     subHeaderComponent={

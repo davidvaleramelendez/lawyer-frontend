@@ -12,8 +12,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // ** Utils
 import {
-    getTransformDate,
-    getRandColorClass
+    getTransformDate
 } from '@utils'
 
 // ** Reactstrap Imports
@@ -31,7 +30,6 @@ import {
 import Select from "react-select"
 
 // ** Custom Components
-import Avatar from "@components/avatar"
 import DatatablePagination from "@components/datatable/DatatablePagination"
 
 // ** Icons Import
@@ -264,15 +262,6 @@ const DocumentsTab = ({
         }
     }, [loadFirst])
 
-    // ** renders case column
-    const renderCase = (row) => {
-        if (row && row.profile_photo_path && row.profile_photo_path.length) {
-            return <Avatar className="me-1" img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`} width="32" height="32" />
-        } else {
-            return <Avatar color={getRandColorClass()} className="me-50" content={row ? row.name : ""} initials />
-        }
-    }
-
     const onCaseDetail = (row) => {
         setCaseRowData(row)
         setDetailModalOpen(true)
@@ -281,8 +270,8 @@ const DocumentsTab = ({
     const caseColumns = [
         {
             name: "",
-            minWidth: "60px",
-            maxWidth: "60px",
+            minWidth: "10%",
+            maxWidth: "10%",
             omit: plusIconAction,
             cell: (row) => (
                 <div className="d-flex align-items-center">
@@ -293,69 +282,65 @@ const DocumentsTab = ({
             )
         },
         {
-            name: T("Reference Number"),
+            name: `${T("Reference Number")}#`,
             sortable: true,
             sortField: "CaseID",
-            cellClass: "text-uppercase",
-            minWidth: "190px",
-            cell: row => <Link to={`${adminRoot}/case/view/${row.CaseID}`}>{`#${row.CaseID}`}</Link>
-        },
-        {
-            name: T("Client"),
-            sortable: true,
-            cellClass: "text-uppercase",
-            minWidth: "250px",
-            sortField: "Name",
-            cell: row => {
-                const name = row ? row.user && row.user.name : "John Doe"
-                return (
-                    <div className="d-flex justify-content-left align-items-center">
-                        {renderCase(row.user)}
-                        <div className="d-flex flex-column">
-                            <Link to={`${adminRoot}/user/view/${row.user && row.user.id}`}>
-                                <h6 className="user-name text-truncate mb-0">{name}</h6>
-                                <small className="text-truncate text-muted mb-0">{(row && row.user && row.user.email) || ""}</small>
-                            </Link>
-                        </div>
-                    </div>
-                )
-            }
+            minWidth: "20%",
+            cell: row => <Link to={`${adminRoot}/case/view/${row.CaseID}`}>{`#${row.CaseID}`}</Link>,
+            /* Custom placeholder vars */
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: T("Attorney"),
             sortable: true,
             sortField: "LaywerID",
-            cellClass: "text-uppercase",
-            minWidth: "140px",
-            cell: (row) => <>{row && row.laywer && row.laywer.id ? (<Link to={`${adminRoot}/user/view/${row.laywer.id}`}>{row.laywer.name}</Link>) : null}</>
+            minWidth: "20%",
+            cell: (row) => <>{row && row.laywer && row.laywer.id ? (<Link to={`${adminRoot}/user/view/${row.laywer.id}`}>{row.laywer.name}</Link>) : null}</>,
+            /* Custom placeholder vars */
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: T("Date"),
             sortable: true,
             sortField: "Date",
-            cellClass: "text-uppercase",
-            minWidth: "110px",
-            cell: (row) => row.Date && getTransformDate(row.Date, "DD MMM YYYY")
+            minWidth: "15%",
+            cell: (row) => row.Date && getTransformDate(row.Date, "DD MMM YYYY"),
+            /* Custom placeholder vars */
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: T("Status"),
             sortable: true,
             sortField: "Status",
-            cellClass: "text-uppercase",
-            minWidth: "50px",
-            cell: (row) => row.Status
+            minWidth: "15%",
+            cell: (row) => row.Status,
+            /* Custom placeholder vars */
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: T("Group"),
             sortable: true,
             sortField: "Status",
-            cellClass: "text-uppercase",
-            minWidth: "110px",
-            cell: (row) => row && row.type && row.type.CaseTypeName
+            minWidth: "20%",
+            cell: (row) => row && row.type && row.type.CaseTypeName,
+            /* Custom placeholder vars */
+            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '70%' },
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: T('Action'),
-            minWidth: '90px',
+            center: true,
+            minWidth: '10%',
             omit: dotIconAction,
             cell: (row) => (
                 <div className='column-action d-flex align-items-center'>
@@ -365,7 +350,11 @@ const DocumentsTab = ({
                         <Eye size={17} className="mx-1" />
                     </Link>
                 </div>
-            )
+            ),
+            /* Custom placeholder vars */
+            customLoaderCellClass: "text-center",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         }
     ]
     /* /Case columns */
@@ -381,9 +370,9 @@ const DocumentsTab = ({
                 <DatatablePagination
                     customClass=""
                     columns={caseColumns}
-                    loading={caseStore && caseStore.loading}
-                    data={caseStore && caseStore.caseItems}
-                    pagination={caseStore && caseStore.pagination}
+                    loading={caseStore.loading}
+                    data={caseStore.caseItems}
+                    pagination={caseStore.pagination}
                     handleSort={handleCaseSort}
                     handlePagination={handleCasePagination}
                     subHeaderComponent={

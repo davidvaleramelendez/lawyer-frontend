@@ -15,6 +15,9 @@ import {
     onImageSrcError
 } from '@utils'
 
+// ** Custom Components
+import LoadingPlaceHolder from '@components/loadingPlaceHolder/LoadingPlaceHolder'
+
 // Constant
 import {
     adminRoot,
@@ -34,41 +37,63 @@ const UserInfoCard = ({
         <Fragment>
             <Card>
                 <CardBody>
-                    <div
-                        className={`user-avatar-section ${userItem && userItem.ids ? '' : 'placeholder-glow'}`}
-                    >
+                    <div className={`user-avatar-section`}>
                         <div className="d-flex align-items-center flex-column">
-                            {userItem && userItem.profile_photo_path ? <>
-                                <img
-                                    height="110"
-                                    width="110"
-                                    alt="user-avatar"
-                                    className={`img-fluid rounded mt-3 mb-2 ${userItem && userItem.id ? '' : 'placeholder'}`}
-                                    src={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${userItem.profile_photo_path}`}
-                                    onError={(currentTarget) => onImageSrcError(currentTarget)}
-                                />
-                            </> : <>
-                                <img
-                                    height="110"
-                                    width="110"
-                                    alt="user-avatar"
-                                    className={`img-fluid rounded mt-3 mb-2 ${userItem && userItem.id ? '' : 'placeholder'}`}
-                                    src={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/images/avatars/avatar-blank.png`}
-                                    onError={(currentTarget) => onImageSrcError(currentTarget)}
-                                />
-                            </>}
+                            {userItem && userItem.profile_photo_path ? (
+                                <div className="mt-3 mb-2 zindex-1">
+                                    {userItem && !userItem.id ? (
+                                        <LoadingPlaceHolder
+                                            extraStyles={{ width: '110px', height: '110px', position: 'absolute', zIndex: 1, borderRadius: '0.357rem' }}
+                                        />
+                                    ) : null}
+                                    <img
+                                        height="110"
+                                        width="110"
+                                        alt="user-avatar"
+                                        className={`img-fluid rounded`}
+                                        src={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${userItem.profile_photo_path}`}
+                                        onError={(currentTarget) => onImageSrcError(currentTarget)}
+                                    />
+                                </div>
+                            ) : (
+                                <div className="mt-3 mb-2 zindex-1">
+                                    {userItem && !userItem.id ? (
+                                        <LoadingPlaceHolder
+                                            extraStyles={{ width: '110px', height: '110px', position: 'absolute', zIndex: 1, borderRadius: '0.357rem' }}
+                                        />
+                                    ) : null}
+
+                                    <img
+                                        height="110"
+                                        width="110"
+                                        alt="user-avatar"
+                                        className={`img-fluid rounded`}
+                                        src={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/images/avatars/avatar-blank.png`}
+                                        onError={(currentTarget) => onImageSrcError(currentTarget)}
+                                    />
+                                </div>
+                            )}
 
                             <div className="d-flex flex-column align-items-center text-center w-100">
                                 <div className="user-info w-100">
-                                    <h4
-                                        className={`${userItem && userItem.id ? '' : 'placeholder w-50'}`}
-                                    >
-                                        {(userItem && userItem.name)}
-                                    </h4>
+                                    {userItem && userItem.id ? (
+                                        <h4>
+                                            {(userItem && userItem.name) || ""}
+                                        </h4>
+                                    ) : (
+                                        <Fragment>
+                                            <LoadingPlaceHolder
+                                                extraStyles={{ height: '20px', borderRadius: '10px' }}
+                                            />
+                                            <LoadingPlaceHolder
+                                                extraStyles={{ height: '15px', width: '50%', borderRadius: '10px', margin: '7px auto' }}
+                                            />
+                                        </Fragment>
+                                    )}
 
                                     {userItem && userItem.role && userItem.role.role_id ? (
                                         <Badge
-                                            className={`text-capitalize ${userItem && userItem.id ? '' : 'placeholder'}`}
+                                            className={`text-capitalize`}
                                             color={roleColors[userItem.role.role_id] || roleColors[11]}
                                         >
                                             {(userItem.role && userItem.role.RoleName)}
@@ -80,103 +105,186 @@ const UserInfoCard = ({
                     </div>
 
                     <h4 className="fw-bolder border-bottom pb-50 mb-1">{T("Details")}</h4>
-                    <div
-                        className={`info-container ${userItem && userItem.id ? '' : 'placeholder-glow'}`}
-                    >
+                    <div className={`info-container`}>
                         <ul className="list-unstyled">
-                            <li className='mb-75'>
-                                <span className='fw-bolder me-25'>{T("Username")}:</span>
-                                <span
-                                    className={`${userItem && userItem.id ? '' : 'placeholder w-50'}`}
-                                >
-                                    {(userItem && userItem.email)}
-                                </span>
+                            <li className="mb-75">
+                                {userItem && userItem.id ? (
+                                    <Fragment>
+                                        <span className="fw-bolder me-25">{T("Username")}:</span>
+                                        <span>{(userItem && userItem.email) || ""}</span>
+                                    </Fragment>
+                                ) : (
+                                    <LoadingPlaceHolder
+                                        extraStyles={{
+                                            height: "18px",
+                                            borderRadius: "10px",
+                                            marginTop: '13px'
+                                        }}
+                                    />
+                                )}
                             </li>
 
-                            <li className='mb-75'>
-                                <span className='fw-bolder me-25'>{T("Email")}:</span>
-                                <span
-                                    className={`${userItem && userItem.id ? '' : 'placeholder w-50'}`}
-                                >
-                                    {(userItem && userItem.email)}
-                                </span>
+                            <li className="mb-75">
+                                {userItem && userItem.id ? (
+                                    <Fragment>
+                                        <span className="fw-bolder me-25">{T("Email")}:</span>
+                                        <span>{(userItem && userItem.email) || ""}</span>
+                                    </Fragment>
+                                ) : (
+                                    <LoadingPlaceHolder
+                                        extraStyles={{
+                                            height: "18px",
+                                            borderRadius: "10px",
+                                            marginTop: '13px'
+                                        }}
+                                    />
+                                )}
                             </li>
 
-                            {userItem && userItem.Status ? (
-                                <li className='mb-75'>
-                                    <span className='fw-bolder me-25'>{T("Status")}:</span>
-                                    <Badge
-                                        className={`text-capitalize ${userItem && userItem.id ? '' : 'placeholder'}`}
-                                        color={`${userItem.Status === "Active" ? 'light-success' : 'light-warning'}`}>
-                                        {(userItem && userItem.Status)}
-                                    </Badge>
-                                </li>
-                            ) : null}
-
-                            <li className='mb-75'>
-                                <span className='fw-bolder me-25'>{T("Role")}:</span>
-                                <span
-                                    className={`text-capitalize ${userItem && userItem.id ? '' : 'placeholder w-50'}`}
-                                >
-                                    {(userItem && userItem.role && userItem.role.RoleName)}
-                                </span>
+                            <li className="mb-75">
+                                {userItem && userItem.id ? (
+                                    <Fragment>
+                                        <span className="fw-bolder me-25">{T("Status")}:</span>
+                                        {userItem && userItem.Status ? (
+                                            <Badge
+                                                className={`text-capitalize`}
+                                                color={`${userItem.Status === "Active" ? "light-success" : "light-warning"}`}>
+                                                {(userItem && userItem.Status)}
+                                            </Badge>
+                                        ) : null}
+                                    </Fragment>
+                                ) : (
+                                    <LoadingPlaceHolder
+                                        extraStyles={{
+                                            height: "18px",
+                                            borderRadius: "10px",
+                                            marginTop: '13px'
+                                        }}
+                                    />
+                                )}
                             </li>
 
-                            <li className='mb-75'>
-                                <span className='fw-bolder me-25'>{T("Contact")}:</span>
-                                <span
-                                    className={`${userItem && userItem.id ? '' : 'placeholder w-50'}`}
-                                >
-                                    {userItem && userItem.Contact}
-                                </span>
+                            <li className="mb-75">
+                                {userItem && userItem.id ? (
+                                    <Fragment>
+                                        <span className="fw-bolder me-25">{T("Role")}:</span>
+                                        <span className={`text-capitalize`}>
+                                            {(userItem && userItem.role && userItem.role.RoleName) || ""}
+                                        </span>
+                                    </Fragment>
+                                ) : (
+                                    <LoadingPlaceHolder
+                                        extraStyles={{
+                                            height: "18px",
+                                            borderRadius: "10px",
+                                            marginTop: '13px'
+                                        }}
+                                    />
+                                )}
                             </li>
 
-                            <li className='mb-75'>
-                                <span className='fw-bolder me-25'>{T("Address")}:</span>
-                                <span
-                                    className={`${userItem && userItem.id ? '' : 'placeholder w-50'}`}
-                                >
-                                    {userItem && userItem.Address}
-                                    {userItem && userItem.Address1 ? (`, ${userItem.Address1}`) : null}
-                                </span>
+                            <li className="mb-75">
+                                {userItem && userItem.id ? (
+                                    <Fragment>
+                                        <span className="fw-bolder me-25">{T("Contact")}:</span>
+                                        <span>{(userItem && userItem.Contact) || ""}</span>
+                                    </Fragment>
+                                ) : (
+                                    <LoadingPlaceHolder
+                                        extraStyles={{
+                                            height: "18px",
+                                            borderRadius: "10px",
+                                            marginTop: '13px'
+                                        }}
+                                    />
+                                )}
                             </li>
 
-                            <li className='mb-75'>
-                                <span className='fw-bolder me-25'>{T("City")}:</span>
-                                <span
-                                    className={`text-capitalize ${userItem && userItem.id ? '' : 'placeholder w-50'}`}
-                                >
-                                    {(userItem && userItem.City)}
-                                </span>
+                            <li className="mb-75">
+                                {userItem && userItem.id ? (
+                                    <Fragment>
+                                        <span className="fw-bolder me-25">{T("Address")}:</span>
+                                        <span>
+                                            {userItem && userItem.Address}
+                                            {userItem && userItem.Address1 ? (`, ${userItem.Address1}`) : null}
+                                        </span>
+                                    </Fragment>
+                                ) : (
+                                    <LoadingPlaceHolder
+                                        extraStyles={{
+                                            height: "18px",
+                                            borderRadius: "10px",
+                                            marginTop: '13px'
+                                        }}
+                                    />
+                                )}
                             </li>
 
-                            <li className='mb-75'>
-                                <span className='fw-bolder me-25'>{T("State")}:</span>
-                                <span
-                                    className={`text-capitalize ${userItem && userItem.id ? '' : 'placeholder w-50'}`}
-                                >
-                                    {(userItem && userItem.State)}
-                                </span>
+                            <li className="mb-75">
+                                {userItem && userItem.id ? (
+                                    <Fragment>
+                                        <span className="fw-bolder me-25">{T("City")}:</span>
+                                        <span className={`text-capitalize`}>
+                                            {(userItem && userItem.City) || ""}
+                                        </span>
+                                    </Fragment>
+                                ) : (
+                                    <LoadingPlaceHolder
+                                        extraStyles={{
+                                            height: "18px",
+                                            borderRadius: "10px",
+                                            marginTop: '13px'
+                                        }}
+                                    />
+                                )}
                             </li>
 
-                            <li className='mb-75'>
-                                <span className='fw-bolder me-25'>{T("Country")}:</span>
-                                <span
-                                    className={`text-capitalize ${userItem && userItem.id ? '' : 'placeholder w-50'}`}
-                                >
-                                    {(userItem && userItem.Country)}
-                                </span>
+                            <li className="mb-75">
+                                {userItem && userItem.id ? (
+                                    <Fragment>
+                                        <span className="fw-bolder me-25">{T("State")}:</span>
+                                        <span className={`text-capitalize`}>
+                                            {(userItem && userItem.State) || ""}
+                                        </span>
+                                    </Fragment>
+                                ) : (
+                                    <LoadingPlaceHolder
+                                        extraStyles={{
+                                            height: "18px",
+                                            borderRadius: "10px",
+                                            marginTop: '13px'
+                                        }}
+                                    />
+                                )}
+                            </li>
+
+                            <li className="mb-75">
+                                {userItem && userItem.id ? (
+                                    <Fragment>
+                                        <span className="fw-bolder me-25">{T("Country")}:</span>
+                                        <span className={`text-capitalize`}>
+                                            {(userItem && userItem.Country) || ""}
+                                        </span>
+                                    </Fragment>
+                                ) : (
+                                    <LoadingPlaceHolder
+                                        extraStyles={{
+                                            height: "18px",
+                                            borderRadius: "10px",
+                                            marginTop: '13px'
+                                        }}
+                                    />
+                                )}
                             </li>
                         </ul>
                     </div>
 
-                    <div
-                        className={`d-flex justify-content-center flex-wrap pt-2 ${userItem && userItem.id ? '' : 'placeholder-glow'}`}
-                    >
+                    <div className={`d-flex justify-content-center flex-wrap pt-2`}>
                         <Button
                             tag={Link}
                             color="primary"
-                            className={`me-1 mb-1 ${userItem && userItem.id ? '' : 'placeholder'}`}
+                            className={`me-1 mb-1`}
+                            disabled={userItem && !userItem.id}
                             to={`${adminRoot}/user/edit/${userItem.id}`}
                         >
                             {T("Edit")}
@@ -184,7 +292,8 @@ const UserInfoCard = ({
 
                         <Button
                             color="danger"
-                            className={`mb-1 ${userItem && userItem.id ? '' : 'placeholder'}`}
+                            className={`mb-1`}
+                            disabled={userItem && !userItem.id}
                             onClick={() => onDeleteUser(id)}
                         >
                             {T("Clear")}

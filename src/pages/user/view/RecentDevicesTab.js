@@ -145,15 +145,25 @@ const RecentDevicesTab = ({
             name: T('Ip Address'),
             sortable: true,
             sortField: 'ip_address',
-            minWidth: '140px',
-            cell: (row) => row.ip_address
+            minWidth: '50%',
+            cell: (row) => row.ip_address,
+            /* Custom placeholder vars */
+            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '60%' },
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: T('Login Date'),
             sortable: true,
             sortField: 'login_at',
-            minWidth: '140px',
-            cell: (row) => row.login_at && getTransformDate(row.login_at, "DD MMM YYYY")
+            minWidth: '50%',
+            cell: (row) => row.login_at && getTransformDate(row.login_at, "DD MMM YYYY"),
+            /* Custom placeholder vars */
+            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '60%' },
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         }
     ]
     /* /Device Log history columns */

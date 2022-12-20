@@ -179,7 +179,7 @@ const Tasks = (props) => {
                 className="todo-item"
               >
                 <div className="todo-title-wrapper">
-                  <Col lg={8} className="todo-title-area">
+                  <Col lg={9} className="todo-title-area">
                     <MoreVertical className="drag-icon" />
                     <div className="width-5-per">
                       <LoadingPlaceHolder
@@ -187,21 +187,21 @@ const Tasks = (props) => {
                       />
                     </div>
 
-                    <span className="todo-title w-75">
+                    <span className="todo-title width-85-per">
                       <LoadingPlaceHolder
                         extraStyles={{ height: '15px', borderRadius: '10px' }}
                       />
                     </span>
                   </Col>
 
-                  <Col lg={4} className="todo-item-action mt-lg-0 mt-50">
+                  <Col lg={3} className="todo-item-action mt-lg-0 mt-50">
                     <div className="badge-wrapper w-25 me-1">
                       <LoadingPlaceHolder
                         extraStyles={{ height: '15px', borderRadius: '10px' }}
                       />
                     </div>
 
-                    <small className="text-nowrap text-muted w-50 me-1">
+                    <small className="text-nowrap text-muted width-40-per me-1">
                       <LoadingPlaceHolder
                         extraStyles={{ height: '15px', borderRadius: '10px' }}
                       />

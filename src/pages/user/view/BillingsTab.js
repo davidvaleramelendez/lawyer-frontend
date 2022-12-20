@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
     getTransformDate,
     getDecimalFormat,
-    getRandColorClass,
     capitalizeWordFirstLetter
 } from '@utils'
 
@@ -237,16 +236,6 @@ const BillingsTab = ({
         }
     }, [loadFirst])
 
-    /* renders user column */
-    const renderUser = (row) => {
-        if (row && row.profile_photo_path && row.profile_photo_path.length) {
-            return <Avatar className='me-1' img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`} width='32' height='32' />
-        } else {
-            return <Avatar color={getRandColorClass()} className='me-50' content={row ? row.name : 'John Doe'} initials />
-        }
-    }
-    /* /renders user column */
-
     /* Invoice columns */
     const invoiceColumns = [
         {
@@ -275,24 +264,6 @@ const BillingsTab = ({
                             <span className='fw-bold'>Due Date:</span> {row.invoice_due_date && getTransformDate(row.invoice_due_date, "DD/MM/YYYY")}
                         </UncontrolledTooltip>
                     </Fragment>
-                )
-            }
-        },
-        {
-            name: T('Client'),
-            sortable: true,
-            minWidth: '240px',
-            sortField: 'customer_id',
-            cell: (row) => {
-                const name = row && row.customer ? row.customer.name : 'John Doe'
-                return (
-                    <div className='d-flex justify-content-left align-items-center'>
-                        {renderUser(row.customer)}
-                        <div className='d-flex flex-column'>
-                            <h6 className='user-name text-truncate mb-0'>{name}</h6>
-                            <small className='text-truncate text-muted text-wrap mb-0'>{row && row.customer && row.customer.email}</small>
-                        </div>
-                    </div>
                 )
             }
         },

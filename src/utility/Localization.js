@@ -1,6 +1,5 @@
 import { getCurrentUser, getLanguageLabels } from "./Utils"
 
-
 export const L10nKeys = {
     //** Menus
     Dashboards: 'Dashboards',

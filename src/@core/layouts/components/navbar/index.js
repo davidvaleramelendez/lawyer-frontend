@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 // ** Custom Components
 import NavbarUser from './NavbarUser'
 import NavbarBookmarks from './NavbarBookmarks'
-import Spinner from '@components/spinner/Simple-grow-spinner'
+import DotPulse from '@components/dotpulse'
 
 // ** Store & Actions
 import { useSelector } from 'react-redux'
@@ -19,7 +19,7 @@ const ThemeNavbar = (props) => {
   return (
     <Fragment>
       {store && !store.loading ? (
-        <Spinner
+        <DotPulse
           className="d-flex justify-content-center position-fixed top-50 w-75 zindex-1"
         />
       ) : null}

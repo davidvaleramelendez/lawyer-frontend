@@ -46,6 +46,7 @@ import {
 } from '@constant/reduxConstant'
 
 // ** Custom Components
+import DotPulse from '@components/dotpulse'
 import Spinner from '@components/spinner/Simple-grow-spinner'
 
 // ** Styles Imports
@@ -351,7 +352,7 @@ const TaskSidebar = (props) => {
       modalClassName='modal-slide-in sidebar-todo-modal'
     >
       {!store.loading ? (
-        <Spinner
+        <DotPulse
           className="d-flex justify-content-center position-absolute top-50 w-100 zindex-3"
         />
       ) : null}

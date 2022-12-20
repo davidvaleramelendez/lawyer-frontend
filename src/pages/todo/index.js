@@ -34,7 +34,8 @@ import {
 // ** Utils
 import {
   isUserLoggedIn,
-  getTotalNumber
+  getTotalNumber,
+  getTransformDate
 } from '@utils'
 
 // ** Custom Components
@@ -186,13 +187,13 @@ const TodoApp = () => {
                 getTaskItem={getTaskItem}
                 searchInput={searchInput}
                 setDateInput={setDateInput}
-                taskItems={store.taskItems}
                 reOrderTasks={reOrderTasks}
                 setRowsPerPage={setRowsPerPage}
                 setSearchInput={setSearchInput}
                 deleteTodoItem={deleteTodoItem}
                 restoreTodoItem={restoreTodoItem}
                 handleTodoLists={handleTodoLists}
+                getTransformDate={getTransformDate}
                 placeholderTasks={placeholderTasks}
                 completeTodoItem={completeTodoItem}
                 handleMainSidebar={handleMainSidebar}

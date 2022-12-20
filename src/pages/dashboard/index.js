@@ -46,7 +46,7 @@ import {
 
 // ** Custom Components
 import Avatar from '@components/avatar'
-import Spinner from '@components/spinner/Simple-grow-spinner'
+import DotPulse from '@components/dotpulse'
 
 // ** Demo Components
 import CardMedal from '@components/cards/advance/CardMedal'
@@ -241,7 +241,7 @@ const EcommerceDashboard = () => {
   return store ? (
     <div id="dashboard-ecommerce">
       {!store.loading ? (
-        <Spinner
+        <DotPulse
           className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
         />
       ) : null}

@@ -71,7 +71,7 @@ export const getUserList = createAsyncThunk('appUser/getUserList', async (params
     const response = await getUserListRequest(params)
     if (response && response.flag) {
       if (response.pagination) {
-        setTotalNumber(TN_USER, response.pagination.totalRecord || 1)
+        setTotalNumber(TN_USER, response.pagination.totalRecord || 0)
       }
 
       return {

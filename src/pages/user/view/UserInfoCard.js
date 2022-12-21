@@ -83,10 +83,11 @@ const UserInfoCard = ({
                                     ) : (
                                         <Fragment>
                                             <LoadingPlaceHolder
-                                                extraStyles={{ height: '20px', borderRadius: '10px' }}
+                                                extraStyles={{ height: '20px', width: 'max-content', minWidth: '210px', borderRadius: '10px', margin: '0 auto' }}
                                             />
+
                                             <LoadingPlaceHolder
-                                                extraStyles={{ height: '15px', width: '50%', borderRadius: '10px', margin: '7px auto' }}
+                                                extraStyles={{ height: '15px', width: 'max-content', minWidth: '76px', borderRadius: '10px', margin: '7px auto' }}
                                             />
                                         </Fragment>
                                     )}
@@ -117,6 +118,8 @@ const UserInfoCard = ({
                                     <LoadingPlaceHolder
                                         extraStyles={{
                                             height: "18px",
+                                            width: 'max-content',
+                                            minWidth: "268px",
                                             borderRadius: "10px",
                                             marginTop: '13px'
                                         }}
@@ -134,6 +137,8 @@ const UserInfoCard = ({
                                     <LoadingPlaceHolder
                                         extraStyles={{
                                             height: "18px",
+                                            width: 'max-content',
+                                            minWidth: "268px",
                                             borderRadius: "10px",
                                             marginTop: '13px'
                                         }}
@@ -157,6 +162,8 @@ const UserInfoCard = ({
                                     <LoadingPlaceHolder
                                         extraStyles={{
                                             height: "18px",
+                                            width: 'max-content',
+                                            minWidth: "109px",
                                             borderRadius: "10px",
                                             marginTop: '13px'
                                         }}
@@ -176,6 +183,8 @@ const UserInfoCard = ({
                                     <LoadingPlaceHolder
                                         extraStyles={{
                                             height: "18px",
+                                            width: 'max-content',
+                                            minWidth: "110px",
                                             borderRadius: "10px",
                                             marginTop: '13px'
                                         }}
@@ -193,6 +202,8 @@ const UserInfoCard = ({
                                     <LoadingPlaceHolder
                                         extraStyles={{
                                             height: "18px",
+                                            width: 'max-content',
+                                            minWidth: "159px",
                                             borderRadius: "10px",
                                             marginTop: '13px'
                                         }}
@@ -213,6 +224,8 @@ const UserInfoCard = ({
                                     <LoadingPlaceHolder
                                         extraStyles={{
                                             height: "18px",
+                                            width: 'max-content',
+                                            minWidth: "268px",
                                             borderRadius: "10px",
                                             marginTop: '13px'
                                         }}
@@ -232,6 +245,8 @@ const UserInfoCard = ({
                                     <LoadingPlaceHolder
                                         extraStyles={{
                                             height: "18px",
+                                            width: 'max-content',
+                                            minWidth: "110px",
                                             borderRadius: "10px",
                                             marginTop: '13px'
                                         }}
@@ -251,6 +266,8 @@ const UserInfoCard = ({
                                     <LoadingPlaceHolder
                                         extraStyles={{
                                             height: "18px",
+                                            width: 'max-content',
+                                            minWidth: "110px",
                                             borderRadius: "10px",
                                             marginTop: '13px'
                                         }}
@@ -270,6 +287,8 @@ const UserInfoCard = ({
                                     <LoadingPlaceHolder
                                         extraStyles={{
                                             height: "18px",
+                                            width: 'max-content',
+                                            minWidth: "140px",
                                             borderRadius: "10px",
                                             marginTop: '13px'
                                         }}

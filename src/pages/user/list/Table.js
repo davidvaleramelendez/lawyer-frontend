@@ -449,7 +449,13 @@ const UsersList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '60px'
+            },
             customLoadingWithIcon: "User",
+            customLoadingIconStyle: {
+                width: '24px', height: '24px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: "d-flex align-items-center"
             /* /Custom placeholder vars */
@@ -461,6 +467,9 @@ const UsersList = () => {
             minWidth: "15%",
             cell: (row) => row.Contact,
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '105px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -476,7 +485,9 @@ const UsersList = () => {
                 </Badge>
             ),
             /* Custom placeholder vars */
-            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '60%' },
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '60px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: "rounded-pill"
             /* /Custom placeholder vars */
@@ -510,6 +521,9 @@ const UsersList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '50px'
+            },
             customLoaderCellClass: "text-center",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */

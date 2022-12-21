@@ -1,3 +1,5 @@
+/* eslint-disable array-bracket-newline */
+
 import { getCurrentUser, getLanguageLabels } from "./Utils"
 
 export const L10nKeys = {
@@ -630,6 +632,10 @@ export const L10nKeys = {
     Okay: 'Okay',
     PleaseUploadMax: 'Please upload max',
     files: 'files',
+    Showing: 'Showing',
+    to: 'to',
+    of: 'of',
+    entries: 'entries',
     //** /Common
 
     //** Error    
@@ -813,8 +819,7 @@ export const L10nOrgKeys = {
         'Sticky', 'Static', 'Hidden', 'FooterType', 'ApplySave'
     ],
     Common: [
-        'AppsMenu', 'RequestSettings', 'Profile', 'Logout',
-        'FileLimitExceeded', 'FileUploadingSizeExceeded', 'Okay', 'PleaseUploadMax', 'files'
+        'AppsMenu', 'RequestSettings', 'Profile', 'Logout', 'FileLimitExceeded', 'FileUploadingSizeExceeded', 'Okay', 'PleaseUploadMax', 'files', 'Showing', 'to', 'of', 'entries'
     ],
     Errors: ['Success', 'Failed', 'Error', 'Warning']
 }

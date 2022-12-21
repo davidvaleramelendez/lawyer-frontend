@@ -1,18 +1,21 @@
-// ** Third Party Components
-import DataTable from 'react-data-table-component'
-import ReactPaginate from 'react-paginate'
-
-// ** Custom Components
-import CustomTable from '@components/placeholder/CustomTable'
-
-// Translation
-import { useTranslation } from 'react-i18next'
+// ** React Imports
+import { Fragment } from 'react'
 
 // ** Reactstrap Imports
 import {
     Col,
     Row
 } from 'reactstrap'
+
+// ** Third Party Components
+import DataTable from 'react-data-table-component'
+import ReactPaginate from 'react-paginate'
+
+// ** Custom Placeholder Components
+import CustomTable from '@components/placeholder/CustomTable'
+
+// ** Translation
+import { T } from '@localization'
 
 // ** Icons Import
 import { ChevronDown } from 'react-feather'
@@ -37,9 +40,6 @@ const DatatablePagination = ({
     displayEntriesLabel = true
     // noDataComponent = "There are no records to display..."
 }) => {
-    // ** Hooks
-    const { t } = useTranslation()
-
     /* Page change function */
     const onPageChange = (page) => {
         if (page && (page.selected || page.selected === 0)) {
@@ -47,13 +47,24 @@ const DatatablePagination = ({
         }
     }
 
-    const DatatablePagination = () => {
+    const DatatablePagination = ({
+        placeholder = false,
+        bodyRows
+    }) => {
         return (
             <Row className="d-flex align-items-center">
                 <Col sm={6} md={6}>
                     {displayEntriesLabel ? (
                         <div className="text-muted text-center text-sm-start p-1">
-                            {t("Showing")} {pagination && pagination.startIndex ? pagination.startIndex : 1} {t("to")} {pagination && pagination.startIndex ? pagination.endIndex : 1} {t("of")} {pagination && pagination.startIndex ? pagination.totalRecord : 1} {t("entries")}
+                            {placeholder ? (
+                                <Fragment>
+                                    {T("Showing")} {pagination && pagination.startIndex ? pagination.startIndex : 1} {T("to")} {bodyRows || 1} {T("of")} {bodyRows || 1} {T("entries")}
+                                </Fragment>
+                            ) : (
+                                <Fragment>
+                                    {T("Showing")} {pagination && pagination.startIndex ? pagination.startIndex : 1} {T("to")} {pagination && pagination.startIndex ? pagination.endIndex : 1} {T("of")} {pagination && pagination.startIndex ? pagination.totalRecord : 1} {T("entries")}
+                                </Fragment>
+                            )}
                         </div>
                     ) : null}
                 </Col>
@@ -98,7 +109,7 @@ const DatatablePagination = ({
                 progressComponent={
                     <CustomTable
                         responsive={false}
-                        tableClassName="placeholder-table mb-3"
+                        tableClassName="placeholder-table"
                         headerClassName=""
                         columns={columns}
                         bodyRows={pagination && pagination.perPage ? parseInt(pagination.perPage) : defaultPerPageRow}
@@ -114,6 +125,13 @@ const DatatablePagination = ({
                 paginationComponent={DatatablePagination}
                 subHeaderComponent={subHeaderComponent}
             />
+
+            {!loading ? (
+                <DatatablePagination
+                    placeholder={true}
+                    bodyRows={pagination && pagination.perPage ? parseInt(pagination.perPage) : defaultPerPageRow}
+                />
+            ) : null}
         </div>
     )
 }

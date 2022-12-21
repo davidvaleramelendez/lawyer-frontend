@@ -27,6 +27,7 @@ import {
   createUpdateTodo,
   completeTodoItem,
   importantTodoItem,
+  resetTaskItems,
   updateTaskLoader,
   clearTodoMessage
 } from './store'
@@ -67,7 +68,7 @@ const TodoApp = () => {
   const [loadFirst, setLoadFirst] = useState(true)
   const [sort, setSort] = useState('')
   const [searchInput, setSearchInput] = useState('')
-  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [rowsPerPage, setRowsPerPage] = useState(getTotalNumber(TN_TASK) ?? 0)
   const [dateInput, setDateInput] = useState('')
   const [mainSidebar, setMainSidebar] = useState(false)
   const [openTaskSidebar, setOpenTaskSidebar] = useState(false)
@@ -161,6 +162,8 @@ const TodoApp = () => {
         mainSidebar={mainSidebar}
         urlFilter={paramsURL.filter}
         setMainSidebar={setMainSidebar}
+        resetTaskItems={resetTaskItems}
+        updateTaskLoader={updateTaskLoader}
         setOpenTaskSidebar={setOpenTaskSidebar}
       />
       <div className='content-right'>

@@ -33,15 +33,21 @@ const TodoSidebar = (props) => {
     mainSidebar,
     getTodoList,
     setMainSidebar,
+    resetTaskItems,
+    // updateTaskLoader,
     setOpenTaskSidebar
   } = props
 
   // ** Functions To Handle List Item Filter
   const handleFilter = (filter) => {
+    // dispatch(updateTaskLoader(false))
+    dispatch(resetTaskItems([]))
     dispatch(getTodoList({ ...params, filter }))
   }
 
-  const handleTag = tag => {
+  const handleTag = (tag) => {
+    // dispatch(updateTaskLoader(false))
+    dispatch(resetTaskItems([]))
     dispatch(getTodoList({ ...params, tag }))
   }
 

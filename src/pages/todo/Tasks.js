@@ -51,11 +51,9 @@ const Tasks = (props) => {
     paramsURL,
     getTaskItem,
     searchInput,
-    rowsPerPage,
     setDateInput,
     reOrderTasks,
     setSearchInput,
-    setRowsPerPage,
     deleteTodoItem,
     restoreTodoItem,
     handleTodoLists,
@@ -70,18 +68,6 @@ const Tasks = (props) => {
   const handleTaskClick = (obj) => {
     dispatch(getTaskItem(obj))
     setOpenTaskSidebar(true)
-  }
-
-  const onScrollDown = (container, value) => {
-    const { scrollTop, scrollHeight, clientHeight } = container
-    const { totalRecord } = store.pagination
-    // console.log("onScrollDown >>> ", scrollTop, scrollHeight, clientHeight, totalRecord)
-    if ((scrollTop + clientHeight) === (scrollHeight - 1) || (scrollTop + clientHeight) === (scrollHeight)) {
-      if (value < totalRecord) {
-        setRowsPerPage(value + 10)
-        handleTodoLists(paramsURL.filter, searchInput, dateInput, sort, paramsURL.tag, value + 10)
-      }
-    }
   }
 
   // ** Returns avatar color based on task tag
@@ -198,7 +184,7 @@ const Tasks = (props) => {
                         extraStyles={{
                           height: '15px',
                           width: "max-content",
-                          minWidth: "350px",
+                          minWidth: "200px",
                           borderRadius: '10px'
                         }}
                       />
@@ -266,7 +252,6 @@ const Tasks = (props) => {
             }
           }
         }}
-        onScrollDown={(container) => onScrollDown(container, rowsPerPage)}
       >
         {store.taskItems && store.taskItems.length ? (
           <ReactSortable

@@ -67,7 +67,7 @@ export const getTodoList = createAsyncThunk('appTodo/getTodoList', async (params
 
       return {
         params,
-        taskItems: response.data,
+        taskItems: response.data || [],
         todosMeta: response.todosMeta || todosMeta,
         pagination: response.pagination,
         todoItem: todoItem,
@@ -319,6 +319,10 @@ export const appTodoSlice = createSlice({
       state.loading = action.payload || false
     },
 
+    resetTaskItems: (state, action) => {
+      state.taskItems = action.payload || []
+    },
+
     clearTodoMessage: (state) => {
       state.actionFlag = ""
       state.success = ""
@@ -387,6 +391,7 @@ export const appTodoSlice = createSlice({
 export const {
   reOrderTasks,
   getTaskItem,
+  resetTaskItems,
   updateTaskLoader,
   clearTodoMessage
 } = appTodoSlice.actions

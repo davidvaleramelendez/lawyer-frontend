@@ -239,7 +239,9 @@ const ContactList = () => {
             sortField: "ContactID",
             cell: (row) => <Link to={`${adminRoot}/contact/view/${row.ContactID}`}>{`#${row.ContactID}`}</Link>,
             /* Custom placeholder vars */
-            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '80%' },
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '90px'
+            },
             customLoadingWithIcon: "",
             customLoaderCellClass: "",
             customLoaderContentClass: ""
@@ -262,7 +264,9 @@ const ContactList = () => {
                 )
             },
             /* Custom placeholder vars */
-            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '70%' },
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '120px'
+            },
             customLoadingWithIcon: "User",
             customLoaderCellClass: "",
             customLoaderContentClass: "d-flex align-items-center"
@@ -275,7 +279,9 @@ const ContactList = () => {
             sortField: "Email",
             cell: row => row.Email,
             /* Custom placeholder vars */
-            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '75%' },
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '210px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -295,7 +301,9 @@ const ContactList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '60%', margin: '0 auto' },
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '30px'
+            },
             customLoaderCellClass: "text-center",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */

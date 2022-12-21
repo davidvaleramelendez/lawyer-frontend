@@ -26,8 +26,11 @@ async function getLetterListRequest(params) {
 export const getLetterList = createAsyncThunk('appLetter/getLetterList', async (params) => {
   try {
     const response = await getLetterListRequest(params)
-    setTotalNumber(TN_OUTBOX, response.pagination.totalRecord)
     if (response && response.flag) {
+      if (response.pagination) {
+        setTotalNumber(TN_OUTBOX, response.pagination.totalRecord || 0)
+      }
+
       return {
         params,
         letterItems: response.data,

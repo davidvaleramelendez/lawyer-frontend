@@ -27,7 +27,10 @@ export const getLetterTemplateList = createAsyncThunk('appLetterTemplate/getLett
     try {
         const response = await getLetterTemplateListRequest(params)
         if (response && response.flag) {
-            setTotalNumber(TN_LETTER_TEMPLATE, response.pagination?.totalRecord)
+            if (response.pagination) {
+                setTotalNumber(TN_LETTER_TEMPLATE, response.pagination.totalRecord || 0)
+            }
+
             return {
                 params,
                 letterTemplateItems: response.data,

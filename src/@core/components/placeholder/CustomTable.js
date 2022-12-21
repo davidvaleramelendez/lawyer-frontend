@@ -35,7 +35,7 @@ const CustomTable = ({
             <Fragment>
                 <Table
                     responsive={responsive}
-                    className={`w-100 ${tableClassName || ""}`}
+                    className={`${tableClassName || ""}`}
                 >
                     <thead
                         className={`${headerClassName || ""}`}
@@ -57,11 +57,12 @@ const CustomTable = ({
                                 return (
                                     !col.omit ? (
                                         <th
-                                            style={style}
                                             key={`place-holder-head-${index}`}
                                             className={`${(col && col.customLoaderCellClass) || ""}`}
                                         >
-                                            {col.name || ""}
+                                            <div>
+                                                {col.name || ""}
+                                            </div>
                                         </th>
                                     ) : null
                                 )

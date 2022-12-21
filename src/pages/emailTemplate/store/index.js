@@ -27,8 +27,11 @@ async function getEmailTemplateListRequest(params) {
 export const getEmailTemplateList = createAsyncThunk('appEmailTemplate/getEmailTemplateList', async (params) => {
   try {
     const response = await getEmailTemplateListRequest(params)
-    setTotalNumber(TN_EMAIL_TEMPLATE, response.pagination.totalRecord)
     if (response && response.flag) {
+      if (response.pagination) {
+        setTotalNumber(TN_EMAIL_TEMPLATE, response.pagination.totalRecord || 0)
+      }
+
       return {
         params,
         emailTemplateItems: response.data,

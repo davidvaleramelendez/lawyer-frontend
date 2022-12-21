@@ -60,8 +60,11 @@ async function getTodoListRequest(params) {
 export const getTodoList = createAsyncThunk('appTodo/getTodoList', async (params) => {
   try {
     const response = await getTodoListRequest(params)
-    setTotalNumber(TN_TASK, response.pagination.totalRecord)
     if (response && response.flag) {
+      if (response.pagination) {
+        setTotalNumber(TN_TASK, response.pagination.totalRecord || 0)
+      }
+
       return {
         params,
         taskItems: response.data,

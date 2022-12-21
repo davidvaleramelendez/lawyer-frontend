@@ -29,7 +29,7 @@ export const getCaseList = createAsyncThunk('appCase/getCaseList', async (params
     const response = await getCaseListRequest(params)
     if (response && response.flag) {
       if (response.pagination) {
-        setTotalNumber(TN_CASES, response.pagination.totalRecord || 1)
+        setTotalNumber(TN_CASES, response.pagination.totalRecord || 0)
       }
       return {
         params,

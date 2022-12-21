@@ -169,6 +169,7 @@ const Tasks = (props) => {
       return <DotPulse />
     }
 
+    // const loading = false
     if (!store.loading) {
       return (
         <div className="list-group todo-task-list-wrapper">
@@ -179,36 +180,62 @@ const Tasks = (props) => {
                 className="todo-item"
               >
                 <div className="todo-title-wrapper">
-                  <Col lg={9} className="todo-title-area">
+                  <Col lg={8} className="todo-title-area">
                     <MoreVertical className="drag-icon" />
-                    <div className="width-5-per">
+                    <div className="">
                       <LoadingPlaceHolder
-                        extraStyles={{ height: '15px', borderRadius: '10px' }}
+                        extraStyles={{
+                          height: '18px',
+                          width: "max-content",
+                          minWidth: "20px",
+                          borderRadius: '10px'
+                        }}
                       />
                     </div>
 
-                    <span className="todo-title width-85-per">
+                    <span className="todo-title">
                       <LoadingPlaceHolder
-                        extraStyles={{ height: '15px', borderRadius: '10px' }}
+                        extraStyles={{
+                          height: '15px',
+                          width: "max-content",
+                          minWidth: "350px",
+                          borderRadius: '10px'
+                        }}
                       />
                     </span>
                   </Col>
 
-                  <Col lg={3} className="todo-item-action mt-lg-0 mt-50">
-                    <div className="badge-wrapper w-25 me-1">
+                  <Col lg={4} className="todo-item-action justify-content-end mt-lg-0 mt-50">
+                    <div className="badge-wrapper me-1">
                       <LoadingPlaceHolder
-                        extraStyles={{ height: '15px', borderRadius: '10px' }}
+                        extraStyles={{
+                          height: '15px',
+                          width: "max-content",
+                          minWidth: "55px",
+                          borderRadius: '10px'
+                        }}
                       />
                     </div>
 
-                    <small className="text-nowrap text-muted width-40-per me-1">
+                    <small className="text-nowrap text-muted ms-0 me-1">
                       <LoadingPlaceHolder
-                        extraStyles={{ height: '15px', borderRadius: '10px' }}
+                        extraStyles={{
+                          height: '15px',
+                          width: 'max-content',
+                          minWidth: '65px',
+                          borderRadius: '10px'
+                        }}
                       />
                     </small>
 
                     <div className="zindex-1">
-                      <LoadingPlaceHolder extraStyles={{ width: '32px', height: '32px', position: 'absolute', borderRadius: '50%', zIndex: 1 }} />
+                      <LoadingPlaceHolder extraStyles={{
+                        height: '32px',
+                        width: '32px',
+                        position: 'absolute',
+                        borderRadius: '50%',
+                        zIndex: 1
+                      }} />
 
                       <Avatar
                         imgClassName=""

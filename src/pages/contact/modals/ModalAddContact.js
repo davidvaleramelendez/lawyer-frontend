@@ -26,7 +26,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from "yup"
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-grow-spinner'
+import DotPulse from '@components/dotpulse'
 
 // ** Third Party Components
 import { Editor } from 'react-draft-wysiwyg'
@@ -54,7 +54,7 @@ const ModalAddContact = ({ open, toggleModal }) => {
     // Name: yup.string().required('Name is required!').matches(/^([a-zA-Z]+ [a-zA-Z]+)$/i, 'Invalid full name!'),
     Name: yup.string().required(T('Name is required!')),
     Email: yup.string().required(T('Email is required!')).email(T('Invalid email address!')),
-    PhoneNo: yup.string().required(T('Mobile is required!')).min(10, T("Mobile Must be 10 digit!")).max(10, T("Mobile Must be 10 digit!"))
+    PhoneNo: yup.string().required(T('Mobile is required!')).min(6, T("Mobile Must be 6 digit!")).max(16, T("Mobile Must be 16 digit!"))
   }).required()
 
   const {
@@ -126,7 +126,7 @@ const ModalAddContact = ({ open, toggleModal }) => {
         backdrop="static"
       >
         {!store.loading ? (
-          <Spinner
+          <DotPulse
             className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
           />
         ) : null}
@@ -143,7 +143,7 @@ const ModalAddContact = ({ open, toggleModal }) => {
           <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <div className='mb-1'>
               <Label className='form-label' for='Name'>
-              {T('Full Name')}
+                {T('Full Name')}
               </Label>
               <Controller
                 defaultValue=""

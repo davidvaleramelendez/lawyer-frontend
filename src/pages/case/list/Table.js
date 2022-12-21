@@ -338,7 +338,7 @@ const CaseList = () => {
             name: `${T("Reference Number")}#`,
             sortable: true,
             sortField: "CaseID",
-            minWidth: "17%",
+            minWidth: "13%",
             cell: (row) => <Link to={`${adminRoot}/case/view/${row.CaseID}`}>{`#${row.CaseID}`}</Link>,
             /* Custom placeholder vars */
             contentExtraStyles: {
@@ -351,7 +351,7 @@ const CaseList = () => {
         {
             name: T("Client"),
             sortable: true,
-            minWidth: "20%",
+            minWidth: "24%",
             sortField: "Name",
             cell: (row) => {
                 const name = row ? row.user && row.user.name : "John Doe"
@@ -370,10 +370,10 @@ const CaseList = () => {
             /* Custom placeholder vars */
             customRenderTwoRow: true,
             contentExtraStylesRow1: {
-                height: '15px', width: 'auto', borderRadius: '10px', minWidth: '120px'
+                height: '15px', width: 'auto', borderRadius: '10px', minWidth: '130px'
             },
             contentExtraStylesRow2: {
-                height: '10px', width: 'auto', borderRadius: '10px', minWidth: '120px', marginTop: '3px'
+                height: '10px', width: 'auto', borderRadius: '10px', minWidth: '130px', marginTop: '3px'
             },
             customLoadingWithIcon: "User",
             customLoaderCellClass: "",
@@ -440,6 +440,7 @@ const CaseList = () => {
             name: T('Action'),
             center: true,
             minWidth: "10%",
+            maxWidth: "10%",
             omit: dotIconAction,
             cell: (row) => (
                 <div className="column-action d-flex align-items-center">

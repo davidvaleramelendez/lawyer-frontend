@@ -327,6 +327,9 @@ const CaseList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '30px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -338,6 +341,9 @@ const CaseList = () => {
             minWidth: "17%",
             cell: (row) => <Link to={`${adminRoot}/case/view/${row.CaseID}`}>{`#${row.CaseID}`}</Link>,
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '95px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -362,6 +368,13 @@ const CaseList = () => {
                 )
             },
             /* Custom placeholder vars */
+            customRenderTwoRow: true,
+            contentExtraStylesRow1: {
+                height: '15px', width: 'auto', borderRadius: '10px', minWidth: '120px'
+            },
+            contentExtraStylesRow2: {
+                height: '10px', width: 'auto', borderRadius: '10px', minWidth: '120px', marginTop: '3px'
+            },
             customLoadingWithIcon: "User",
             customLoaderCellClass: "",
             customLoaderContentClass: "d-flex align-items-center"
@@ -374,6 +387,9 @@ const CaseList = () => {
             minWidth: "14%",
             cell: (row) => row && row.laywer && row.laywer.id ? (<Link to={`${adminRoot}/user/view/${row.laywer.id}`}>{row.laywer.name}</Link>) : null,
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '125px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -385,6 +401,9 @@ const CaseList = () => {
             minWidth: "13%",
             cell: (row) => row.Date && getTransformDate(row.Date, "DD MMM YYYY"),
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -396,7 +415,9 @@ const CaseList = () => {
             minWidth: "12%",
             cell: (row) => row.Status,
             /* Custom placeholder vars */
-            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '70%' },
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '60px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -408,6 +429,9 @@ const CaseList = () => {
             minWidth: "14%",
             cell: (row) => row && row.type && row.type.CaseTypeName,
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -427,7 +451,9 @@ const CaseList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
-            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '50%', margin: '0 auto' },
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '30px'
+            },
             customLoaderCellClass: "text-center",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */

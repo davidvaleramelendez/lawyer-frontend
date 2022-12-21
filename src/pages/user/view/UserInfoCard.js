@@ -40,7 +40,13 @@ const UserInfoCard = ({
                     <div className={`user-avatar-section`}>
                         <div className="d-flex align-items-center flex-column">
                             {userItem && userItem.profile_photo_path ? (
-                                <div className="mt-3 mb-2 zindex-1">
+                                <div
+                                    className="mt-3 mb-2 zindex-1"
+                                    style={{
+                                        minWidth: '110px',
+                                        minHeight: '110px'
+                                    }}
+                                >
                                     {userItem && !userItem.id ? (
                                         <LoadingPlaceHolder
                                             extraStyles={{ width: '110px', height: '110px', position: 'absolute', zIndex: 1, borderRadius: '0.357rem' }}
@@ -56,7 +62,13 @@ const UserInfoCard = ({
                                     />
                                 </div>
                             ) : (
-                                <div className="mt-3 mb-2 zindex-1">
+                                <div
+                                    className="mt-3 mb-2 zindex-1"
+                                    style={{
+                                        minWidth: '110px',
+                                        minHeight: '110px'
+                                    }}
+                                >
                                     {userItem && !userItem.id ? (
                                         <LoadingPlaceHolder
                                             extraStyles={{ width: '110px', height: '110px', position: 'absolute', zIndex: 1, borderRadius: '0.357rem' }}

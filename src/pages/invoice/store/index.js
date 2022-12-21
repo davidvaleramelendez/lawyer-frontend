@@ -39,7 +39,7 @@ export const getInvoiceList = createAsyncThunk('appInvoice/getInvoiceList', asyn
     const response = await getInvoiceListRequest(params)
     if (response && response.flag) {
       if (response.pagination) {
-        setTotalNumber(TN_INVOICE, response.pagination.totalRecord || 1)
+        setTotalNumber(TN_INVOICE, response.pagination.totalRecord || 0)
       }
       return {
         params,

@@ -35,7 +35,7 @@ const CustomTable = ({
             <Fragment>
                 <Table
                     responsive={responsive}
-                    className={`w-100 ${tableClassName || ""}`}
+                    className={`${tableClassName || ""}`}
                 >
                     <thead
                         className={`${headerClassName || ""}`}
@@ -57,11 +57,12 @@ const CustomTable = ({
                                 return (
                                     !col.omit ? (
                                         <th
-                                            style={style}
                                             key={`place-holder-head-${index}`}
                                             className={`${(col && col.customLoaderCellClass) || ""}`}
                                         >
-                                            {col.name || ""}
+                                            <div>
+                                                {col.name || ""}
+                                            </div>
                                         </th>
                                     ) : null
                                 )
@@ -95,7 +96,7 @@ const CustomTable = ({
                                             IconTag = Icon[col.customLoadingWithIcon] || Icon["User"]
                                         }
 
-                                        let iconCustomStyle = {}
+                                        let iconCustomStyle = { width: '32px', height: '32px' }
                                         const iconExtraStyles = { width: '32px', height: '32px', position: 'absolute', borderRadius: '50%', zIndex: 1 }
                                         if (col && col.customLoadingIconStyle) {
                                             iconCustomStyle = col.customLoadingIconStyle
@@ -134,13 +135,13 @@ const CustomTable = ({
                                                             ) : null}
 
                                                             {col && col.customRenderTwoRow ? (
-                                                                <div className="w-100">
+                                                                <div className="">
                                                                     <LoadingPlaceHolder
-                                                                        extraStyles={(col && col.contentExtraStyles) || { height: '15px', borderRadius: '10px' }}
+                                                                        extraStyles={(col && col.contentExtraStylesRow1) || { height: '15px', borderRadius: '10px' }}
                                                                     />
                                                                     <LoadingPlaceHolder
                                                                         extraStyles={
-                                                                            (col && col.contentExtraStyles) || {
+                                                                            (col && col.contentExtraStylesRow2) || {
                                                                                 height: '10px',
                                                                                 borderRadius: '10px',
                                                                                 marginTop: '3px'

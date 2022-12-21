@@ -26,8 +26,11 @@ async function getContactListRequest(params) {
 export const getContactList = createAsyncThunk('appContact/getContactList', async (params) => {
   try {
     const response = await getContactListRequest(params)
-    setTotalNumber(TN_CONTACT, response.pagination.totalRecord)
     if (response && response.flag) {
+      if (response.pagination) {
+        setTotalNumber(TN_CONTACT, response.pagination.totalRecord || 0)
+      }
+
       return {
         params,
         contactItems: response.data,

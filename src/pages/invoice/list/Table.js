@@ -395,6 +395,9 @@ const InvoiceList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '30px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -406,6 +409,9 @@ const InvoiceList = () => {
             minWidth: "20%",
             cell: (row) => <Link to={`${adminRoot}/invoice/view/${row.id}`}>{`#${row.invoice_no}`}</Link>,
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '90px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -432,6 +438,9 @@ const InvoiceList = () => {
                 )
             },
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '35px', width: 'auto', borderRadius: '50%', display: 'inline-block', minWidth: '35px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -454,6 +463,13 @@ const InvoiceList = () => {
                 )
             },
             /* Custom placeholder vars */
+            customRenderTwoRow: true,
+            contentExtraStylesRow1: {
+                height: '15px', width: 'auto', borderRadius: '10px', minWidth: '140px'
+            },
+            contentExtraStylesRow2: {
+                height: '10px', width: 'auto', borderRadius: '10px', minWidth: '140px', marginTop: '3px'
+            },
             customLoadingWithIcon: "User",
             customLoaderCellClass: "",
             customLoaderContentClass: "d-flex align-items-center"
@@ -466,6 +482,9 @@ const InvoiceList = () => {
             minWidth: "12%",
             cell: (row) => `€ ${row && row.total_price && getDecimalFormat(row.total_price)}`,
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '65px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -477,6 +496,9 @@ const InvoiceList = () => {
             minWidth: "15%",
             cell: (row) => row.invoice_due_date && getTransformDate(row.invoice_due_date, "DD MMM YYYY"),
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -487,7 +509,7 @@ const InvoiceList = () => {
             omit: dotIconAction,
             minWidth: "15%",
             cell: (row) => (
-                <div className="column-action d-flex align-items-center">
+                <div className="d-flex column-action align-items-center">
                     <Send
                         className="cursor-pointer"
                         size={17}
@@ -568,6 +590,9 @@ const InvoiceList = () => {
                 </div>
             ),
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '90px'
+            },
             customLoaderCellClass: "text-center",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */

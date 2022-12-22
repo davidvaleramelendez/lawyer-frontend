@@ -25,13 +25,12 @@ const ViewActions = ({
 
     return (
         <Card className="invoice-action-wrapper">
-            <CardBody
-                className={`${invoiceItem && invoiceItem.id ? '' : 'placeholder-glow'}`}
-            >
+            <CardBody>
                 <Button
                     block
                     color="primary"
-                    className={`mb-75 ${invoiceItem && invoiceItem.id ? '' : 'placeholder'}`}
+                    className={`mb-75`}
+                    disabled={invoiceItem && !invoiceItem.id}
                     onClick={() => setSendInvoiceModalOpen(true)}
                 >
                     {T("Send invoice by e-mail")}
@@ -44,8 +43,9 @@ const ViewActions = ({
                     target="_blank"
                     color="secondary"
                     rel="noopener noreferrer"
-                    className={`mb-75 ${invoiceItem && invoiceItem.id ? '' : 'placeholder'}`}
+                    className={`mb-75`}
                     href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${invoiceItem.pdf_path}`}
+                    disabled={invoiceItem && !invoiceItem.id}
                     onClick={(event) => invoiceItem && !invoiceItem.pdf_path && event.preventDefault()}
                 >
                     {T("Download")}
@@ -58,8 +58,9 @@ const ViewActions = ({
                     target="_blank"
                     color="secondary"
                     rel="noopener noreferrer"
-                    className={`mb-75 ${invoiceItem && invoiceItem.id ? '' : 'placeholder'}`}
+                    className={`mb-75`}
                     href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${invoiceItem.pdf_path}`}
+                    disabled={invoiceItem && !invoiceItem.id}
                     onClick={(event) => invoiceItem && !invoiceItem.pdf_path && event.preventDefault()}
                 >
                     {T("Print out")}
@@ -70,22 +71,21 @@ const ViewActions = ({
                     outline
                     tag={Link}
                     color="secondary"
-                    className={`mb-75 ${invoiceItem && invoiceItem.id ? '' : 'placeholder'}`}
+                    className={`mb-75`}
                     to={`${adminRoot}/invoice/edit/${invoiceItem.id}`}
+                    disabled={invoiceItem && !invoiceItem.id}
                 >
                     {T("Edit")}
                 </Button>
 
-                {invoiceItem && parseFloat(invoiceItem.remaining_amount) ? (
-                    <Button
-                        block
-                        color="success"
-                        className={`${invoiceItem && invoiceItem.id ? '' : 'placeholder'}`}
-                        onClick={() => setPaymentModalOpen(true)}
-                    >
-                        {T("Add Payment")}
-                    </Button>
-                ) : null}
+                <Button
+                    block
+                    color="success"
+                    disabled={invoiceItem && !parseFloat(invoiceItem.remaining_amount)}
+                    onClick={() => setPaymentModalOpen(true)}
+                >
+                    {T("Add Payment")}
+                </Button>
             </CardBody>
         </Card>
     )

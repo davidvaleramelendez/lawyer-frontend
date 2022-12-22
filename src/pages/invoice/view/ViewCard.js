@@ -1,3 +1,6 @@
+// ** React Imports
+import { Fragment } from 'react'
+
 // ** Reactstrap Imports
 import {
     Col,
@@ -7,6 +10,9 @@ import {
     CardBody,
     CardText
 } from 'reactstrap'
+
+// ** Custom Components
+import LoadingPlaceHolder from '@components/loadingPlaceHolder/LoadingPlaceHolder'
 
 // ** Translation
 import { T } from '@localization'
@@ -18,10 +24,13 @@ const ViewCard = ({
     getTransformDate
 }) => {
 
+    /* Net cost value */
     const onNetValueCost = (total = 0, vat = 0) => {
         return getDecimalFormat(total - vat)
     }
+    /* /Net cost value */
 
+    /* Contact two values */
     const concateTwoValue = (value1 = "", value2 = "") => {
         let name = ""
         if (value1) {
@@ -34,14 +43,13 @@ const ViewCard = ({
 
         return name
     }
+    /* /Contact two values */
 
     return invoiceItem ? (
         <Card className="invoice-preview-card">
             <CardBody className="invoice-padding pb-0">
                 {/* Header */}
-                <div
-                    className={`d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0 ${invoiceItem && invoiceItem.id ? '' : 'placeholder-glow'}`}
-                >
+                <div className={`d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0`}>
                     <div>
                         <div className="logo-wrapper">
                             <svg viewBox='0 0 139 95' version='1.1' height='24'>
@@ -95,60 +103,136 @@ const ViewCard = ({
                             </svg>
                             <h3 className="text-primary invoice-logo">Logo</h3>
                         </div>
-                        <CardText
-                            className={`mb-25 ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}
-                        >
-                            {companyItem && companyItem.id ? concateTwoValue(companyItem.name, companyItem.last_name) : null}
-                        </CardText>
+                        {invoiceItem && invoiceItem.id ? (
+                            <CardText className={`mb-25`}>
+                                {companyItem && companyItem.id ? concateTwoValue(companyItem.name, companyItem.last_name) : null}
+                            </CardText>
+                        ) : (
+                            <LoadingPlaceHolder
+                                customClassName="mb-25"
+                                extraStyles={{
+                                    height: "21px",
+                                    width: 'max-content',
+                                    minWidth: "150px",
+                                    borderRadius: "10px"
+                                }}
+                            />
+                        )}
 
-                        <CardText
-                            className={`mb-25 ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}
-                        >
-                            {companyItem && companyItem.id ? <>
-                                {companyItem.address}
-                                {companyItem.city ? `, ${companyItem.city}` : ''}
-                            </> : null}
-                        </CardText>
+                        {companyItem && companyItem.id ? (
+                            <Fragment>
+                                <CardText className={`mb-25`}>
+                                    {companyItem.address || ""}
+                                    {companyItem.city ? `, ${companyItem.city || ""}` : ''}
+                                </CardText>
+                            </Fragment>
+                        ) : (
+                            <LoadingPlaceHolder
+                                customClassName="mb-25"
+                                extraStyles={{
+                                    height: "21px",
+                                    width: 'max-content',
+                                    minWidth: "250px",
+                                    borderRadius: "10px"
+                                }}
+                            />
+                        )}
 
-                        <CardText
-                            className={`mb-0 ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}
-                        >
-                            {companyItem && companyItem.id ? companyItem.zip_code : null}
-                        </CardText>
+                        {companyItem && companyItem.id ? (
+                            <CardText className={`mb-0`}>
+                                {companyItem.zip_code || ""}
+                            </CardText>
+                        ) : (
+                            <LoadingPlaceHolder
+                                customClassName="mb-25"
+                                extraStyles={{
+                                    height: "21px",
+                                    width: 'max-content',
+                                    minWidth: "100px",
+                                    borderRadius: "10px"
+                                }}
+                            />
+                        )}
                     </div>
 
                     <div className="mt-md-0 mt-2">
                         <h4 className="invoice-title">
-                            {T("Invoice")} <span className={`invoice-number ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}>
-                                #{invoiceItem && invoiceItem.invoice_no}
-                            </span>
+                            {invoiceItem && invoiceItem.id ? (
+                                <Fragment>
+                                    {T("Invoice")} <span className={`invoice-number`}>
+                                        #{(invoiceItem && invoiceItem.invoice_no) || ""}
+                                    </span>
+                                </Fragment>
+                            ) : (
+                                <LoadingPlaceHolder
+                                    extraStyles={{
+                                        height: "22px",
+                                        width: 'max-content',
+                                        minWidth: "210px",
+                                        borderRadius: "10px"
+                                    }}
+                                />
+                            )}
                         </h4>
 
                         <div className="invoice-date-wrapper">
-                            <p className="invoice-date-title">{T("Created")}:</p>
-                            <p
-                                className={`invoice-date ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}
-                            >
-                                {invoiceItem && invoiceItem.invoice_date && getTransformDate(invoiceItem.invoice_date, "DD.MM.YYYY")}
-                            </p>
+                            {invoiceItem && invoiceItem.id ? (
+                                <Fragment>
+                                    <p className="invoice-date-title">{T("Created")}:</p>
+                                    <p className={`invoice-date`}>
+                                        {(invoiceItem && invoiceItem.invoice_date && getTransformDate(invoiceItem.invoice_date, "DD.MM.YYYY")) || ""}
+                                    </p>
+                                </Fragment>
+                            ) : (
+                                <LoadingPlaceHolder
+                                    extraStyles={{
+                                        height: "21px",
+                                        width: 'max-content',
+                                        minWidth: "200px",
+                                        borderRadius: "10px"
+                                    }}
+                                />
+                            )}
                         </div>
 
                         <div className="invoice-date-wrapper">
-                            <p className="invoice-date-title">{T("Maturity")}:</p>
-                            <p
-                                className={`invoice-date ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}
-                            >
-                                {invoiceItem && invoiceItem.invoice_due_date && getTransformDate(invoiceItem.invoice_due_date, "DD.MM.YYYY")}
-                            </p>
+                            {invoiceItem && invoiceItem.id ? (
+                                <Fragment>
+                                    <p className="invoice-date-title">{T("Maturity")}:</p>
+                                    <p className={`invoice-date`}>
+                                        {(invoiceItem && invoiceItem.invoice_due_date && getTransformDate(invoiceItem.invoice_due_date, "DD.MM.YYYY")) || ""}
+                                    </p>
+                                </Fragment>
+                            ) : (
+                                <LoadingPlaceHolder
+                                    extraStyles={{
+                                        height: "21px",
+                                        width: 'max-content',
+                                        minWidth: "200px",
+                                        borderRadius: "10px"
+                                    }}
+                                />
+                            )}
                         </div>
 
                         <div className="invoice-date-wrapper">
-                            <p className="invoice-date-title">{T("Status")}:</p>
-                            <p
-                                className={`invoice-date text-capitalize ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}
-                            >
-                                {invoiceItem && invoiceItem.status}
-                            </p>
+                            {invoiceItem && invoiceItem.id ? (
+                                <Fragment>
+                                    <p className="invoice-date-title">{T("Status")}:</p>
+                                    <p className={`invoice-date text-capitalize`}>
+                                        {(invoiceItem && invoiceItem.status) || ""}
+                                    </p>
+                                </Fragment>
+                            ) : (
+                                <LoadingPlaceHolder
+                                    extraStyles={{
+                                        height: "21px",
+                                        width: 'max-content',
+                                        minWidth: "160px",
+                                        borderRadius: "10px"
+                                    }}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>
@@ -159,66 +243,134 @@ const ViewCard = ({
 
             {/* Address and Contact */}
             <CardBody className="invoice-padding pt-0">
-                <Row
-                    className={`invoice-spacing ${invoiceItem && invoiceItem.id ? '' : 'placeholder-glow'}`}
-                >
-                    <Col
-                        xl={8}
-                        className="p-0"
-                    >
+                <Row className={`invoice-spacing`}>
+                    <Col xl={8} className="p-0">
                         <h6 className="mb-2">{T("Invoice to")}:</h6>
-                        <h6
-                            className={`mb-25 ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-50'}`}
-                        >
-                            {invoiceItem && invoiceItem.customer && invoiceItem.customer.name}
+                        <h6 className={`mb-25`}>
+                            {invoiceItem && invoiceItem.id ? (
+                                (invoiceItem && invoiceItem.customer && invoiceItem.customer.name) || ""
+                            ) : (
+                                <LoadingPlaceHolder
+                                    customClassName="mb-50"
+                                    extraStyles={{
+                                        height: "18px",
+                                        width: 'max-content',
+                                        minWidth: "140px",
+                                        borderRadius: "10px"
+                                    }}
+                                />
+                            )}
                         </h6>
 
-                        <CardText
-                            className={`mb-25 ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-75'}`}
-                        >
-                            {invoiceItem && invoiceItem.customer && invoiceItem.customer.email}
-                        </CardText>
+                        {invoiceItem && invoiceItem.id ? (
+                            <CardText className={`mb-25`}>
+                                {(invoiceItem && invoiceItem.customer && invoiceItem.customer.email) || ""}
+                            </CardText>
+                        ) : (
+                            <LoadingPlaceHolder
+                                customClassName="mb-25"
+                                extraStyles={{
+                                    height: "18px",
+                                    width: 'max-content',
+                                    minWidth: "190px",
+                                    borderRadius: "10px"
+                                }}
+                            />
+                        )}
 
-                        <CardText
-                            className={`mb-25 ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-75'}`}
-                        >
-                            {invoiceItem && invoiceItem.customer && invoiceItem.customer.Address}
-                        </CardText>
+                        {invoiceItem && invoiceItem.id ? (
+                            <CardText className={`mb-25`}>
+                                {(invoiceItem && invoiceItem.customer && invoiceItem.customer.Address) || ""}
+                            </CardText>
+                        ) : (
+                            <LoadingPlaceHolder
+                                customClassName="mb-25"
+                                extraStyles={{
+                                    height: "18px",
+                                    width: 'max-content',
+                                    minWidth: "190px",
+                                    borderRadius: "10px"
+                                }}
+                            />
+                        )}
 
-                        <CardText
-                            className={`mb-25 ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-50'}`}
-                        >
-                            {invoiceItem && invoiceItem.customer && invoiceItem.customer.Postcode}
-                        </CardText>
+                        {invoiceItem && invoiceItem.id ? (
+                            invoiceItem && invoiceItem.customer && invoiceItem.customer.Postcode ? (
+                                <CardText className={`mb-25`}>
+                                    {invoiceItem.customer.Postcode || ""}
+                                </CardText>
+                            ) : (
+                                <CardText
+                                    className={`mb-25`}
+                                    style={{ height: '17px' }}
+                                />
+                            )
+                        ) : (
+                            <LoadingPlaceHolder
+                                customClassName="mb-25"
+                                extraStyles={{
+                                    height: "18px",
+                                    width: 'max-content',
+                                    minWidth: "100px",
+                                    borderRadius: "10px"
+                                }}
+                            />
+                        )}
                     </Col>
 
-                    <Col
-                        xl={4}
-                        className="p-0 mt-xl-0 mt-2"
-                    >
+                    <Col xl={4} className="p-0 mt-xl-0 mt-2">
                         <h6 className="mb-2">{T("Payment details")}:</h6>
                         <table>
                             <tbody>
                                 <tr>
-                                    <td>{T("Total")}:</td>
-                                    <td>
-                                        <span
-                                            className={`fw-bold ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}
-                                        >
-                                            € {invoiceItem && invoiceItem.total_price && getDecimalFormat(invoiceItem.total_price)}
-                                        </span>
-                                    </td>
+                                    {invoiceItem && invoiceItem.id ? (
+                                        <Fragment>
+                                            <td>{T("Total")}:</td>
+                                            <td>
+                                                <span className={`fw-bold`}>
+                                                    € {invoiceItem && invoiceItem.total_price && getDecimalFormat(invoiceItem.total_price)}
+                                                </span>
+                                            </td>
+                                        </Fragment>
+                                    ) : (
+                                        <td>
+                                            <LoadingPlaceHolder
+                                                customClassName="mb-25"
+                                                extraStyles={{
+                                                    height: "18px",
+                                                    width: 'max-content',
+                                                    minWidth: "180px",
+                                                    borderRadius: "10px"
+                                                }}
+                                            />
+                                        </td>
+                                    )}
                                 </tr>
 
                                 <tr>
-                                    <td className="">{T("Open amount")}:</td>
-                                    <td>
-                                        <span
-                                            className={`fw-bold ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-100'}`}
-                                        >
-                                            € {invoiceItem && invoiceItem.remaining_amount && getDecimalFormat(invoiceItem.remaining_amount)}
-                                        </span>
-                                    </td>
+                                    {invoiceItem && invoiceItem.id ? (
+                                        <Fragment>
+                                            <td className="">{T("Open amount")}:</td>
+                                            <td>
+                                                <span className={`fw-bold`}>
+                                                    € {invoiceItem && invoiceItem.remaining_amount && getDecimalFormat(invoiceItem.remaining_amount)}
+                                                </span>
+                                            </td>
+                                        </Fragment>
+                                    ) : (
+                                        <td>
+                                            <LoadingPlaceHolder
+                                                customClassName="mb-25"
+                                                extraStyles={{
+                                                    height: "18px",
+                                                    width: 'max-content',
+                                                    minWidth: "180px",
+                                                    borderRadius: "10px",
+                                                    marginTop: "2px"
+                                                }}
+                                            />
+                                        </td>
+                                    )}
                                 </tr>
                             </tbody>
                         </table>
@@ -235,16 +387,41 @@ const ViewCard = ({
                         <th className="d-flex justify-content-end">{T("Amount")}</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     {invoiceItem && invoiceItem.items && invoiceItem.items.length ? <>
                         {invoiceItem.items.map((item, index) => (
                             <tr key={`item_${index}`}>
                                 <td>
-                                    {item.item_detail}
+                                    {invoiceItem && invoiceItem.id ? (
+                                        item.item_detail
+                                    ) : (
+                                        <LoadingPlaceHolder
+                                            extraStyles={{
+                                                height: "20px",
+                                                width: 'max-content',
+                                                minWidth: "210px",
+                                                borderRadius: "10px"
+                                            }}
+                                        />
+                                    )}
                                 </td>
 
                                 <td className="d-flex justify-content-end">
-                                    € {item.price && getDecimalFormat(item.price)}
+                                    {invoiceItem && invoiceItem.id ? (
+                                        <Fragment>
+                                            € {item.price && getDecimalFormat(item.price)}
+                                        </Fragment>
+                                    ) : (
+                                        <LoadingPlaceHolder
+                                            extraStyles={{
+                                                height: "20px",
+                                                width: 'max-content',
+                                                minWidth: "80px",
+                                                borderRadius: "10px"
+                                            }}
+                                        />
+                                    )}
                                 </td>
                             </tr>
                         ))}
@@ -255,38 +432,70 @@ const ViewCard = ({
 
             {/* Total & Sales Person */}
             <CardBody className="invoice-padding pb-0">
-                <Row
-                    className={`invoice-sales-total-wrapper ${invoiceItem && invoiceItem.id ? '' : 'placeholder-glow'}`}
-                >
+                <Row className={`invoice-sales-total-wrapper`}>
                     <Col className="mt-md-0 mt-3" md={6} order={{ md: 1, lg: 2 }} />
                     <Col className="d-flex justify-content-end" md={6} order={{ md: 2, lg: 1 }}>
                         <div className="invoice-total-wrapper">
                             <div className="invoice-total-item">
-                                <p className="invoice-total-title">{T("Net")}:</p>
-                                <p
-                                    className={`invoice-total-amount ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-50'}`}
-                                >
-                                    € {onNetValueCost(invoiceItem && invoiceItem.total_price, invoiceItem && invoiceItem.vat)}
-                                </p>
+                                {invoiceItem && invoiceItem.id ? (
+                                    <Fragment>
+                                        <p className="invoice-total-title">{T("Net")}:</p>
+                                        <p className={`invoice-total-amount`}>
+                                            € {onNetValueCost(invoiceItem && invoiceItem.total_price, invoiceItem && invoiceItem.vat)}
+                                        </p>
+                                    </Fragment>
+                                ) : (
+                                    <LoadingPlaceHolder
+                                        extraStyles={{
+                                            height: "20px",
+                                            width: 'max-content',
+                                            minWidth: "170px",
+                                            borderRadius: "10px"
+                                        }}
+                                    />
+                                )}
                             </div>
 
                             <div className="invoice-total-item">
-                                <p className="invoice-total-title text-uppercase">{T("Vat")} 19 %</p>
-                                <p
-                                    className={`invoice-total-amount ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-50'}`}
-                                >
-                                    € {invoiceItem && invoiceItem.vat && getDecimalFormat(invoiceItem.vat)}
-                                </p>
+                                {invoiceItem && invoiceItem.id ? (
+                                    <Fragment>
+                                        <p className="invoice-total-title text-uppercase">{T("Vat")} 19 %</p>
+                                        <p className={`invoice-total-amount`}>
+                                            € {invoiceItem && invoiceItem.vat && getDecimalFormat(invoiceItem.vat)}
+                                        </p>
+                                    </Fragment>
+                                ) : (
+                                    <LoadingPlaceHolder
+                                        extraStyles={{
+                                            height: "20px",
+                                            width: 'max-content',
+                                            minWidth: "170px",
+                                            borderRadius: "10px",
+                                            marginTop: '6px'
+                                        }}
+                                    />
+                                )}
                             </div>
                             <hr className="my-50" />
 
                             <div className="invoice-total-item">
-                                <p className="invoice-total-title">{T("Total")}:</p>
-                                <p
-                                    className={`invoice-total-amount ${invoiceItem && invoiceItem.id ? '' : 'placeholder w-50'}`}
-                                >
-                                    € {invoiceItem && invoiceItem.total_price && getDecimalFormat(invoiceItem.total_price)}
-                                </p>
+                                {invoiceItem && invoiceItem.id ? (
+                                    <Fragment>
+                                        <p className="invoice-total-title">{T("Total")}:</p>
+                                        <p className={`invoice-total-amount`}>
+                                            € {invoiceItem && invoiceItem.total_price && getDecimalFormat(invoiceItem.total_price)}
+                                        </p>
+                                    </Fragment>
+                                ) : (
+                                    <LoadingPlaceHolder
+                                        extraStyles={{
+                                            height: "21px",
+                                            width: 'max-content',
+                                            minWidth: "170px",
+                                            borderRadius: "10px"
+                                        }}
+                                    />
+                                )}
                             </div>
                         </div>
                     </Col>

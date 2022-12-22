@@ -24,15 +24,16 @@ import {
   Modal,
   Button,
   ModalBody,
-  ModalHeader
+  ModalHeader,
+  FormFeedback
 } from 'reactstrap'
 
 import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from "yup"
+import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-grow-spinner'
+import DotPulse from '@components/dotpulse'
 
 // ** Third Party Components
 import { Editor } from 'react-draft-wysiwyg'
@@ -130,7 +131,7 @@ const ModalAddNotes = ({
         backdrop="static"
       >
         {!store.loading ? (
-          <Spinner
+          <DotPulse
             className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
           />
         ) : null}
@@ -164,7 +165,7 @@ const ModalAddNotes = ({
                   />
                 )}
               />
-              <div className="invalid-feedback d-block">{errors.Notes?.message || (errors.Notes?.blocks && errors.Notes.blocks[0]?.text?.message)}</div>
+              <FormFeedback className="d-block">{errors.Notes?.message || (errors.Notes?.blocks && errors.Notes.blocks[0]?.text?.message)}</FormFeedback>
             </div>
 
             <Row className="mt-2 mb-2">

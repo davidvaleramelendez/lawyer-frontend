@@ -83,7 +83,7 @@ const ModalInvoicePayment = ({
   // ** Get contact on mount based on id
   useEffect(() => {
     /* For reset form data and closing modal */
-    if (store && store.actionFlag && store.actionFlag === "PAYMENT_CREATED") {
+    if (store && store.actionFlag && (store.actionFlag === "PAYMENT_CREATED")) {
       handleReset()
     }
 
@@ -91,7 +91,7 @@ const ModalInvoicePayment = ({
     if (store && (store.success || store.error || store.actionFlag)) {
       dispatch(clearInvoiceMessage())
     }
-  }, [dispatch, store.success, store.error, store.actionFlag])
+  }, [store.success, store.error, store.actionFlag])
   // console.log("ModalInvoicePayment >>>> ", invoiceData)
 
   const handleSidebarOpened = () => {

@@ -80,7 +80,7 @@ const ModalSendInvoice = ({
   // ** Get contact on mount based on id
   useEffect(() => {
     /* For reset form data and closing modal */
-    if (store && store.actionFlag && store.actionFlag === "INVOICE_SENT") {
+    if (store && store.actionFlag && (store.actionFlag === "INVOICE_SENT")) {
       handleReset()
     }
 
@@ -88,7 +88,7 @@ const ModalSendInvoice = ({
     if (store && (store.success || store.error || store.actionFlag)) {
       dispatch(clearInvoiceMessage())
     }
-  }, [dispatch, store.success, store.error, store.actionFlag])
+  }, [store.success, store.error, store.actionFlag])
   // console.log("ModalSendInvoice >>>> ", invoiceData)
 
   const handleSidebarClosed = () => {

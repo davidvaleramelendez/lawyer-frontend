@@ -29,11 +29,11 @@ import {
 } from 'reactstrap'
 
 import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from "yup"
+import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-grow-spinner'
+import DotPulse from '@components/dotpulse'
 
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
@@ -170,7 +170,7 @@ const ModalAcceptRequest = ({
         onOpened={handleSidebarOpened}
       >
         {!store.loading ? (
-          <Spinner
+          <DotPulse
             className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
           />
         ) : null}

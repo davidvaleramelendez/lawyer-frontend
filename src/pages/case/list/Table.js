@@ -342,7 +342,7 @@ const CaseList = () => {
             cell: (row) => <Link to={`${adminRoot}/case/view/${row.CaseID}`}>{`#${row.CaseID}`}</Link>,
             /* Custom placeholder vars */
             contentExtraStyles: {
-                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '95px'
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '90px'
             },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
@@ -351,7 +351,7 @@ const CaseList = () => {
         {
             name: T("Client"),
             sortable: true,
-            minWidth: "24%",
+            minWidth: "23%",
             sortField: "Name",
             cell: (row) => {
                 const name = row ? row.user && row.user.name : "John Doe"
@@ -370,10 +370,10 @@ const CaseList = () => {
             /* Custom placeholder vars */
             customRenderTwoRow: true,
             contentExtraStylesRow1: {
-                height: '15px', width: 'auto', borderRadius: '10px', minWidth: '130px'
+                height: '15px', width: 'auto', borderRadius: '10px', minWidth: '120px'
             },
             contentExtraStylesRow2: {
-                height: '10px', width: 'auto', borderRadius: '10px', minWidth: '130px', marginTop: '3px'
+                height: '10px', width: 'auto', borderRadius: '10px', minWidth: '120px', marginTop: '3px'
             },
             customLoadingWithIcon: "User",
             customLoaderCellClass: "",
@@ -384,11 +384,11 @@ const CaseList = () => {
             name: T("Attorney"),
             sortable: true,
             sortField: "LaywerID",
-            minWidth: "14%",
+            minWidth: "15%",
             cell: (row) => row && row.laywer && row.laywer.id ? (<Link to={`${adminRoot}/user/view/${row.laywer.id}`}>{row.laywer.name}</Link>) : null,
             /* Custom placeholder vars */
             contentExtraStyles: {
-                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '125px'
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
             },
             customLoaderCellClass: "",
             customLoaderContentClass: ""

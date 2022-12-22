@@ -1,7 +1,6 @@
 import React from 'react'
 
 function LoadingPlaceHolder(props) {
-
     const loaderStyles = {
         backgroundColor: '#eee',
         width: '100%',
@@ -21,7 +20,10 @@ function LoadingPlaceHolder(props) {
     }
 
     return (
-        <div style={loaderStyles}>
+        <div
+            style={loaderStyles}
+            className={props.customClassName || ""}
+        >
             <div style={loaderSwipeStyles}></div>
         </div>
     )

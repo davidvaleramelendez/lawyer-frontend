@@ -46,6 +46,7 @@ import {
 
 // ** Custom Components
 import Notification from '@components/toast/notification'
+import LoadingPlaceHolder from '@components/loadingPlaceHolder/LoadingPlaceHolder'
 
 // ** Third Party Components
 import Swal from 'sweetalert2'
@@ -156,24 +157,42 @@ const ContactView = () => {
                   sm={6}
                   className="d-flex flex-column justify-content-between border-container-lg"
                 >
-                  <div
-                    className={`${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder-glow'}`}
-                  >
-                    <h4
-                      className={`mb-25 ${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder w-50'}`}
-                    >
-                      {(store.contactItem && store.contactItem.Name)}
-                    </h4>
-                    <span
-                      className={`mb-25 ${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder w-75'}`}
-                    >
-                      {(store.contactItem && store.contactItem.Email)}
-                    </span>
+                  <div>
+                    {store.contactItem && store.contactItem.ContactID ? (
+                      <Fragment>
+                        <h4 className={`mb-25`}>{(store.contactItem && store.contactItem.Name)}</h4>
+                        <span className={`mb-25`}>{(store.contactItem && store.contactItem.Email)}</span>
+                      </Fragment>
+                    ) : (
+                      <Fragment>
+                        <LoadingPlaceHolder
+                          extraStyles={{
+                            height: "20px",
+                            width: 'max-content',
+                            minWidth: "210px",
+                            borderRadius: "10px",
+                            marginBottom: '6px'
+                          }}
+                        />
+
+                        <LoadingPlaceHolder
+                          extraStyles={{
+                            height: "18px",
+                            width: 'max-content',
+                            minWidth: "268px",
+                            borderRadius: "10px",
+                            marginBottom: '6px'
+                          }}
+                        />
+                      </Fragment>
+                    )}
+
                     {/* Buttons */}
                     <div className="mt-1 mb-25">
                       <Button
                         color="success"
-                        className={`me-1 mb-1 ${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder'}`}
+                        className={`me-1 mb-1`}
+                        disabled={store.contactItem && !store.contactItem.ContactID}
                         onClick={() => setAcceptModalOpen(true)}
                       >
                         {T("Accept")}
@@ -181,7 +200,8 @@ const ContactView = () => {
 
                       <Button
                         color="primary"
-                        className={`me-1 mb-1 ${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder'}`}
+                        className={`me-1 mb-1`}
+                        disabled={store.contactItem && !store.contactItem.ContactID}
                         onClick={() => setModalOpen(true)}
                       >
                         {T("Notes")}
@@ -189,7 +209,8 @@ const ContactView = () => {
 
                       <Button
                         color="danger"
-                        className={`mb-1 ${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder'}`}
+                        className={`mb-1`}
+                        disabled={store.contactItem && !store.contactItem.ContactID}
                         onClick={() => onDeleteContact(id)}
                       >
                         {T("Clear")}
@@ -219,38 +240,65 @@ const ContactView = () => {
                   md={6}
                   sm={6}
                 >
-                  <div
-                    className={`mt-md-0 mt-2 ${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder-glow'}`}
-                  >
-                    <div className="invoice-date-wrapper">
-                      <User size={14} />
-                      <p className="invoice-date-title fw-bold ms-1">Name</p>
-                      <p
-                        className={`invoice-date fw-normal ${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder w-50'}`}
-                      >
-                        {(store.contactItem && store.contactItem.Name)}
-                      </p>
-                    </div>
+                  <div className={`mt-md-0 mt-2`}>
+                    {store.contactItem && store.contactItem.ContactID ? (
+                      <div className="invoice-date-wrapper">
+                        <User size={14} />
+                        <p className="invoice-date-title fw-bold ms-1">Name</p>
+                        <p className={`invoice-date fw-normal`}>
+                          {(store.contactItem && store.contactItem.Name)}
+                        </p>
+                      </div>
+                    ) : (
+                      <LoadingPlaceHolder
+                        extraStyles={{
+                          height: "21px",
+                          width: 'max-content',
+                          minWidth: "320px",
+                          borderRadius: "10px",
+                          marginBottom: "10px"
+                        }}
+                      />
+                    )}
 
-                    <div className="invoice-date-wrapper">
-                      <Phone size={14} />
-                      <p className="invoice-date-title fw-bold ms-1">Telephone</p>
-                      <p
-                        className={`invoice-date fw-normal ${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder w-50'}`}
-                      >
-                        {(store.contactItem && store.contactItem.PhoneNo)}
-                      </p>
-                    </div>
+                    {store.contactItem && store.contactItem.ContactID ? (
+                      <div className="invoice-date-wrapper">
+                        <Phone size={14} />
+                        <p className="invoice-date-title fw-bold ms-1">Telephone</p>
+                        <p className={`invoice-date fw-normal`}>
+                          {(store.contactItem && store.contactItem.PhoneNo)}
+                        </p>
+                      </div>
+                    ) : (
+                      <LoadingPlaceHolder
+                        extraStyles={{
+                          height: "21px",
+                          width: 'max-content',
+                          minWidth: "280px",
+                          borderRadius: "10px",
+                          marginBottom: "10px"
+                        }}
+                      />
+                    )}
 
-                    <div className="invoice-date-wrapper">
-                      <Mail size={14} />
-                      <p className="invoice-date-title fw-bold ms-1">E-Mail</p>
-                      <p
-                        className={`invoice-date fw-normal ${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder w-50'}`}
-                      >
-                        {(store.contactItem && store.contactItem.Email)}
-                      </p>
-                    </div>
+                    {store.contactItem && store.contactItem.ContactID ? (
+                      <div className="invoice-date-wrapper">
+                        <Mail size={14} />
+                        <p className="invoice-date-title fw-bold ms-1">E-Mail</p>
+                        <p className={`invoice-date fw-normal`}>
+                          {(store.contactItem && store.contactItem.Email)}
+                        </p>
+                      </div>
+                    ) : (
+                      <LoadingPlaceHolder
+                        extraStyles={{
+                          height: "21px",
+                          width: 'max-content',
+                          minWidth: "400px",
+                          borderRadius: "10px"
+                        }}
+                      />
+                    )}
                   </div>
                 </Col>
               </Row>
@@ -265,13 +313,19 @@ const ContactView = () => {
             </CardHeader>
 
             <CardBody>
-              <Row
-                className={`${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder-glow px-1'}`}
-              >
-                <span
-                  className={`${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder'}`}
-                >
-                  {store.contactItem && setInnerHtml(store.contactItem.Subject)}
+              <Row>
+                <span>
+                  {store.contactItem && store.contactItem.ContactID ? (
+                    store.contactItem && setInnerHtml(store.contactItem.Subject)
+                  ) : (
+                    <LoadingPlaceHolder
+                      extraStyles={{
+                        height: "21px",
+                        borderRadius: "10px",
+                        marginBottom: "15px"
+                      }}
+                    />
+                  )}
                 </span>
               </Row>
             </CardBody>

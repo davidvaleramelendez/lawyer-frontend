@@ -20,7 +20,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from "yup"
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-grow-spinner'
+import DotPulse from '@components/dotpulse'
 
 // ** Translation
 import { T } from '@localization'
@@ -149,7 +149,7 @@ const ModalCloudFolder = ({
                 className="modal-dialog-centered modal-md"
             >
                 {!store.loading ? (
-                    <Spinner
+                    <DotPulse
                         className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
                     />
                 ) : null}

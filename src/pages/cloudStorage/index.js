@@ -32,6 +32,7 @@ import {
     trashCloudStorageFolder,
     defaultCloudStorageItem,
     deleteCloudStorageFolder,
+    defaultCloudStorageItems,
     createCloudStorageFolder,
     updateCloudStorageFolder,
     updateCloudStorageLoader,
@@ -47,7 +48,7 @@ import withReactContent from 'sweetalert2-react-content'
 // ** Custom Components
 import Sidebar from './Sidebar'
 import Storages from './Storages'
-import Spinner from '@components/spinner/Simple-grow-spinner'
+import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 
 // Constant
@@ -118,6 +119,7 @@ const CloudStorageApp = () => {
         }
 
         if (loadFirst) {
+            dispatch(defaultCloudStorageItems())
             dispatch(getTreeFolderList())
             handleCloudStorageLists()
             setLoadFirst(false)
@@ -310,7 +312,7 @@ const CloudStorageApp = () => {
         />
 
         {!store.loading ? (
-            <Spinner
+            <DotPulse
                 className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
             />
         ) : null}

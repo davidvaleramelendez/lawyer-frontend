@@ -30,8 +30,21 @@ import { T } from '@localization'
 const UserInfoCard = ({
     id,
     userItem,
-    onDeleteUser
+    onDeleteUser,
+    authUserItem
 }) => {
+
+    /* Check permission */
+    const onCheckPermission = (id) => {
+        if (authUserItem && authUserItem.permission && authUserItem.permission.length) {
+            const index = authUserItem.permission.findIndex((x) => x.permission_id === id)
+            if (index !== -1) {
+                return true
+            }
+        }
+        return false
+    }
+    /* /Check permission */
 
     return (
         <Fragment>
@@ -311,24 +324,39 @@ const UserInfoCard = ({
                     </div>
 
                     <div className={`d-flex justify-content-center flex-wrap pt-2`}>
-                        <Button
-                            tag={Link}
-                            color="primary"
-                            className={`me-1 mb-1`}
-                            disabled={userItem && !userItem.id}
-                            to={`${adminRoot}/user/edit/${userItem.id}`}
-                        >
-                            {T("Edit")}
-                        </Button>
+                        {userItem && userItem.id ? (
+                            <Fragment>
+                                <Button
+                                    tag={Link}
+                                    color="primary"
+                                    className={`mb-1`}
+                                    disabled={userItem && !userItem.id}
+                                    to={`${adminRoot}/user/edit/${userItem.id}`}
+                                >
+                                    {T("Edit")}
+                                </Button>
 
-                        <Button
-                            color="danger"
-                            className={`mb-1`}
-                            disabled={userItem && !userItem.id}
-                            onClick={() => onDeleteUser(id)}
-                        >
-                            {T("Clear")}
-                        </Button>
+                                {onCheckPermission(1) ? (
+                                    <Button
+                                        color="danger"
+                                        className={`ms-1 mb-1`}
+                                        disabled={userItem && !userItem.id}
+                                        onClick={() => onDeleteUser(id)}
+                                    >
+                                        {T("Clear")}
+                                    </Button>
+                                ) : null}
+                            </Fragment>
+                        ) : (
+                            <LoadingPlaceHolder
+                                extraStyles={{
+                                    height: "39px",
+                                    width: 'max-content',
+                                    minWidth: "170px",
+                                    borderRadius: "10px"
+                                }}
+                            />
+                        )}
                     </div>
                 </CardBody>
             </Card>

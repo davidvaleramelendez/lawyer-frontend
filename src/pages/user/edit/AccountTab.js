@@ -61,18 +61,18 @@ const AccountTab = ({
     const [imageUrl, setImageUrl] = useState("")
 
     const UserAcntSchema = yup.object({
-        username: yup.string().required(T('Email is required!')).email(T('Invalid username!')),
-        name: yup.string().required(T('Name is required!')),
+        first_name: yup.string().required(T('Name is required!')),
+        last_name: yup.string().required(T('Last name is required!')),
         email: yup.string().required(T('Email is required!')).email(T('Invalid email address!')),
         status: yup.object().required(T(`Status is required!`)).nullable(),
         roleId: yup.object().required(T(`Role is required!`)).nullable(),
-        DOB: yup.date().required(T("Birth date is required!")).max(new Date(Date.now() - 86400000), T("Date cannot be in the future!")).nullable(),
+        DOB: yup.date().notRequired(T("Birth date is required!")).max(new Date(Date.now() - 86400000), T("Date cannot be in the future!")).nullable(),
         contact: yup.string().required(T('Mobile is required!')).min(6, T("Mobile Must be 6 digit!")).max(16, T("Mobile Must be 16 digit!")),
         gender: yup.string().required(T('Gender is required!')),
-        address: yup.string().required(T('Address line 1 is required!')),
-        postcode: yup.string().required(T('Postcode is required!')).max(6, T("Postcode no more than 6 characters!")),
-        state: yup.string().required(T('State is required!')),
-        country: yup.string().required(T('Country is required!'))
+        address: yup.string().notRequired(T('Address line 1 is required!')),
+        postcode: yup.string().notRequired(T('Postcode is required!')).max(6, T("Postcode no more than 6 characters!")),
+        state: yup.string().notRequired(T('State is required!')),
+        country: yup.string().notRequired(T('Country is required!'))
     }).required()
 
     /* acnt => account */
@@ -90,17 +90,21 @@ const AccountTab = ({
     const handleReset = () => {
         const userItem = { ...store.userItem }
         if (userItem && userItem.id) {
-            if (userItem.email) {
-                userItem.username = userItem.email
-            }
-
             if (userItem.role && userItem.role.role_id) {
                 userItem.roleId = { value: userItem.role.role_id, label: userItem.role.RoleName }
             }
 
-            if (userItem.Company) {
-                userItem.company = userItem.Company
-            }
+            userItem.name = userItem.name || ""
+            userItem.first_name = userItem.first_name || ""
+            userItem.last_name = userItem.last_name || ""
+            userItem.company = userItem.last_name || ""
+            userItem.contact = userItem.Contact || ""
+            userItem.address = userItem.Address || ""
+            userItem.address1 = userItem.Address1 || ""
+            userItem.postcode = userItem.Postcode || ""
+            userItem.city = userItem.City || ""
+            userItem.state = userItem.State || ""
+            userItem.country = userItem.Country || ""
 
             if (userItem.Status) {
                 userItem.status = { value: userItem.Status, label: userItem.Status }
@@ -108,34 +112,6 @@ const AccountTab = ({
 
             if (userItem.Gender) {
                 userItem.gender = userItem.Gender
-            }
-
-            if (userItem.Contact) {
-                userItem.contact = userItem.Contact
-            }
-
-            if (userItem.Address) {
-                userItem.address = userItem.Address
-            }
-
-            if (userItem.Address1) {
-                userItem.address1 = userItem.Address1
-            }
-
-            if (userItem.Postcode) {
-                userItem.postcode = userItem.Postcode
-            }
-
-            if (userItem.City) {
-                userItem.city = userItem.City
-            }
-
-            if (userItem.State) {
-                userItem.state = userItem.State
-            }
-
-            if (userItem.Country) {
-                userItem.country = userItem.Country
             }
         }
 
@@ -179,8 +155,9 @@ const AccountTab = ({
         if (values) {
             const userData = {
                 id: id,
-                // username: values.username,
                 name: values.name,
+                first_name: values.first_name,
+                last_name: values.last_name,
                 email: values.email,
                 Company: values.company,
                 Contact: values.contact,
@@ -211,7 +188,7 @@ const AccountTab = ({
                 userData.DOB = getTransformDate(values.DOB, "YYYY-MM-DD")
             }
 
-            // console.log("onSubmitAccount >>>>>>>>> ", userData)
+            console.log("onSubmitAccount >>>>>>>>> ", userData)
             if (userData && userData.id) {
                 dispatch(updateUserLoader(false))
                 dispatch(updateUser(userData))
@@ -236,15 +213,23 @@ const AccountTab = ({
                                     width="100"
                                 />
                             </div>
-                            <div className="d-flex align-items-end mt-75 ms-1">
+                            <div className="d-flex mt-75 ms-1">
                                 <div>
-                                    <h4 className="mb-50">{store.userItem.name}</h4>
+                                    <h4
+                                        className="mb-50"
+                                        style={{
+                                            height: "20px"
+                                        }}
+                                    >
+                                        {store.userItem.name}
+                                    </h4>
                                     <Button
                                         size="sm"
                                         tag={Label}
                                         type="button"
                                         color="primary"
                                         className="mb-75 me-75"
+                                        disabled={store.userItem && !store.userItem.id}
                                     >
                                         {T('Change')}
                                         <Input type="file" hidden accept="image/*" onChange={(event) => onFileChange(event)} />
@@ -255,33 +240,31 @@ const AccountTab = ({
 
                         <Row>
                             <Col sm={6} className="mb-1">
-                                <Label className="form-label" for="username">
-                                    {T('Username')}
-                                </Label>
-                                <Controller
-                                    defaultValue={store.userItem.email}
-                                    name="username"
-                                    id="username"
-                                    control={acntControl}
-                                    render={({ field }) => (
-                                        <Input {...field} type="email" placeholder={PlaceholderSchema && PlaceholderSchema.username} invalid={acntErrors.username && true} />
-                                    )}
-                                />
-                                <FormFeedback>{acntErrors.username?.message}</FormFeedback>
-                            </Col>
-
-                            <Col sm={6} className="mb-1">
-                                <Label className="form-label" for="name">
+                                <Label className="form-label" for="first_name">
                                     {T('Name')}
                                 </Label>
                                 <Controller
-                                    defaultValue={store.userItem.name}
-                                    id="name"
-                                    name="name"
+                                    defaultValue={""}
+                                    id="first_name"
+                                    name="first_name"
                                     control={acntControl}
-                                    render={({ field }) => <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.fullname} invalid={acntErrors.name && true} />}
+                                    render={({ field }) => <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.first_name} invalid={acntErrors.first_name && true} />}
                                 />
-                                <FormFeedback>{acntErrors.name?.message}</FormFeedback>
+                                <FormFeedback>{acntErrors.first_name?.message}</FormFeedback>
+                            </Col>
+
+                            <Col sm={6} className="mb-1">
+                                <Label className="form-label" for="last_name">
+                                    {T('Last Name')}
+                                </Label>
+                                <Controller
+                                    defaultValue={""}
+                                    id="last_name"
+                                    name="last_name"
+                                    control={acntControl}
+                                    render={({ field }) => <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.last_name} invalid={acntErrors.last_name && true} />}
+                                />
+                                <FormFeedback>{acntErrors.last_name?.message}</FormFeedback>
                             </Col>
 
                             <Col sm={6} className="mb-1">

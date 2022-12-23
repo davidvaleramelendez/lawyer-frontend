@@ -429,6 +429,10 @@ export const appCloudStorageSlice = createSlice({
             state.cloudStorageItem = action.payload.payload || cloudStorageItem
         },
 
+        defaultCloudStorageItems: (state) => {
+            state.cloudStorageItems = null
+        },
+
         defaultCloudStorageItem: (state) => {
             state.cloudStorageItem = cloudStorageItem
         },
@@ -540,6 +544,7 @@ export const {
     changeExpandedValue,
     getCloudStorageItem,
     defaultCloudStorageItem,
+    defaultCloudStorageItems,
     updateCloudStorageLoader,
     clearCloudStorageMessage
 } = appCloudStorageSlice.actions

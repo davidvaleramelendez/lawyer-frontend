@@ -79,7 +79,7 @@ const Sidebar = (props) => {
         return <Fragment key={`tree_folder_${level}_${index}`}>
           <ListGroupItem
             className={`pb-0 ${IconTag ? 'position-relative' : ''}`}
-            active={params.slug === folder.slug}
+            active={(params.slug || "default") === folder.slug}
           >
             <div
               className={`d-inline-flex ${folder && folder.id !== 0 ? IconTag ? '' : 'ms-2' : ''}`}

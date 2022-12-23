@@ -42,6 +42,7 @@ const ModalCloudUploadFile = ({
     const [parentId, setParentId] = useState(null)
     const [treeStructureData, setTreeStructureData] = useState(store.treeFolderItems)
 
+    /* Modal opened event */
     const handleSidebarOpened = () => {
         const treeFolderItems = [...store.treeFolderItems]
         if (store) {
@@ -55,7 +56,9 @@ const ModalCloudUploadFile = ({
         }
         setTreeStructureData([...treeFolderItems])
     }
+    /* /Modal opened event */
 
+    /* Modal closed event */
     const handleSidebarClosed = () => {
         setFileUrl('')
         setFileName('')
@@ -63,13 +66,16 @@ const ModalCloudUploadFile = ({
         setTreeStructureData([])
         setParentId(null)
     }
+    /* /Modal closed event */
 
+    /* Handle reset */
     const handleReset = () => {
         setFileUrl('')
         setFileName('')
         dispatch(defaultCloudStorageItem(cloudStorageItem))
         toggleModal()
     }
+    /* /Handle reset */
 
     /* Swal Alert */
     const onAlertMessage = (title, text, icon) => {
@@ -88,6 +94,7 @@ const ModalCloudUploadFile = ({
             }
         })
     }
+    /* /Swal Alert */
 
     // ** Get contact on mount based on id
     useEffect(() => {
@@ -167,6 +174,7 @@ const ModalCloudUploadFile = ({
     }
     /* /Tree dropdown value change */
 
+    /* onSubmit event */
     const onSubmit = () => {
         if (store.cloudStorageItem && store.cloudStorageItem.id) {
             const fileData = {
@@ -198,6 +206,7 @@ const ModalCloudUploadFile = ({
             }
         }
     }
+    /* /onSubmit event */
 
     return store ? (
         <div className="disabled-backdrop-modal">

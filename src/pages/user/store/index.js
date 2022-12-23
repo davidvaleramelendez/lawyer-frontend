@@ -185,7 +185,8 @@ export const getUserView = createAsyncThunk('appUser/getUserView', async (id) =>
     if (response && response.flag) {
       return {
         id,
-        userItem: response.data,
+        userItem: response.data.userItem,
+        authUserItem: response.data.authUser,
         actionFlag: "EDIT_USER",
         success: "",
         error: ""
@@ -194,6 +195,7 @@ export const getUserView = createAsyncThunk('appUser/getUserView', async (id) =>
       return {
         id,
         userItem: userItem,
+        authUserItem: userItem,
         actionFlag: "",
         success: "",
         error: ""
@@ -204,6 +206,7 @@ export const getUserView = createAsyncThunk('appUser/getUserView', async (id) =>
     return {
       id,
       userItem: userItem,
+      authUserItem: userItem,
       actionFlag: "",
       success: "",
       error: error
@@ -633,6 +636,7 @@ export const appUserSlice = createSlice({
     userItems: [],
     userStatItems: null,
     userItem: userItem,
+    authUserItem: userItem,
     userDeviceLogs: [],
     languageLabels: {},
     deviceLogPagination: null,
@@ -700,6 +704,7 @@ export const appUserSlice = createSlice({
       .addCase(getUserView.fulfilled, (state, action) => {
         state.id = action.payload.id
         state.userItem = action.payload.userItem
+        state.authUserItem = action.payload.authUserItem
         state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success

@@ -60,7 +60,7 @@ const ModalAcceptRequest = ({
   const AcceptSchema = yup.object({
     Name: yup.string().required('Name is required!'),
     Email: yup.string().required('Email is required!').email('Invalid email address!'),
-    PhoneNo: yup.string().required('Mobile is required!').min(10, "Mobile Must be 10 digit!").max(10, "Mobile Must be 10 digit!"),
+    PhoneNo: yup.string().required(T('Mobile is required!')).min(6, T("Mobile Must be 6 digit!")).max(16, T("Mobile Must be 16 digit!")),
     LaywerID: yup.object().required(`${T("Attorney")} is required!`).nullable(),
     CaseTypeID: yup.object().required(`${T("Group")} is required!`).nullable()
   }).required()

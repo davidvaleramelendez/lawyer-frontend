@@ -28,7 +28,7 @@ import {
 } from '@utils'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-grow-spinner'
+import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 
 // ** User view Components
@@ -95,13 +95,13 @@ const UserEditApp = () => {
       Notification(T("Error"), store.error, "warning")
     }
   }, [store.roleItems, store.success, store.error, store.actionFlag, loadFirst])
-  // console.log("store >>> ", store)
+  console.log("store >>> ", store)
 
   return store ? (
     <Row>
       <Col xs={12}>
         {!store.loading ? (
-          <Spinner
+          <DotPulse
             className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
           />
         ) : null}
@@ -110,6 +110,8 @@ const UserEditApp = () => {
           id={id}
           active={active}
           toggleTab={toggleTab}
+          userItem={store.userItem}
+          authUserItem={store.authUserItem}
         />
       </Col>
     </Row>

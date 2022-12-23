@@ -40,6 +40,7 @@ const PermissionsTab = ({
     }, [store.actionFlag])
 
     /* Permission */
+    /* Set or remove checked check for permission */
     const onPermissionCheckboxChange = (checked, value) => {
         const permissionData = [...permission]
         if (value) {
@@ -56,7 +57,9 @@ const PermissionsTab = ({
         }
         setPermission([...permissionData])
     }
+    /* /Set or remove checked check for permission */
 
+    /* Check and set permission */
     const getPermissionChecked = (value) => {
         if (permission && permission.length) {
             const index = permission.findIndex((x) => x.permission_id === value)
@@ -67,17 +70,27 @@ const PermissionsTab = ({
         }
         return false
     }
+    /* /Check and set permission */
 
-    const onPermissionSubmit = () => {
-        if (permission && permission.length) {
-            const userData = {
-                user_id: id,
-                permissions: permission
-            }
-            dispatch(updateUserLoader(false))
-            dispatch(updatePermission(userData))
+    /* Check and disabled permission change */
+    const checkDisablePermission = (roleId) => {
+        if (store && store.userItem && store.userItem.role_id === roleId) {
+            return true
         }
+        return false
     }
+    /* /Check and disabled permission change */
+
+    /* Permission submit event */
+    const onPermissionSubmit = () => {
+        const userData = {
+            user_id: id,
+            permissions: permission || []
+        }
+        dispatch(updateUserLoader(false))
+        dispatch(updatePermission(userData))
+    }
+    /* /Permission submit event */
     /* /Permission */
 
     return (
@@ -103,7 +116,9 @@ const PermissionsTab = ({
                                         type='checkbox'
                                         id="admin-read"
                                         value={1}
+                                        className="opacity-100"
                                         checked={getPermissionChecked(1)}
+                                        disabled={checkDisablePermission(10)}
                                         onChange={(event) => onPermissionCheckboxChange(event.target.checked, 1)}
                                     />
                                 </div>
@@ -118,7 +133,9 @@ const PermissionsTab = ({
                                         type='checkbox'
                                         id="staff-read"
                                         value={2}
+                                        className="opacity-100"
                                         checked={getPermissionChecked(2)}
+                                        disabled={checkDisablePermission(10)}
                                         onChange={(event) => onPermissionCheckboxChange(event.target.checked, 2)}
                                     />
                                 </div>
@@ -133,7 +150,9 @@ const PermissionsTab = ({
                                         type='checkbox'
                                         id="author-read"
                                         value={3}
+                                        className="opacity-100"
                                         checked={getPermissionChecked(3)}
+                                        disabled={checkDisablePermission(10)}
                                         onChange={(event) => onPermissionCheckboxChange(event.target.checked, 3)}
                                     />
                                 </div>
@@ -148,7 +167,9 @@ const PermissionsTab = ({
                                         type='checkbox'
                                         id="contributor-read"
                                         value={4}
+                                        className="opacity-100"
                                         checked={getPermissionChecked(4)}
+                                        disabled={checkDisablePermission(10)}
                                         onChange={(event) => onPermissionCheckboxChange(event.target.checked, 4)}
                                     />
                                 </div>
@@ -163,7 +184,9 @@ const PermissionsTab = ({
                                         type='checkbox'
                                         id="user-read"
                                         value={5}
+                                        className="opacity-100"
                                         checked={getPermissionChecked(5)}
+                                        disabled={checkDisablePermission(10)}
                                         onChange={(event) => onPermissionCheckboxChange(event.target.checked, 5)}
                                     />
                                 </div>
@@ -178,7 +201,9 @@ const PermissionsTab = ({
                                         type='checkbox'
                                         id="user-letters"
                                         value={6}
+                                        className="opacity-100"
                                         checked={getPermissionChecked(6)}
+                                        disabled={checkDisablePermission(10)}
                                         onChange={(event) => onPermissionCheckboxChange(event.target.checked, 6)}
                                     />
                                 </div>
@@ -187,15 +212,19 @@ const PermissionsTab = ({
                     </tbody>
                 </Table>
 
-                <div className='d-flex flex-wrap p-2'>
-                    <Button
-                        type='button'
-                        color='primary'
-                        disabled={!store.loading}
-                        onClick={() => onPermissionSubmit()}
-                    >
-                        {T("Update")}
-                    </Button>
+                <div className="d-flex flex-wrap p-2">
+                    {checkDisablePermission(10) ? (
+                        <div style={{ height: '38px' }} />
+                    ) : (
+                        <Button
+                            type='button'
+                            color='primary'
+                            disabled={!store.loading}
+                            onClick={() => onPermissionSubmit()}
+                        >
+                            {T("Update")}
+                        </Button>
+                    )}
                 </div>
             </Card>
         </Fragment>

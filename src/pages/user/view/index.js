@@ -148,6 +148,7 @@ const UserView = () => {
             id={id}
             userItem={store.userItem}
             onDeleteUser={onDeleteUser}
+            authUserItem={store.authUserItem}
           />
         </Col>
 

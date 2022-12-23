@@ -26,11 +26,11 @@ import {
 import Select from 'react-select'
 
 import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from "yup"
+import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-grow-spinner'
+import DotPulse from '@components/dotpulse'
 
 // ** Utils
 import {
@@ -60,7 +60,8 @@ const ModalAddUser = ({
 
   /* Yup validation schema */
   const UserSchema = yup.object({
-    name: yup.string().required(T('Name is required!')),
+    first_name: yup.string().required(T('First name is required!')),
+    last_name: yup.string().required(T('Last name is required!')),
     email: yup.string().required(T('Email is required!')).email(T('Invalid email address!')),
     Contact: yup.string().required(T('Mobile is required!')).min(6, T("Mobile Must be 6 digit!")).max(16, T("Mobile Must be 16 digit!")),
     password: yup.string().required(T('Password is required!')).min(6, T("Password Must be 6 digit!")),
@@ -73,6 +74,8 @@ const ModalAddUser = ({
   /* Placeholder texts */
   const PlaceholderSchema = {
     name: "John Doe",
+    first_name: "John",
+    last_name: "Doe",
     Contact: "+4915901766553",
     email: "john.doe@example.com",
     password: "******",
@@ -116,13 +119,14 @@ const ModalAddUser = ({
     if (store && store.actionFlag && store.actionFlag === "ADDED_ITEM") {
       handleReset()
     }
-  }, [dispatch, roleItems, store.success, store.error, store.actionFlag])
+  }, [roleItems, store.success, store.error, store.actionFlag])
 
   /* Submitting data */
   const onSubmit = (values) => {
     if (values) {
       const userData = {
-        name: values.name,
+        first_name: values.first_name,
+        last_name: values.last_name,
         Contact: values.Contact,
         email: values.email,
         password: encryptData(values.password)
@@ -149,24 +153,38 @@ const ModalAddUser = ({
       toggleSidebar={handleReset}
     >
       {!store.loading ? (
-        <Spinner
+        <DotPulse
           className="d-flex justify-content-center position-absolute top-50 w-75 zindex-1"
         />
       ) : null}
 
       <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <div className="mb-1">
-          <Label className="form-label" for="name">
-          {T("Full Name")}
+          <Label className="form-label" for="first_name">
+            {T("First Name")}
           </Label>
           <Controller
             defaultValue=""
-            id="name"
-            name="name"
+            id="first_name"
+            name="first_name"
             control={control}
-            render={({ field }) => <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.name} invalid={errors.name && true} />}
+            render={({ field }) => <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.first_name} invalid={errors.first_name && true} />}
           />
-          <FormFeedback>{errors.name?.message}</FormFeedback>
+          <FormFeedback>{errors.first_name?.message}</FormFeedback>
+        </div>
+
+        <div className="mb-1">
+          <Label className="form-label" for="last_name">
+            {T("Last Name")}
+          </Label>
+          <Controller
+            defaultValue=""
+            id="last_name"
+            name="last_name"
+            control={control}
+            render={({ field }) => <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.last_name} invalid={errors.last_name && true} />}
+          />
+          <FormFeedback>{errors.last_name?.message}</FormFeedback>
         </div>
 
         <div className="mb-1">

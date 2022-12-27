@@ -45,7 +45,6 @@ const UserTabs = ({
 
     /* Placeholder texts */
     const PlaceholderSchema = {
-        username: "john.doe@example.com",
         fullname: "John Doe",
         first_name: "John",
         last_name: "Doe",
@@ -74,7 +73,9 @@ const UserTabs = ({
                 /* Selected user */
                 if (userItem && userItem.id) {
                     if (userItem.role_id === customerRoleId) {
-                        toggleTab("1")
+                        if (active === "3") {
+                            toggleTab("1")
+                        }
                         return false
                     }
                 }
@@ -86,7 +87,9 @@ const UserTabs = ({
                     /* Selected user */
                     if (userItem && userItem.id) {
                         if (userItem.role_id === customerRoleId) {
-                            toggleTab("1")
+                            if (active === "3") {
+                                toggleTab("1")
+                            }
                             return false
                         }
                     }

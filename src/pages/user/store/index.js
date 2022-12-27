@@ -150,6 +150,7 @@ export const addUser = createAsyncThunk('appUser/addUser', async (payload, { dis
     const response = await addUserRequest(payload)
     if (response && response.flag) {
       await dispatch(getUserList(getState().user.params))
+      await dispatch(getUserStatsList({}))
       return {
         userItem: response.data,
         actionFlag: "ADDED_ITEM",

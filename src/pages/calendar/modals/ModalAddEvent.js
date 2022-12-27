@@ -38,7 +38,7 @@ import '@styles/react/libs/flatpickr/flatpickr.scss'
 // ** Translation
 import { T } from '@localization'
 
-const ModalAddEvent = props => {
+const ModalAddEvent = (props) => {
   // ** Props
   const {
     open,
@@ -133,7 +133,7 @@ const ModalAddEvent = props => {
     return (
       <components.Option {...props}>
         <div className='d-flex flex-wrap align-items-center'>
-          <Avatar className='my-0 me-1' size='sm' img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${data.img}`} />
+          <Avatar className='my-0 me-50' size='sm' img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${data.img}`} />
           <div>{data.label}</div>
         </div>
       </components.Option>
@@ -180,7 +180,7 @@ const ModalAddEvent = props => {
       return eventItem.user.map(user => {
         return {
           value: user.id,
-          label: user.name,
+          label: `${user.name} (${user.email})`,
           img: user.profile_photo_path ? user.profile_photo_path : 'images/avatars/avatar-blank.png'
         }
       })
@@ -250,7 +250,7 @@ const ModalAddEvent = props => {
       return (
         <Fragment>
           <Button className="me-1" type="submit" color="primary">
-          {T('Add')}
+            {T('Add')}
           </Button>
 
           <Button color="secondary" type="reset" onClick={toggleAddEventModal} outline>

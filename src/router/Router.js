@@ -24,6 +24,7 @@ import { getRoutes } from './routes'
 const Error = lazy(() => import('@src/pages/auth/Error'))
 const ForgotPassword = lazy(() => import('@src/pages/auth/ForgotPassword'))
 const NotAuthorized = lazy(() => import('@src/pages/auth/NotAuthorized'))
+const Forbidden = lazy(() => import('@src/pages/auth/Forbidden'))
 
 let Login = lazy(() => import('@src/pages/auth/login/LoginCover'))
 if (authenticationConfig && authenticationConfig.LoginTemplate) {
@@ -79,6 +80,11 @@ const Router = () => {
       path: '*',
       element: <BlankLayout />,
       children: [{ path: '*', element: <Error /> }]
+    },
+    {
+      path: '/forbidden',
+      element: <BlankLayout />,
+      children: [{ path: '/forbidden', element: <Forbidden /> }]
     },
     ...allRoutes
   ])

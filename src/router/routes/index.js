@@ -15,6 +15,7 @@ import LayoutWrapper from '@src/@core/layouts/components/layout-wrapper'
 import PublicRoute from '@components/routes/PublicRoute'
 import PrivateRoute from '@components/routes/PrivateRoute'
 import RoleWrapper from '@components/routes/RoleWrapper'
+import RoleRestriction from '@components/routes/RoleRestriction'
 
 // ** Utils
 import { isObjEmpty } from '@utils'
@@ -82,6 +83,11 @@ const MergeLayoutRoutes = (layout, defaultLayout) => {
                 <RoleWrapper route={route}>
                   {route.element}
                 </RoleWrapper>
+                {route.meta?.restrictRole ? (
+                  <RoleRestriction route={route}>
+                    {route.element}
+                  </RoleRestriction>
+                ) : null}
               </RouteTag>
             </Wrapper>
           )

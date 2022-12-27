@@ -95,7 +95,7 @@ const UserEditApp = () => {
       Notification(T("Error"), store.error, "warning")
     }
   }, [store.roleItems, store.success, store.error, store.actionFlag, loadFirst])
-  console.log("store >>> ", store)
+  // console.log("store >>> ", store)
 
   return store ? (
     <Row>

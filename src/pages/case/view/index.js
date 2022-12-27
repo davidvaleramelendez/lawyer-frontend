@@ -360,6 +360,30 @@ const CaseView = () => {
     setTimeCounterTerminalOpen(true)
   }
 
+  /* Check case permission */
+  const checkPermissionAccess = (id) => {
+    if (store) {
+      if (store.authUserItem && store.authUserItem.id) {
+        if (store.authUserItem.permission && store.authUserItem.permission.length) {
+          const index = store.authUserItem.permission.findIndex((x) => x.permission_id === id)
+          if (index !== -1) {
+            return true
+          }
+        }
+
+        if (store.caseItem && store.caseItem.LaywerID === store.authUserItem.id) {
+          return true
+        }
+
+        return false
+      }
+      return false
+    }
+
+    return false
+  }
+  /* /Check case permission */
+
   return store ? (
     <div className='invoice-preview-wrapper'>
       <Row className='match-height'>
@@ -409,11 +433,7 @@ const CaseView = () => {
                 <CardBody className='invoice-padding'>
                   <Row>
                     {/* Client detail */}
-                    <Col
-                      xl={6}
-                      md={6}
-                      sm={6}
-                      className={`${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder-glow'}`}
+                    <Col xl={6} md={6} sm={6} className={`${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder-glow'}`}
                     >
                       <div className='mt-md-0 mt-2'>
                         <div className="user-info">
@@ -428,13 +448,17 @@ const CaseView = () => {
                           >
                             {store.caseItem && store.caseItem.user && store.caseItem.user.name}
                           </p>
-                          <Button.Ripple
-                            color="flat-primary"
-                            className={`btn-icon rounded-circle ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder'}`}
-                            onClick={() => setEditModalOpen(true)}
-                          >
-                            <Edit size={16} />
-                          </Button.Ripple>
+
+                          {checkPermissionAccess(5) ? (
+                            <Button.Ripple
+                              color="flat-primary"
+                              className={`btn-icon rounded-circle ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder'}`}
+                              onClick={() => setEditModalOpen(true)}
+                            >
+                              <Edit size={16} />
+                            </Button.Ripple>
+                          ) : null}
+
                           <ModalEditCaseClient
                             open={editModalOpen}
                             toggleModal={() => setEditModalOpen(!editModalOpen)}
@@ -522,6 +546,7 @@ const CaseView = () => {
                           >
                             <Send size={16} />
                           </Button.Ripple>
+
                           <ModalComposeMail
                             open={sendMailModalOpen}
                             toggleModal={() => setSendMailModalOpen(!sendMailModalOpen)}
@@ -530,9 +555,9 @@ const CaseView = () => {
                             messageRowData={messageRowData}
                             setMessageRowData={setMessageRowData}
                           />
-
                         </div>
                       </div>
+
                       <div className="d-flex align-items-center user-total-numbers">
                         <div className="d-flex align-items-center mr-2">
                           <div className="color-box bg-light-primary rounded-circle">

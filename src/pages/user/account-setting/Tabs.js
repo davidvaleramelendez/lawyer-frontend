@@ -39,6 +39,18 @@ const Tabs = ({
     selLanguage,
     setSelLanguage
 }) => {
+    const denyTabPermissionAccess = (roleId) => {
+        if (userData && userData.id) {
+            if (userData.role_id === roleId) {
+                if (active !== "1") {
+                    toggleTab("1")
+                }
+                return false
+            }
+            return true
+        }
+        return true
+    }
 
     return (
         <Fragment>
@@ -50,26 +62,32 @@ const Tabs = ({
                     </NavLink>
                 </NavItem>
 
-                <NavItem>
-                    <NavLink active={active === "2"} onClick={() => toggleTab("2")}>
-                        <Settings size={14} className="me-50" />
-                        <span className="fw-bold d-none d-sm-block">{T("Company Setting")}</span>
-                    </NavLink>
-                </NavItem>
+                {denyTabPermissionAccess(11) ? (
+                    <NavItem>
+                        <NavLink active={active === "2"} onClick={() => toggleTab("2")}>
+                            <Settings size={14} className="me-50" />
+                            <span className="fw-bold d-none d-sm-block">{T("Company Setting")}</span>
+                        </NavLink>
+                    </NavItem>
+                ) : null}
 
-                <NavItem>
-                    <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
-                        <Info size={14} className="me-50" />
-                        <span className="fw-bold d-none d-sm-block">{T('Language Labels')}</span>
-                    </NavLink>
-                </NavItem>
+                {denyTabPermissionAccess(11) ? (
+                    <NavItem>
+                        <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
+                            <Info size={14} className="me-50" />
+                            <span className="fw-bold d-none d-sm-block">{T('Language Labels')}</span>
+                        </NavLink>
+                    </NavItem>
+                ) : null}
 
-                <NavItem>
-                    <NavLink active={active === "4"} onClick={() => toggleTab("4")}>
-                        <Info size={14} className="me-50" />
-                        <span className="fw-bold d-none d-sm-block">{T('IMAP information')}</span>
-                    </NavLink>
-                </NavItem>
+                {denyTabPermissionAccess(11) ? (
+                    <NavItem>
+                        <NavLink active={active === "4"} onClick={() => toggleTab("4")}>
+                            <Info size={14} className="me-50" />
+                            <span className="fw-bold d-none d-sm-block">{T('IMAP information')}</span>
+                        </NavLink>
+                    </NavItem>
+                ) : null}
             </Nav>
 
             <TabContent activeTab={active}>

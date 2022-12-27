@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 // Constant
 import {
     bookmarks
-} from '@constant/navBookmarkConst'
+} from '@src/configs/navBookmarkConfig'
 
 // ** Api endpoints
 import {

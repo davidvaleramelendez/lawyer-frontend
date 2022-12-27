@@ -123,7 +123,7 @@ const TodoApp = () => {
       list1 = store.userItems.map(user => {
         return {
           value: user.id,
-          label: user.name,
+          label: `${user.name} (${user.email})`,
           img: user.profile_photo_path ? user.profile_photo_path : 'images/avatars/avatar-blank.png'
         }
       })

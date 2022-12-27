@@ -35,113 +35,99 @@ const PermissionsTab = ({
                     <CardTitle tag="h4">{T("Permissions")}</CardTitle>
                 </CardHeader>
 
-                {permissions && permissions.length ? (
-                    <Table className="text-nowrap text-center mb-3" responsive>
-                        <thead>
-                            <tr>
-                                <th className="text-start">{T('Type')}</th>
-                                <th>{T('Allow')}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {getPermissionCheck(1) ? (
-                                <tr>
-                                    <td className="text-start">{T('Delete Users')}</td>
-                                    <td>
-                                        <div className="d-flex form-check justify-content-center">
-                                            <Input
-                                                disabled
-                                                type="checkbox"
-                                                className="opacity-100"
-                                                defaultChecked={getPermissionCheck(1)}
-                                            />
-                                        </div>
-                                    </td>
-                                </tr>
-                            ) : null}
+                <Table className="text-nowrap text-center mb-3" responsive>
+                    <thead>
+                        <tr>
+                            <th className="text-start">{T('Type')}</th>
+                            <th>{T('Allow')}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="text-start">{T('See All Users')}</td>
+                            <td>
+                                <div className="d-flex form-check justify-content-center">
+                                    <Input
+                                        disabled
+                                        type="checkbox"
+                                        className="opacity-100"
+                                        checked={getPermissionCheck(2)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
 
-                            {getPermissionCheck(2) ? (
-                                <tr>
-                                    <td className="text-start">{T('See All Users')}</td>
-                                    <td>
-                                        <div className="d-flex form-check justify-content-center">
-                                            <Input
-                                                disabled
-                                                type="checkbox"
-                                                className="opacity-100"
-                                                defaultChecked={getPermissionCheck(2)}
-                                            />
-                                        </div>
-                                    </td>
-                                </tr>
-                            ) : null}
+                        <tr>
+                            <td className="text-start">{T('Delete Users')}</td>
+                            <td>
+                                <div className="d-flex form-check justify-content-center">
+                                    <Input
+                                        disabled
+                                        type="checkbox"
+                                        className="opacity-100"
+                                        checked={getPermissionCheck(1)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
 
-                            {getPermissionCheck(3) ? (
-                                <tr>
-                                    <td className="text-start">{T('See Contacts')}</td>
-                                    <td>
-                                        <div className="d-flex form-check justify-content-center">
-                                            <Input
-                                                disabled
-                                                type="checkbox"
-                                                className="opacity-100"
-                                                defaultChecked={getPermissionCheck(3)}
-                                            />
-                                        </div>
-                                    </td>
-                                </tr>
-                            ) : null}
+                        <tr>
+                            <td className="text-start">{T('See Contacts')}</td>
+                            <td>
+                                <div className="d-flex form-check justify-content-center">
+                                    <Input
+                                        disabled
+                                        type="checkbox"
+                                        className="opacity-100"
+                                        checked={getPermissionCheck(3)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
 
-                            {getPermissionCheck(4) ? (
-                                <tr>
-                                    <td className="text-start">{T('See All Cases')}</td>
-                                    <td>
-                                        <div className="d-flex form-check justify-content-center">
-                                            <Input
-                                                disabled
-                                                type="checkbox"
-                                                className="opacity-100"
-                                                defaultChecked={getPermissionCheck(4)}
-                                            />
-                                        </div>
-                                    </td>
-                                </tr>
-                            ) : null}
+                        <tr>
+                            <td className="text-start">{T('See All Cases')}</td>
+                            <td>
+                                <div className="d-flex form-check justify-content-center">
+                                    <Input
+                                        disabled
+                                        type="checkbox"
+                                        className="opacity-100"
+                                        checked={getPermissionCheck(4)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
 
-                            {getPermissionCheck(5) ? (
-                                <tr>
-                                    <td className="text-start">{T('Update Cases')}</td>
-                                    <td>
-                                        <div className="d-flex form-check justify-content-center">
-                                            <Input
-                                                disabled
-                                                type="checkbox"
-                                                className="opacity-100"
-                                                defaultChecked={getPermissionCheck(5)}
-                                            />
-                                        </div>
-                                    </td>
-                                </tr>
-                            ) : null}
+                        <tr>
+                            <td className="text-start">{T('Update Cases')}</td>
+                            <td>
+                                <div className="d-flex form-check justify-content-center">
+                                    <Input
+                                        disabled
+                                        type="checkbox"
+                                        className="opacity-100"
+                                        checked={getPermissionCheck(5)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
 
-                            {getPermissionCheck(6) ? (
-                                <tr>
-                                    <td className="text-start">{T('See Letters')}</td>
-                                    <td>
-                                        <div className="d-flex form-check justify-content-center">
-                                            <Input
-                                                disabled
-                                                type="checkbox"
-                                                className="opacity-100"
-                                                defaultChecked={getPermissionCheck(6)}
-                                            />
-                                        </div>
-                                    </td>
-                                </tr>
-                            ) : null}
-                        </tbody>
-                    </Table>
-                ) : <p className="p-2">{`${T('You do not have any permissions')}...!`}</p>}
+                        <tr>
+                            <td className="text-start">{T('See Letters')}</td>
+                            <td>
+                                <div className="d-flex form-check justify-content-center">
+                                    <Input
+                                        disabled
+                                        type="checkbox"
+                                        className="opacity-100"
+                                        checked={getPermissionCheck(6)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </Table>
             </Card>
         </Fragment>
     )

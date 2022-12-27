@@ -56,9 +56,18 @@ const UserDropdown = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const store = useSelector((state) => state.auth)
+  const userStore = useSelector((state) => state.user)
 
   // ** State
   const [userData, setUserData] = useState(getCurrentUser)
+
+  //** ComponentDidMount
+  useEffect(() => {
+    /* Reset form data */
+    if (userStore && userStore.actionFlag && (userStore.actionFlag === "ACCOUNT_SETTING")) {
+      setUserData(getCurrentUser)
+    }
+  }, [userStore.actionFlag])
 
   //** ComponentDidMount
   useEffect(() => {
@@ -82,6 +91,7 @@ const UserDropdown = () => {
 
     /* Succes toast notification */
     if (store && store.success) {
+      console.log("getCurrentUser >>> ", getCurrentUser())
       Notification(T("Success"), store.success, "success")
     }
 
@@ -89,7 +99,7 @@ const UserDropdown = () => {
     if (store && store.error) {
       Notification(T("Error"), store.error, "warning")
     }
-  }, [dispatch, store.success, store.error, store.actionFlag])
+  }, [store.success, store.error, store.actionFlag])
 
   const onLogoutHandle = (event) => {
     if (event) {

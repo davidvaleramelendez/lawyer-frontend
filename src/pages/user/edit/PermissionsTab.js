@@ -126,6 +126,23 @@ const PermissionsTab = ({
                         </tr>
 
                         <tr>
+                            <td className='text-start'>{T('Add User')}</td>
+                            <td>
+                                <div className='d-flex form-check justify-content-center'>
+                                    <Input
+                                        type='checkbox'
+                                        id="staff-read"
+                                        value={2}
+                                        className="opacity-100"
+                                        checked={getPermissionChecked(7)}
+                                        disabled={checkDisablePermission(10)}
+                                        onChange={(event) => onPermissionCheckboxChange(event.target.checked, 7)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
                             <td className='text-start'>{T('Delete Users')}</td>
                             <td>
                                 <div className='d-flex form-check justify-content-center'>

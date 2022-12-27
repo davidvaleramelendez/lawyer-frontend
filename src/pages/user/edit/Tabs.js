@@ -106,7 +106,9 @@ const UserTabs = ({
                 /* Selected user */
                 if (userItem && userItem.id) {
                     if (userItem.role_id === customerRoleId) {
-                        toggleTab("1")
+                        if (active === "3") {
+                            toggleTab("1")
+                        }
                         return false
                     }
                 }

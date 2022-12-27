@@ -94,7 +94,8 @@ const CustomHeader = ({
     setModalOpen,
     handleSearch,
     handlePerPage,
-    handleRoleFilter
+    handleRoleFilter,
+    checkPermissionAccess
 }) => {
 
     return (<>
@@ -149,20 +150,22 @@ const CustomHeader = ({
                             id="role_id-filter"
                             placeholder={`${T('Select Role')}...`}
                             options={roleOptions}
-                            className="react-select dropdown me-2"
+                            className="react-select dropdown"
                             classNamePrefix="select"
                             isClearable={true}
                             value={roleFilter}
                             onChange={(data) => handleRoleFilter(data)}
                         />
 
-                        <Button
-                            color="primary"
-                            className="add-new-user"
-                            onClick={() => setModalOpen(true)}
-                        >
-                            {T("Add New User")}
-                        </Button>
+                        {checkPermissionAccess(7) ? (
+                            <Button
+                                color="primary"
+                                className="add-new-user ms-2"
+                                onClick={() => setModalOpen(true)}
+                            >
+                                {T("Add New User")}
+                            </Button>
+                        ) : null}
                     </div>
                 </Col>
             </Row>
@@ -177,6 +180,7 @@ const UsersList = () => {
     // ** Store Vars
     const dispatch = useDispatch()
     const store = useSelector((state) => state.user)
+    const authStore = useSelector((state) => state.auth)
 
     // ** States
     const [windowSize, setWindowSize] = useState(getWindowSize())
@@ -533,6 +537,23 @@ const UsersList = () => {
         }
     ]
 
+    /* Check permissions */
+    const checkPermissionAccess = (id) => {
+        if (authStore) {
+            if (authStore.userItem && authStore.userItem.id) {
+                if (authStore.userItem.permission && authStore.userItem.permission.length) {
+                    const index = authStore.userItem.permission.findIndex((x) => x.permission_id === id)
+                    if (index !== -1) {
+                        return true
+                    }
+                }
+            }
+            return false
+        }
+        return false
+    }
+    /* /Check permissions */
+
     return (
         <Fragment>
             <Card className="overflow-hidden">
@@ -560,6 +581,7 @@ const UsersList = () => {
                                 setModalOpen={setModalOpen}
                                 handlePerPage={handlePerPage}
                                 handleRoleFilter={handleRoleFilter}
+                                checkPermissionAccess={checkPermissionAccess}
                             />
                         }
                     />

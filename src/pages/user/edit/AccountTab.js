@@ -188,7 +188,7 @@ const AccountTab = ({
                 userData.DOB = getTransformDate(values.DOB, "YYYY-MM-DD")
             }
 
-            console.log("onSubmitAccount >>>>>>>>> ", userData)
+            // console.log("onSubmitAccount >>>>>>>>> ", userData)
             if (userData && userData.id) {
                 dispatch(updateUserLoader(false))
                 dispatch(updateUser(userData))

@@ -23,6 +23,9 @@ import {
     getCurrentUser
 } from '@utils'
 
+// ** Custom Components
+import LoadingPlaceHolder from '@components/loadingPlaceHolder/LoadingPlaceHolder'
+
 /* User tab view components */
 import BillingsTab from './BillingsTab'
 import DocumentsTab from './DocumentsTab'
@@ -106,33 +109,45 @@ const UserTabs = ({
             <Nav pills className="mb-2">
                 <NavItem>
                     <NavLink active={active === "1"} onClick={() => toggleTab("1")}>
-                        <Briefcase size={18} className="me-50" />
-                        <span className="fw-bold d-none d-sm-block">{T("Documents")}</span>
+                        <Briefcase size={18} />
+                        <span className="fw-bold d-none d-sm-block ms-50">{T("Documents")}</span>
                     </NavLink>
                 </NavItem>
 
                 <NavItem>
                     <NavLink active={active === "2"} onClick={() => toggleTab("2")}>
-                        <FileText size={18} className="me-50" />
-                        <span className="fw-bold d-none d-sm-block">{T("Bills")}</span>
+                        <FileText size={18} />
+                        <span className="fw-bold d-none d-sm-block ms-50">{T("Bills")}</span>
                     </NavLink>
                 </NavItem>
 
                 <NavItem>
                     <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
-                        <Monitor size={18} className="me-50" />
-                        <span className="fw-bold d-none d-sm-block">{T("Recent devices")}</span>
+                        <Monitor size={18} />
+                        <span className="fw-bold d-none d-sm-block ms-50">{T("Recent devices")}</span>
                     </NavLink>
                 </NavItem>
 
-                {onCheckPermissionAccess(10) ? (
-                    <NavItem>
-                        <NavLink active={active === "4"} onClick={() => toggleTab("4")}>
-                            <Unlock size={18} className="me-50" />
-                            <span className="fw-bold d-none d-sm-block">{T("Permissions")}</span>
-                        </NavLink>
+                {userItem && userItem.id ? (
+                    onCheckPermissionAccess(10) ? (
+                        <NavItem>
+                            <NavLink active={active === "4"} onClick={() => toggleTab("4")}>
+                                <Unlock size={18} />
+                                <span className="fw-bold d-none d-sm-block ms-50">{T("Permissions")}</span>
+                            </NavLink>
+                        </NavItem>
+                    ) : null
+                ) : (
+                    <NavItem className="d-flex">
+                        <LoadingPlaceHolder
+                            extraStyles={{ width: '69px', height: '42px' }}
+                        />
+                        <LoadingPlaceHolder
+                            customClassName="d-none d-sm-block"
+                            extraStyles={{ width: '95px', height: '42px' }}
+                        />
                     </NavItem>
-                ) : null}
+                )}
             </Nav>
 
             <TabContent activeTab={active}>

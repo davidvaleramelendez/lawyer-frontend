@@ -130,7 +130,6 @@ const ModalAddUser = ({
       handleReset()
     }
   }, [roleItems, authStore.userItem, store.success, store.error, store.actionFlag])
-  console.log("roleItems >>> ", roleItems)
 
   /* Submitting data */
   const onSubmit = (values) => {

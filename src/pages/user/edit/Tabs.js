@@ -17,6 +17,9 @@ import {
     Unlock
 } from 'react-feather'
 
+// ** Custom Components
+import LoadingPlaceHolder from '@components/loadingPlaceHolder/LoadingPlaceHolder'
+
 // ** Utils
 import {
     encryptData,
@@ -139,14 +142,26 @@ const UserTabs = ({
                     </NavLink>
                 </NavItem>
 
-                {onCheckPermissionAccess(10) ? (
-                    <NavItem>
-                        <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
-                            <Unlock className="font-medium-3 me-50" />
-                            <span className="fw-bold d-none d-sm-block">{T("Permissions")}</span>
-                        </NavLink>
+                {userItem && userItem.id ? (
+                    onCheckPermissionAccess(10) ? (
+                        <NavItem>
+                            <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
+                                <Unlock className="font-medium-3 me-50" />
+                                <span className="fw-bold d-none d-sm-block">{T("Permissions")}</span>
+                            </NavLink>
+                        </NavItem>
+                    ) : null
+                ) : (
+                    <NavItem className="d-flex">
+                        <LoadingPlaceHolder
+                            extraStyles={{ width: '69px', height: '42px' }}
+                        />
+                        <LoadingPlaceHolder
+                            customClassName="d-none d-sm-block"
+                            extraStyles={{ width: '95px', height: '42px' }}
+                        />
                     </NavItem>
-                ) : null}
+                )}
             </Nav>
 
             <TabContent activeTab={active}>

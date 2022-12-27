@@ -67,14 +67,16 @@ const AppRoutes = [
     path: `${adminRoot}/contact`,
     element: <ContactList />,
     meta: {
-      id: 'contactApp'
+      id: "contactApp",
+      restrictRole: [11]
     }
   },
   {
     path: `${adminRoot}/contact/view/:id`,
     element: <ContactView />,
     meta: {
-      id: 'contactApp'
+      id: "contactApp",
+      restrictRole: [11]
     }
   },
   /* User */
@@ -82,21 +84,24 @@ const AppRoutes = [
     path: `${adminRoot}/user`,
     element: <UserList />,
     meta: {
-      id: 'userApp'
+      id: "userApp",
+      restrictRole: [11]
     }
   },
   {
     path: `${adminRoot}/user/view/:id`,
     element: <UserView />,
     meta: {
-      id: 'userApp'
+      id: "userApp",
+      restrictRole: [11]
     }
   },
   {
     path: `${adminRoot}/user/edit/:id`,
     element: <UserEdit />,
     meta: {
-      id: 'userApp'
+      id: "userApp",
+      restrictRole: [11]
     }
   },
   /* Account Setting */
@@ -104,7 +109,7 @@ const AppRoutes = [
     path: `${adminRoot}/account-setting`,
     element: <UserAccountSetting />,
     meta: {
-      id: 'accountApp'
+      id: "accountApp"
     }
   },
   /* Email */
@@ -112,26 +117,29 @@ const AppRoutes = [
     path: `${adminRoot}/email`,
     element: <Email />,
     meta: {
+      id: "emailApp",
       appLayout: true,
-      className: 'email-application',
-      id: 'emailApp'
+      className: "email-application",
+      restrictRole: [11]
     }
   },
   {
     path: `${adminRoot}/email/:folder`,
     element: <Email />,
     meta: {
+      id: "emailApp",
       appLayout: true,
-      className: 'email-application',
-      id: 'emailApp'
+      className: "email-application",
+      restrictRole: [11]
     }
   },
   {
     path: `${adminRoot}/email/view/:id`,
     element: <EmailView />,
     meta: {
-      layout: 'blank',
-      id: 'emailApp'
+      id: "emailApp",
+      layout: "blank",
+      restrictRole: [11]
     }
   },
   /* Chat */
@@ -139,9 +147,10 @@ const AppRoutes = [
     path: `${adminRoot}/chat`,
     element: <Chat />,
     meta: {
+      id: "chatApp",
       appLayout: true,
-      className: 'chat-application',
-      id: 'chatApp'
+      className: "chat-application",
+      restrictRole: [11]
     }
   },
   /* Case */
@@ -149,14 +158,14 @@ const AppRoutes = [
     path: `${adminRoot}/case`,
     element: <CaseList />,
     meta: {
-      id: 'documentApp'
+      id: "documentApp"
     }
   },
   {
     path: `${adminRoot}/case/view/:id`,
     element: <CaseView />,
     meta: {
-      id: 'documentApp'
+      id: "documentApp"
     }
   },
   /* Todo */
@@ -164,27 +173,30 @@ const AppRoutes = [
     path: `${adminRoot}/todo`,
     element: <Todo />,
     meta: {
+      id: "taskApp",
       appLayout: true,
-      className: 'todo-application',
-      id: 'taskApp'
+      className: "todo-application",
+      restrictRole: [11]
     }
   },
   {
     path: `${adminRoot}/todo/:filter`,
     element: <Todo />,
     meta: {
+      id: "taskApp",
       appLayout: true,
-      className: 'todo-application',
-      id: 'taskApp'
+      className: "todo-application",
+      restrictRole: [11]
     }
   },
   {
     path: `${adminRoot}/todo/tag/:tag`,
     element: <Todo />,
     meta: {
+      id: "taskApp",
       appLayout: true,
-      className: 'todo-application',
-      id: 'taskApp'
+      className: "todo-application",
+      restrictRole: [11]
     }
   },
   /* Calendar */
@@ -192,7 +204,7 @@ const AppRoutes = [
     path: `${adminRoot}/calendar`,
     element: <Calendar />,
     meta: {
-      id: 'calendarApp'
+      id: "calendarApp"
     }
   },
   /* Timeline */
@@ -200,7 +212,8 @@ const AppRoutes = [
     path: `${adminRoot}/timeline`,
     element: <Timeline />,
     meta: {
-      id: 'respiteApp'
+      id: "respiteApp",
+      restrictRole: [11]
     }
   },
   /* Letter */
@@ -208,7 +221,8 @@ const AppRoutes = [
     path: `${adminRoot}/letter`,
     element: <LetterList />,
     meta: {
-      id: 'outboxApp'
+      id: "outboxApp",
+      restrictRole: [11]
     }
   },
   /* Invoice */
@@ -216,28 +230,30 @@ const AppRoutes = [
     path: `${adminRoot}/invoice`,
     element: <InvoiceList />,
     meta: {
-      id: 'billsApp'
+      id: "billsApp"
     }
   },
   {
     path: `${adminRoot}/invoice/add`,
     element: <InvoiceAdd />,
     meta: {
-      id: 'billsApp'
+      id: "billsApp",
+      restrictRole: [11]
     }
   },
   {
     path: `${adminRoot}/invoice/view/:id`,
     element: <InvoiceView />,
     meta: {
-      id: 'billsApp'
+      id: "billsApp"
     }
   },
   {
     path: `${adminRoot}/invoice/edit/:id`,
     element: <InvoiceEdit />,
     meta: {
-      id: 'billsApp'
+      id: "billsApp",
+      restrictRole: [11]
     }
   },
   /* EmailTemplate */
@@ -245,28 +261,32 @@ const AppRoutes = [
     path: `${adminRoot}/email-template`,
     element: <EmailTemplateList />,
     meta: {
-      id: 'emailTemplateApp'
+      id: "emailTemplateApp",
+      restrictRole: [11]
     }
   },
   {
     path: `${adminRoot}/email-template/add`,
     element: <EmailTemplateAdd />,
     meta: {
-      id: 'emailTemplateApp'
+      id: "emailTemplateApp",
+      restrictRole: [11]
     }
   },
   {
     path: `${adminRoot}/email-template/edit/:id`,
     element: <EmailTemplateEdit />,
     meta: {
-      id: 'emailTemplateApp'
+      id: "emailTemplateApp",
+      restrictRole: [11]
     }
   },
   {
     path: `${adminRoot}/email-template/view/:id`,
     element: <EmailTemplateView />,
     meta: {
-      id: 'emailTemplateApp'
+      id: "emailTemplateApp",
+      restrictRole: [11]
     }
   },
   /* CloudStorage */
@@ -274,18 +294,20 @@ const AppRoutes = [
     path: `${adminRoot}/cloud-storage`,
     element: <CloudStorage />,
     meta: {
+      id: "cloudServerApp",
       appLayout: true,
-      className: 'file-manager-application',
-      id: 'cloudServerApp'
+      className: "file-manager-application",
+      restrictRole: [11]
     }
   },
   {
     path: `${adminRoot}/cloud-storage/:slug`,
     element: <CloudStorage />,
     meta: {
+      id: "cloudServerApp",
       appLayout: true,
-      className: 'file-manager-application',
-      id: 'cloudServerApp'
+      className: "file-manager-application",
+      restrictRole: [11]
     }
   },
   /* Letter Template */
@@ -293,37 +315,42 @@ const AppRoutes = [
     path: `${adminRoot}/letter-template`,
     element: <LetterTemplateList />,
     meta: {
-      id: 'letterTemplateApp'
+      id: "letterTemplateApp",
+      restrictRole: [11]
     }
   },
   {
     path: `${adminRoot}/letter-template/add`,
     element: <LetterTemplateAdd />,
     meta: {
-      id: 'letterTemplateApp'
+      id: "letterTemplateApp",
+      restrictRole: [11]
     }
   },
   {
     path: `${adminRoot}/letter-template/edit/:id`,
     element: <LetterTemplateEdit />,
     meta: {
-      id: 'letterTemplateApp'
+      id: "letterTemplateApp",
+      restrictRole: [11]
     }
   },
   {
     path: `${adminRoot}/case/letter-template/add/:caseId/:letterTemplateId`,
     element: <CaseLetterTemplateAdd />,
     meta: {
-      layout: 'blank',
-      id: 'letterTemplateApp'
+      layout: "blank",
+      id: "letterTemplateApp",
+      restrictRole: [11]
     }
   },
   {
     path: `${adminRoot}/case/letter-template/edit/:caseId/:letterId`,
     element: <CaseLetterTemplateEdit />,
     meta: {
-      layout: 'blank',
-      id: 'letterTemplateApp'
+      layout: "blank",
+      id: "letterTemplateApp",
+      restrictRole: [11]
     }
   }
 ]

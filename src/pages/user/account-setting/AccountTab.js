@@ -46,8 +46,8 @@ const AccountTab = ({
 
     /* Validation rules */
     const AccountSchema = yup.object({
-        username: yup.string().required(`${T("Username is required!")}`).email('Invalid username!'),
-        name: yup.string().required(`${T("Name is required!")}`),
+        first_name: yup.string().required(T('Name is required!')),
+        last_name: yup.string().required(T('Last name is required!')),
         email: yup.string().required(`${T("Email is required!")}`).email('Invalid email address!')
     }).required()
 
@@ -65,8 +65,9 @@ const AccountTab = ({
 
     /* Placeholder texts */
     const PlaceholderSchema = {
-        username: "john.doe@example.com",
         name: "John Doe",
+        first_name: "John",
+        last_name: "Doe",
         email: "john.doe@example.com",
         company: "Company"
     }
@@ -74,10 +75,6 @@ const AccountTab = ({
     const handleReset = () => {
         const userItem = { ...store.userItem }
         if (userItem && userItem.id) {
-            if (userItem.email) {
-                userItem.username = userItem.email
-            }
-
             if (userItem.Company) {
                 userItem.company = userItem.Company
             }
@@ -112,7 +109,8 @@ const AccountTab = ({
     const onSubmitAccount = (values) => {
         if (values) {
             const userData = {
-                name: values.name,
+                first_name: values.first_name,
+                last_name: values.last_name,
                 email: values.email,
                 Company: values.company,
                 language: selLanguage
@@ -171,35 +169,35 @@ const AccountTab = ({
 
                         <Row>
                             <Col xl={6} md={6} sm={6} className="mb-1">
-                                <Label className="form-label" for="username">
-                                    {T('Username')}
-                                </Label>
-                                <Controller
-                                    defaultValue={store.userItem && store.userItem.email}
-                                    name="username"
-                                    id="username"
-                                    control={acntControl}
-                                    render={({ field }) => (
-                                        <Input {...field} type="email" placeholder={PlaceholderSchema && PlaceholderSchema.username} invalid={acntErrors.username && true} />
-                                    )}
-                                />
-                                <FormFeedback>{acntErrors.username?.message}</FormFeedback>
-                            </Col>
-
-                            <Col xl={6} md={6} sm={6} className="mb-1">
-                                <Label className="form-label" for="name">
+                                <Label className="form-label" for="first_name">
                                     {T('Name')}
                                 </Label>
                                 <Controller
-                                    defaultValue={store.userItem && store.userItem.name}
-                                    id="name"
-                                    name="name"
+                                    defaultValue=""
+                                    name="first_name"
+                                    id="first_name"
                                     control={acntControl}
                                     render={({ field }) => (
-                                        <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.name} invalid={acntErrors.name && true} />
+                                        <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.first_name} invalid={acntErrors.first_name && true} />
                                     )}
                                 />
-                                <FormFeedback>{acntErrors.name?.message}</FormFeedback>
+                                <FormFeedback>{acntErrors.first_name?.message}</FormFeedback>
+                            </Col>
+
+                            <Col xl={6} md={6} sm={6} className="mb-1">
+                                <Label className="form-label" for="last_name">
+                                    {T('Last Name')}
+                                </Label>
+                                <Controller
+                                    defaultValue=""
+                                    id="last_name"
+                                    name="last_name"
+                                    control={acntControl}
+                                    render={({ field }) => (
+                                        <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.last_name} invalid={acntErrors.last_name && true} />
+                                    )}
+                                />
+                                <FormFeedback>{acntErrors.last_name?.message}</FormFeedback>
                             </Col>
 
                             <Col xl={6} md={6} sm={6} className="mb-1">
@@ -224,7 +222,7 @@ const AccountTab = ({
                                     type="select"
                                     name="language"
                                     id="language"
-                                    value={selLanguage}
+                                    value={selLanguage || ""}
                                     onChange={onLanguageChange}
                                 >
                                     {languages && languages.length ? (<>
@@ -240,6 +238,7 @@ const AccountTab = ({
                             <Button
                                 type="submit"
                                 color="primary"
+                                disabled={store && store.userItem && !store.userItem.id}
                             >
                                 {T("Save Change")}
                             </Button>

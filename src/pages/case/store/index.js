@@ -6,6 +6,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 // Constant
 import {
   caseItem,
+  userItem,
   recordItem,
   fighterItem
 } from '@constant/reduxConstant'
@@ -93,6 +94,7 @@ export const getCaseView = createAsyncThunk('appCase/getCaseView', async (id) =>
         fighterItem: response.data.fighter && response.data.fighter.id ? response.data.fighter : fighterItem,
         typeItems: response.data.caseType,
         laywerItems: response.data.laywers,
+        authUserItem: response.data.authUser,
         attachments: [],
         actionFlag: "",
         success: "",
@@ -104,6 +106,7 @@ export const getCaseView = createAsyncThunk('appCase/getCaseView', async (id) =>
         recordItem: recordItem,
         caseItem: caseItem,
         fighterItem: fighterItem,
+        authUserItem: userItem,
         typeItems: [],
         laywerItems: [],
         attachments: [],
@@ -119,6 +122,7 @@ export const getCaseView = createAsyncThunk('appCase/getCaseView', async (id) =>
       recordItem: recordItem,
       caseItem: caseItem,
       fighterItem: fighterItem,
+      authUserItem: userItem,
       typeItems: [],
       laywerItems: [],
       attachments: [],
@@ -972,6 +976,7 @@ export const appCaseSlice = createSlice({
     caseItem: caseItem,
     recordItem: recordItem,
     fighterItem: fighterItem,
+    authUserItem: userItem,
     caseDocs: [],
     attachments: [],
     caseRecords: [],
@@ -1030,6 +1035,7 @@ export const appCaseSlice = createSlice({
         state.recordItem = action.payload.recordItem
         state.caseItem = action.payload.caseItem
         state.fighterItem = action.payload.fighterItem
+        state.authUserItem = action.payload.authUserItem
         state.typeItems = action.payload.typeItems
         state.laywerItems = action.payload.laywerItems
         state.attachments = action.payload.attachments

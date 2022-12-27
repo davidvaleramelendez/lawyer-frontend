@@ -109,23 +109,6 @@ const PermissionsTab = ({
                     </thead>
                     <tbody>
                         <tr>
-                            <td className='text-start'>{T('Delete Users')}</td>
-                            <td>
-                                <div className='d-flex form-check justify-content-center'>
-                                    <Input
-                                        type='checkbox'
-                                        id="admin-read"
-                                        value={1}
-                                        className="opacity-100"
-                                        checked={getPermissionChecked(1)}
-                                        disabled={checkDisablePermission(10)}
-                                        onChange={(event) => onPermissionCheckboxChange(event.target.checked, 1)}
-                                    />
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
                             <td className='text-start'>{T('See All Users')}</td>
                             <td>
                                 <div className='d-flex form-check justify-content-center'>
@@ -137,6 +120,23 @@ const PermissionsTab = ({
                                         checked={getPermissionChecked(2)}
                                         disabled={checkDisablePermission(10)}
                                         onChange={(event) => onPermissionCheckboxChange(event.target.checked, 2)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className='text-start'>{T('Delete Users')}</td>
+                            <td>
+                                <div className='d-flex form-check justify-content-center'>
+                                    <Input
+                                        type='checkbox'
+                                        id="admin-read"
+                                        value={1}
+                                        className="opacity-100"
+                                        checked={getPermissionChecked(1)}
+                                        disabled={checkDisablePermission(10)}
+                                        onChange={(event) => onPermissionCheckboxChange(event.target.checked, 1)}
                                     />
                                 </div>
                             </td>

@@ -104,7 +104,7 @@ const CalendarApp = () => {
       list1 = store.userItems.map(user => {
         return {
           value: user.id,
-          label: user.name,
+          label: `${user.name} (${user.email})`,
           img: user.profile_photo_path ? user.profile_photo_path : 'images/avatars/avatar-blank.png'
         }
       })
@@ -155,25 +155,25 @@ const CalendarApp = () => {
 
           <Col className="position-relative">
             {!store.loading ? (
-                <DotPulse />
-              ) : (
-                <Calendar
-                  isRtl={isRtl}
-                  store={store}
-                  dispatch={dispatch}
-                  calendarApi={calendarApi}
-                  updateEvent={updateEvent}
-                  getEventItem={getEventItem}
-                  toggleSidebar={toggleSidebar}
-                  setCalendarApi={setCalendarApi}
-                  loadingCalendar={loadingCalendar}
-                  getTransformDate={getTransformDate}
-                  calendarsColor={calendarFilterColor}
-                  setLoadingCalendar={setLoadingCalendar}
-                  setAddEventModalOpen={setAddEventModalOpen}
-                  increaseCustomDateFormat={increaseCustomDateFormat}
-                />
-              )
+              <DotPulse />
+            ) : (
+              <Calendar
+                isRtl={isRtl}
+                store={store}
+                dispatch={dispatch}
+                calendarApi={calendarApi}
+                updateEvent={updateEvent}
+                getEventItem={getEventItem}
+                toggleSidebar={toggleSidebar}
+                setCalendarApi={setCalendarApi}
+                loadingCalendar={loadingCalendar}
+                getTransformDate={getTransformDate}
+                calendarsColor={calendarFilterColor}
+                setLoadingCalendar={setLoadingCalendar}
+                setAddEventModalOpen={setAddEventModalOpen}
+                increaseCustomDateFormat={increaseCustomDateFormat}
+              />
+            )
             }
           </Col>
 

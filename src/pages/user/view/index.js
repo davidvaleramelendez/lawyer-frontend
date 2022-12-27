@@ -158,6 +158,8 @@ const UserView = () => {
             active={active}
             toggleTab={toggleTab}
             permissions={store.permissions}
+            userItem={store.userItem}
+            authUserItem={store.authUserItem}
           />
         </Col>
       </Row>

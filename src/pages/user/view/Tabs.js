@@ -1,5 +1,5 @@
 // ** React Imports
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 
 // ** Reactstrap Imports
 import {
@@ -18,6 +18,11 @@ import {
     Briefcase
 } from 'react-feather'
 
+// ** Utils
+import {
+    getCurrentUser
+} from '@utils'
+
 /* User tab view components */
 import BillingsTab from './BillingsTab'
 import DocumentsTab from './DocumentsTab'
@@ -30,9 +35,71 @@ import { T } from '@localization'
 const UserTabs = ({
     id,
     active,
+    userItem,
     toggleTab,
-    permissions
+    permissions,
+    authUserItem
 }) => {
+    // ** State
+    const [userData] = useState(getCurrentUser)
+
+    /* Check user permission access */
+    const onCheckPermissionAccess = (roleId, customerRoleId = 11) => {
+        /* Logged in user */
+        if (authUserItem && authUserItem.role) {
+            /* Logged in user */
+            if (authUserItem.role.role_id === roleId) {
+                /* Selected user */
+                if (userItem && userItem.id) {
+                    if (userItem.role_id === customerRoleId) {
+                        if (active === "4") {
+                            toggleTab("1")
+                        }
+                        return false
+                    }
+                }
+                /* /Selected user */
+                return true
+            } else if (userData && userData.role) {
+                /* Logged in user */
+                if (userData.role.role_id === roleId) {
+                    /* Selected user */
+                    if (userItem && userItem.id) {
+                        if (userItem.role_id === customerRoleId) {
+                            if (active === "4") {
+                                toggleTab("1")
+                            }
+                            return false
+                        }
+                    }
+                    /* /Selected user */
+                    return true
+                }
+                /* /Logged in user */
+            }
+            /* /Logged in user */
+            return false
+        } else if (userData && userData.role) {
+            /* Logged in user */
+            if (userData.role.role_id === roleId) {
+                /* Selected user */
+                if (userItem && userItem.id) {
+                    if (userItem.role_id === customerRoleId) {
+                        if (active === "4") {
+                            toggleTab("1")
+                        }
+                        return false
+                    }
+                }
+                /* /Selected user */
+                return true
+            }
+            /* /Logged in user */
+        }
+        /* /Logged in user */
+        return false
+    }
+    /* /Check user permission access */
 
     return (
         <Fragment>
@@ -58,12 +125,14 @@ const UserTabs = ({
                     </NavLink>
                 </NavItem>
 
-                <NavItem>
-                    <NavLink active={active === "4"} onClick={() => toggleTab("4")}>
-                        <Unlock size={18} className="me-50" />
-                        <span className="fw-bold d-none d-sm-block">{T("Permissions")}</span>
-                    </NavLink>
-                </NavItem>
+                {onCheckPermissionAccess(10) ? (
+                    <NavItem>
+                        <NavLink active={active === "4"} onClick={() => toggleTab("4")}>
+                            <Unlock size={18} className="me-50" />
+                            <span className="fw-bold d-none d-sm-block">{T("Permissions")}</span>
+                        </NavLink>
+                    </NavItem>
+                ) : null}
             </Nav>
 
             <TabContent activeTab={active}>

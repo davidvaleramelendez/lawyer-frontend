@@ -58,6 +58,20 @@ const PermissionsTab = ({
                         </tr>
 
                         <tr>
+                            <td className="text-start">{T('Add User')}</td>
+                            <td>
+                                <div className="d-flex form-check justify-content-center">
+                                    <Input
+                                        disabled
+                                        type="checkbox"
+                                        className="opacity-100"
+                                        checked={getPermissionCheck(7)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
                             <td className="text-start">{T('Delete Users')}</td>
                             <td>
                                 <div className="d-flex form-check justify-content-center">

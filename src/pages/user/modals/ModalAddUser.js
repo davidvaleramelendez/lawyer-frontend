@@ -57,6 +57,7 @@ const ModalAddUser = ({
   // ** Store vars
   const dispatch = useDispatch()
   const store = useSelector((state) => state.user)
+  const authStore = useSelector((state) => state.auth)
 
   /* Yup validation schema */
   const UserSchema = yup.object({
@@ -107,6 +108,15 @@ const ModalAddUser = ({
           label: role.RoleName
         }
       })
+
+      if (authStore.userItem && authStore.userItem.id) {
+        if (authStore.userItem.role_id !== 10) {
+          const index = list1.findIndex((x) => x.value === 10)
+          if (index !== -1) {
+            list1.splice(index, 1)
+          }
+        }
+      }
     }
     setRoleOptions(list1)
 
@@ -119,7 +129,8 @@ const ModalAddUser = ({
     if (store && store.actionFlag && store.actionFlag === "ADDED_ITEM") {
       handleReset()
     }
-  }, [roleItems, store.success, store.error, store.actionFlag])
+  }, [roleItems, authStore.userItem, store.success, store.error, store.actionFlag])
+  console.log("roleItems >>> ", roleItems)
 
   /* Submitting data */
   const onSubmit = (values) => {

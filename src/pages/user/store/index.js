@@ -176,78 +176,6 @@ export const addUser = createAsyncThunk('appUser/addUser', async (payload, { dis
   }
 })
 
-async function getUserViewRequest(id) {
-  return axios.get(`${API_ENDPOINTS.users.view}/${id}`).then((user) => user.data).catch((error) => error)
-}
-
-export const getUserView = createAsyncThunk('appUser/getUserView', async (id) => {
-  try {
-    const response = await getUserViewRequest(id)
-    if (response && response.flag) {
-      return {
-        id,
-        userItem: response.data.userItem,
-        authUserItem: response.data.authUser,
-        actionFlag: "EDIT_USER",
-        success: "",
-        error: ""
-      }
-    } else {
-      return {
-        id,
-        userItem: userItem,
-        authUserItem: userItem,
-        actionFlag: "",
-        success: "",
-        error: ""
-      }
-    }
-  } catch (error) {
-    console.log("getUserView catch ", error)
-    return {
-      id,
-      userItem: userItem,
-      authUserItem: userItem,
-      actionFlag: "",
-      success: "",
-      error: error
-    }
-  }
-})
-
-async function updateUserRequest(payload) {
-  return axios.post(`${API_ENDPOINTS.users.update}`, payload).then((user) => user.data).catch((error) => error)
-}
-
-export const updateUser = createAsyncThunk('appUser/updateUser', async (payload) => {
-  try {
-    const response = await updateUserRequest(payload)
-    if (response && response.flag) {
-      return {
-        userItem: response.data,
-        actionFlag: "USER_UPDATED",
-        success: response.message,
-        error: ""
-      }
-    } else {
-      return {
-        userItem: userItem,
-        actionFlag: "",
-        success: "",
-        error: response.message
-      }
-    }
-  } catch (error) {
-    console.log("updateUser catch ", error)
-    return {
-      userItem: userItem,
-      actionFlag: "",
-      success: "",
-      error: error
-    }
-  }
-})
-
 async function updatePermissionRequest(payload) {
   return axios.post(`${API_ENDPOINTS.users.updatePermission}`, payload).then((user) => user.data).catch((error) => error)
 }
@@ -307,6 +235,79 @@ export const getUserPermission = createAsyncThunk('appUser/getUserPermission', a
     console.log("getUserView catch ", error)
     return {
       permissions: [],
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function getUserViewRequest(id) {
+  return axios.get(`${API_ENDPOINTS.users.view}/${id}`).then((user) => user.data).catch((error) => error)
+}
+
+export const getUserView = createAsyncThunk('appUser/getUserView', async (id) => {
+  try {
+    const response = await getUserViewRequest(id)
+    if (response && response.flag) {
+      return {
+        id,
+        userItem: response.data.userItem,
+        authUserItem: response.data.authUser,
+        actionFlag: "EDIT_USER",
+        success: "",
+        error: ""
+      }
+    } else {
+      return {
+        id,
+        userItem: userItem,
+        authUserItem: userItem,
+        actionFlag: "",
+        success: "",
+        error: ""
+      }
+    }
+  } catch (error) {
+    console.log("getUserView catch ", error)
+    return {
+      id,
+      userItem: userItem,
+      authUserItem: userItem,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function updateUserRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.users.update}`, payload).then((user) => user.data).catch((error) => error)
+}
+
+export const updateUser = createAsyncThunk('appUser/updateUser', async (payload, { dispatch, getState }) => {
+  try {
+    const response = await updateUserRequest(payload)
+    if (response && response.flag) {
+      await dispatch(getUserPermission(getState().user.id))
+      return {
+        userItem: response.data,
+        actionFlag: "USER_UPDATED",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        userItem: userItem,
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("updateUser catch ", error)
+    return {
+      userItem: userItem,
       actionFlag: "",
       success: "",
       error: error

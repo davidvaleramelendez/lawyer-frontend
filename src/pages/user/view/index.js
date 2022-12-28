@@ -1,6 +1,6 @@
 // ** React Imports
 import { useEffect, useState, Fragment } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useParams, useLocation, useNavigate } from 'react-router-dom'
 
 // ** Store & Actions
 import {
@@ -54,6 +54,8 @@ import { T } from '@localization'
 const UserView = () => {
   // ** Hooks
   const { id } = useParams()
+  const search = useLocation().search
+  const type = new URLSearchParams(search).get('type')
   const navigate = useNavigate()
 
   const MySwal = withReactContent(Swal)
@@ -155,6 +157,7 @@ const UserView = () => {
         <Col xl={8} lg={7} xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
           <UserTabs
             id={id}
+            type={type}
             active={active}
             toggleTab={toggleTab}
             permissions={store.permissions}

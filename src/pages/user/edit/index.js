@@ -1,6 +1,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useLocation, useNavigate } from 'react-router-dom'
 
 // ** Store & Actions
 import {
@@ -44,6 +44,8 @@ import { T } from '@localization'
 const UserEditApp = () => {
   // ** Hooks
   const { id } = useParams()
+  const search = useLocation().search
+  const type = new URLSearchParams(search).get('type')
 
   // ** Store vars
   const dispatch = useDispatch()
@@ -108,6 +110,7 @@ const UserEditApp = () => {
 
         <UserTabs
           id={id}
+          type={type}
           active={active}
           toggleTab={toggleTab}
           userItem={store.userItem}

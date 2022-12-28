@@ -91,7 +91,6 @@ const UserDropdown = () => {
 
     /* Succes toast notification */
     if (store && store.success) {
-      console.log("getCurrentUser >>> ", getCurrentUser())
       Notification(T("Success"), store.success, "success")
     }
 

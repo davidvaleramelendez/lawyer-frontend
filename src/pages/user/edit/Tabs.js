@@ -17,9 +17,6 @@ import {
     Unlock
 } from 'react-feather'
 
-// ** Custom Components
-import LoadingPlaceHolder from '@components/loadingPlaceHolder/LoadingPlaceHolder'
-
 // ** Utils
 import {
     encryptData,
@@ -38,6 +35,7 @@ import { T } from '@localization'
 
 const UserTabs = ({
     id,
+    type,
     active,
     userItem,
     toggleTab,
@@ -70,55 +68,36 @@ const UserTabs = ({
     /* Check user permission access */
     const onCheckPermissionAccess = (roleId, customerRoleId = 11) => {
         /* Logged in user */
-        if (authUserItem && authUserItem.role) {
-            /* Logged in user */
-            if (authUserItem.role.role_id === roleId) {
-                /* Selected user */
-                if (userItem && userItem.id) {
-                    if (userItem.role_id === customerRoleId) {
-                        if (active === "3") {
-                            toggleTab("1")
-                        }
-                        return false
-                    }
+        if (authUserItem && authUserItem.role_id === roleId) {
+            /* Selected user */
+            if ((userItem && userItem.role_id === customerRoleId)) {
+                if (active === "3") {
+                    toggleTab("1")
                 }
-                /* /Selected user */
-                return true
-            } else if (userData && userData.role) {
-                /* Logged in user */
-                if (userData.role.role_id === roleId) {
-                    /* Selected user */
-                    if (userItem && userItem.id) {
-                        if (userItem.role_id === customerRoleId) {
-                            if (active === "3") {
-                                toggleTab("1")
-                            }
-                            return false
-                        }
-                    }
-                    /* /Selected user */
-                    return true
+                return false
+            } else if ((userItem && userItem.role_id !== roleId) && type) {
+                if (active === "3") {
+                    toggleTab("1")
                 }
-                /* /Logged in user */
+                return false
             }
-            /* /Logged in user */
-            return false
-        } else if (userData && userData.role) {
-            /* Logged in user */
-            if (userData.role.role_id === roleId) {
-                /* Selected user */
-                if (userItem && userItem.id) {
-                    if (userItem.role_id === customerRoleId) {
-                        if (active === "3") {
-                            toggleTab("1")
-                        }
-                        return false
-                    }
+            /* /Selected user */
+            return true
+        } else if (userData && userData.role_id === roleId) {
+            /* Selected user */
+            if ((userItem && userItem.role_id === customerRoleId)) {
+                if (active === "3") {
+                    toggleTab("1")
                 }
-                /* /Selected user */
-                return true
+                return false
+            } else if ((userItem && userItem.role_id !== roleId) && type) {
+                if (active === "3") {
+                    toggleTab("1")
+                }
+                return false
             }
-            /* /Logged in user */
+            /* /Selected user */
+            return true
         }
         /* /Logged in user */
         return false
@@ -142,26 +121,14 @@ const UserTabs = ({
                     </NavLink>
                 </NavItem>
 
-                {userItem && userItem.id ? (
-                    onCheckPermissionAccess(10) ? (
-                        <NavItem>
-                            <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
-                                <Unlock className="font-medium-3 me-50" />
-                                <span className="fw-bold d-none d-sm-block">{T("Permissions")}</span>
-                            </NavLink>
-                        </NavItem>
-                    ) : null
-                ) : (
-                    <NavItem className="d-flex">
-                        <LoadingPlaceHolder
-                            extraStyles={{ width: '69px', height: '42px' }}
-                        />
-                        <LoadingPlaceHolder
-                            customClassName="d-none d-sm-block"
-                            extraStyles={{ width: '95px', height: '42px' }}
-                        />
+                {onCheckPermissionAccess(10) ? (
+                    <NavItem>
+                        <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
+                            <Unlock className="font-medium-3 me-50" />
+                            <span className="fw-bold d-none d-sm-block">{T("Permissions")}</span>
+                        </NavLink>
                     </NavItem>
-                )}
+                ) : null}
             </Nav>
 
             <TabContent activeTab={active}>

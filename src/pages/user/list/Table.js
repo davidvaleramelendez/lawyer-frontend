@@ -507,7 +507,7 @@ const UsersList = () => {
             cell: (row) => (
                 <div className='column-action d-flex align-items-center'>
                     <Link
-                        to={`${adminRoot}/user/view/${(row && row.id) || ""}`}
+                        to={`${adminRoot}/user/view/${(row && row.id) || ""}${row.role_id === 11 ? `?type=customer` : ''}`}
                         id={`pw-view-tooltip-${(row && row.id) || ""}`}
                     >
                         <Eye size={17} className="me-50" />
@@ -517,7 +517,7 @@ const UsersList = () => {
                     </UncontrolledTooltip>
 
                     <Link
-                        to={`${adminRoot}/user/edit/${(row && row.id) || ""}`}
+                        to={`${adminRoot}/user/edit/${(row && row.id) || ""}${row.role_id === 11 ? `?type=customer` : ''}`}
                         id={`pw-edit-tooltip-${(row && row.id) || ""}`}
                     >
                         <Edit size={17} />

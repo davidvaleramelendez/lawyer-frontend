@@ -23,7 +23,7 @@ async function getMailsRequest(folder, params) {
 
 export const getMails = createAsyncThunk('appEmail/getMails', async (params) => {
   try {
-    const response = await getMailsRequest(params.folder, params.payload)
+    const response = await getMailsRequest(params.folder || "", params.payload)
     if (response && response.flag) {
       return {
         params,
@@ -526,6 +526,39 @@ export const deleteDrafts = createAsyncThunk('appEmail/deleteDrafts', async (ids
 })
 /* /Draft*/
 
+/* Email cron */
+async function callEmailCronJobRequest(params) {
+  return axios.get(`${API_ENDPOINTS.emails.userMailCron}`, { params }).then((response) => response.data).catch((error) => error)
+}
+
+export const callEmailCronJob = createAsyncThunk('appEmail/callEmailCronJob', async (params, { dispatch, getState }) => {
+  try {
+    const response = await callEmailCronJobRequest(params)
+    if (response && response.flag) {
+      await dispatch(getMails(getState().email.params))
+      return {
+        actionFlag: "",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("callEmailCronJob catch ", error)
+    return {
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+/* /Email cron */
+
 export const appEmailSlice = createSlice({
   name: 'appEmail',
   initialState: {
@@ -605,7 +638,7 @@ export const appEmailSlice = createSlice({
       if (index !== -1) {
         selectedDrafts.splice(index, 1)
       } else {
-        selectedDrafts.push({ id: action.payload.id})
+        selectedDrafts.push({ id: action.payload.id })
       }
       state.selectedDrafts = selectedDrafts
     },
@@ -614,11 +647,11 @@ export const appEmailSlice = createSlice({
       const selectAllDraftsArr = []
       if (action.payload) {
         state.drafts.map(draft => {
-          selectAllDraftsArr.push({id: draft.id})
+          selectAllDraftsArr.push({ id: draft.id })
         })
       }
-      console.log('action.payload: ', action.payload)
-      console.log('selectAllDraftsArr: ', selectAllDraftsArr)
+      // console.log('action.payload: ', action.payload)
+      // console.log('selectAllDraftsArr: ', selectAllDraftsArr)
       state.selectedDrafts = selectAllDraftsArr
     },
 
@@ -680,11 +713,11 @@ export const appEmailSlice = createSlice({
 
     setComposeSubject: (state, action) => {
       state.composeModal.subject = action.payload || ""
-    }, 
+    },
 
     setComposeEditorHtmlContent: (state, action) => {
       state.composeModal.editorHtmlContent = action.payload || ""
-    }, 
+    },
 
     setComposeAttachments: (state, action) => {
       state.composeModal.attachments = action.payload || []
@@ -784,6 +817,7 @@ export const appEmailSlice = createSlice({
         state.error = action.payload.error
       })
       /* /Mail attachment */
+
       /* Draft */
       .addCase(getDraftList.fulfilled, (state, action) => {
         state.drafts = action.payload.draftList
@@ -792,17 +826,13 @@ export const appEmailSlice = createSlice({
         state.error = action.payload.error
       })
       .addCase(getDraftMail.fulfilled, (state, action) => {
-
         if (!action.payload.data) {
           return
         }
-        
+
         const draft = action.payload.data
-
         state.composeModal.draftId = draft.id
-
         const userOptions = JSON.parse(JSON.stringify(state.composeModal.userOptions))
-
         const toIds = draft.to_ids.split(",")
         state.composeModal.mailTo = []
         toIds.forEach((id) => {
@@ -840,7 +870,7 @@ export const appEmailSlice = createSlice({
 
 
         state.composeModal.open = true
-        
+
         state.loading = true
         state.success = action.payload.success
         state.error = action.payload.error
@@ -881,6 +911,15 @@ export const appEmailSlice = createSlice({
         }
       })
       /* /Draft */
+
+      /* Email cron */
+      .addCase(callEmailCronJob.fulfilled, (state, action) => {
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+    /* /Email cron */
   }
 })
 

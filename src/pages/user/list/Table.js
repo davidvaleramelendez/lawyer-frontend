@@ -417,7 +417,7 @@ const UsersList = () => {
                     {renderUser(row)}
                     <div className="d-flex flex-column">
                         <Link
-                            to={`${adminRoot}/user/view/${row.id}`}
+                            to={`${adminRoot}/user/view/${row.id}${row.role_id === 11 ? `?type=customer` : ''}`}
                             className="user_name text-truncate text-body"
                         >
                             <span className="fw-bolder text-primary text-wrap">{row.name}</span>

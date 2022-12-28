@@ -24,6 +24,8 @@ import {
   resetMailDetailItem,
   createEmailAttachment,
   deleteEmailAttachment,
+  callEmailCronJob,
+  updateEmailLoader,
   clearEmailMessage,
   toggleCompose
 } from './store'
@@ -156,9 +158,11 @@ const EmailApp = () => {
             handleGetMails={handleGetMails}
             markEmailTrash={markEmailTrash}
             markEmailDelete={markEmailDelete}
+            callEmailCronJob={callEmailCronJob}
             setUploadedFiles={setUploadedFiles}
             createEmailReply={createEmailReply}
             markEmailRestore={markEmailRestore}
+            updateEmailLoader={updateEmailLoader}
             editorHtmlContent={editorHtmlContent}
             resetSelectedMail={resetSelectedMail}
             editorStateContent={editorStateContent}

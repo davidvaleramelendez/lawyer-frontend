@@ -22,6 +22,7 @@ import {
 
 // ** Utils
 import {
+    getCurrentUser,
     onImageSrcError
 } from '@utils'
 
@@ -97,6 +98,7 @@ const Tabs = ({
                         languages={languages}
                         selLanguage={selLanguage}
                         setSelLanguage={setSelLanguage}
+                        getCurrentUser={getCurrentUser}
                         onImageSrcError={onImageSrcError}
                     />
                 </TabPane>

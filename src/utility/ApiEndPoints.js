@@ -172,7 +172,8 @@ export const API_ENDPOINTS = {
         markImportant: `/api/admin/email/mark_important`,
         createReply: `/api/admin/email/reply`,
         view: `/api/admin/email`,
-        draft: `/api/admin/draft`
+        draft: `/api/admin/draft`,
+        userMailCron: `/api/admin/email/email-imap/user/cron`
     },
     /* /Email module */
 

@@ -35,6 +35,7 @@ const AccountTab = ({
     languages,
     selLanguage,
     setSelLanguage,
+    getCurrentUser,
     onImageSrcError
 }) => {
     // ** Store vars
@@ -124,6 +125,20 @@ const AccountTab = ({
             dispatch(saveAccount(userData))
         }
     }
+
+    /* Check admin role permission */
+    const checkAdminRoleAccess = () => {
+        const currentUser = getCurrentUser()
+
+        if (store.userItem && store.userItem.role_id === 10) {
+            return true
+        } else if (currentUser && currentUser.role_id === 10) {
+            return true
+        }
+
+        return false
+    }
+    /* /Check admin role permission */
 
     return (
         <Fragment>
@@ -216,22 +231,24 @@ const AccountTab = ({
                                 <FormFeedback>{acntErrors.email?.message}</FormFeedback>
                             </Col>
 
-                            <Col xl={6} md={6} sm={6} className="mb-1">
-                                <label className="form-label" htmlFor="language-select">{T('Language')}</label>
-                                <Input
-                                    type="select"
-                                    name="language"
-                                    id="language"
-                                    value={selLanguage || ""}
-                                    onChange={onLanguageChange}
-                                >
-                                    {languages && languages.length ? (<>
-                                        {languages.map((item, index) => (
-                                            <option key={`row-${index}`} value={item}>{item}</option>
-                                        ))}
-                                    </>) : null}
-                                </Input>
-                            </Col>
+                            {checkAdminRoleAccess() ? (
+                                <Col xl={6} md={6} sm={6} className="mb-1">
+                                    <label className="form-label" htmlFor="language-select">{T('Language')}</label>
+                                    <Input
+                                        type="select"
+                                        name="language"
+                                        id="language"
+                                        value={selLanguage || ""}
+                                        onChange={onLanguageChange}
+                                    >
+                                        {languages && languages.length ? (<>
+                                            {languages.map((item, index) => (
+                                                <option key={`row-${index}`} value={item}>{item}</option>
+                                            ))}
+                                        </>) : null}
+                                    </Input>
+                                </Col>
+                            ) : null}
                         </Row>
 
                         <div className="mb-2 mt-2">

@@ -21,15 +21,18 @@ import {
   Menu,
   Trash,
   Search,
-  RefreshCw
+  RefreshCw,
+  RefreshCcw
 } from 'react-feather'
 
 // ** Reactstrap Imports
 import {
   Input,
   Label,
+  Spinner,
   InputGroup,
-  InputGroupText
+  InputGroupText,
+  UncontrolledTooltip
 } from 'reactstrap'
 import DraftCard from './DraftCard'
 import {
@@ -68,6 +71,8 @@ const Mails = (props) => {
     createEmailReply,
     setUploadedFiles,
     markEmailRestore,
+    callEmailCronJob,
+    updateEmailLoader,
     editorHtmlContent,
     editorStateContent,
     markEmailImportant,
@@ -82,6 +87,7 @@ const Mails = (props) => {
   const {
     mails,
     drafts,
+    loading,
     selectedMails,
     selectedDrafts
   } = store
@@ -139,6 +145,13 @@ const Mails = (props) => {
     setSearchInput(value)
     handleGetMails(value, rowsPerPage)
   }
+
+  /* Refetching emails */
+  const getRefetchEmail = () => {
+    dispatch(updateEmailLoader(false))
+    dispatch(callEmailCronJob({}))
+  }
+  /* /Refetching emails */
 
   const onScrollDown = (container, value) => {
     const { scrollTop, scrollHeight, clientHeight } = container
@@ -219,21 +232,21 @@ const Mails = (props) => {
 
   return (
     <Fragment>
-      <div className='email-app-list'>
-        <div className='app-fixed-search d-flex align-items-center'>
-          <div className='sidebar-toggle d-block d-lg-none ms-1' onClick={() => setSidebarOpen(true)}>
-            <Menu size='21' />
+      <div className="email-app-list">
+        <div className="app-fixed-search d-flex align-items-center">
+          <div className="sidebar-toggle d-block d-lg-none ms-1" onClick={() => setSidebarOpen(true)}>
+            <Menu size="21" />
           </div>
 
-          <div className='d-flex align-content-center justify-content-between w-100'>
-            <InputGroup className='input-group-merge'>
+          <div className="d-flex align-content-center justify-content-between w-100">
+            <InputGroup className="input-group-merge">
               <InputGroupText>
-                <Search className='text-muted' size={14} />
+                <Search className="text-muted" size={14} />
               </InputGroupText>
 
               <Input
-                id='email-search'
-                placeholder={T('Search email')}
+                id="email-search"
+                placeholder={T("Search email")}
                 value={searchInput}
                 onChange={(event) => handleSearch(event.target.value)}
               />
@@ -241,63 +254,79 @@ const Mails = (props) => {
           </div>
         </div>
 
-        <div className='app-action'>
-          <div className='action-left form-check'>
+        <div className="app-action">
+          <div className="action-left form-check">
             <Input
-              type='checkbox'
-              id='select-all'
+              type="checkbox"
+              id="select-all"
               onChange={handleSelectAll}
               checked={getCheckedAllStatus()}
             />
-            <Label className='form-check-label fw-bolder ps-25 mb-0' for='select-all'>
-              {T('Select All')}
+            <Label className="form-check-label fw-bolder ps-25 mb-0" for="select-all">
+              {T("Select All")}
             </Label>
           </div>
 
-          {folder !== 'draft' && selectedMails && selectedMails.length ? (
-            <div className='action-right'>
-              <ul className='list-inline m-0'>
-                {folder === "trash" ? (<li className='list-inline-item'>
-                  <span className='action-icon' onClick={() => handleMailToRestore(selectedMails)}>
+          <div className="action-right">
+            <ul className="list-inline m-0">
+              <li className="list-inline-item" id={`pw-mail-refresh-tooltip`}>
+                {loading ? (
+                  <span className="action-icon" onClick={() => getRefetchEmail()}>
                     <RefreshCw size={18} />
                   </span>
-                </li>) : null}
+                ) : (
+                  <Spinner size="sm" />
+                )}
+                <UncontrolledTooltip placement="top" target={`pw-mail-refresh-tooltip`}>
+                  {T("Refresh")}
+                </UncontrolledTooltip>
+              </li>
 
-                <li className='list-inline-item'>
-                  <span className='action-icon' onClick={() => handleMailToTrash(selectedMails)}>
+              {folder !== "draft" && selectedMails && selectedMails.length ? (
+                <Fragment>
+                  {folder === "trash" ? (
+                    <li className="list-inline-item" id={`pw-mail-restore-tooltip`}>
+                      <span className="action-icon" onClick={() => handleMailToRestore(selectedMails)}>
+                        <RefreshCcw size={18} />
+                      </span>
+                      <UncontrolledTooltip placement="top" target={`pw-mail-restore-tooltip`}>
+                        {T("Restore")}
+                      </UncontrolledTooltip>
+                    </li>
+                  ) : null}
+
+                  <li className="list-inline-item">
+                    <span className="action-icon" onClick={() => handleMailToTrash(selectedMails)}>
+                      <Trash size={18} />
+                    </span>
+                  </li>
+                </Fragment>
+              ) : null}
+
+              {folder === "draft" && selectedDrafts && selectedDrafts.length ? (
+                <li className="list-inline-item">
+                  <span className="action-icon" onClick={() => handleRemoveDrafts()}>
                     <Trash size={18} />
                   </span>
                 </li>
-              </ul>
-            </div>
-          ) : null}
-
-          {folder === 'draft' && selectedDrafts && selectedDrafts.length ? (
-            <div className='action-right'>
-              <ul className='list-inline m-0'>
-                <li className='list-inline-item'>
-                  <span className='action-icon' onClick={() => handleRemoveDrafts()}>
-                    <Trash size={18} />
-                  </span>
-                </li>
-              </ul>
-            </div>
-          ) : null}
+              ) : null}
+            </ul>
+          </div>
         </div>
 
         <PerfectScrollbar
-          className='email-user-list'
+          className="email-user-list"
           options={{ wheelPropagation: false }}
           onScrollDown={(container) => onScrollDown(container, rowsPerPage)}
         >
-          {folder !== 'draft' && mails && mails.length ? (
-            <ul className='email-media-list'>{renderMails()}</ul>
+          {folder !== "draft" && mails && mails.length ? (
+            <ul className="email-media-list">{renderMails()}</ul>
 
-          ) : folder === 'draft' && drafts && drafts.length ? (
-            <ul className='email-media-list'>{renderDrafts()}</ul>
+          ) : folder === "draft" && drafts && drafts.length ? (
+            <ul className="email-media-list">{renderDrafts()}</ul>
           ) : (
-            <div className='no-results d-block'>
-              <h5>{T('No Items Found')}</h5>
+            <div className="no-results d-block">
+              <h5>{T("No Items Found")}</h5>
             </div>
           )}
         </PerfectScrollbar>

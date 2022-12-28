@@ -45,7 +45,10 @@ const UserTabs = ({
     const [userData] = useState(getCurrentUser)
 
     /* Check user permission access */
-    const onCheckPermissionAccess = (roleId, customerRoleId = 11) => {
+    const onCheckPermissionAccess = (roleId = 10) => {
+        const customerRoleId = 11
+        const lawyerRoleId = 14
+        const partnerRoleId = 12
         /* Logged in user */
         if (authUserItem && authUserItem.role_id === roleId) {
             /* Selected user */
@@ -54,7 +57,11 @@ const UserTabs = ({
                     toggleTab("1")
                 }
                 return false
-            } else if ((userItem && userItem.role_id !== roleId) && type) {
+            } else if ((
+                (userItem && userItem.role_id !== roleId) &&
+                (userItem && userItem.role_id !== lawyerRoleId) &&
+                (userItem && userItem.role_id !== partnerRoleId)
+            ) && type) {
                 if (active === "4") {
                     toggleTab("1")
                 }
@@ -69,7 +76,11 @@ const UserTabs = ({
                     toggleTab("1")
                 }
                 return false
-            } else if ((userItem && userItem.role_id !== roleId) && type) {
+            } else if ((
+                (userItem && userItem.role_id !== roleId) &&
+                (userItem && userItem.role_id !== lawyerRoleId) &&
+                (userItem && userItem.role_id !== partnerRoleId)
+            ) && type) {
                 if (active === "4") {
                     toggleTab("1")
                 }
@@ -107,7 +118,7 @@ const UserTabs = ({
                     </NavLink>
                 </NavItem>
 
-                {onCheckPermissionAccess(10) ? (
+                {onCheckPermissionAccess() ? (
                     <NavItem>
                         <NavLink active={active === "4"} onClick={() => toggleTab("4")}>
                             <Unlock size={18} />

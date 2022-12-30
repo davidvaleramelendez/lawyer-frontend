@@ -1,7 +1,7 @@
 /* eslint-disable object-shorthand */
 
 // ** React Imports
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 // ** Third Party Components
@@ -52,6 +52,7 @@ import { T } from '@localization'
 const MailDetails = (props) => {
   // ** Props
   const {
+    store,
     folder,
     mailItem,
     openMail,
@@ -79,6 +80,14 @@ const MailDetails = (props) => {
   // ** States
   const [showReplies, setShowReplies] = useState(false)
   const [replySection, setReplySection] = useState(false)
+
+  // ** UseEffect: GET initial data on Mount
+  useEffect(() => {
+    /* Updating editor data in detail page files */
+    if (store && store.actionFlag && store.actionFlag === "REPLIED") {
+      setReplySection(false)
+    }
+  }, [store.actionFlag])
 
   /* Swal Alert */
   const onAlertMessage = (title, text, icon) => {
@@ -203,77 +212,79 @@ const MailDetails = (props) => {
 
   // ** Renders Messages
   const renderMessage = (obj) => {
-    return (<Card>
-      <CardHeader className='email-detail-head'>
-        <div className='user-details d-flex justify-content-between align-items-center flex-wrap'>
-          <div className='mail-items'>
-            <h5 className='mb-0'>{obj.sender && obj.sender.name}</h5>
-            <UncontrolledDropdown className='email-info-dropup'>
-              <DropdownToggle className='font-small-3 text-muted cursor-pointer' tag='span' caret>
-                <span className='me-25'>{obj.sender && obj.sender.email}</span>
-              </DropdownToggle>
-              <DropdownMenu>
-                <Table className='font-small-3' size='sm' borderless>
-                  <tbody>
-                    <tr>
-                      <td className='text-end text-muted align-top'>From:</td>
-                      <td>{obj.sender && obj.sender.email}</td>
-                    </tr>
+    return (
+      <Card>
+        <CardHeader className='email-detail-head'>
+          <div className='user-details d-flex justify-content-between align-items-center flex-wrap'>
+            <div className='mail-items'>
+              <h5 className='mb-0'>{obj.sender && obj.sender.name}</h5>
+              <UncontrolledDropdown className='email-info-dropup'>
+                <DropdownToggle className='font-small-3 text-muted cursor-pointer' tag='span' caret>
+                  <span className='me-25'>{obj.sender && obj.sender.email}</span>
+                </DropdownToggle>
+                <DropdownMenu>
+                  <Table className='font-small-3' size='sm' borderless>
+                    <tbody>
+                      <tr>
+                        <td className='text-end text-muted align-top'>From:</td>
+                        <td>{obj.sender && obj.sender.email}</td>
+                      </tr>
 
-                    <tr>
-                      <td className='text-end text-muted align-top'>To:</td>
-                      <td>{obj.receiver && obj.receiver.email}</td>
-                    </tr>
+                      <tr>
+                        <td className='text-end text-muted align-top'>To:</td>
+                        <td>{obj.receiver && obj.receiver.email}</td>
+                      </tr>
 
-                    <tr>
-                      <td className='text-end text-muted align-top'>Date:</td>
-                      {obj && obj.date ? (<td>
-                        {getTransformDate(obj.date, "DD-MM-YYYY HH:mm:ss")}
-                      </td>) : null}
+                      <tr>
+                        <td className='text-end text-muted align-top'>Date:</td>
+                        {obj && obj.date ? (<td>
+                          {getTransformDate(obj.date, "DD-MM-YYYY HH:mm:ss")}
+                        </td>) : null}
 
-                      {obj && obj.created_at ? (<td>
-                        {getTransformDate(obj.created_at, "DD-MM-YYYY HH:mm:ss")}
-                      </td>) : null}
-                    </tr>
-                  </tbody>
-                </Table>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-          </div>
-        </div>
-
-        <div className='mail-meta-item d-flex align-items-center'>
-          <small className='mail-date-time text-muted'>
-            {obj && obj.date ? getTransformDate(obj.date, "DD-MM-YYYY HH:mm:ss") : null}
-            {obj && obj.created_at ? getTransformDate(obj.created_at, "DD-MM-YYYY HH:mm:ss") : null}
-          </small>
-        </div>
-      </CardHeader>
-
-      <CardBody className='mail-message-wrapper pt-2'>
-        {obj && obj.body ? (setInnerHtml(obj.body, "mail-message")) : null}
-        {obj && obj.data && obj.data.data && obj.data.data.display_message ? (setInnerHtml(obj.data.data.display_message, "mail-message")) : null}
-      </CardBody>
-
-      {obj.attachment && obj.attachment.length ? (
-        <CardFooter>
-          <div className='mail-attachments'>
-            <div className='d-flex align-items-center mb-1'>
-              <Paperclip size={16} />
-              <h5 className='fw-bolder text-body mb-0 ms-50'>{obj.attachment.length} Attachment</h5>
+                        {obj && obj.created_at ? (<td>
+                          {getTransformDate(obj.created_at, "DD-MM-YYYY HH:mm:ss")}
+                        </td>) : null}
+                      </tr>
+                    </tbody>
+                  </Table>
+                </DropdownMenu>
+              </UncontrolledDropdown>
             </div>
-            <div className='d-flex flex-column'>{renderAttachments(obj.attachment)}</div>
           </div>
-        </CardFooter>
-      ) : null}
-    </Card>)
+
+          <div className='mail-meta-item d-flex align-items-center'>
+            <small className='mail-date-time text-muted'>
+              {obj && obj.date ? getTransformDate(obj.date, "DD-MM-YYYY HH:mm:ss") : null}
+              {obj && obj.created_at ? getTransformDate(obj.created_at, "DD-MM-YYYY HH:mm:ss") : null}
+            </small>
+          </div>
+        </CardHeader>
+
+        <CardBody className='mail-message-wrapper pt-2'>
+          {obj && obj.body ? (setInnerHtml(obj.body, "mail-message")) : null}
+          {obj && obj.data && obj.data && obj.data.display_message ? (setInnerHtml(obj.data.display_message, "mail-message")) : null}
+        </CardBody>
+
+        {obj.attachment && obj.attachment.length ? (
+          <CardFooter>
+            <div className='mail-attachments'>
+              <div className='d-flex align-items-center mb-1'>
+                <Paperclip size={16} />
+                <h5 className='fw-bolder text-body mb-0 ms-50'>{obj.attachment.length} Attachment</h5>
+              </div>
+              <div className='d-flex flex-column'>{renderAttachments(obj.attachment)}</div>
+            </div>
+          </CardFooter>
+        ) : null}
+      </Card>
+    )
   }
 
   // ** Renders Replies
   const renderReplies = (arr) => {
     if (arr.length && showReplies === true) {
       return arr.map((obj, index) => (
-        <Row key={index}>
+        <Row key={index} className="odd-even-reply">
           <Col sm={12}>{renderMessage(obj)}</Col>
         </Row>
       ))
@@ -300,6 +311,7 @@ const MailDetails = (props) => {
   /* Go back on listing */
   const handleGoBack = () => {
     setOpenMail(false)
+    setShowReplies(false)
     setEditorHtmlContent("")
     setEditorStateContent(null)
     dispatch(resetMailDetailItem())
@@ -374,7 +386,7 @@ const MailDetails = (props) => {
                 <ChevronLeft size={20} />
               </span>
               <h4 className='email-subject mb-0'>
-                {mailItem && mailItem.mail && mailItem.mail.subject ? mailItem.mail.subject : mailItem && mailItem.mail && mailItem.mail.data && mailItem.mail.data.data && mailItem.mail.data.data.subject ? mailItem.mail.data.data.subject : ""}
+                {mailItem && mailItem.mail && mailItem.mail.subject ? mailItem.mail.subject : mailItem && mailItem.mail && mailItem.mail.data && mailItem.mail.data && mailItem.mail.data.subject ? mailItem.mail.data.subject : ""}
               </h4>
             </div>
 
@@ -391,7 +403,7 @@ const MailDetails = (props) => {
 
           <PerfectScrollbar className='email-scroll-area' options={{ wheelPropagation: false }}>
             <Row>
-              <Col sm='12'>
+              <Col sm={12}>
                 <div className='email-label'>{mailItem && mailItem.mail && mailItem.mail.label ? renderLabels(mailItem.mail.label.split(',')) : null}</div>
               </Col>
             </Row>
@@ -412,101 +424,107 @@ const MailDetails = (props) => {
               </Fragment>
             ) : null}
 
-            {mailItem && mailItem.mail ? (<Row>
-              <Col sm='12'>{renderMessage(mailItem.mail)}</Col>
-            </Row>) : null}
+            {mailItem && mailItem.mail ? (
+              <Row className={`${showReplies ? 'odd-even-reply' : ''}`}>
+                <Col sm={12}>{renderMessage(mailItem.mail)}</Col>
+              </Row>
+            ) : null}
 
-            {!replySection ? (<Row>
-              <Col sm='12'>
-                <Card>
-                  <CardBody>
-                    <div className="d-flex justify-content-between">
-                      <h5 className='mb-0'>
-                        <Button type='button' color='primary' className='me-1' onClick={handleReplySection}>Reply</Button>
-                        {folder !== "trash" ? (<Button type='button' color='danger' onClick={handleDeleteMail}>Delete</Button>) : null}
-                      </h5>
-                    </div>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>) : null}
+            {!replySection ? (
+              <Row>
+                <Col sm='12'>
+                  <Card>
+                    <CardBody>
+                      <div className="d-flex justify-content-between">
+                        <h5 className='mb-0'>
+                          <Button type='button' color='primary' className='me-1' onClick={handleReplySection}>Reply</Button>
+                          {folder !== "trash" ? (<Button type='button' color='danger' onClick={handleDeleteMail}>Delete</Button>) : null}
+                        </h5>
+                      </div>
+                    </CardBody>
+                  </Card>
+                </Col>
+              </Row>
+            ) : null}
 
-            {replySection ? (<Row>
-              <Col sm={12}>
-                <Card>
-                  <CardBody>
-                    <Col sm={12}>
-                      <Row>
-                        <h2 className="mb-1">Answers</h2>
-                        <div id='message-editor'>
-                          <Editor
-                            toolbarClassName='rounded-0'
-                            wrapperClassName='toolbar-bottom'
-                            editorClassName='rounded-0 border-1'
-                            toolbar={{
-                              options: ['inline', 'textAlign'],
-                              inline: {
-                                inDropdown: false,
-                                options: ['bold', 'italic', 'underline', 'strikethrough']
-                              }
-                            }}
-                            editorState={editorStateContent}
-                            onEditorStateChange={handleEditorStateChange}
-                          />
-                        </div>
-                      </Row>
-                    </Col>
-
-                    {uploadedFiles && uploadedFiles.length ? <>
+            {replySection ? (
+              <Row>
+                <Col sm={12}>
+                  <Card>
+                    <CardBody>
                       <Col sm={12}>
-                        <div className="email-attachments mt-1 mb-1">
-                          {uploadedFiles.map((item, index) => {
-                            return (
-                              <div className="inline" key={`attachment_${index}`}>
-                                <Paperclip className='cursor-pointer ms-50 me-1' size={17} />
-
-                                {item && item.path ? (<a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>) : null}
-
-                                <a
-                                  href={`${adminRoot}/email`}
-                                  onClick={(event) => onFileRemove(event, item.id)}
-                                >
-                                  <X className='cursor-pointer ms-50' size={17} />
-                                </a>
-                              </div>
-                            )
-                          })}
-                        </div>
+                        <Row>
+                          <h2 className="mb-1">Answers</h2>
+                          <div id='message-editor'>
+                            <Editor
+                              toolbarClassName='rounded-0'
+                              wrapperClassName='toolbar-bottom'
+                              editorClassName='rounded-0 border-1'
+                              toolbar={{
+                                options: ['inline', 'textAlign'],
+                                inline: {
+                                  inDropdown: false,
+                                  options: ['bold', 'italic', 'underline', 'strikethrough']
+                                }
+                              }}
+                              editorState={editorStateContent}
+                              onEditorStateChange={handleEditorStateChange}
+                            />
+                          </div>
+                        </Row>
                       </Col>
-                    </> : null}
 
-                    <Col sm={12}>
-                      <Row className="mt-2">
-                        <div className="d-flex justify-content-between">
-                          <h5 className="mb-0">
-                            <Button type="button" color="primary" className="me-1" onClick={handleSendReply}>Send</Button>
+                      {uploadedFiles && uploadedFiles.length ? <>
+                        <Col sm={12}>
+                          <div className="email-attachments mt-1 mb-1">
+                            {uploadedFiles.map((item, index) => {
+                              return (
+                                <div className="inline" key={`attachment_${index}`}>
+                                  <Paperclip className='cursor-pointer ms-50 me-1' size={17} />
 
-                            <Button type="button" color="warning" className="me-1" onClick={handleReplySection}>Cancel</Button>
+                                  {item && item.path ? (<a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>) : null}
 
-                            <Label className="mb-0" for="attach-email-item">
-                              <Paperclip className="cursor-pointer ms-50" size={17} />
-                              <input
-                                hidden
-                                multiple
-                                type="file"
-                                name="attach-email-item"
-                                id="attach-email-item"
-                                onChange={(event) => onFileChange(event)}
-                              />
-                            </Label>
-                          </h5>
-                        </div>
-                      </Row>
-                    </Col>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>) : null}
+                                  <a
+                                    href={`${adminRoot}/email`}
+                                    onClick={(event) => onFileRemove(event, item.id)}
+                                  >
+                                    <X className='cursor-pointer ms-50' size={17} />
+                                  </a>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </Col>
+                      </> : null}
+
+                      <Col sm={12}>
+                        <Row className="mt-2">
+                          <div className="d-flex justify-content-between">
+                            <h5 className="mb-0">
+                              <Button type="button" color="primary" className="me-1" onClick={handleSendReply}>Send</Button>
+
+                              <Button type="button" color="warning" className="me-1" onClick={handleReplySection}>Cancel</Button>
+
+                              <Label className="mb-0" for="attach-email-item">
+                                <Paperclip className="cursor-pointer ms-50" size={17} />
+                                <input
+                                  hidden
+                                  multiple
+                                  type="file"
+                                  name="attach-email-item"
+                                  id="attach-email-item"
+                                  onChange={(event) => onFileChange(event)}
+                                />
+                              </Label>
+                            </h5>
+                          </div>
+                        </Row>
+                      </Col>
+                    </CardBody>
+                  </Card>
+                </Col>
+              </Row>
+            ) : null}
           </PerfectScrollbar>
         </Fragment>
       ) : null}

@@ -85,3 +85,54 @@ $calendar-night-color: rgb(215 215 215 / 34%);
 	}
 }
 /* /Timeline */
+
+/* Email module */
+/* Email odd even reply */
+.odd-even-reply {
+	&.row:nth-child(odd) {
+		.card {
+			background: #e1e1e1;
+		}
+	}
+}
+/* /Email odd even reply */
+
+/* Email toggle action collapse, expand */
+.mail-toggle-three-dot {
+	margin-top: 5px;
+
+	summary {
+		display: inline-block;
+		border: 1px solid #7367f0;
+		border-radius: 10px;
+		height: 18px;
+
+		&::marker {
+			font-size: 0;
+		}
+
+		&:after {
+			content: "...";
+			padding: 0px 10px;
+			font-size: 18px;
+			position: relative;
+			top: -5px;
+			line-height: 1;
+			height: 21px;
+			display: inline-block;
+			vertical-align: top;
+			color: #7367f0;
+			font-weight: bold;
+		}
+	}
+}
+/* /Email toggle action collapse, expand */
+
+.mail-message {
+	.gmail_quote {
+		.gmail_attr {
+			display: none;
+		}
+	}
+}
+/* Email module */

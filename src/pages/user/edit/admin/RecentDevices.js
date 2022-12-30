@@ -6,7 +6,7 @@ import { Fragment, useEffect, useState } from "react"
 // ** Store & Actions
 import {
     getUserDeviceLogs
-} from '../store'
+} from '@src/pages/user/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Utils
@@ -66,7 +66,7 @@ const CustomLogHeader = ({
 }
 /* /Device Log History header */
 
-const RecentDevicesTab = ({
+const RecentDevices = ({
     id
 }) => {
 
@@ -145,25 +145,15 @@ const RecentDevicesTab = ({
             name: T('Ip Address'),
             sortable: true,
             sortField: 'ip_address',
-            minWidth: '50%',
-            cell: (row) => row.ip_address,
-            /* Custom placeholder vars */
-            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '60%' },
-            customLoaderCellClass: "",
-            customLoaderContentClass: ""
-            /* /Custom placeholder vars */
+            minWidth: '140px',
+            cell: (row) => row.ip_address
         },
         {
             name: T('Login Date'),
             sortable: true,
             sortField: 'login_at',
-            minWidth: '50%',
-            cell: (row) => row.login_at && getTransformDate(row.login_at, "DD MMM YYYY"),
-            /* Custom placeholder vars */
-            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '60%' },
-            customLoaderCellClass: "",
-            customLoaderContentClass: ""
-            /* /Custom placeholder vars */
+            minWidth: '140px',
+            cell: (row) => row.login_at && getTransformDate(row.login_at, "DD MMM YYYY")
         }
     ]
     /* /Device Log history columns */
@@ -197,4 +187,4 @@ const RecentDevicesTab = ({
     )
 }
 
-export default RecentDevicesTab
+export default RecentDevices

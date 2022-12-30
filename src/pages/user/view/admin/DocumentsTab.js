@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 // ** Store & Actions
 import {
     getCaseList
-} from '../../case/store'
+} from '@src/pages/case/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Utils
@@ -49,7 +49,7 @@ import {
 } from '@constant/reduxConstant'
 
 // ** Modal
-import ModalCaseDetail from '../../case/modals/ModalCaseDetail'
+import ModalCaseDetail from '@src/pages/case/modals/ModalCaseDetail'
 
 // ** Translation
 import { T } from '@localization'

@@ -331,7 +331,7 @@ const UserInfoCard = ({
                                     color="primary"
                                     className={`mb-1`}
                                     disabled={userItem && !userItem.id}
-                                    to={`${adminRoot}/user/edit/${userItem.id}`}
+                                    to={`${adminRoot}/user/lawyer/edit/${userItem.id}`}
                                 >
                                     {T("Edit")}
                                 </Button>

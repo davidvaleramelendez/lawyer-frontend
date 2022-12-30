@@ -1,6 +1,6 @@
 // ** React Imports
 import { useEffect, useState, Fragment } from 'react'
-import { useParams, useLocation, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 // ** Store & Actions
 import {
@@ -8,13 +8,13 @@ import {
   getUserView,
   getUserPermission,
   clearUserMessage
-} from '../store'
+} from '@src/pages/user/store'
 import {
   clearCaseMessage
-} from '../../case/store'
+} from '@src/pages/case/store'
 import {
   clearInvoiceMessage
-} from '../../invoice/store'
+} from '@src/pages/invoice/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // Constant
@@ -54,8 +54,6 @@ import { T } from '@localization'
 const UserView = () => {
   // ** Hooks
   const { id } = useParams()
-  const search = useLocation().search
-  const type = new URLSearchParams(search).get('type')
   const navigate = useNavigate()
 
   const MySwal = withReactContent(Swal)
@@ -72,6 +70,14 @@ const UserView = () => {
 
   const toggleTab = (tab) => {
     setActive(tab)
+  }
+
+  const onCheckRoleAccess = (roleId) => {
+    if (store && store.userItem && store.userItem.id) {
+      if (store.userItem.role_id !== roleId) {
+        navigate(`${adminRoot}/user`)
+      }
+    }
   }
 
   // ** Get contact on mount based on id
@@ -91,6 +97,10 @@ const UserView = () => {
       dispatch(getUserView(id))
       dispatch(getUserPermission(id))
       setLoadFirst(false)
+    }
+
+    if (store && store.userItem) {
+      onCheckRoleAccess(12)
     }
 
     /* For blank message api called inside */
@@ -120,7 +130,7 @@ const UserView = () => {
     if (store.actionFlag && store.actionFlag === "DELETED") {
       navigate(`${adminRoot}/user`)
     }
-  }, [store.success, store.error, store.actionFlag, caseStore.success, caseStore.error, caseStore.actionFlag, invoiceStore.success, invoiceStore.error, invoiceStore.actionFlag, loadFirst])
+  }, [store.userItem, store.success, store.error, store.actionFlag, caseStore.success, caseStore.error, caseStore.actionFlag, invoiceStore.success, invoiceStore.error, invoiceStore.actionFlag, loadFirst])
   // console.log("store ", store)
 
   const onDeleteUser = (userId) => {
@@ -157,12 +167,9 @@ const UserView = () => {
         <Col xl={8} lg={7} xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
           <UserTabs
             id={id}
-            type={type}
             active={active}
             toggleTab={toggleTab}
             permissions={store.permissions}
-            userItem={store.userItem}
-            authUserItem={store.authUserItem}
           />
         </Col>
       </Row>

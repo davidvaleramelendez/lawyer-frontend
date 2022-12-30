@@ -1,6 +1,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
-import { useParams, useLocation, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 // ** Store & Actions
 import {
@@ -8,7 +8,7 @@ import {
   getUserView,
   getUserPermission,
   clearUserMessage
-} from '../store'
+} from '@src/pages/user/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // Constant
@@ -44,8 +44,6 @@ import { T } from '@localization'
 const UserEditApp = () => {
   // ** Hooks
   const { id } = useParams()
-  const search = useLocation().search
-  const type = new URLSearchParams(search).get('type')
 
   // ** Store vars
   const dispatch = useDispatch()
@@ -59,6 +57,16 @@ const UserEditApp = () => {
   const toggleTab = (tab) => {
     if (active !== tab) {
       setActive(tab)
+    }
+  }
+
+  const onCheckRoleAccess = (denyRole) => {
+    if (store && store.userItem && store.userItem.id) {
+      if (denyRole.indexOf(store.userItem.role_id) !== -1) {
+        navigate(`${adminRoot}/user`)
+      }
+      // if (store.userItem.role_id !== roleId) {
+      // }
     }
   }
 
@@ -82,6 +90,10 @@ const UserEditApp = () => {
       setLoadFirst(false)
     }
 
+    if (store && store.userItem) {
+      onCheckRoleAccess([10, 12, 14])
+    }
+
     /* For blank message api called inside */
     if (store.success || store.error || store.actionFlag) {
       dispatch(clearUserMessage())
@@ -96,7 +108,7 @@ const UserEditApp = () => {
     if (store.error) {
       Notification(T("Error"), store.error, "warning")
     }
-  }, [store.roleItems, store.success, store.error, store.actionFlag, loadFirst])
+  }, [store.userItem, store.roleItems, store.success, store.error, store.actionFlag, loadFirst])
   // console.log("store >>> ", store)
 
   return store ? (
@@ -110,11 +122,8 @@ const UserEditApp = () => {
 
         <UserTabs
           id={id}
-          type={type}
           active={active}
           toggleTab={toggleTab}
-          userItem={store.userItem}
-          authUserItem={store.authUserItem}
         />
       </Col>
     </Row>

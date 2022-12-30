@@ -10,10 +10,25 @@ import {
 const ContactList = lazy(() => import('@src/pages/contact/list'))
 const ContactView = lazy(() => import('@src/pages/contact/view'))
 
-// User
+/* User */
 const UserList = lazy(() => import('@src/pages/user/list'))
-const UserView = lazy(() => import('@src/pages/user/view'))
-const UserEdit = lazy(() => import('@src/pages/user/edit'))
+
+/* User edit */
+const UserAdminEdit = lazy(() => import('@src/pages/user/edit/admin'))
+const UserLawyerEdit = lazy(() => import('@src/pages/user/edit/lawyer'))
+const UserPartnerEdit = lazy(() => import('@src/pages/user/edit/partner'))
+const UserCustomerEdit = lazy(() => import('@src/pages/user/edit/customer'))
+/* /User edit */
+
+/* User view */
+const UserAdminView = lazy(() => import('@src/pages/user/view/admin'))
+const UserLawyerView = lazy(() => import('@src/pages/user/view/lawyer'))
+const UserPartnerView = lazy(() => import('@src/pages/user/view/partner'))
+const UserCustomerView = lazy(() => import('@src/pages/user/view/customer'))
+/* /User view */
+/* /User */
+
+// Auth user profile
 const UserAccountSetting = lazy(() => import('@src/pages/user/account-setting'))
 
 // Email
@@ -79,6 +94,7 @@ const AppRoutes = [
       restrictRole: [11]
     }
   },
+
   /* User */
   {
     path: `${adminRoot}/user`,
@@ -88,22 +104,76 @@ const AppRoutes = [
       restrictRole: [11]
     }
   },
+  /* User edit */
   {
-    path: `${adminRoot}/user/view/:id`,
-    element: <UserView />,
+    path: `${adminRoot}/user/admin/edit/:id`,
+    element: <UserAdminEdit />,
     meta: {
       id: "userApp",
       restrictRole: [11]
     }
   },
   {
-    path: `${adminRoot}/user/edit/:id`,
-    element: <UserEdit />,
+    path: `${adminRoot}/user/lawyer/edit/:id`,
+    element: <UserLawyerEdit />,
     meta: {
       id: "userApp",
       restrictRole: [11]
     }
   },
+  {
+    path: `${adminRoot}/user/partner/edit/:id`,
+    element: <UserPartnerEdit />,
+    meta: {
+      id: "userApp",
+      restrictRole: [11]
+    }
+  },
+  {
+    path: `${adminRoot}/user/customer/edit/:id`,
+    element: <UserCustomerEdit />,
+    meta: {
+      id: "userApp",
+      restrictRole: [11]
+    }
+  },
+  /* /User edit */
+  /* User view */
+  {
+    path: `${adminRoot}/user/admin/view/:id`,
+    element: <UserAdminView />,
+    meta: {
+      id: "userApp",
+      restrictRole: [11]
+    }
+  },
+  {
+    path: `${adminRoot}/user/lawyer/view/:id`,
+    element: <UserLawyerView />,
+    meta: {
+      id: "userApp",
+      restrictRole: [11]
+    }
+  },
+  {
+    path: `${adminRoot}/user/partner/view/:id`,
+    element: <UserPartnerView />,
+    meta: {
+      id: "userApp",
+      restrictRole: [11]
+    }
+  },
+  {
+    path: `${adminRoot}/user/customer/view/:id`,
+    element: <UserCustomerView />,
+    meta: {
+      id: "userApp",
+      restrictRole: [11]
+    }
+  },
+  /* /User view */
+  /* /User */
+
   /* Account Setting */
   {
     path: `${adminRoot}/account-setting`,
@@ -112,6 +182,8 @@ const AppRoutes = [
       id: "accountApp"
     }
   },
+  /* /Account Setting */
+
   /* Email */
   {
     path: `${adminRoot}/email`,
@@ -142,6 +214,8 @@ const AppRoutes = [
       restrictRole: [11]
     }
   },
+  /* /Email */
+
   /* Chat */
   {
     path: `${adminRoot}/chat`,
@@ -153,6 +227,8 @@ const AppRoutes = [
       restrictRole: [11]
     }
   },
+  /* /Chat */
+
   /* Case */
   {
     path: `${adminRoot}/case`,
@@ -168,6 +244,8 @@ const AppRoutes = [
       id: "documentApp"
     }
   },
+  /* /Case */
+
   /* Todo */
   {
     path: `${adminRoot}/todo`,
@@ -199,6 +277,8 @@ const AppRoutes = [
       restrictRole: [11]
     }
   },
+  /* /Todo */
+
   /* Calendar */
   {
     path: `${adminRoot}/calendar`,
@@ -207,6 +287,8 @@ const AppRoutes = [
       id: "calendarApp"
     }
   },
+  /* /Calendar */
+
   /* Timeline */
   {
     path: `${adminRoot}/timeline`,
@@ -216,6 +298,8 @@ const AppRoutes = [
       restrictRole: [11]
     }
   },
+  /* /Timeline */
+
   /* Letter */
   {
     path: `${adminRoot}/letter`,
@@ -225,6 +309,8 @@ const AppRoutes = [
       restrictRole: [11]
     }
   },
+  /* /Letter */
+
   /* Invoice */
   {
     path: `${adminRoot}/invoice`,
@@ -256,6 +342,8 @@ const AppRoutes = [
       restrictRole: [11]
     }
   },
+  /* /Invoice */
+
   /* EmailTemplate */
   {
     path: `${adminRoot}/email-template`,
@@ -289,6 +377,8 @@ const AppRoutes = [
       restrictRole: [11]
     }
   },
+  /* /EmailTemplate */
+
   /* CloudStorage */
   {
     path: `${adminRoot}/cloud-storage`,
@@ -310,6 +400,8 @@ const AppRoutes = [
       restrictRole: [11]
     }
   },
+  /* /CloudStorage */
+
   /* Letter Template */
   {
     path: `${adminRoot}/letter-template`,
@@ -353,6 +445,7 @@ const AppRoutes = [
       restrictRole: [11]
     }
   }
+  /* /Letter Template */
 ]
 
 export default AppRoutes

@@ -345,6 +345,21 @@ const UsersList = () => {
     }, [store.roleItems, store.success, store.error, store.actionFlag, loadFirst])
     // console.log("store >>> ", store)
 
+    const handleNavigationRole = (user, type = "view") => {
+        if (user && user.id) {
+            if (user.role_id === 10) {
+                return `${adminRoot}/user/admin/${type}/${user.id}`
+            } else if (user.role_id === 14) {
+                return `${adminRoot}/user/lawyer/${type}/${user.id}`
+            } else if (user.role_id === 12) {
+                return `${adminRoot}/user/partner/${type}/${user.id}`
+            } else {
+                return `${adminRoot}/user/customer/${type}/${user.id}`
+            }
+        }
+        return `${adminRoot}/user`
+    }
+
     /* Renders User Columns */
     const renderUser = (row) => {
         if (row && row.profile_photo_path && row.profile_photo_path.length) {
@@ -417,7 +432,7 @@ const UsersList = () => {
                     {renderUser(row)}
                     <div className="d-flex flex-column">
                         <Link
-                            to={`${adminRoot}/user/view/${row.id}${row.role_id === 11 ? `?type=customer` : ''}`}
+                            to={handleNavigationRole(row, "view")}
                             className="user_name text-truncate text-body"
                         >
                             <span className="fw-bolder text-primary text-wrap">{row.name}</span>
@@ -507,7 +522,7 @@ const UsersList = () => {
             cell: (row) => (
                 <div className='column-action d-flex align-items-center'>
                     <Link
-                        to={`${adminRoot}/user/view/${(row && row.id) || ""}${row.role_id === 11 ? `?type=customer` : ''}`}
+                        to={handleNavigationRole(row, "view")}
                         id={`pw-view-tooltip-${(row && row.id) || ""}`}
                     >
                         <Eye size={17} className="me-50" />
@@ -517,7 +532,7 @@ const UsersList = () => {
                     </UncontrolledTooltip>
 
                     <Link
-                        to={`${adminRoot}/user/edit/${(row && row.id) || ""}${row.role_id === 11 ? `?type=customer` : ''}`}
+                        to={handleNavigationRole(row, "edit")}
                         id={`pw-edit-tooltip-${(row && row.id) || ""}`}
                     >
                         <Edit size={17} />

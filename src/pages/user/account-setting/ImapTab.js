@@ -38,7 +38,7 @@ const ImapTab = ({
         formState: { errors: imapErrors }
     } = useForm({
         mode: 'all',
-        defaultValues: store.userItem
+        defaultValues: { imapName: "", imapEmail: "", imap_host: "", imap_port: "", imap_ssl: "", imap_email: "", imap_password: "" }
     })
 
     /* Validation rules */

@@ -1,5 +1,5 @@
 // ** React Imports
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 
 // ** Reactstrap Imports
 import {
@@ -13,14 +13,12 @@ import {
 // ** Icons Import
 import {
     User,
-    Lock,
-    Unlock
+    Lock
 } from 'react-feather'
 
 // ** Utils
 import {
     encryptData,
-    getCurrentUser,
     onImageSrcError,
     getTransformDate
 } from '@utils'
@@ -28,21 +26,15 @@ import {
 /* User tab view components */
 import AccountTab from './AccountTab'
 import SecurityTab from './SecurityTab'
-import PermissionsTab from './PermissionsTab'
 
 // ** Translation
 import { T } from '@localization'
 
 const UserTabs = ({
     id,
-    type,
     active,
-    userItem,
-    toggleTab,
-    authUserItem
+    toggleTab
 }) => {
-    // ** State
-    const [userData] = useState(getCurrentUser)
 
     /* Placeholder texts */
     const PlaceholderSchema = {
@@ -65,56 +57,6 @@ const UserTabs = ({
         retypePassword: "********"
     }
 
-    /* Check user permission access */
-    const onCheckPermissionAccess = (roleId = 10) => {
-        const customerRoleId = 11
-        const lawyerRoleId = 14
-        const partnerRoleId = 12
-        /* Logged in user */
-        if (authUserItem && authUserItem.role_id === roleId) {
-            /* Selected user */
-            if ((userItem && userItem.role_id === customerRoleId)) {
-                if (active === "3") {
-                    toggleTab("1")
-                }
-                return false
-            } else if ((
-                (userItem && userItem.role_id !== roleId) &&
-                (userItem && userItem.role_id !== lawyerRoleId) &&
-                (userItem && userItem.role_id !== partnerRoleId)
-            ) && type) {
-                if (active === "3") {
-                    toggleTab("1")
-                }
-                return false
-            }
-            /* /Selected user */
-            return true
-        } else if (userData && userData.role_id === roleId) {
-            /* Selected user */
-            if ((userItem && userItem.role_id === customerRoleId)) {
-                if (active === "3") {
-                    toggleTab("1")
-                }
-                return false
-            } else if ((
-                (userItem && userItem.role_id !== roleId) &&
-                (userItem && userItem.role_id !== lawyerRoleId) &&
-                (userItem && userItem.role_id !== partnerRoleId)
-            ) && type) {
-                if (active === "3") {
-                    toggleTab("1")
-                }
-                return false
-            }
-            /* /Selected user */
-            return true
-        }
-        /* /Logged in user */
-        return false
-    }
-    /* /Check user permission access */
-
     return (
         <Fragment>
             <Nav pills className="mb-2">
@@ -131,15 +73,6 @@ const UserTabs = ({
                         <span className="fw-bold d-none d-sm-block">{T("Security")}</span>
                     </NavLink>
                 </NavItem>
-
-                {onCheckPermissionAccess() ? (
-                    <NavItem>
-                        <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
-                            <Unlock className="font-medium-3 me-50" />
-                            <span className="fw-bold d-none d-sm-block">{T("Permissions")}</span>
-                        </NavLink>
-                    </NavItem>
-                ) : null}
             </Nav>
 
             <TabContent activeTab={active}>
@@ -158,10 +91,6 @@ const UserTabs = ({
                         encryptData={encryptData}
                         PlaceholderSchema={PlaceholderSchema}
                     />
-                </TabPane>
-
-                <TabPane tabId="3">
-                    <PermissionsTab id={id} />
                 </TabPane>
             </TabContent>
         </Fragment>

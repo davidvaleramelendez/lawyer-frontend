@@ -333,6 +333,7 @@ const Mails = (props) => {
       </div>
 
       <MailDetails
+        store={store}
         folder={folder}
         openMail={openMail}
         dispatch={dispatch}

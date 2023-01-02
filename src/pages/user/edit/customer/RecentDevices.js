@@ -6,7 +6,7 @@ import { Fragment, useEffect, useState } from "react"
 // ** Store & Actions
 import {
     getUserDeviceLogs
-} from '../store'
+} from '@src/pages/user/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Utils

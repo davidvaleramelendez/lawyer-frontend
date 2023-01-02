@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom'
 // ** Store & Actions
 import {
     getInvoiceList
-} from '../../invoice/store'
+} from '@src/pages/invoice/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Utils

@@ -7,7 +7,7 @@ import { Fragment, useEffect, useState } from 'react'
 import {
     updateUser,
     updateUserLoader
-} from '../store'
+} from '@src/pages/user/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Reactstrap Imports

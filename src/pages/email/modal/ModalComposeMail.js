@@ -43,12 +43,10 @@ import {
   ModalBody,
   UncontrolledButtonDropdown
 } from 'reactstrap'
+import { useForm, Controller } from 'react-hook-form'
 
 // ** React draggable Import
 import Draggable from 'react-draggable'
-
-
-import { useForm, Controller } from 'react-hook-form'
 
 // ** Store & Actions
 import { useDispatch, useSelector } from 'react-redux'
@@ -75,7 +73,7 @@ import {
 } from '../store'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-grow-spinner'
+import DotPulse from '@components/dotpulse'
 
 // ** Utils
 import {
@@ -364,6 +362,7 @@ const ModalComposeMail = () => {
       list1 = store.userItems.map(item => {
         return {
           value: item.id,
+          name: item.name,
           label: `${item.name} (${item.email})`,
           img: item.profile_photo_path
         }
@@ -417,14 +416,16 @@ const ModalComposeMail = () => {
   }
 
   // ** submit the email form
-  const onSubmit = async (values) => {
+  const onSubmit = async () => {
     if (store.composeModal.mailTo.length === 0) {
       setMailToValid(false)
       return
     }
 
-    const mailData = {
-      subject: values.subject
+    const mailData = {}
+
+    if (store.composeModal && store.composeModal.subject) {
+      mailData.subject = store.composeModal.subject
     }
 
     if (store.composeModal.editorHtmlContent) {
@@ -473,7 +474,7 @@ const ModalComposeMail = () => {
           {data && data.img ? <>
             <Avatar className='my-0 me-50' size='sm' img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${data.img}`} />
           </> : <>
-            <Avatar color={getRandColorClass()} className='me-50' content={data ? data.label : 'John Doe'} initials />
+            <Avatar color={getRandColorClass()} className='me-50' content={data ? data.name : 'John Doe'} initials />
           </>}
           {data.label}
         </div>
@@ -498,7 +499,7 @@ const ModalComposeMail = () => {
         onOpened={onModalOpened}
       >
         {!store.loading ? (
-          <Spinner
+          <DotPulse
             className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
           />
         ) : null}

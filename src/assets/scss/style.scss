@@ -91,7 +91,9 @@ $calendar-night-color: rgb(215 215 215 / 34%);
 .odd-even-reply {
 	&.row:nth-child(odd) {
 		.card {
-			background: #e1e1e1;
+			// background: #e1e1e1;
+			background: #7367f0;
+			color: #ffffff;
 		}
 	}
 }
@@ -103,7 +105,7 @@ $calendar-night-color: rgb(215 215 215 / 34%);
 
 	summary {
 		display: inline-block;
-		border: 1px solid #7367f0;
+		border: 1px solid #475867;
 		border-radius: 10px;
 		height: 18px;
 
@@ -121,7 +123,7 @@ $calendar-night-color: rgb(215 215 215 / 34%);
 			height: 21px;
 			display: inline-block;
 			vertical-align: top;
-			color: #7367f0;
+			color: #475867;
 			font-weight: bold;
 		}
 	}

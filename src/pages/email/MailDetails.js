@@ -38,6 +38,9 @@ import {
   UncontrolledDropdown
 } from 'reactstrap'
 
+// ** Custom Components
+import DotPulse from '@components/dotpulse'
+
 // Constant
 import {
   adminRoot
@@ -65,6 +68,7 @@ const MailDetails = (props) => {
     getTransformDate,
     createEmailReply,
     editorHtmlContent,
+    updateEmailLoader,
     handleMailToTrash,
     editorStateContent,
     resetMailDetailItem,
@@ -368,6 +372,7 @@ const MailDetails = (props) => {
     }
 
     if (replyData && replyData.id && editorHtmlContent) {
+      dispatch(updateEmailLoader(false))
       dispatch(createEmailReply(replyData))
     }
   }
@@ -452,6 +457,11 @@ const MailDetails = (props) => {
                 <Col sm={12}>
                   <Card>
                     <CardBody>
+                      {!store.loading ? (
+                        <DotPulse
+                          className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
+                        />
+                      ) : null}
                       <Col sm={12}>
                         <Row>
                           <h2 className="mb-1">Answers</h2>
@@ -501,9 +511,25 @@ const MailDetails = (props) => {
                         <Row className="mt-2">
                           <div className="d-flex justify-content-between">
                             <h5 className="mb-0">
-                              <Button type="button" color="primary" className="me-1" onClick={handleSendReply}>Send</Button>
+                              <Button
+                                type="button"
+                                color="primary"
+                                className="me-1"
+                                disabled={!store.loading}
+                                onClick={handleSendReply}
+                              >
+                                Send
+                              </Button>
 
-                              <Button type="button" color="warning" className="me-1" onClick={handleReplySection}>Cancel</Button>
+                              <Button
+                                type="button"
+                                color="warning"
+                                className="me-1"
+                                onClick={handleReplySection}
+                                disabled={!store.loading}
+                              >
+                                Cancel
+                              </Button>
 
                               <Label className="mb-0" for="attach-email-item">
                                 <Paperclip className="cursor-pointer ms-50" size={17} />
@@ -513,6 +539,7 @@ const MailDetails = (props) => {
                                   type="file"
                                   name="attach-email-item"
                                   id="attach-email-item"
+                                  disabled={!store.loading}
                                   onChange={(event) => onFileChange(event)}
                                 />
                               </Label>

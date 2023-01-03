@@ -345,6 +345,7 @@ const Mails = (props) => {
         getTransformDate={getTransformDate}
         setUploadedFiles={setUploadedFiles}
         createEmailReply={createEmailReply}
+        updateEmailLoader={updateEmailLoader}
         handleMailToTrash={handleMailToTrash}
         editorHtmlContent={editorHtmlContent}
         editorStateContent={editorStateContent}

@@ -85,7 +85,7 @@ const MailCard = (props) => {
           <div className='mail-items'>
             <h5 className='mb-25'>
               {mailItem && mailItem.sender && mailItem.sender.id ? mailItem.sender.name : null}
-              {mailItem && mailItem.count2 ? <span className='text-truncate ms-1 me-1' style={{ color: '#0000FF' }}>({mailItem.count2})</span> : null}
+              {mailItem && mailItem.email_group && mailItem.email_group.length ? <span className='text-truncate ms-1 me-1' style={{ color: '#0000FF' }}>({mailItem.email_group.length})</span> : null}
               <span className='text-truncate'>
                 {mailItem && mailItem.subject ? mailItem.subject : mailItem.data && mailItem.data.data && mailItem.data.data.subject ? mailItem.data.data.subject : null}
               </span>

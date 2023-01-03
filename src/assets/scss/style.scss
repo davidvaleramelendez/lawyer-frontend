@@ -94,45 +94,87 @@ $calendar-night-color: rgb(215 215 215 / 34%);
 			// background: #e1e1e1;
 			background: #7367f0;
 			color: #ffffff;
+
+			h5,
+			a,
+			span {
+				color: #ffffff;
+			}
+
+			.mail-toggle-three-dot {
+				summary {
+					border: 1px solid #ffffff;
+
+					&:after {
+						color: #ffffff;
+					}
+				}
+
+				p,
+				div,
+				span {
+					color: #ffffff !important;
+				}
+			}
+
+			.gmail_signature {
+				p,
+				div,
+				span {
+					color: #ffffff !important;
+				}
+			}
+
+			.gmail_quote {
+				div,
+				p,
+				span {
+					color: #ffffff !important;
+				}
+			}
 		}
 	}
 }
 /* /Email odd even reply */
 
-/* Email toggle action collapse, expand */
-.mail-toggle-three-dot {
-	margin-top: 5px;
+.mail-message {
+	#gmail_signature {
+		display: none;
+	}
 
-	summary {
-		display: inline-block;
-		border: 1px solid #475867;
-		border-radius: 10px;
-		height: 18px;
+	/* Email toggle action collapse, expand */
+	.mail-toggle-three-dot {
+		margin-top: 5px;
 
-		&::marker {
-			font-size: 0;
-		}
-
-		&:after {
-			content: "...";
-			padding: 0px 10px;
-			font-size: 18px;
-			position: relative;
-			top: -5px;
-			line-height: 1;
-			height: 21px;
+		summary {
 			display: inline-block;
-			vertical-align: top;
-			color: #475867;
-			font-weight: bold;
+			border: 1px solid #7367f0;
+			border-radius: 10px;
+			height: 18px;
+
+			&::marker {
+				font-size: 0;
+			}
+
+			&:after {
+				content: "...";
+				padding: 0px 10px;
+				font-size: 18px;
+				position: relative;
+				top: -5px;
+				line-height: 1;
+				height: 21px;
+				display: inline-block;
+				vertical-align: top;
+				color: #7367f0;
+				font-weight: bold;
+			}
 		}
 	}
-}
-/* /Email toggle action collapse, expand */
+	/* /Email toggle action collapse, expand */
 
-.mail-message {
 	.gmail_quote {
-		.gmail_attr {
+		#gmail_attr {
 			display: none;
 		}
 	}

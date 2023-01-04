@@ -75,7 +75,9 @@ const MailDetails = (props) => {
     setEditorHtmlContent,
     setEditorStateContent,
     createEmailAttachment,
-    deleteEmailAttachment
+    deleteEmailAttachment,
+    setComposeAttachments,
+    deleteMultipleEmailAttachment
   } = props
 
   // ** Hooks
@@ -142,6 +144,7 @@ const MailDetails = (props) => {
         onAlertMessage(T('File limit exceeded!'), `${T('Please upload max')} ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb ${T('files')}!`, 'warning')
         return
       }
+
       result.map(((file, index) => {
         const fileReader = new FileReader()
         fileReader.readAsDataURL(file)
@@ -173,6 +176,7 @@ const MailDetails = (props) => {
           }
 
           if (fileFlag) {
+            dispatch(updateEmailLoader(false))
             dispatch(createEmailAttachment({ attachment: fileArray, type: type, ids: ids }))
           }
         }
@@ -215,82 +219,84 @@ const MailDetails = (props) => {
   }
 
   // ** Renders Messages
-  const renderMessage = (obj) => {
+  const renderMessage = (obj, index) => {
     return (
-      <Card>
-        <CardHeader className='email-detail-head'>
-          <div className='user-details d-flex justify-content-between align-items-center flex-wrap'>
-            <div className='mail-items'>
-              <h5 className='mb-0'>{obj.sender && obj.sender.name}</h5>
-              <UncontrolledDropdown className='email-info-dropup'>
-                <DropdownToggle className='font-small-3 text-muted cursor-pointer' tag='span' caret>
-                  <span className='me-25'>{obj.sender && obj.sender.email}</span>
-                </DropdownToggle>
-                <DropdownMenu>
-                  <Table className='font-small-3' size='sm' borderless>
-                    <tbody>
-                      <tr>
-                        <td className='text-end text-muted align-top'>From:</td>
-                        <td>{obj.sender && obj.sender.email}</td>
-                      </tr>
+      <Row className={`${index % 2 === 1 ? 'odd-even-reply' : ''}`}>
+        <Col sm={12}>
+          <Card>
+            <CardHeader className='email-detail-head'>
+              <div className='user-details d-flex justify-content-between align-items-center flex-wrap'>
+                <div className='mail-items'>
+                  <h5 className='mb-0'>{obj.sender && obj.sender.name}</h5>
+                  <UncontrolledDropdown className='email-info-dropup'>
+                    <DropdownToggle className='font-small-3 text-muted cursor-pointer' tag='span' caret>
+                      <span className='me-25'>{obj.sender && obj.sender.email}</span>
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      <Table className='font-small-3' size='sm' borderless>
+                        <tbody>
+                          <tr>
+                            <td className='text-end text-muted align-top'>From:</td>
+                            <td>{obj.sender && obj.sender.email}</td>
+                          </tr>
 
-                      <tr>
-                        <td className='text-end text-muted align-top'>To:</td>
-                        <td>{obj.receiver && obj.receiver.email}</td>
-                      </tr>
+                          <tr>
+                            <td className='text-end text-muted align-top'>To:</td>
+                            <td>{obj.receiver && obj.receiver.email}</td>
+                          </tr>
 
-                      <tr>
-                        <td className='text-end text-muted align-top'>Date:</td>
-                        {obj && obj.date ? (<td>
-                          {getTransformDate(obj.date, "DD-MM-YYYY HH:mm:ss")}
-                        </td>) : null}
-
-                        {obj && obj.created_at ? (<td>
-                          {getTransformDate(obj.created_at, "DD-MM-YYYY HH:mm:ss")}
-                        </td>) : null}
-                      </tr>
-                    </tbody>
-                  </Table>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            </div>
-          </div>
-
-          <div className='mail-meta-item d-flex align-items-center'>
-            <small className='mail-date-time text-muted'>
-              {obj && obj.date ? getTransformDate(obj.date, "DD-MM-YYYY HH:mm:ss") : null}
-              {obj && obj.created_at ? getTransformDate(obj.created_at, "DD-MM-YYYY HH:mm:ss") : null}
-            </small>
-          </div>
-        </CardHeader>
-
-        <CardBody className='mail-message-wrapper pt-2'>
-          {obj && obj.body ? (setInnerHtml(obj.body, "mail-message")) : null}
-          {obj && obj.data && obj.data && obj.data.display_message ? (setInnerHtml(obj.data.display_message, "mail-message")) : null}
-        </CardBody>
-
-        {obj.attachment && obj.attachment.length ? (
-          <CardFooter>
-            <div className='mail-attachments'>
-              <div className='d-flex align-items-center mb-1'>
-                <Paperclip size={16} />
-                <h5 className='fw-bolder text-body mb-0 ms-50'>{obj.attachment.length} Attachment</h5>
+                          <tr>
+                            <td className='text-end text-muted align-top'>Date:</td>
+                            {obj && obj.date ? (
+                              <td>
+                                {getTransformDate(obj.date, "DD-MM-YYYY HH:mm:ss")}
+                              </td>
+                            ) : null}
+                          </tr>
+                        </tbody>
+                      </Table>
+                    </DropdownMenu>
+                  </UncontrolledDropdown>
+                </div>
               </div>
-              <div className='d-flex flex-column'>{renderAttachments(obj.attachment)}</div>
-            </div>
-          </CardFooter>
-        ) : null}
-      </Card>
+
+              <div className='mail-meta-item d-flex align-items-center'>
+                <small className='mail-date-time text-muted'>
+                  {obj && obj.date ? getTransformDate(obj.date, "DD-MM-YYYY HH:mm:ss") : null}
+                </small>
+              </div>
+            </CardHeader>
+
+            <CardBody className='mail-message-wrapper pt-2'>
+              {obj && obj.body ? (setInnerHtml(obj.body, "mail-message")) : null}
+            </CardBody>
+
+            {obj.attachment && obj.attachment.length ? (
+              <CardFooter>
+                <div className='mail-attachments'>
+                  <div className='d-flex align-items-center mb-1'>
+                    <Paperclip size={16} />
+                    <h5 className='fw-bolder text-body mb-0 ms-50'>{obj.attachment.length} Attachment</h5>
+                  </div>
+                  <div className='d-flex flex-column'>{renderAttachments(obj.attachment)}</div>
+                </div>
+              </CardFooter>
+            ) : null}
+          </Card>
+        </Col>
+      </Row>
     )
   }
 
   // ** Renders Replies
-  const renderReplies = (arr) => {
-    if (arr.length && showReplies === true) {
-      return arr.map((obj, index) => (
-        <Row key={index} className="odd-even-reply">
-          <Col sm={12}>{renderMessage(obj)}</Col>
-        </Row>
+  const renderReplies = (replies) => {
+    if (replies && replies.length) {
+      return replies.map((item, index) => (
+        <Fragment key={`replies_${index}`}>
+          {(index === replies.length - 1 || showReplies) ? (
+            renderMessage(item, showReplies ? index : 0)
+          ) : null}
+        </Fragment>
       ))
     }
   }
@@ -310,6 +316,12 @@ const MailDetails = (props) => {
     setEditorHtmlContent("")
     setEditorStateContent(null)
     setReplySection(!replySection)
+    if (uploadedFiles && uploadedFiles.length) {
+      const attchIds = uploadedFiles.map((t) => t.id)
+      setUploadedFiles([])
+      dispatch(setComposeAttachments([]))
+      dispatch(deleteMultipleEmailAttachment({ ids: attchIds }))
+    }
   }
 
   /* Go back on listing */
@@ -379,47 +391,47 @@ const MailDetails = (props) => {
 
   return (
     <div
-      className={classnames('email-app-details', {
+      className={classnames("email-app-details", {
         show: openMail
       })}
     >
       {mailItem && mailItem.mail ? (
         <Fragment>
-          <div className='email-detail-header'>
-            <div className='email-header-left d-flex align-items-center'>
-              <span className='go-back me-1' onClick={handleGoBack}>
+          <div className="email-detail-header">
+            <div className="email-header-left d-flex align-items-center">
+              <span className="go-back me-1" onClick={handleGoBack}>
                 <ChevronLeft size={20} />
               </span>
-              <h4 className='email-subject mb-0'>
+              <h4 className="email-subject mb-0">
                 {mailItem && mailItem.mail && mailItem.mail.subject ? mailItem.mail.subject : mailItem && mailItem.mail && mailItem.mail.data && mailItem.mail.data && mailItem.mail.data.subject ? mailItem.mail.data.subject : ""}
               </h4>
             </div>
 
-            <div className='email-header-right ms-2 ps-1'>
-              <ul className='list-inline m-0'>
-                {mailItem && mailItem.mail && mailItem.mail.id && !mailItem.mail.type ? (<li className='list-inline-item'>
+            <div className="email-header-right ms-2 ps-1">
+              <ul className="list-inline m-0">
+                {mailItem && mailItem.mail && mailItem.mail.id && !mailItem.mail.type ? (<li className="list-inline-item">
                   <Link to={`${adminRoot}/email/view/${mailItem.mail.id}`} target="_blank">
-                    <Eye size={18} className='mx-1' />
+                    <Eye size={18} className="mx-1" />
                   </Link>
                 </li>) : null}
               </ul>
             </div>
           </div>
 
-          <PerfectScrollbar className='email-scroll-area' options={{ wheelPropagation: false }}>
+          <PerfectScrollbar className="email-scroll-area" options={{ wheelPropagation: false }}>
             <Row>
               <Col sm={12}>
-                <div className='email-label'>{mailItem && mailItem.mail && mailItem.mail.label ? renderLabels(mailItem.mail.label.split(',')) : null}</div>
+                <div className="email-label">{mailItem && mailItem.mail && mailItem.mail.label ? renderLabels(mailItem.mail.label.split(",")) : null}</div>
               </Col>
             </Row>
 
             {mailItem && mailItem.replies && mailItem.replies.length ? (
               <Fragment>
-                {showReplies === false ? (
-                  <Row className='mb-1'>
-                    <Col sm='12'>
-                      <a className='fw-bold' href='/' onClick={handleShowReplies}>
-                        View {mailItem.replies.length} Earlier Messages
+                {(mailItem.replies && mailItem.replies.length - 1) && showReplies === false ? (
+                  <Row className="mb-1">
+                    <Col sm={12}>
+                      <a className="fw-bold" href="/" onClick={handleShowReplies}>
+                        View {mailItem.replies.length - 1} Earlier Messages
                       </a>
                     </Col>
                   </Row>
@@ -430,20 +442,34 @@ const MailDetails = (props) => {
             ) : null}
 
             {mailItem && mailItem.mail ? (
-              <Row className={`${showReplies ? 'odd-even-reply' : ''}`}>
-                <Col sm={12}>{renderMessage(mailItem.mail)}</Col>
-              </Row>
+              renderMessage(mailItem.mail, showReplies ? (mailItem.replies && mailItem.replies.length) || 0 : 1)
             ) : null}
 
             {!replySection ? (
               <Row>
-                <Col sm='12'>
+                <Col sm={12}>
                   <Card>
                     <CardBody>
                       <div className="d-flex justify-content-between">
-                        <h5 className='mb-0'>
-                          <Button type='button' color='primary' className='me-1' onClick={handleReplySection}>Reply</Button>
-                          {folder !== "trash" ? (<Button type='button' color='danger' onClick={handleDeleteMail}>Delete</Button>) : null}
+                        <h5 className="mb-0">
+                          <Button
+                            type="button"
+                            color="primary"
+                            className="me-1"
+                            onClick={handleReplySection}
+                          >
+                            Reply
+                          </Button>
+
+                          {folder !== "trash" ? (
+                            <Button
+                              type="button"
+                              color="danger"
+                              onClick={handleDeleteMail}
+                            >
+                              Delete
+                            </Button>
+                          ) : null}
                         </h5>
                       </div>
                     </CardBody>
@@ -462,19 +488,20 @@ const MailDetails = (props) => {
                           className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
                         />
                       ) : null}
+
                       <Col sm={12}>
                         <Row>
                           <h2 className="mb-1">Answers</h2>
-                          <div id='message-editor'>
+                          <div id="message-editor">
                             <Editor
-                              toolbarClassName='rounded-0'
-                              wrapperClassName='toolbar-bottom'
-                              editorClassName='rounded-0 border-1'
+                              toolbarClassName="rounded-0"
+                              wrapperClassName="toolbar-bottom"
+                              editorClassName="rounded-0 border-1"
                               toolbar={{
-                                options: ['inline', 'textAlign'],
+                                options: ["inline", "textAlign"],
                                 inline: {
                                   inDropdown: false,
-                                  options: ['bold', 'italic', 'underline', 'strikethrough']
+                                  options: ["bold", "italic", "underline", "strikethrough"]
                                 }
                               }}
                               editorState={editorStateContent}
@@ -490,7 +517,7 @@ const MailDetails = (props) => {
                             {uploadedFiles.map((item, index) => {
                               return (
                                 <div className="inline" key={`attachment_${index}`}>
-                                  <Paperclip className='cursor-pointer ms-50 me-1' size={17} />
+                                  <Paperclip className="cursor-pointer ms-50 me-1" size={17} />
 
                                   {item && item.path ? (<a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>) : null}
 
@@ -498,7 +525,11 @@ const MailDetails = (props) => {
                                     href={`${adminRoot}/email`}
                                     onClick={(event) => onFileRemove(event, item.id)}
                                   >
-                                    <X className='cursor-pointer ms-50' size={17} />
+                                    <X
+                                      size={17}
+                                      color="#FF0000"
+                                      className="cursor-pointer ms-50"
+                                    />
                                   </a>
                                 </div>
                               )

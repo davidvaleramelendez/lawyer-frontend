@@ -12,6 +12,7 @@ import { Input, Label } from 'reactstrap'
 const MailCard = (props) => {
   // ** Props
   const {
+    folder,
     mailItem,
     dispatch,
     selectMail,
@@ -84,7 +85,12 @@ const MailCard = (props) => {
         <div className='mail-details'>
           <div className='mail-items'>
             <h5 className='mb-25'>
-              {mailItem && mailItem.sender && mailItem.sender.id ? mailItem.sender.name : null}
+              {folder === 'sent' ? (
+                mailItem && mailItem.receiver && mailItem.receiver.id ? mailItem.receiver.name : null
+              ) : (
+                mailItem && mailItem.sender && mailItem.sender.id ? mailItem.sender.name : null
+              )}
+
               {mailItem && mailItem.email_group && mailItem.email_group.length ? <span className='text-truncate ms-1 me-1' style={{ color: '#0000FF' }}>({mailItem.email_group.length})</span> : null}
               <span className='text-truncate'>
                 {mailItem && mailItem.subject ? mailItem.subject : mailItem.data && mailItem.data.data && mailItem.data.data.subject ? mailItem.data.data.subject : null}
@@ -94,7 +100,6 @@ const MailCard = (props) => {
 
           <div className='mail-meta-item'>
             {mailItem && mailItem.attachment_id ? <Paperclip size={14} /> : null}
-            {/* {mailItem && mailItem.label ? (<span className="mx-50 bullet bullet-warning bullet-sm" />) : null} */}
             {mailItem && mailItem.label ? (renderLabels(mailItem.label.split(','))) : null}
             <span className='mail-date'>
               {mailItem && mailItem.date ? getTransformDate(mailItem.date, "DD MMM YYYY") : mailItem && mailItem.created_at ? getTransformDate(mailItem.created_at, "DD MMM YYYY") : null}

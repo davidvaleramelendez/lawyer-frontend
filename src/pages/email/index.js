@@ -24,6 +24,8 @@ import {
   resetMailDetailItem,
   createEmailAttachment,
   deleteEmailAttachment,
+  setComposeAttachments,
+  deleteMultipleEmailAttachment,
   callEmailCronJob,
   updateEmailLoader,
   clearEmailMessage,
@@ -119,6 +121,7 @@ const EmailApp = () => {
       setEditorHtmlContent("")
       setUploadedFiles(store.attachments)
       setEditorStateContent(null)
+      dispatch(setComposeAttachments([]))
     }
   }, [store.attachments, store.success, store.error, store.actionFlag, searchInput, loadFirst])
 
@@ -167,11 +170,13 @@ const EmailApp = () => {
             resetSelectedMail={resetSelectedMail}
             editorStateContent={editorStateContent}
             markEmailImportant={markEmailImportant}
+            resetMailDetailItem={resetMailDetailItem}
             setEditorHtmlContent={setEditorHtmlContent}
             setEditorStateContent={setEditorStateContent}
             createEmailAttachment={createEmailAttachment}
             deleteEmailAttachment={deleteEmailAttachment}
-            resetMailDetailItem={resetMailDetailItem}
+            setComposeAttachments={setComposeAttachments}
+            deleteMultipleEmailAttachment={deleteMultipleEmailAttachment}
           />
         </div>
       </div>

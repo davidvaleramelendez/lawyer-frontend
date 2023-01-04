@@ -69,6 +69,7 @@ import {
   setComposeSubject,
   saveDraftEmail,
   resetComposeModal,
+  setComposeAttachments,
   deleteDrafts
 } from '../store'
 
@@ -260,6 +261,7 @@ const ModalComposeMail = () => {
     }
 
     setUploadedFiles([...fileArray])
+    dispatch(setComposeAttachments([...fileArray]))
   }
 
   /* convert from html to editor state */
@@ -317,7 +319,7 @@ const ModalComposeMail = () => {
 
           if (fileFlag) {
             dispatch(updateEmailLoader(false))
-            dispatch(createEmailAttachment({ attachment: fileArray, type: 'notification', ids: ids }))
+            dispatch(createEmailAttachment({ attachment: fileArray, type: 'email', ids: ids, from: "COMPOSE" }))
           }
         }
       }))
@@ -384,9 +386,9 @@ const ModalComposeMail = () => {
     }
 
     /* Updating uploaded files */
-    // if (store && store.actionFlag && store.actionFlag === "ATTACHMENT_ADDED") {
-    setUploadedFiles(store.composeModal.attachments)
-    // }
+    if (store && store.actionFlag && store.actionFlag === "ATTACHMENT_ADDED") {
+      setUploadedFiles(store.composeModal.attachments)
+    }
 
     /* Updating editor state */
     if (store && store.composeModal.htmlToEditorState !== "") {

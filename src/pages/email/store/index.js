@@ -333,7 +333,12 @@ export const createEmailAttachment = createAsyncThunk('appContact/createEmailAtt
   try {
     const response = await createEmailAttachmentRequest(payload)
     if (response && response.flag) {
+      let composeAttachment = []
+      if (payload && payload.from === "COMPOSE") {
+        composeAttachment = response.data
+      }
       return {
+        composeAttachment: composeAttachment,
         attachments: response.data,
         actionFlag: "ATTACHMENT_ADDED",
         success: response.message,
@@ -380,6 +385,36 @@ export const deleteEmailAttachment = createAsyncThunk('appEmail/deleteEmailAttac
     }
   } catch (error) {
     console.log("deleteEmailAttachment catch ", error)
+    return {
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function deleteMultipleEmailAttachmentRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.attachments.multipleDelete}`, payload).then((email) => email.data).catch((error) => error)
+}
+
+export const deleteMultipleEmailAttachment = createAsyncThunk('appEmail/deleteMultipleEmailAttachment', async (payload) => {
+  try {
+    const response = await deleteMultipleEmailAttachmentRequest(payload)
+    if (response && response.flag) {
+      return {
+        actionFlag: "",
+        success: "",
+        error: ""
+      }
+    } else {
+      return {
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("deleteMultipleEmailAttachment catch ", error)
     return {
       actionFlag: "",
       success: "",
@@ -804,13 +839,20 @@ export const appEmailSlice = createSlice({
       })
       /* Mail attachment */
       .addCase(createEmailAttachment.fulfilled, (state, action) => {
-        state.composeModal.attachments = action.payload.attachments
+        state.composeModal.attachments = action.payload.composeAttachment
+        state.attachments = action.payload.attachments
         state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success
         state.error = action.payload.error
       })
       .addCase(deleteEmailAttachment.fulfilled, (state, action) => {
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(deleteMultipleEmailAttachment.fulfilled, (state, action) => {
         state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success

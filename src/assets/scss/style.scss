@@ -88,49 +88,48 @@ $calendar-night-color: rgb(215 215 215 / 34%);
 
 /* Email module */
 /* Email odd even reply */
+$email-dark-background-color: #7367f0;
+$email-dark-background-font-color: #ffffff;
 .odd-even-reply {
-	&.row:nth-child(odd) {
-		.card {
-			// background: #e1e1e1;
-			background: #7367f0;
-			color: #ffffff;
+	.card {
+		background: $email-dark-background-color !important;
+		color: $email-dark-background-font-color !important;
 
-			h5,
-			a,
+		h5,
+		a,
+		span {
+			color: $email-dark-background-font-color !important;
+		}
+
+		.mail-toggle-three-dot {
+			summary {
+				border: 1px solid $email-dark-background-font-color !important;
+
+				&:after {
+					color: $email-dark-background-font-color !important;
+				}
+			}
+
+			p,
+			div,
 			span {
-				color: #ffffff;
+				color: $email-dark-background-font-color !important;
 			}
+		}
 
-			.mail-toggle-three-dot {
-				summary {
-					border: 1px solid #ffffff;
-
-					&:after {
-						color: #ffffff;
-					}
-				}
-
-				p,
-				div,
-				span {
-					color: #ffffff !important;
-				}
+		.gmail_signature {
+			p,
+			div,
+			span {
+				color: $email-dark-background-font-color !important;
 			}
+		}
 
-			.gmail_signature {
-				p,
-				div,
-				span {
-					color: #ffffff !important;
-				}
-			}
-
-			.gmail_quote {
-				div,
-				p,
-				span {
-					color: #ffffff !important;
-				}
+		.gmail_quote {
+			div,
+			p,
+			span {
+				color: $email-dark-background-font-color !important;
 			}
 		}
 	}
@@ -138,10 +137,6 @@ $calendar-night-color: rgb(215 215 215 / 34%);
 /* /Email odd even reply */
 
 .mail-message {
-	#gmail_signature {
-		display: none;
-	}
-
 	/* Email toggle action collapse, expand */
 	.mail-toggle-three-dot {
 		margin-top: 5px;

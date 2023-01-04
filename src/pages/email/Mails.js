@@ -73,6 +73,7 @@ const Mails = (props) => {
     markEmailRestore,
     callEmailCronJob,
     updateEmailLoader,
+    resetSelectedMail,
     editorHtmlContent,
     editorStateContent,
     markEmailImportant,
@@ -81,7 +82,8 @@ const Mails = (props) => {
     setEditorStateContent,
     createEmailAttachment,
     deleteEmailAttachment,
-    resetSelectedMail
+    setComposeAttachments,
+    deleteMultipleEmailAttachment
   } = props
 
   const {
@@ -172,6 +174,7 @@ const Mails = (props) => {
         return (
           <MailCard
             key={index}
+            folder={folder}
             mailItem={mail}
             dispatch={dispatch}
             selectMail={selectMail}
@@ -354,6 +357,8 @@ const Mails = (props) => {
         setEditorStateContent={setEditorStateContent}
         createEmailAttachment={createEmailAttachment}
         deleteEmailAttachment={deleteEmailAttachment}
+        setComposeAttachments={setComposeAttachments}
+        deleteMultipleEmailAttachment={deleteMultipleEmailAttachment}
       />
     </Fragment>
   )

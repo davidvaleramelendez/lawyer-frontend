@@ -90,7 +90,8 @@ export const API_ENDPOINTS = {
     /* Attachments */
     attachments: {
         create: `/api/admin/attachment/create`,
-        delete: `/api/admin/attachment/delete`
+        delete: `/api/admin/attachment/delete`,
+        multipleDelete: `/api/admin/attachment/multiple/delete`
     },
     /* /Attachments */
 

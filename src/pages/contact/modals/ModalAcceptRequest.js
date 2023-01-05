@@ -192,7 +192,7 @@ const ModalAcceptRequest = ({
                   {T("Name")}
                 </Label>
                 <Controller
-                  defaultValue={contactData.Name}
+                  defaultValue={contactData.Name || ""}
                   id="Name"
                   name="Name"
                   control={control}
@@ -206,7 +206,7 @@ const ModalAcceptRequest = ({
                   {T("Telephone")}
                 </Label>
                 <Controller
-                  defaultValue={contactData.PhoneNo}
+                  defaultValue={contactData.PhoneNo || ""}
                   id="PhoneNo"
                   name="PhoneNo"
                   control={control}
@@ -220,7 +220,7 @@ const ModalAcceptRequest = ({
                   {T("Email")}
                 </Label>
                 <Controller
-                  defaultValue={contactData.Email}
+                  defaultValue={contactData.Email || ""}
                   name="Email"
                   id="Email"
                   control={control}

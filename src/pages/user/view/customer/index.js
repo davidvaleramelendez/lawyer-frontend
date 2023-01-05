@@ -77,8 +77,6 @@ const UserView = () => {
       if (denyRole.indexOf(store.userItem.role_id) !== -1) {
         navigate(`${adminRoot}/user`)
       }
-      // if (store.userItem.role_id !== roleId) {
-      // }
     }
   }
 

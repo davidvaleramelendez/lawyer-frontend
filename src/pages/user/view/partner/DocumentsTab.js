@@ -12,7 +12,10 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // ** Utils
 import {
-    getTransformDate
+    getTotalNumber,
+    getTransformDate,
+    getRandColorClass,
+    getCurrentPageNumber
 } from '@utils'
 
 // ** Reactstrap Imports
@@ -30,6 +33,8 @@ import {
 import Select from "react-select"
 
 // ** Custom Components
+import Avatar from "@components/avatar"
+import DotPulse from "@components/dotpulse"
 import DatatablePagination from "@components/datatable/DatatablePagination"
 
 // ** Icons Import
@@ -38,8 +43,9 @@ import {
     PlusCircle
 } from 'react-feather'
 
-// Constant
+// ** Constant
 import {
+    TN_CASES,
     adminRoot,
     perPageRowItems,
     defaultPerPageRow
@@ -128,7 +134,6 @@ const CustomCaseHeader = ({
 const DocumentsTab = ({
     id
 }) => {
-
     // ** Store vars
     const dispatch = useDispatch()
     const caseStore = useSelector((state) => state.cases)
@@ -267,6 +272,28 @@ const DocumentsTab = ({
         setDetailModalOpen(true)
     }
 
+    // ** renders case column
+    const renderCase = (row) => {
+        if (row && row.profile_photo_path && row.profile_photo_path.length) {
+            return (
+                <Avatar
+                    width="32"
+                    height="32"
+                    className="me-50"
+                    img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`}
+                />
+            )
+        } else {
+            return (
+                <Avatar
+                    initials
+                    className="me-50"
+                    color={getRandColorClass()}
+                    content={row ? row.name : ""}
+                />)
+        }
+    }
+
     const caseColumns = [
         {
             name: "",
@@ -279,37 +306,71 @@ const DocumentsTab = ({
                         <PlusCircle color="#7367f0" size={17} />
                     </Button>
                 </div>
-            )
-        },
-        {
-            name: `${T("Reference Number")}#`,
-            sortable: true,
-            sortField: "CaseID",
-            minWidth: "20%",
-            cell: row => <Link to={`${adminRoot}/case/view/${row.CaseID}`}>{`#${row.CaseID}`}</Link>,
+            ),
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '30px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
         },
         {
-            name: T("Attorney"),
+            name: `${T("Reference Number")}#`,
             sortable: true,
-            sortField: "LaywerID",
-            minWidth: "20%",
-            cell: (row) => <>{row && row.laywer && row.laywer.id ? (<Link to={`${adminRoot}/user/view/${row.laywer.id}`}>{row.laywer.name}</Link>) : null}</>,
+            sortField: "CaseID",
+            minWidth: "18%",
+            cell: row => <Link to={`${adminRoot}/case/view/${row.CaseID}`}>{`#${row.CaseID}`}</Link>,
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '90px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
+            /* /Custom placeholder vars */
+        },
+        {
+            name: T("Client"),
+            sortable: true,
+            minWidth: "23%",
+            sortField: "Name",
+            cell: (row) => {
+                const name = row ? row.user && row.user.name : "John Doe"
+                return (
+                    <div className="d-flex justify-content-left align-items-center">
+                        {renderCase(row.user)}
+                        <div className="d-flex flex-column">
+                            <Link to={`${adminRoot}/user/view/${row.user && row.user.id}`}>
+                                <h6 className="user-name text-truncate mb-0">{name}</h6>
+                                <small className="text-truncate text-muted text-wrap mb-0">{(row && row.user && row.user.email) || ""}</small>
+                            </Link>
+                        </div>
+                    </div>
+                )
+            },
+            /* Custom placeholder vars */
+            customRenderTwoRow: true,
+            contentExtraStylesRow1: {
+                height: '15px', width: 'auto', borderRadius: '10px', minWidth: '100px'
+            },
+            contentExtraStylesRow2: {
+                height: '10px', width: 'auto', borderRadius: '10px', minWidth: '100px', marginTop: '3px'
+            },
+            customLoadingWithIcon: "User",
+            customLoaderCellClass: "",
+            customLoaderContentClass: "d-flex align-items-center"
             /* /Custom placeholder vars */
         },
         {
             name: T("Date"),
             sortable: true,
             sortField: "Date",
-            minWidth: "15%",
+            minWidth: "14%",
             cell: (row) => row.Date && getTransformDate(row.Date, "DD MMM YYYY"),
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -318,9 +379,12 @@ const DocumentsTab = ({
             name: T("Status"),
             sortable: true,
             sortField: "Status",
-            minWidth: "15%",
+            minWidth: "17%",
             cell: (row) => row.Status,
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '60px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -329,10 +393,12 @@ const DocumentsTab = ({
             name: T("Group"),
             sortable: true,
             sortField: "Status",
-            minWidth: "20%",
+            minWidth: "18%",
             cell: (row) => row && row.type && row.type.CaseTypeName,
             /* Custom placeholder vars */
-            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '70%' },
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -352,6 +418,9 @@ const DocumentsTab = ({
                 </div>
             ),
             /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '30px'
+            },
             customLoaderCellClass: "text-center",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -367,25 +436,32 @@ const DocumentsTab = ({
                     <CardTitle tag="h4">{T("Documents")}</CardTitle>
                 </CardHeader>
 
-                <DatatablePagination
-                    customClass=""
-                    columns={caseColumns}
-                    loading={caseStore.loading}
-                    data={caseStore.caseItems}
-                    pagination={caseStore.pagination}
-                    handleSort={handleCaseSort}
-                    handlePagination={handleCasePagination}
-                    subHeaderComponent={
-                        <CustomCaseHeader
-                            searchInput={searchInput}
-                            rowsPerPage={rowsPerPage}
-                            handleSearch={handleCaseSearch}
-                            handlePerPage={handleCasePerPage}
-                            statusFilter={statusFilter}
-                            handleStatusFilter={handleCaseStatusFilter}
-                        />
-                    }
-                />
+                {(!caseStore.loading && !getTotalNumber(TN_CASES)) ? (
+                    <DotPulse />
+                ) : (
+                    <DatatablePagination
+                        customClass=""
+                        columns={caseColumns}
+                        loading={caseStore.loading}
+                        data={caseStore.caseItems}
+                        pagination={caseStore.loading ? caseStore.pagination : {
+                            ...caseStore.pagination,
+                            perPage: getCurrentPageNumber(TN_CASES, rowsPerPage, currentPage)
+                        }}
+                        handleSort={handleCaseSort}
+                        handlePagination={handleCasePagination}
+                        subHeaderComponent={
+                            <CustomCaseHeader
+                                searchInput={searchInput}
+                                rowsPerPage={rowsPerPage}
+                                handleSearch={handleCaseSearch}
+                                handlePerPage={handleCasePerPage}
+                                statusFilter={statusFilter}
+                                handleStatusFilter={handleCaseStatusFilter}
+                            />
+                        }
+                    />
+                )}
 
                 <ModalCaseDetail
                     toggleModal={() => setDetailModalOpen(!detailModalOpen)}

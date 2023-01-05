@@ -175,3 +175,27 @@ $email-dark-background-font-color: #ffffff;
 	}
 }
 /* Email module */
+
+/* User module */
+.user-detail-email {
+	.sidebar-left {
+		width: 25% !important;
+
+		.sidebar-content {
+			&.email-app-sidebar {
+				width: 100% !important;
+			}
+		}
+	}
+
+	.content-right {
+		width: 75% !important;
+
+		.email-app-details {
+			&.show {
+				width: calc(100% - 25%) !important;
+			}
+		}
+	}
+}
+/* /User module */

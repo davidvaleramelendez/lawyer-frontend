@@ -12,8 +12,10 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // ** Utils
 import {
+    getTotalNumber,
     getTransformDate,
     getDecimalFormat,
+    getCurrentPageNumber,
     capitalizeWordFirstLetter
 } from '@utils'
 
@@ -45,11 +47,13 @@ import {
 
 // ** Custom Components
 import Avatar from "@components/avatar"
+import DotPulse from "@components/dotpulse"
 import DatatablePagination from "@components/datatable/DatatablePagination"
 
 // Constant
 import {
     adminRoot,
+    TN_INVOICE,
     perPageRowItems,
     defaultPerPageRow
 } from '@constant/defaultValues'
@@ -121,6 +125,7 @@ const CustomInvoiceHeader = ({
 const BillingsTab = ({
     id
 }) => {
+    // ** Hooks
     const navigate = useNavigate()
 
     // ** Store vars
@@ -239,52 +244,82 @@ const BillingsTab = ({
     /* Invoice columns */
     const invoiceColumns = [
         {
-            name: T('Invoice Number'),
+            name: T("Invoice Number"),
             sortable: true,
-            sortField: 'invoice_no',
-            minWidth: '190px',
-            cell: (row) => <Link to={`${adminRoot}/invoice/view/${row.id}`}>{`#${row.invoice_no}`}</Link>
+            sortField: "invoice_no",
+            minWidth: "22%",
+            cell: (row) => <Link to={`${adminRoot}/invoice/view/${row.id}`}>{`#${row.invoice_no}`}</Link>,
+            /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '90px'
+            },
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: T('Status'),
+            name: T("Status"),
             sortable: true,
-            sortField: 'status',
-            minWidth: '70px',
+            sortField: "status",
+            minWidth: "20%",
             cell: (row) => {
-                const color = invoiceStatus[row.status] ? invoiceStatus[row.status].color : 'primary',
+                const color = invoiceStatus[row.status] ? invoiceStatus[row.status].color : "primary",
                     Icon = invoiceStatus[row.status] ? invoiceStatus[row.status].icon : Edit
                 return (
                     <Fragment>
                         <Avatar color={color} icon={<Icon size={14} />} id={`av-tooltip-${row.id}`} />
-                        <UncontrolledTooltip placement='top' target={`av-tooltip-${row.id}`}>
-                            <span className='fw-bold'>{row.status && capitalizeWordFirstLetter(row.status)}</span>
+                        <UncontrolledTooltip placement="top" target={`av-tooltip-${row.id}`}>
+                            <span className="fw-bold">{row.status && capitalizeWordFirstLetter(row.status)}</span>
                             <br />
-                            <span className='fw-bold'>Balance:</span> {row && row.remaining_amount && getDecimalFormat(row.remaining_amount)}
+                            <span className="fw-bold">{T('Balance')}:</span> {row && row.remaining_amount && getDecimalFormat(row.remaining_amount)}
                             <br />
-                            <span className='fw-bold'>Due Date:</span> {row.invoice_due_date && getTransformDate(row.invoice_due_date, "DD/MM/YYYY")}
+                            <span className="fw-bold">{T('Due Date')}:</span> {row.invoice_due_date && getTransformDate(row.invoice_due_date, "DD/MM/YYYY")}
                         </UncontrolledTooltip>
                     </Fragment>
                 )
-            }
+            },
+            /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '35px', width: 'auto', borderRadius: '50%', display: 'inline-block', minWidth: '35px'
+            },
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: T('Total'),
+            name: T("Total"),
             sortable: true,
-            sortField: 'total_price',
-            minWidth: '100px',
-            cell: (row) => `€ ${row && row.total_price && getDecimalFormat(row.total_price)}`
+            sortField: "total_price",
+            minWidth: "18%",
+            cell: (row) => `€ ${row && row.total_price && getDecimalFormat(row.total_price)}`,
+            /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '65px'
+            },
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: T('Due Date'),
+            name: T("Due Date"),
             sortable: true,
-            sortField: 'invoice_due_date',
-            minWidth: '140px',
-            cell: (row) => row.invoice_due_date && getTransformDate(row.invoice_due_date, "DD MMM YYYY")
+            sortField: "invoice_due_date",
+            minWidth: "25%",
+            cell: (row) => row.invoice_due_date && getTransformDate(row.invoice_due_date, "DD MMM YYYY"),
+            /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
+            },
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
-            name: T('Action'),
+            name: T("Action"),
+            center: true,
+            minWidth: "15%",
             cell: (row) => (
-                <div className='column-action d-flex align-items-center'>
+                <div className="d-flex column-action align-items-center">
                     <Link
                         id={`pw-view-tooltip-${row.id}`}
                         to={`${adminRoot}/invoice/view/${row.id}`}
@@ -296,7 +331,14 @@ const BillingsTab = ({
                         {T('View Invoice')}
                     </UncontrolledTooltip>
                 </div>
-            )
+            ),
+            /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '30px'
+            },
+            customLoaderCellClass: "text-center",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         }
     ]
     /* /Invoice columns */
@@ -309,26 +351,33 @@ const BillingsTab = ({
                     <CardTitle tag="h4">{T("Bills")}</CardTitle>
                 </CardHeader>
 
-                <DatatablePagination
-                    customClass=""
-                    columns={invoiceColumns}
-                    loading={invoiceStore && invoiceStore.loading}
-                    data={invoiceStore && invoiceStore.invoiceItems}
-                    pagination={invoiceStore && invoiceStore.pagination}
-                    handleSort={handleInvoiceSort}
-                    handlePagination={handleInvoicePagination}
-                    subHeaderComponent={
-                        <CustomInvoiceHeader
-                            navigate={navigate}
-                            searchInput={invSearchInput}
-                            rowsPerPage={invRowsPerPage}
-                            handleSearch={handleInvoiceSearch}
-                            handlePerPage={handleInvoicePerPage}
-                            statusFilter={invStatusFilter}
-                            handleStatusFilter={handleInvoiceStatusFilter}
-                        />
-                    }
-                />
+                {(!invoiceStore.loading && !getTotalNumber(TN_INVOICE)) ? (
+                    <DotPulse />
+                ) : (
+                    <DatatablePagination
+                        customClass=""
+                        columns={invoiceColumns}
+                        loading={invoiceStore && invoiceStore.loading}
+                        data={invoiceStore && invoiceStore.invoiceItems}
+                        pagination={invoiceStore.loading ? invoiceStore.pagination : {
+                            ...invoiceStore.pagination,
+                            perPage: getCurrentPageNumber(TN_INVOICE, invRowsPerPage, invCurrentPage)
+                        }}
+                        handleSort={handleInvoiceSort}
+                        handlePagination={handleInvoicePagination}
+                        subHeaderComponent={
+                            <CustomInvoiceHeader
+                                navigate={navigate}
+                                searchInput={invSearchInput}
+                                rowsPerPage={invRowsPerPage}
+                                handleSearch={handleInvoiceSearch}
+                                handlePerPage={handleInvoicePerPage}
+                                statusFilter={invStatusFilter}
+                                handleStatusFilter={handleInvoiceStatusFilter}
+                            />
+                        }
+                    />
+                )}
             </Card>
             {/* /Invoice listing */}
         </Fragment>

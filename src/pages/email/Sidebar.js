@@ -46,7 +46,7 @@ const Sidebar = (props) => {
     setOpenMail(false)
     goToOtherFolder(newFolder)
     if (newFolder === 'draft') {
-      dispatch(getDraftList())
+      dispatch(getDraftList({}))
     } else {
       dispatch(getMails({ ...store.params, folder: newFolder }))
     }

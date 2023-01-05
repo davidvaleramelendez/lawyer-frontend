@@ -11,7 +11,9 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // ** Utils
 import {
-    getTransformDate
+    getTotalNumber,
+    getTransformDate,
+    getCurrentPageNumber
 } from '@utils'
 
 // ** Reactstrap Imports
@@ -25,12 +27,14 @@ import {
 } from 'reactstrap'
 
 // ** Custom Components
+import DotPulse from "@components/dotpulse"
 import DatatablePagination from "@components/datatable/DatatablePagination"
 
-// Constant
+// ** Constant
 import {
     perPageRowItems,
-    defaultPerPageRow
+    defaultPerPageRow,
+    TN_RECENT_DEVICE_LOGS
 } from '@constant/defaultValues'
 
 // ** Translation
@@ -69,7 +73,6 @@ const CustomLogHeader = ({
 const RecentDevicesTab = ({
     id
 }) => {
-
     // ** Store vars
     const dispatch = useDispatch()
     const store = useSelector((state) => state.user)
@@ -148,7 +151,9 @@ const RecentDevicesTab = ({
             minWidth: '50%',
             cell: (row) => row.ip_address,
             /* Custom placeholder vars */
-            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '60%' },
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '120px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -160,7 +165,9 @@ const RecentDevicesTab = ({
             minWidth: '50%',
             cell: (row) => row.login_at && getTransformDate(row.login_at, "DD MMM YYYY"),
             /* Custom placeholder vars */
-            contentExtraStyles: { height: '15px', borderRadius: '10px', width: '60%' },
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
+            },
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
@@ -176,21 +183,28 @@ const RecentDevicesTab = ({
                     <CardTitle tag="h4">{T("Recent devices")}</CardTitle>
                 </CardHeader>
 
-                <DatatablePagination
-                    customClass=""
-                    columns={logColumns}
-                    loading={store && store.loading}
-                    data={store && store.userDeviceLogs}
-                    pagination={store && store.deviceLogPagination}
-                    handleSort={handleLogSort}
-                    handlePagination={handledeviceLogPagination}
-                    subHeaderComponent={
-                        <CustomLogHeader
-                            rowsPerPage={logRowsPerPage}
-                            handlePerPage={handleLogPerPage}
-                        />
-                    }
-                />
+                {(!store.loading && !getTotalNumber(TN_RECENT_DEVICE_LOGS)) ? (
+                    <DotPulse />
+                ) : (
+                    <DatatablePagination
+                        customClass=""
+                        columns={logColumns}
+                        loading={store && store.loading}
+                        data={store && store.userDeviceLogs}
+                        pagination={store.loading ? store.deviceLogPagination : {
+                            ...store.deviceLogPagination,
+                            perPage: getCurrentPageNumber(TN_RECENT_DEVICE_LOGS, logRowsPerPage, logCurrentPage)
+                        }}
+                        handleSort={handleLogSort}
+                        handlePagination={handledeviceLogPagination}
+                        subHeaderComponent={
+                            <CustomLogHeader
+                                rowsPerPage={logRowsPerPage}
+                                handlePerPage={handleLogPerPage}
+                            />
+                        }
+                    />
+                )}
             </Card>
             {/* /Device Log History listing */}
         </Fragment>

@@ -33,7 +33,6 @@ const UserInfoCard = ({
     onDeleteUser,
     authUserItem
 }) => {
-
     /* Check permission */
     const onCheckPermission = (id) => {
         if (authUserItem && authUserItem.permission && authUserItem.permission.length) {

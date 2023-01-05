@@ -1,6 +1,6 @@
 // ** React Imports
 import { useEffect, useState, Fragment } from 'react'
-import { useParams, useLocation, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 // ** Store & Actions
 import {
@@ -54,8 +54,6 @@ import { T } from '@localization'
 const UserView = () => {
   // ** Hooks
   const { id } = useParams()
-  const search = useLocation().search
-  const type = new URLSearchParams(search).get('type')
   const navigate = useNavigate()
 
   const MySwal = withReactContent(Swal)
@@ -154,32 +152,31 @@ const UserView = () => {
     })
   }
 
-  return store ? (<Fragment>
-    <div className="app-user-view">
-      <Row>
-        <Col xl={4} lg={5} xs={{ order: 1 }} md={{ order: 0, size: 5 }}>
-          <UserInfoCard
-            id={id}
-            userItem={store.userItem}
-            onDeleteUser={onDeleteUser}
-            authUserItem={store.authUserItem}
-          />
-        </Col>
+  return store ? (
+    <Fragment>
+      <div className="app-user-view">
+        <Row>
+          <Col xl={4} lg={5} xs={{ order: 1 }} md={{ order: 0, size: 5 }}>
+            <UserInfoCard
+              id={id}
+              userItem={store.userItem}
+              onDeleteUser={onDeleteUser}
+              authUserItem={store.authUserItem}
+            />
+          </Col>
 
-        <Col xl={8} lg={7} xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
-          <UserTabs
-            id={id}
-            type={type}
-            active={active}
-            toggleTab={toggleTab}
-            permissions={store.permissions}
-            userItem={store.userItem}
-            authUserItem={store.authUserItem}
-          />
-        </Col>
-      </Row>
-    </div>
-  </Fragment>) : null
+          <Col xl={8} lg={7} xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
+            <UserTabs
+              id={id}
+              active={active}
+              toggleTab={toggleTab}
+              permissions={store.permissions}
+            />
+          </Col>
+        </Row>
+      </div>
+    </Fragment>
+  ) : null
 }
 
 export default UserView

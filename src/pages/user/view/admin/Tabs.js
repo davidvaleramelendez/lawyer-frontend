@@ -1,5 +1,5 @@
 // ** React Imports
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 
 // ** Reactstrap Imports
 import {
@@ -12,88 +12,30 @@ import {
 
 // ** Icons Imports
 import {
+    Mail,
     Unlock,
     Monitor,
-    FileText,
-    Briefcase
+    Calendar,
+    Briefcase,
+    CheckSquare,
+    MessageCircle
 } from 'react-feather'
 
-// ** Utils
-import {
-    getCurrentUser
-} from '@utils'
-
 /* User tab view components */
-import BillingsTab from './BillingsTab'
 import DocumentsTab from './DocumentsTab'
 import PermissionsTab from './PermissionsTab'
 import RecentDevicesTab from './RecentDevicesTab'
+import EmailTab from './emailTab'
 
 // ** Translation
 import { T } from '@localization'
 
 const UserTabs = ({
     id,
-    type,
     active,
-    userItem,
     toggleTab,
-    permissions,
-    authUserItem
+    permissions
 }) => {
-    // ** State
-    const [userData] = useState(getCurrentUser)
-
-    /* Check user permission access */
-    const onCheckPermissionAccess = (roleId = 10) => {
-        const customerRoleId = 11
-        const lawyerRoleId = 14
-        const partnerRoleId = 12
-        /* Logged in user */
-        if (authUserItem && authUserItem.role_id === roleId) {
-            /* Selected user */
-            if ((userItem && userItem.role_id === customerRoleId)) {
-                if (active === "4") {
-                    toggleTab("1")
-                }
-                return false
-            } else if ((
-                (userItem && userItem.role_id !== roleId) &&
-                (userItem && userItem.role_id !== lawyerRoleId) &&
-                (userItem && userItem.role_id !== partnerRoleId)
-            ) && type) {
-                if (active === "4") {
-                    toggleTab("1")
-                }
-                return false
-            }
-            /* /Selected user */
-            return true
-        } else if (userData && userData.role_id === roleId) {
-            /* Selected user */
-            if ((userItem && userItem.role_id === customerRoleId)) {
-                if (active === "4") {
-                    toggleTab("1")
-                }
-                return false
-            } else if ((
-                (userItem && userItem.role_id !== roleId) &&
-                (userItem && userItem.role_id !== lawyerRoleId) &&
-                (userItem && userItem.role_id !== partnerRoleId)
-            ) && type) {
-                if (active === "4") {
-                    toggleTab("1")
-                }
-                return false
-            }
-            /* /Selected user */
-            return true
-        }
-        /* /Logged in user */
-        return false
-    }
-    /* /Check user permission access */
-
     return (
         <Fragment>
             <Nav pills className="mb-2">
@@ -106,26 +48,45 @@ const UserTabs = ({
 
                 <NavItem>
                     <NavLink active={active === "2"} onClick={() => toggleTab("2")}>
-                        <FileText size={18} />
-                        <span className="fw-bold d-none d-sm-block ms-50">{T("Bills")}</span>
-                    </NavLink>
-                </NavItem>
-
-                <NavItem>
-                    <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
                         <Monitor size={18} />
                         <span className="fw-bold d-none d-sm-block ms-50">{T("Recent devices")}</span>
                     </NavLink>
                 </NavItem>
 
-                {onCheckPermissionAccess() ? (
-                    <NavItem>
-                        <NavLink active={active === "4"} onClick={() => toggleTab("4")}>
-                            <Unlock size={18} />
-                            <span className="fw-bold d-none d-sm-block ms-50">{T("Permissions")}</span>
-                        </NavLink>
-                    </NavItem>
-                ) : null}
+                <NavItem>
+                    <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
+                        <Unlock size={18} />
+                        <span className="fw-bold d-none d-sm-block ms-50">{T("Permissions")}</span>
+                    </NavLink>
+                </NavItem>
+
+                <NavItem>
+                    <NavLink active={active === "4"} onClick={() => toggleTab("4")}>
+                        <Mail size={18} />
+                        <span className="fw-bold d-none d-sm-block ms-50">{T("Email")}</span>
+                    </NavLink>
+                </NavItem>
+
+                <NavItem>
+                    <NavLink active={active === "5"} onClick={() => toggleTab("5")}>
+                        <MessageCircle size={18} />
+                        <span className="fw-bold d-none d-sm-block ms-50">{T("Chat")}</span>
+                    </NavLink>
+                </NavItem>
+
+                <NavItem>
+                    <NavLink active={active === "6"} onClick={() => toggleTab("6")}>
+                        <CheckSquare size={18} />
+                        <span className="fw-bold d-none d-sm-block ms-50">{T("Task")}</span>
+                    </NavLink>
+                </NavItem>
+
+                <NavItem>
+                    <NavLink active={active === "7"} onClick={() => toggleTab("7")}>
+                        <Calendar size={18} />
+                        <span className="fw-bold d-none d-sm-block ms-50">{T("Calendar")}</span>
+                    </NavLink>
+                </NavItem>
             </Nav>
 
             <TabContent activeTab={active}>
@@ -136,22 +97,40 @@ const UserTabs = ({
                 </TabPane>
 
                 <TabPane tabId="2">
-                    {/* Invoice listing */}
-                    <BillingsTab id={id} />
-                    {/* /Invoice listing */}
-                </TabPane>
-
-                <TabPane tabId="3">
                     {/* Device Log History listing */}
                     <RecentDevicesTab id={id} />
                     {/* /Device Log History listing */}
                 </TabPane>
 
-                <TabPane tabId="4">
+                <TabPane tabId="3">
+                    {/* User permissions */}
                     <PermissionsTab permissions={permissions} />
+                    {/* /User permissions */}
+                </TabPane>
+
+                <TabPane tabId="4">
+                    {/* Emails */}
+                    <div className="email-application user-detail-email">
+                        <div className="content-area-wrapper container-xxl p-0">
+                            <EmailTab
+                                userId={id}
+                            />
+                        </div>
+                    </div>
+                    {/* /Emails */}
+                </TabPane>
+
+                <TabPane tabId="5">
+                </TabPane>
+
+                <TabPane tabId="6">
+                </TabPane>
+
+                <TabPane tabId="7">
                 </TabPane>
             </TabContent>
         </Fragment>
     )
 }
+
 export default UserTabs

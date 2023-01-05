@@ -3,7 +3,11 @@
 // ** Redux Imports
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-// Constant
+// ** Constant
+import {
+  TN_USER,
+  TN_RECENT_DEVICE_LOGS
+} from '@constant/defaultValues'
 import {
   userItem,
   imapItem,
@@ -25,7 +29,6 @@ import {
 // ** Axios Imports
 import axios from 'axios'
 
-import { TN_USER } from '@constant/defaultValues'
 import { L10nKeys } from '../../../utility/Localization'
 
 /* User */
@@ -530,6 +533,9 @@ export const getUserDeviceLogs = createAsyncThunk('appUser/getUserDeviceLogs', a
   try {
     const response = await getUserDeviceLogsRequest(params)
     if (response && response.flag) {
+      if (response.pagination) {
+        setTotalNumber(TN_RECENT_DEVICE_LOGS, response.pagination.totalRecord || 0)
+      }
       return {
         logParams: params,
         userDeviceLogs: response.data,

@@ -11,7 +11,9 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // ** Utils
 import {
-    getTransformDate
+    getTotalNumber,
+    getTransformDate,
+    getCurrentPageNumber
 } from '@utils'
 
 // ** Reactstrap Imports
@@ -25,12 +27,14 @@ import {
 } from 'reactstrap'
 
 // ** Custom Components
+import DotPulse from "@components/dotpulse"
 import DatatablePagination from "@components/datatable/DatatablePagination"
 
-// Constant
+// ** Constant
 import {
     perPageRowItems,
-    defaultPerPageRow
+    defaultPerPageRow,
+    TN_RECENT_DEVICE_LOGS
 } from '@constant/defaultValues'
 
 // ** Translation
@@ -69,7 +73,6 @@ const CustomLogHeader = ({
 const RecentDevices = ({
     id
 }) => {
-
     // ** Store vars
     const dispatch = useDispatch()
     const store = useSelector((state) => state.user)
@@ -145,15 +148,29 @@ const RecentDevices = ({
             name: T('Ip Address'),
             sortable: true,
             sortField: 'ip_address',
-            minWidth: '140px',
-            cell: (row) => row.ip_address
+            minWidth: '50%',
+            cell: (row) => row.ip_address,
+            /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '120px'
+            },
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         },
         {
             name: T('Login Date'),
             sortable: true,
             sortField: 'login_at',
-            minWidth: '140px',
-            cell: (row) => row.login_at && getTransformDate(row.login_at, "DD MMM YYYY")
+            minWidth: '50%',
+            cell: (row) => row.login_at && getTransformDate(row.login_at, "DD MMM YYYY"),
+            /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
+            },
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         }
     ]
     /* /Device Log history columns */
@@ -166,21 +183,28 @@ const RecentDevices = ({
                     <CardTitle tag="h4">{T("Recent devices")}</CardTitle>
                 </CardHeader>
 
-                <DatatablePagination
-                    customClass=""
-                    columns={logColumns}
-                    loading={store && store.loading}
-                    data={store && store.userDeviceLogs}
-                    pagination={store && store.deviceLogPagination}
-                    handleSort={handleLogSort}
-                    handlePagination={handledeviceLogPagination}
-                    subHeaderComponent={
-                        <CustomLogHeader
-                            rowsPerPage={logRowsPerPage}
-                            handlePerPage={handleLogPerPage}
-                        />
-                    }
-                />
+                {(!store.loading && !getTotalNumber(TN_RECENT_DEVICE_LOGS)) ? (
+                    <DotPulse />
+                ) : (
+                    <DatatablePagination
+                        customClass=""
+                        columns={logColumns}
+                        loading={store && store.loading}
+                        data={store && store.userDeviceLogs}
+                        pagination={store.loading ? store.deviceLogPagination : {
+                            ...store.deviceLogPagination,
+                            perPage: getCurrentPageNumber(TN_RECENT_DEVICE_LOGS, logRowsPerPage, logCurrentPage)
+                        }}
+                        handleSort={handleLogSort}
+                        handlePagination={handledeviceLogPagination}
+                        subHeaderComponent={
+                            <CustomLogHeader
+                                rowsPerPage={logRowsPerPage}
+                                handlePerPage={handleLogPerPage}
+                            />
+                        }
+                    />
+                )}
             </Card>
             {/* /Device Log History listing */}
         </Fragment>

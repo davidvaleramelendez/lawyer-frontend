@@ -78,4 +78,5 @@ const UserTabs = ({
         </Fragment>
     )
 }
+
 export default UserTabs

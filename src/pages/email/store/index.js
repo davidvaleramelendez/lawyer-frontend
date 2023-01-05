@@ -425,13 +425,13 @@ export const deleteMultipleEmailAttachment = createAsyncThunk('appEmail/deleteMu
 /* /Mail attachment */
 
 /* Draft */
-async function getDraftListRequest() {
-  return axios.get(`${API_ENDPOINTS.emails.draft}`).then((res) => res.data).catch((error) => error)
+async function getDraftListRequest(params) {
+  return axios.get(`${API_ENDPOINTS.emails.draft}`, { params }).then((res) => res.data).catch((error) => error)
 }
 
-export const getDraftList = createAsyncThunk('appEmail/getDraftList', async () => {
+export const getDraftList = createAsyncThunk('appEmail/getDraftList', async (params) => {
   try {
-    const response = await getDraftListRequest()
+    const response = await getDraftListRequest(params)
     if (response && response.flag) {
       return {
         draftList: response.data,

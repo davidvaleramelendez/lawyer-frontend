@@ -30,7 +30,8 @@ import {
 
 // ** Utils
 import {
-  isUserLoggedIn
+  isUserLoggedIn,
+  getCurrentUser
 } from '@utils'
 
 // ** Third Party Components
@@ -170,6 +171,8 @@ const UserView = () => {
             active={active}
             toggleTab={toggleTab}
             permissions={store.permissions}
+            authUserItem={store.authUserItem}
+            getCurrentUser={getCurrentUser}
           />
         </Col>
       </Row>

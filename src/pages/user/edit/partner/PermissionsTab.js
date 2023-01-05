@@ -72,15 +72,6 @@ const PermissionsTab = ({
     }
     /* /Check and set permission */
 
-    /* Check and disabled permission change */
-    const checkDisablePermission = (roleId) => {
-        if (store && store.userItem && store.userItem.role_id === roleId) {
-            return true
-        }
-        return false
-    }
-    /* /Check and disabled permission change */
-
     /* Permission submit event */
     const onPermissionSubmit = () => {
         const userData = {
@@ -114,11 +105,10 @@ const PermissionsTab = ({
                                 <div className='d-flex form-check justify-content-center'>
                                     <Input
                                         type='checkbox'
-                                        id="staff-read"
+                                        id="all-users-list"
                                         value={2}
                                         className="opacity-100"
                                         checked={getPermissionChecked(2)}
-                                        disabled={checkDisablePermission(10)}
                                         onChange={(event) => onPermissionCheckboxChange(event.target.checked, 2)}
                                     />
                                 </div>
@@ -131,11 +121,10 @@ const PermissionsTab = ({
                                 <div className='d-flex form-check justify-content-center'>
                                     <Input
                                         type='checkbox'
-                                        id="staff-read"
-                                        value={2}
+                                        id="add-user"
+                                        value={7}
                                         className="opacity-100"
                                         checked={getPermissionChecked(7)}
-                                        disabled={checkDisablePermission(10)}
                                         onChange={(event) => onPermissionCheckboxChange(event.target.checked, 7)}
                                     />
                                 </div>
@@ -148,11 +137,10 @@ const PermissionsTab = ({
                                 <div className='d-flex form-check justify-content-center'>
                                     <Input
                                         type='checkbox'
-                                        id="admin-read"
+                                        id="delete-user"
                                         value={1}
                                         className="opacity-100"
                                         checked={getPermissionChecked(1)}
-                                        disabled={checkDisablePermission(10)}
                                         onChange={(event) => onPermissionCheckboxChange(event.target.checked, 1)}
                                     />
                                 </div>
@@ -165,11 +153,10 @@ const PermissionsTab = ({
                                 <div className='d-flex form-check justify-content-center'>
                                     <Input
                                         type='checkbox'
-                                        id="author-read"
+                                        id="see-all-contacts"
                                         value={3}
                                         className="opacity-100"
                                         checked={getPermissionChecked(3)}
-                                        disabled={checkDisablePermission(10)}
                                         onChange={(event) => onPermissionCheckboxChange(event.target.checked, 3)}
                                     />
                                 </div>
@@ -182,11 +169,10 @@ const PermissionsTab = ({
                                 <div className='d-flex form-check justify-content-center'>
                                     <Input
                                         type='checkbox'
-                                        id="contributor-read"
+                                        id="see-all-cases"
                                         value={4}
                                         className="opacity-100"
                                         checked={getPermissionChecked(4)}
-                                        disabled={checkDisablePermission(10)}
                                         onChange={(event) => onPermissionCheckboxChange(event.target.checked, 4)}
                                     />
                                 </div>
@@ -199,11 +185,10 @@ const PermissionsTab = ({
                                 <div className='d-flex form-check justify-content-center'>
                                     <Input
                                         type='checkbox'
-                                        id="user-read"
+                                        id="update-case"
                                         value={5}
                                         className="opacity-100"
                                         checked={getPermissionChecked(5)}
-                                        disabled={checkDisablePermission(10)}
                                         onChange={(event) => onPermissionCheckboxChange(event.target.checked, 5)}
                                     />
                                 </div>
@@ -216,12 +201,171 @@ const PermissionsTab = ({
                                 <div className='d-flex form-check justify-content-center'>
                                     <Input
                                         type='checkbox'
-                                        id="user-letters"
+                                        id="see-all-letters"
                                         value={6}
                                         className="opacity-100"
                                         checked={getPermissionChecked(6)}
-                                        disabled={checkDisablePermission(10)}
                                         onChange={(event) => onPermissionCheckboxChange(event.target.checked, 6)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className='text-start'>{T('See All Emails')}</td>
+                            <td>
+                                <div className='d-flex form-check justify-content-center'>
+                                    <Input
+                                        type='checkbox'
+                                        id="see-all-emails"
+                                        value={8}
+                                        className="opacity-100"
+                                        checked={getPermissionChecked(8)}
+                                        onChange={(event) => onPermissionCheckboxChange(event.target.checked, 8)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className='text-start'>{T('Compose Email')}</td>
+                            <td>
+                                <div className='d-flex form-check justify-content-center'>
+                                    <Input
+                                        type='checkbox'
+                                        id="compose-emails"
+                                        value={9}
+                                        className="opacity-100"
+                                        checked={getPermissionChecked(9)}
+                                        onChange={(event) => onPermissionCheckboxChange(event.target.checked, 9)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className='text-start'>{T('See All Chats')}</td>
+                            <td>
+                                <div className='d-flex form-check justify-content-center'>
+                                    <Input
+                                        type='checkbox'
+                                        id="see-all-chats"
+                                        value={10}
+                                        className="opacity-100"
+                                        checked={getPermissionChecked(10)}
+                                        onChange={(event) => onPermissionCheckboxChange(event.target.checked, 10)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className='text-start'>{T('Chat with User')}</td>
+                            <td>
+                                <div className='d-flex form-check justify-content-center'>
+                                    <Input
+                                        type='checkbox'
+                                        id="chat-with-user"
+                                        value={11}
+                                        className="opacity-100"
+                                        checked={getPermissionChecked(11)}
+                                        onChange={(event) => onPermissionCheckboxChange(event.target.checked, 11)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className='text-start'>{T('See All Tasks')}</td>
+                            <td>
+                                <div className='d-flex form-check justify-content-center'>
+                                    <Input
+                                        type='checkbox'
+                                        id="see-all-tasks"
+                                        value={12}
+                                        className="opacity-100"
+                                        checked={getPermissionChecked(12)}
+                                        onChange={(event) => onPermissionCheckboxChange(event.target.checked, 12)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className='text-start'>{T('Add Task')}</td>
+                            <td>
+                                <div className='d-flex form-check justify-content-center'>
+                                    <Input
+                                        type='checkbox'
+                                        id="add-task"
+                                        value={13}
+                                        className="opacity-100"
+                                        checked={getPermissionChecked(13)}
+                                        onChange={(event) => onPermissionCheckboxChange(event.target.checked, 13)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className='text-start'>{T('See All Appointments')}</td>
+                            <td>
+                                <div className='d-flex form-check justify-content-center'>
+                                    <Input
+                                        type='checkbox'
+                                        id="see-all-appointments"
+                                        value={14}
+                                        className="opacity-100"
+                                        checked={getPermissionChecked(14)}
+                                        onChange={(event) => onPermissionCheckboxChange(event.target.checked, 14)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className='text-start'>{T('Create Appointment')}</td>
+                            <td>
+                                <div className='d-flex form-check justify-content-center'>
+                                    <Input
+                                        type='checkbox'
+                                        id="create-appointment"
+                                        value={15}
+                                        className="opacity-100"
+                                        checked={getPermissionChecked(15)}
+                                        onChange={(event) => onPermissionCheckboxChange(event.target.checked, 15)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className='text-start'>{T('See All Cloud Server')}</td>
+                            <td>
+                                <div className='d-flex form-check justify-content-center'>
+                                    <Input
+                                        type='checkbox'
+                                        id="see-all-cloud-server"
+                                        value={16}
+                                        className="opacity-100"
+                                        checked={getPermissionChecked(16)}
+                                        onChange={(event) => onPermissionCheckboxChange(event.target.checked, 16)}
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className='text-start'>{T('Add Data Cloud')}</td>
+                            <td>
+                                <div className='d-flex form-check justify-content-center'>
+                                    <Input
+                                        type='checkbox'
+                                        id="add-data-cloud-server"
+                                        value={17}
+                                        className="opacity-100"
+                                        checked={getPermissionChecked(17)}
+                                        onChange={(event) => onPermissionCheckboxChange(event.target.checked, 17)}
                                     />
                                 </div>
                             </td>
@@ -230,18 +374,14 @@ const PermissionsTab = ({
                 </Table>
 
                 <div className="d-flex flex-wrap p-2">
-                    {checkDisablePermission(10) ? (
-                        <div style={{ height: '38px' }} />
-                    ) : (
-                        <Button
-                            type='button'
-                            color='primary'
-                            disabled={!store.loading}
-                            onClick={() => onPermissionSubmit()}
-                        >
-                            {T("Update")}
-                        </Button>
-                    )}
+                    <Button
+                        type='button'
+                        color='primary'
+                        disabled={!store.loading}
+                        onClick={() => onPermissionSubmit()}
+                    >
+                        {T("Update")}
+                    </Button>
                 </div>
             </Card>
         </Fragment>

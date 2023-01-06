@@ -49,7 +49,7 @@ import { T } from '@localization'
 
 const ChatLog = (props) => {
   // ** Props & Store
-  const { store, handleUser, handleUserSidebarRight, handleSidebar, userSidebarLeft } = props
+  const { store, userId, handleUser, handleSidebar, userSidebarLeft, handleUserSidebarRight, onCheckUserPermission } = props
   const { userProfile, selectedUser, chats, chatCount, totalChatCount, success, error, actionFlag } = store
 
   // ** Refs & Dispatch
@@ -172,13 +172,13 @@ const ChatLog = (props) => {
   const handleSendMsg = (event) => {
     event.preventDefault()
     if (message.trim().length) {
-      dispatch(sendMessage({ receiver_id: selectedUser.id, message: message }))
+      dispatch(sendMessage({ receiver_id: selectedUser.id, user_id: userId, message: message }))
     }
   }
 
   const handleLoadMore = (event) => {
     event.preventDefault()
-    dispatch(getChatHistory({ id: selectedUser.id, payload: { chatCount: chatCount } }))
+    dispatch(getChatHistory({ id: selectedUser.id, payload: { user_id: userId, chatCount: chatCount } }))
   }
 
   // ** ChatWrapper tag based on chat's length
@@ -252,19 +252,21 @@ const ChatLog = (props) => {
             {chats && chats.length ? <div className='chats'>{renderChats()}</div> : null}
           </ChatWrapper>
 
-          <Form className='chat-app-form' onSubmit={(event) => handleSendMsg(event)}>
-            <InputGroup className='input-group-merge me-1 form-send-message'>
-              <Input
-                value={message}
-                onChange={(event) => setMessage(event.target.value)}
-                placeholder='Type your message or use speech to text'
-              />
-            </InputGroup>
-            <Button className='send' color='primary'>
-              <Send size={14} className='d-lg-none' />
-              <span className='d-none d-lg-block'>{T('Send')}</span>
-            </Button>
-          </Form>
+          {onCheckUserPermission(11) ? (
+            <Form className='chat-app-form' onSubmit={(event) => handleSendMsg(event)}>
+              <InputGroup className='input-group-merge me-1 form-send-message'>
+                <Input
+                  value={message}
+                  onChange={(event) => setMessage(event.target.value)}
+                  placeholder='Type your message or use speech to text'
+                />
+              </InputGroup>
+              <Button className='send' color='primary'>
+                <Send size={14} className='d-lg-none' />
+                <span className='d-none d-lg-block'>{T('Send')}</span>
+              </Button>
+            </Form>
+          ) : null}
         </div>
       ) : null}
     </div>

@@ -10,7 +10,7 @@ import {
   addUser,
   updateUserLoader,
   clearUserMessage
-} from '../store'
+} from '@src/pages/user/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Reactstrap Imports

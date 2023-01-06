@@ -3,8 +3,7 @@
 // ** Redux Imports
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-// ** Constant
-import { TN_CHAT, TN_CHAT_CONTACT } from '@constant/defaultValues'
+// Constant
 import {
   chatItem
 } from '@constant/reduxConstant'
@@ -14,17 +13,20 @@ import {
   API_ENDPOINTS
 } from '@src/utility/ApiEndPoints'
 
-import {
-  setTotalNumber
-} from '@utils'
-
 // ** Axios Imports
 import axios from 'axios'
 
+import { setTotalNumber } from '@utils'
+import { TN_CHAT, TN_CHAT_CONTACT } from '@constant/defaultValues'
 
 async function getChatContactsRequest(params) {
   return axios.get(`${API_ENDPOINTS.chats.list}`, { params })
-    .then((chat) => chat.data)
+    .then((chat) => {
+      const { chats, users } = chat.data.data
+      setTotalNumber(TN_CHAT_CONTACT, users.length)
+      setTotalNumber(TN_CHAT, Object.keys(chats).length)
+      return chat.data
+    })
     .catch((error) => error)
 }
 
@@ -32,15 +34,6 @@ export const getChatContacts = createAsyncThunk('appContact/getChatContacts', as
   try {
     const response = await getChatContactsRequest(params)
     if (response && response.flag) {
-      if (response.data) {
-        if (response.data.users && response.data.users.length) {
-          setTotalNumber(TN_CHAT_CONTACT, response.data.users.length)
-        }
-
-        if (response.data.chats && Object.keys(response.data.chats).length) {
-          setTotalNumber(TN_CHAT, Object.keys(response.data.chats).length)
-        }
-      }
       return {
         params,
         userProfile: response.data.userData,
@@ -53,7 +46,7 @@ export const getChatContacts = createAsyncThunk('appContact/getChatContacts', as
     } else {
       return {
         params,
-        userProfile: response.data && response.data.userData ? response.data.userData : {},
+        userProfile: {},
         contacts: [],
         chatItems: [],
         actionFlag: "",

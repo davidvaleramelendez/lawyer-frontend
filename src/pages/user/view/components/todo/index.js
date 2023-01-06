@@ -54,7 +54,10 @@ import '@styles/react/apps/app-todo.scss'
 // ** Translation
 import { T } from '@localization'
 
-const TodoApp = () => {
+const TodoApp = ({
+  userId,
+  onCheckUserPermission
+}) => {
   // ** Hooks
   const navigate = useNavigate()
   const MySwal = withReactContent(Swal)
@@ -73,20 +76,23 @@ const TodoApp = () => {
   const [mainSidebar, setMainSidebar] = useState(false)
   const [openTaskSidebar, setOpenTaskSidebar] = useState(false)
   const [userOptions, setuserOptions] = useState([])
+  const [folder, setFolder] = useState('')
+  const [tagFolder, setTagFolder] = useState('')
 
   // ** URL Params
   const paramsURL = useParams()
   const params = {
-    filter: paramsURL.filter || '',
+    filter: folder || '',
     search: searchInput || '',
     sortBy: sort || '',
-    tag: paramsURL.tag || ''
+    tag: tagFolder || '',
+    user_id: userId || ""
   }
 
   // ** Function to handle Left sidebar & Task sidebar
   const handleMainSidebar = () => setMainSidebar(!mainSidebar)
 
-  const handleTodoLists = (filter = paramsURL.filter, search = searchInput, date = dateInput, sortBy = sort, tag = paramsURL.tag, perPage = rowsPerPage) => {
+  const handleTodoLists = (filter = folder, search = searchInput, date = dateInput, sortBy = sort, tag = tagFolder, perPage = rowsPerPage) => {
     dispatch(
       getTodoList({
         filter: filter || '',
@@ -94,7 +100,8 @@ const TodoApp = () => {
         date: date || '',
         sortBy: sortBy || '',
         tag: tag || '',
-        perPage: perPage || 10
+        perPage: perPage || 10,
+        user_id: userId || ""
       })
     )
   }
@@ -108,13 +115,13 @@ const TodoApp = () => {
 
     if (loadFirst) {
       handleTodoLists(
-        paramsURL.filter || '',
+        folder || '',
         searchInput || '',
         dateInput || '',
         sort || '',
-        paramsURL.tag || ''
+        tagFolder || ''
       )
-      dispatch(getUserList({}))
+      dispatch(getUserList({ user_id: userId || "" }))
       setLoadFirst(false)
     }
 
@@ -157,13 +164,18 @@ const TodoApp = () => {
       <Sidebar
         store={store}
         params={params}
+        folder={folder}
         dispatch={dispatch}
+        setFolder={setFolder}
+        tagFolder={tagFolder}
         getTodoList={getTodoList}
         mainSidebar={mainSidebar}
+        setTagFolder={setTagFolder}
         setMainSidebar={setMainSidebar}
         resetTaskItems={resetTaskItems}
         updateTaskLoader={updateTaskLoader}
         setOpenTaskSidebar={setOpenTaskSidebar}
+        onCheckUserPermission={onCheckUserPermission}
       />
       <div className='content-right'>
         <div className='content-wrapper'>
@@ -180,9 +192,11 @@ const TodoApp = () => {
                 sort={sort}
                 store={store}
                 params={params}
+                folder={folder}
                 MySwal={MySwal}
                 setSort={setSort}
                 dispatch={dispatch}
+                tagFolder={tagFolder}
                 dateInput={dateInput}
                 paramsURL={paramsURL}
                 rowsPerPage={rowsPerPage}
@@ -206,6 +220,8 @@ const TodoApp = () => {
             <TaskSidebar
               store={store}
               params={params}
+              userId={userId}
+              folder={folder}
               MySwal={MySwal}
               dispatch={dispatch}
               paramsURL={paramsURL}
@@ -217,6 +233,7 @@ const TodoApp = () => {
               completeTodoItem={completeTodoItem}
               updateTaskLoader={updateTaskLoader}
               importantTodoItem={importantTodoItem}
+              onCheckUserPermission={onCheckUserPermission}
               handleTaskSidebar={() => setOpenTaskSidebar(!openTaskSidebar)}
             />
           </div>

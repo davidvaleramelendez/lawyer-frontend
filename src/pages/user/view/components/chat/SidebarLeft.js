@@ -54,6 +54,7 @@ const SidebarLeft = (props) => {
   // ** Props & Store
   const {
     store,
+    userId,
     sidebar,
     handleSidebar,
     userSidebarLeft,
@@ -78,7 +79,7 @@ const SidebarLeft = (props) => {
 
   // ** Handles User Chat Click
   const handleUserClick = (id, from = '') => {
-    dispatch(getContactChat({ id: id, chatCount: 0 }))
+    dispatch(getContactChat({ id: id, user_id: userId, chatCount: 0 }))
     setActive(`${from}_${id}`)
     if (sidebar === true) {
       handleSidebar()
@@ -228,7 +229,7 @@ const SidebarLeft = (props) => {
   // ** Handles Filter
   const handleSearch = (value) => {
     setSearchInput(value)
-    dispatch(getChatContacts({ search: value }))
+    dispatch(getChatContacts({ user_id: userId, search: value }))
   }
 
   return store ? (

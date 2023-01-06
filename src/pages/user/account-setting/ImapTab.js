@@ -4,7 +4,7 @@ import { Fragment, useEffect } from 'react'
 // ** Store & Actions
 import {
     saveAccountImap
-} from '../store'
+} from '@src/pages/user/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Reactstrap Imports

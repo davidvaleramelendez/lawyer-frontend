@@ -4,18 +4,11 @@
 import { useState } from 'react'
 import {
   Col,
-  Nav,
   Row,
-  Card,
   Form,
   Label,
   Input,
-  Button,
-  NavLink,
-  TabPane,
-  NavItem,
-  CardBody,
-  TabContent
+  Button
 } from 'reactstrap'
 
 // ** localization keys
@@ -50,7 +43,7 @@ const LabelsForm = (props) => {
 
   const onChangeValue = (origin, value) => {
     onChangeTranslation(origin, value)
-    const errs = {...errors}
+    const errs = { ...errors }
     if (value === '') {
       errs[category + origin] = true
     } else {
@@ -71,12 +64,12 @@ const LabelsForm = (props) => {
       }
       return translation[origin]
     }
-    
+
     return ''
   }
 
   return (translation || translation === undefined) ? (
-    <div style={{margin: '20px'}}>
+    <div style={{ margin: '20px' }}>
       <Form id={formId} onSubmit={onSubmit} autoComplete="off" className="pl-2 pr-2">
         <Row>
           {originKeys.map((key) => {
@@ -89,10 +82,10 @@ const LabelsForm = (props) => {
                 </Col>
 
                 <Col xl={6} md={6} sm={6} className="mb-1">
-                  <Input id={key} name={origin[key]} 
-                      value={getValue(L10nKeys[key])} 
-                      onChange={event => onChangeValue(L10nKeys[key], event.target.value)}
-                      invalid={errors[category + key] && true}/>
+                  <Input id={key} name={origin[key]}
+                    value={getValue(L10nKeys[key])}
+                    onChange={event => onChangeValue(L10nKeys[key], event.target.value)}
+                    invalid={errors[category + key] && true} />
                   <div className="invalid-feedback">{errors[key] ? T('Translation is required!') : ''}</div>
                 </Col>
               </Row>

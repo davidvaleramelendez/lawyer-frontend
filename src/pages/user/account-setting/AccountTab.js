@@ -4,7 +4,7 @@ import { Fragment, useState, useEffect } from 'react'
 // ** Store & Actions
 import {
     saveAccount
-} from '../store'
+} from '@src/pages/user/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Reactstrap Imports

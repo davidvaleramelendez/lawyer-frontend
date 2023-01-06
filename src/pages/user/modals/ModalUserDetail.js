@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 // ** Store & Actions
-import { clearUserMessage } from '../store'
+import { clearUserMessage } from '@src/pages/user/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Reactstrap Imports

@@ -33,7 +33,10 @@ import {
 import '@styles/base/pages/app-chat.scss'
 import '@styles/base/pages/app-chat-list.scss'
 
-const ChatApp = () => {
+const ChatApp = ({
+  userId,
+  onCheckUserPermission
+}) => {
   // ** Store Vars
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -69,18 +72,19 @@ const ChatApp = () => {
     }
 
     if (loadFirst) {
-      dispatch(getChatContacts({}))
+      dispatch(getChatContacts({ user_id: userId || "" }))
       dispatch(setDefaultVariables({}))
       handleUser({})
       setLoadFirst(false)
     }
-  }, [dispatch, loadFirst])
+  }, [loadFirst])
   // console.log("store >>> ", store)
 
   return (
     <Fragment>
       <Sidebar
         store={store}
+        userId={userId}
         sidebar={sidebar}
         handleSidebar={handleSidebar}
         userSidebarLeft={userSidebarLeft}
@@ -99,9 +103,11 @@ const ChatApp = () => {
             ></div>
             <Chat
               store={store}
+              userId={userId}
               handleUser={handleUser}
               handleSidebar={handleSidebar}
               userSidebarLeft={userSidebarLeft}
+              onCheckUserPermission={onCheckUserPermission}
               handleUserSidebarRight={handleUserSidebarRight}
             />
 

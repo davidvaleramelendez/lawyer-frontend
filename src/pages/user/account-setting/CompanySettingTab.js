@@ -4,7 +4,7 @@ import { Fragment, useEffect } from 'react'
 // ** Store & Actions
 import {
     createUpdateCompany
-} from '../store'
+} from '@src/pages/user/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Translation

@@ -66,7 +66,8 @@ const ModalHeader = (props) => {
     important,
     setImportant,
     handleTaskSidebar,
-    importantTodoItem
+    importantTodoItem,
+    onCheckUserPermission
   } = props
 
   const handleImportant = () => {
@@ -80,15 +81,17 @@ const ModalHeader = (props) => {
     <div className='modal-header d-flex align-items-center justify-content-between mb-1'>
       <h5 className='modal-title'>{children}</h5>
       <div className='todo-item-action d-flex align-items-center'>
-        <span className='todo-item-favorite cursor-pointer mx-75'>
-          <Star
-            size={16}
-            onClick={() => handleImportant()}
-            className={classnames({
-              'text-warning': important === true
-            })}
-          />
-        </span>
+        {onCheckUserPermission(13) ? (
+          <span className='todo-item-favorite cursor-pointer mx-75'>
+            <Star
+              size={16}
+              onClick={() => handleImportant()}
+              className={classnames({
+                'text-warning': important === true
+              })}
+            />
+          </span>
+        ) : null}
         <X className='fw-normal mt-25 cursor-pointer' size={16} onClick={handleTaskSidebar} />
       </div>
     </div>
@@ -101,8 +104,9 @@ const TaskSidebar = (props) => {
     open,
     store,
     MySwal,
+    folder,
+    userId,
     dispatch,
-    paramsURL,
     userOptions,
     getTaskItem,
     trashTodoItem,
@@ -110,7 +114,8 @@ const TaskSidebar = (props) => {
     updateTaskLoader,
     completeTodoItem,
     importantTodoItem,
-    handleTaskSidebar
+    handleTaskSidebar,
+    onCheckUserPermission
   } = props
 
   // ** State Constant
@@ -263,7 +268,7 @@ const TaskSidebar = (props) => {
             {T('Update')}
           </Button>
 
-          {paramsURL && paramsURL.filter !== 'deleted' ? (
+          {folder !== 'deleted' ? (
             <Button
               color="danger"
               className="ms-1"
@@ -308,7 +313,8 @@ const TaskSidebar = (props) => {
     if (values) {
       const taskData = {
         id: values.id,
-        title: values.title
+        title: values.title,
+        user_id: userId || ""
       }
 
       if (important) {
@@ -365,8 +371,11 @@ const TaskSidebar = (props) => {
           setImportant={setImportant}
           importantTodoItem={importantTodoItem}
           handleTaskSidebar={handleTaskSidebar}
+          onCheckUserPermission={onCheckUserPermission}
         >
-          {handleSidebarTitle()}
+          {onCheckUserPermission(13) ? (
+            handleSidebarTitle()
+          ) : null}
         </ModalHeader>
 
         <ModalBody className='flex-grow-1 pb-sm-0 pb-3'>
@@ -503,7 +512,10 @@ const TaskSidebar = (props) => {
             />
             {errors.description && <FormFeedback>{errors.description?.message}</FormFeedback>}
           </div>
-          <div>{renderFooterButtons()}</div>
+
+          {onCheckUserPermission(13) ? (
+            <div>{renderFooterButtons()}</div>
+          ) : null}
         </ModalBody>
       </Form>
     </Modal>

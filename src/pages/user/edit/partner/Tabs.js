@@ -13,8 +13,7 @@ import {
 // ** Icons Import
 import {
     User,
-    Lock,
-    Unlock
+    Lock
 } from 'react-feather'
 
 // ** Utils
@@ -27,7 +26,6 @@ import {
 /* User tab view components */
 import AccountTab from './AccountTab'
 import SecurityTab from './SecurityTab'
-import PermissionsTab from './PermissionsTab'
 
 // ** Translation
 import { T } from '@localization'
@@ -74,13 +72,6 @@ const UserTabs = ({
                         <span className="fw-bold d-none d-sm-block">{T("Security")}</span>
                     </NavLink>
                 </NavItem>
-
-                <NavItem>
-                    <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
-                        <Unlock className="font-medium-3 me-50" />
-                        <span className="fw-bold d-none d-sm-block">{T("Permissions")}</span>
-                    </NavLink>
-                </NavItem>
             </Nav>
 
             <TabContent activeTab={active}>
@@ -99,10 +90,6 @@ const UserTabs = ({
                         encryptData={encryptData}
                         PlaceholderSchema={PlaceholderSchema}
                     />
-                </TabPane>
-
-                <TabPane tabId="3">
-                    <PermissionsTab id={id} />
                 </TabPane>
             </TabContent>
         </Fragment>

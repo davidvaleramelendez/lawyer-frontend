@@ -8,14 +8,9 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // ** Reactstrap Imports
 import {
-  Col,
   Nav,
-  Row,
   Card,
-  Form,
-  Label,
   Input,
-  Button,
   NavLink,
   TabPane,
   NavItem,
@@ -37,11 +32,11 @@ import {
   Calendar,
   HardDrive,
   Briefcase,
+  Codesandbox,
   CheckCircle,
   CheckSquare,
   MessageCircle,
-  MessageSquare,
-  Codesandbox
+  MessageSquare
 } from 'react-feather'
 
 // ** Styles
@@ -64,7 +59,7 @@ import 'react-tabs/style/react-tabs.css'
 import LabelsForm from './LabelsForm'
 
 import menuConfig from '@configs/menuConfig'
-import { updateLanguageLabels } from '../../../auth/store'
+import { updateLanguageLabels } from '@src/pages/auth/store'
 
 const LanguageLabels = () => {
 

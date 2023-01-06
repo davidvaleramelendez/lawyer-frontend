@@ -42,7 +42,7 @@ export const todosMeta = { important: 0 }
 export const todoItem = { id: "", title: "", Assign: "", due_date: new Date(), tag: "", description: "", UserId: "", is_important: 0, is_completed: 0, is_deleted: 0 }
 
 // Add Events
-export const addEventItem = { id: "", google_id: "", title: "", business: "", start_date: "", end_date: "", allDay: false, event_url: "", guest: "", location: "", description: "", extendedProps: { calendar: "" }, user: [] }
+export const addEventItem = { id: "", google_id: "", title: "", business: "", start_date: "", end_date: "", allDay: false, event_url: "", user_id: "", guest: "", location: "", description: "", extendedProps: { calendar: "" }, user: [] }
 
 // Invoice
 export const invoiceItem = { id: "", invoice_no: "", customer_id: "", user_id: "", invoice_date: null, invoice_due_date: null, payment_details: "", note: "", CaseID: "", vat: "", total_price: "", remaining_amount: "", method: "", status: "", CaseTypeName: "", items: [{ id: "", invoice_id: "", item_detail: "", price: "", vat: "" }] }

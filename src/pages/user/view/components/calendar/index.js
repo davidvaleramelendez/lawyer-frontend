@@ -55,7 +55,10 @@ import '@styles/react/apps/app-calendar.scss'
 // ** Translation
 import { T } from '@localization'
 
-const CalendarApp = () => {
+const CalendarApp = ({
+  userId,
+  onCheckUserPermission
+}) => {
   // ** Hooks
   const [isRtl] = useRTL()
   const navigate = useNavigate()
@@ -94,8 +97,8 @@ const CalendarApp = () => {
     }
 
     if (loadFirst) {
-      dispatch(getEventList({ filter: JSON.stringify(store.selectedCalendars) }))
-      dispatch(getUserList({}))
+      dispatch(getEventList({ user_id: userId || "", filter: JSON.stringify(store.selectedCalendars) }))
+      dispatch(getUserList({ user_id: userId || "" }))
       setLoadFirst(false)
     }
 
@@ -150,6 +153,7 @@ const CalendarApp = () => {
               toggleSidebar={toggleSidebar}
               updateAllFilters={updateAllFilters}
               setAddEventModalOpen={setAddEventModalOpen}
+              onCheckUserPermission={onCheckUserPermission}
             />
           </Col>
 
@@ -171,6 +175,7 @@ const CalendarApp = () => {
                 calendarsColor={calendarFilterColor}
                 setLoadingCalendar={setLoadingCalendar}
                 setAddEventModalOpen={setAddEventModalOpen}
+                onCheckUserPermission={onCheckUserPermission}
                 increaseCustomDateFormat={increaseCustomDateFormat}
               />
             )
@@ -201,6 +206,7 @@ const CalendarApp = () => {
         getTransformDate={getTransformDate}
         calendarsColor={calendarFilterColor}
         selectThemeColors={selectThemeColors}
+        onCheckUserPermission={onCheckUserPermission}
         underscoreCapitalizeWord={underscoreCapitalizeWord}
         toggleAddEventModal={() => setAddEventModalOpen(!addEventModalOpen)}
       />

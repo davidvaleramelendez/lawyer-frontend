@@ -198,4 +198,44 @@ $email-dark-background-font-color: #ffffff;
 		}
 	}
 }
+
+.user-detail-chat {
+	.sidebar-left {
+		width: 35% !important;
+
+		.sidebar-content {
+			width: 100% !important;
+
+			.chat-fixed-search {
+				width: 100% !important;
+			}
+
+			.scrollbar-container {
+				&.chat-user-list-wrapper {
+					width: 100% !important;
+				}
+			}
+		}
+	}
+
+	.content-right {
+		width: 65% !important;
+	}
+}
+
+.user-detail-todo {
+	.sidebar-left {
+		width: 30% !important;
+
+		.sidebar-content {
+			&.todo-sidebar {
+				width: 100% !important;
+			}
+		}
+	}
+
+	.content-right {
+		width: 70% !important;
+	}
+}
 /* /User module */

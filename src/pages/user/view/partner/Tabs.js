@@ -14,6 +14,7 @@ import {
 import {
     Mail,
     Monitor,
+    HardDrive,
     Briefcase,
     CheckSquare,
     MessageCircle
@@ -25,6 +26,7 @@ import RecentDevicesTab from './RecentDevicesTab'
 import EmailComponent from '../components/email'
 import ChatComponent from '../components/chat'
 import TaskComponent from '../components/todo'
+import CloudStorageComponent from '../components/cloudStorage'
 
 // ** Translation
 import { T } from '@localization'
@@ -101,8 +103,17 @@ const UserTabs = ({
                     </NavItem>
                 ) : null}
 
+                {onCheckUserPermission(16) ? (
+                    <NavItem>
+                        <NavLink active={active === "5"} onClick={() => toggleTab("5")}>
+                            <HardDrive size={18} />
+                            <span className="fw-bold d-none d-sm-block ms-50">{T("Cloud Storage")}</span>
+                        </NavLink>
+                    </NavItem>
+                ) : null}
+
                 <NavItem>
-                    <NavLink active={active === "5"} onClick={() => toggleTab("5")}>
+                    <NavLink active={active === "6"} onClick={() => toggleTab("6")}>
                         <Monitor size={18} />
                         <span className="fw-bold d-none d-sm-block ms-50">{T("Recent devices")}</span>
                     </NavLink>
@@ -159,7 +170,22 @@ const UserTabs = ({
                     </TabPane>
                 ) : null}
 
-                <TabPane tabId="5">
+                {onCheckUserPermission(16) ? (
+                    <TabPane tabId="5">
+                        {/* User CloudStorage */}
+                        <div className="file-manager-application user-detail-file-manager">
+                            <div className="content-area-wrapper container-xxl p-0">
+                                <CloudStorageComponent
+                                    userId={id}
+                                    onCheckUserPermission={onCheckUserPermission}
+                                />
+                            </div>
+                        </div>
+                        {/* /User CloudStorage */}
+                    </TabPane>
+                ) : null}
+
+                <TabPane tabId="6">
                     {/* Device Log History listing */}
                     <RecentDevicesTab id={id} />
                     {/* /Device Log History listing */}

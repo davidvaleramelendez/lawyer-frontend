@@ -44,6 +44,7 @@ const ModalAddEvent = (props) => {
     open,
     store,
     MySwal,
+    userId,
     dispatch,
     calendarApi,
     createEvent,
@@ -196,7 +197,8 @@ const ModalAddEvent = (props) => {
         title: values.title,
         event_url: values.eventUrl,
         location: values.Location,
-        description: values.Description
+        description: values.Description,
+        user_id: userId || ""
       }
 
       if (values.businessLbl && values.businessLbl.value) {

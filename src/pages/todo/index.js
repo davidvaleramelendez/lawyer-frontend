@@ -68,7 +68,6 @@ const TodoApp = () => {
   const [loadFirst, setLoadFirst] = useState(true)
   const [sort, setSort] = useState('')
   const [searchInput, setSearchInput] = useState('')
-  const [rowsPerPage, setRowsPerPage] = useState(getTotalNumber(TN_TASK) ?? 0)
   const [dateInput, setDateInput] = useState('')
   const [mainSidebar, setMainSidebar] = useState(false)
   const [openTaskSidebar, setOpenTaskSidebar] = useState(false)
@@ -86,15 +85,14 @@ const TodoApp = () => {
   // ** Function to handle Left sidebar & Task sidebar
   const handleMainSidebar = () => setMainSidebar(!mainSidebar)
 
-  const handleTodoLists = (filter = paramsURL.filter, search = searchInput, date = dateInput, sortBy = sort, tag = paramsURL.tag, perPage = rowsPerPage) => {
+  const handleTodoLists = (filter = paramsURL.filter, search = searchInput, date = dateInput, sortBy = sort, tag = paramsURL.tag) => {
     dispatch(
       getTodoList({
         filter: filter || '',
         search: search || '',
         date: date || '',
         sortBy: sortBy || '',
-        tag: tag || '',
-        perPage: perPage || 10
+        tag: tag || ''
       })
     )
   }
@@ -185,12 +183,10 @@ const TodoApp = () => {
                 dispatch={dispatch}
                 dateInput={dateInput}
                 paramsURL={paramsURL}
-                rowsPerPage={rowsPerPage}
                 getTaskItem={getTaskItem}
                 searchInput={searchInput}
                 setDateInput={setDateInput}
                 reOrderTasks={reOrderTasks}
-                setRowsPerPage={setRowsPerPage}
                 setSearchInput={setSearchInput}
                 deleteTodoItem={deleteTodoItem}
                 restoreTodoItem={restoreTodoItem}

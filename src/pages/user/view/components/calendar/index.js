@@ -193,6 +193,7 @@ const CalendarApp = ({
 
       <ModalAddEvent
         store={store}
+        userId={userId}
         MySwal={MySwal}
         dispatch={dispatch}
         open={addEventModalOpen}

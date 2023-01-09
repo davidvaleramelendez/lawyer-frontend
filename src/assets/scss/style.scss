@@ -238,4 +238,18 @@ $email-dark-background-font-color: #ffffff;
 		width: 70% !important;
 	}
 }
+
+.user-detail-file-manager {
+	.sidebar-left {
+		width: 30% !important;
+
+		.sidebar-file-manager {
+			width: 100% !important;
+		}
+	}
+
+	.content-right {
+		width: 70% !important;
+	}
+}
 /* /User module */

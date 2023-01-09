@@ -3,7 +3,7 @@
 // ** Redux Imports
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-// Constant
+// ** Constant
 import {
     cloudStorageItem
 } from '@constant/reduxConstant'
@@ -67,6 +67,7 @@ export const getTreeFolderList = createAsyncThunk('appCloudStorage/getTreeFolder
         const response = await getTreeFolderListRequest(params)
         if (response && response.flag) {
             return {
+                treeParams: params,
                 treeFolderItems: response.data,
                 actionFlag: "",
                 success: "",
@@ -74,6 +75,7 @@ export const getTreeFolderList = createAsyncThunk('appCloudStorage/getTreeFolder
             }
         } else {
             return {
+                treeParams: params,
                 treeFolderItems: [],
                 actionFlag: "",
                 success: "",
@@ -83,6 +85,7 @@ export const getTreeFolderList = createAsyncThunk('appCloudStorage/getTreeFolder
     } catch (error) {
         console.log("getTreeFolderList catch ", error)
         return {
+            treeParams: params,
             treeFolderItems: [],
             actionFlag: "",
             success: "",
@@ -99,7 +102,7 @@ export const createCloudStorageFolder = createAsyncThunk('appCloudStorage/create
     try {
         const response = await createCloudStorageFolderRequest(payload)
         if (response && response.flag) {
-            await dispatch(getTreeFolderList())
+            await dispatch(getTreeFolderList(getState().cloudStorage.treeParams))
             await dispatch(getCloudStorageList(getState().cloudStorage.params))
             return {
                 actionFlag: "FOLDER_CREATED",
@@ -414,6 +417,7 @@ export const appCloudStorageSlice = createSlice({
     name: 'appCloudStorage',
     initialState: {
         params: {},
+        treeParams: {},
         cloudStorageItems: null,
         cloudStorageItem: cloudStorageItem,
         treeFolderItems: [],
@@ -479,6 +483,7 @@ export const appCloudStorageSlice = createSlice({
 
             /* Cloud Storage Folder */
             .addCase(getTreeFolderList.fulfilled, (state, action) => {
+                state.treeParams = action.payload.treeParams
                 state.treeFolderItems = action.payload.treeFolderItems
                 state.actionFlag = action.payload.actionFlag
                 state.loading = true

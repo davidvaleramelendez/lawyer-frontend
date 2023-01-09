@@ -58,13 +58,13 @@ const Storages = (props) => {
   const {
     sort,
     store,
-    navigate,
-    hashParam,
+    layoutView,
     handleSort,
     searchInput,
     onTrashFile,
     handleSearch,
     onTrashFolder,
+    setLayoutView,
     handleFileItem,
     handleDeleteFile,
     getTransformDate,
@@ -76,6 +76,7 @@ const Storages = (props) => {
     handleFileItemMove,
     handleMarkImportant,
     handleFolderItemMove,
+    onCheckUserPermission,
     handleBreadcrumbNavigate
   } = props
 
@@ -177,7 +178,7 @@ const Storages = (props) => {
       >
         {/* Container Starts */}
         <div
-          className={`view-container ${hashParam === "#list" ? 'list-view' : ''}`}
+          className={`view-container ${layoutView === "#list" ? 'list-view' : ''}`}
         >
           <div className="files-header">
             <h6 className="fw-bold mb-0">{T('Filename')}</h6>
@@ -210,7 +211,7 @@ const Storages = (props) => {
 
           {/* Folder */}
           {store.cloudStorageItems.folders && store.cloudStorageItems.folders.length ? (<>
-            {hashParam === "#grid" ? (
+            {layoutView === "#grid" ? (
               <h6 className="files-section-title mt-25 mb-75">{T("Folders")}</h6>
             ) : null}
 
@@ -222,67 +223,69 @@ const Storages = (props) => {
                 <div className="card-img-top file-logo-wrapper">
                   <div className="dropdown float-end">
                     {/* View action */}
-                    <UncontrolledButtonDropdown>
-                      <DropdownToggle color="#FFFFFF" tag="span">
-                        <MoreVertical size={17} className="cursor-pointer" />
-                      </DropdownToggle>
-                      <DropdownMenu end>
-                        {folder && !folder.deleted_at ? (<>
-                          <DropdownItem
-                            className="w-100"
-                            onClick={() => handleFolderItem(folder)}
-                          >
-                            <Edit size={17} className="me-50" />
-                            <span className="align-middle">{T("Edit")}</span>
-                          </DropdownItem>
+                    {onCheckUserPermission(17) ? (
+                      <UncontrolledButtonDropdown>
+                        <DropdownToggle color="#FFFFFF" tag="span">
+                          <MoreVertical size={17} className="cursor-pointer" />
+                        </DropdownToggle>
+                        <DropdownMenu end>
+                          {folder && !folder.deleted_at ? (<>
+                            <DropdownItem
+                              className="w-100"
+                              onClick={() => handleFolderItem(folder)}
+                            >
+                              <Edit size={17} className="me-50" />
+                              <span className="align-middle">{T("Edit")}</span>
+                            </DropdownItem>
 
-                          <DropdownItem
-                            className="w-100"
-                            onClick={() => handleFolderItemMove(folder)}
-                          >
-                            <Move size={17} className="me-50" />
-                            <span className="align-middle">{T("Move")}</span>
-                          </DropdownItem>
+                            <DropdownItem
+                              className="w-100"
+                              onClick={() => handleFolderItemMove(folder)}
+                            >
+                              <Move size={17} className="me-50" />
+                              <span className="align-middle">{T("Move")}</span>
+                            </DropdownItem>
 
-                          <DropdownItem
-                            className="w-100"
-                            onClick={() => handleMarkImportant(folder)}
-                          >
-                            <Star
-                              size={17}
-                              className={classnames("me-50", {
-                                'text-warning': (folder && folder.important_at !== null) || ""
-                              })}
-                            />
-                            <span className="align-middle">{T("Important")}</span>
-                          </DropdownItem>
+                            <DropdownItem
+                              className="w-100"
+                              onClick={() => handleMarkImportant(folder)}
+                            >
+                              <Star
+                                size={17}
+                                className={classnames("me-50", {
+                                  'text-warning': (folder && folder.important_at !== null) || ""
+                                })}
+                              />
+                              <span className="align-middle">{T("Important")}</span>
+                            </DropdownItem>
 
-                          <DropdownItem
-                            className="w-100"
-                            onClick={() => onTrashFolder(folder.id)}
-                          >
-                            <Trash2 size={17} className="me-50" />
-                            <span className="align-middle">{T("Delete")}</span>
-                          </DropdownItem>
-                        </>) : (<>
-                          <DropdownItem
-                            className="w-100"
-                            onClick={() => handleMarkRestore(folder)}
-                          >
-                            <RefreshCw size={17} className="me-50" />
-                            <span className="align-middle">{T("Restore")}</span>
-                          </DropdownItem>
+                            <DropdownItem
+                              className="w-100"
+                              onClick={() => onTrashFolder(folder.id)}
+                            >
+                              <Trash2 size={17} className="me-50" />
+                              <span className="align-middle">{T("Delete")}</span>
+                            </DropdownItem>
+                          </>) : (<>
+                            <DropdownItem
+                              className="w-100"
+                              onClick={() => handleMarkRestore(folder)}
+                            >
+                              <RefreshCw size={17} className="me-50" />
+                              <span className="align-middle">{T("Restore")}</span>
+                            </DropdownItem>
 
-                          <DropdownItem
-                            className="w-100"
-                            onClick={() => handleDeleteFolder(folder)}
-                          >
-                            <Trash2 size={17} className="me-50" />
-                            <span className="align-middle">{T("Delete forever")}</span>
-                          </DropdownItem>
-                        </>)}
-                      </DropdownMenu>
-                    </UncontrolledButtonDropdown>
+                            <DropdownItem
+                              className="w-100"
+                              onClick={() => handleDeleteFolder(folder)}
+                            >
+                              <Trash2 size={17} className="me-50" />
+                              <span className="align-middle">{T("Delete forever")}</span>
+                            </DropdownItem>
+                          </>)}
+                        </DropdownMenu>
+                      </UncontrolledButtonDropdown>
+                    ) : null}
                     {/* View action */}
                   </div>
 
@@ -343,7 +346,7 @@ const Storages = (props) => {
 
           {/* File */}
           {store.cloudStorageItems.files && store.cloudStorageItems.files.length ? (<>
-            {hashParam === "#grid" ? (
+            {layoutView === "#grid" ? (
               <h6 className="files-section-title mt-25 mb-75">{T("Files")}</h6>
             ) : null}
 
@@ -358,67 +361,69 @@ const Storages = (props) => {
                   <div className="card-img-top file-logo-wrapper">
                     <div className="dropdown float-end">
                       {/* View action */}
-                      <UncontrolledButtonDropdown>
-                        <DropdownToggle color="#FFFFFF" tag="span">
-                          <MoreVertical size={17} className="cursor-pointer" />
-                        </DropdownToggle>
-                        <DropdownMenu end>
-                          {file && !file.deleted_at ? (<>
-                            <DropdownItem
-                              className="w-100"
-                              onClick={() => handleFileItem(file)}
-                            >
-                              <Edit size={17} className="me-50" />
-                              <span className="align-middle">{T("Edit")}</span>
-                            </DropdownItem>
+                      {onCheckUserPermission(17) ? (
+                        <UncontrolledButtonDropdown>
+                          <DropdownToggle color="#FFFFFF" tag="span">
+                            <MoreVertical size={17} className="cursor-pointer" />
+                          </DropdownToggle>
+                          <DropdownMenu end>
+                            {file && !file.deleted_at ? (<>
+                              <DropdownItem
+                                className="w-100"
+                                onClick={() => handleFileItem(file)}
+                              >
+                                <Edit size={17} className="me-50" />
+                                <span className="align-middle">{T("Edit")}</span>
+                              </DropdownItem>
 
-                            <DropdownItem
-                              className="w-100"
-                              onClick={() => handleFileItemMove(file)}
-                            >
-                              <Move size={17} className="me-50" />
-                              <span className="align-middle">{T("Move")}</span>
-                            </DropdownItem>
+                              <DropdownItem
+                                className="w-100"
+                                onClick={() => handleFileItemMove(file)}
+                              >
+                                <Move size={17} className="me-50" />
+                                <span className="align-middle">{T("Move")}</span>
+                              </DropdownItem>
 
-                            <DropdownItem
-                              className="w-100"
-                              onClick={() => handleMarkImportant(file)}
-                            >
-                              <Star
-                                size={17}
-                                className={classnames("me-50", {
-                                  'text-warning': (file && file.important_at !== null) || ""
-                                })}
-                              />
-                              <span className="align-middle">{T("Important")}</span>
-                            </DropdownItem>
+                              <DropdownItem
+                                className="w-100"
+                                onClick={() => handleMarkImportant(file)}
+                              >
+                                <Star
+                                  size={17}
+                                  className={classnames("me-50", {
+                                    'text-warning': (file && file.important_at !== null) || ""
+                                  })}
+                                />
+                                <span className="align-middle">{T("Important")}</span>
+                              </DropdownItem>
 
-                            <DropdownItem
-                              className="w-100"
-                              onClick={() => onTrashFile(file.id)}
-                            >
-                              <Trash2 size={17} className="me-50" />
-                              <span className="align-middle">{T("Delete")}</span>
-                            </DropdownItem>
-                          </>) : (<>
-                            <DropdownItem
-                              className="w-100"
-                              onClick={() => handleMarkRestore(file)}
-                            >
-                              <RefreshCw size={17} className="me-50" />
-                              <span className="align-middle">{T("Restore")}</span>
-                            </DropdownItem>
+                              <DropdownItem
+                                className="w-100"
+                                onClick={() => onTrashFile(file.id)}
+                              >
+                                <Trash2 size={17} className="me-50" />
+                                <span className="align-middle">{T("Delete")}</span>
+                              </DropdownItem>
+                            </>) : (<>
+                              <DropdownItem
+                                className="w-100"
+                                onClick={() => handleMarkRestore(file)}
+                              >
+                                <RefreshCw size={17} className="me-50" />
+                                <span className="align-middle">{T("Restore")}</span>
+                              </DropdownItem>
 
-                            <DropdownItem
-                              className="w-100"
-                              onClick={() => handleDeleteFile(file)}
-                            >
-                              <Trash2 size={17} className="me-50" />
-                              <span className="align-middle">{T("Delete forever")}</span>
-                            </DropdownItem>
-                          </>)}
-                        </DropdownMenu>
-                      </UncontrolledButtonDropdown>
+                              <DropdownItem
+                                className="w-100"
+                                onClick={() => handleDeleteFile(file)}
+                              >
+                                <Trash2 size={17} className="me-50" />
+                                <span className="align-middle">{T("Delete forever")}</span>
+                              </DropdownItem>
+                            </>)}
+                          </DropdownMenu>
+                        </UncontrolledButtonDropdown>
+                      ) : null}
                       {/* /View action */}
                     </div>
 
@@ -510,8 +515,8 @@ const Storages = (props) => {
               color='primary'
               className="p-50"
               id={`cs-tooltip-grid`}
-              active={hashParam === "#grid"}
-              onClick={() => navigate(`#grid`)}
+              active={layoutView === "#grid"}
+              onClick={() => setLayoutView(`#grid`)}
             >
               <Grid
                 size={14}
@@ -530,8 +535,8 @@ const Storages = (props) => {
               color='primary'
               className="p-50"
               id={`cs-tooltip-list`}
-              active={hashParam === "#list"}
-              onClick={() => navigate(`#list`)}
+              active={layoutView === "#list"}
+              onClick={() => setLayoutView(`#list`)}
             >
               <List
                 size={14}

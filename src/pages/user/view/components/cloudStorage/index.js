@@ -1,6 +1,6 @@
 // ** React Imports
 import { useState, useEffect, Fragment } from 'react'
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 // ** Utils
 import {
@@ -10,8 +10,7 @@ import {
 
 // ** Constant
 import {
-    root,
-    adminRoot
+    root
 } from '@constant/defaultValues'
 import {
     cloudStorageItem
@@ -56,27 +55,27 @@ import ModalCloudFolder from './modals/ModalCloudFolder'
 import ModalCloudUploadFile from './modals/ModalCloudUploadFile'
 
 // ** Styles
-// import 'antd/dist/antd.css'
 import '@src/assets/scss/antd.css'
 import '@styles/base/pages/app-file-manager.scss'
 
 // ** Translation
 import { T } from '@localization'
 
-const CloudStorageApp = () => {
+const CloudStorageApp = ({
+    userId,
+    onCheckUserPermission
+}) => {
     // ** Hooks
     const navigate = useNavigate()
     const MySwal = withReactContent(Swal)
-
-    // ** Vars
-    const params = useParams()
-    const hashParam = useLocation().hash || "#list"
 
     // ** States
     const [loadFirst, setLoadFirst] = useState(true)
     const [mainSidebar, setMainSidebar] = useState(false)
     const [sort, setSort] = useState('name-asc')
     const [searchInput, setSearchInput] = useState('')
+    const [folderSlug, setFolderSlug] = useState('')
+    const [layoutView, setLayoutView] = useState("#list")
     const [folderModalOpen, setFolderModalOpen] = useState(false)
     const [fileModalOpen, setFileModalOpen] = useState(false)
     const [movItemFlag, setMoveItemFlag] = useState(false)
@@ -88,12 +87,15 @@ const CloudStorageApp = () => {
     const dispatch = useDispatch()
     const store = useSelector((state) => state.cloudStorage)
 
-    const handleCloudStorageLists = (search = searchInput, sortBy = sort) => {
-        dispatch(getCloudStorageList({
-            slug: params.slug || "",
-            search: search || "",
-            sortBy: sortBy || ""
-        }))
+    const handleCloudStorageLists = (search = searchInput, sortBy = sort, slug = folderSlug) => {
+        dispatch(
+            getCloudStorageList({
+                slug: slug || "",
+                search: search || "",
+                sortBy: sortBy || "",
+                user_id: userId || ""
+            })
+        )
     }
 
     const handleSearch = (val) => {
@@ -114,7 +116,7 @@ const CloudStorageApp = () => {
 
         if (loadFirst) {
             dispatch(defaultCloudStorageItems())
-            dispatch(getTreeFolderList())
+            dispatch(getTreeFolderList({ user_id: userId || "" }))
             handleCloudStorageLists()
             setLoadFirst(false)
         }
@@ -272,7 +274,8 @@ const CloudStorageApp = () => {
                 slug = ""
             }
 
-            navigate(`${adminRoot}/cloud-storage/${slug || ''}${hashParam}`)
+            setFolderSlug(slug)
+            handleCloudStorageLists(searchInput, sort, slug)
         }
     }
     /* /Entering on folder click */
@@ -281,9 +284,11 @@ const CloudStorageApp = () => {
     const handleBreadcrumbNavigate = (slug, flag) => {
         if (flag) {
             if (slug) {
-                navigate(`${adminRoot}/cloud-storage/${slug}${hashParam}`)
+                setFolderSlug(slug)
+                handleCloudStorageLists(searchInput, sort, slug)
             } else {
-                navigate(`${adminRoot}/cloud-storage${hashParam}`)
+                setFolderSlug('')
+                handleCloudStorageLists(searchInput, sort, '')
             }
         }
     }
@@ -292,13 +297,14 @@ const CloudStorageApp = () => {
     return store ? (<Fragment>
         <Sidebar
             store={store}
-            params={params}
             dispatch={dispatch}
+            folderSlug={folderSlug}
             mainSidebar={mainSidebar}
             setFileModalOpen={setFileModalOpen}
             handleNavigateItem={handleNavigateItem}
             setFolderModalOpen={setFolderModalOpen}
             changeExpandedValue={changeExpandedValue}
+            onCheckUserPermission={onCheckUserPermission}
         />
 
         {!store.loading ? (
@@ -320,13 +326,13 @@ const CloudStorageApp = () => {
                     <Storages
                         sort={sort}
                         store={store}
-                        navigate={navigate}
-                        hashParam={hashParam}
                         handleSort={handleSort}
+                        layoutView={layoutView}
                         searchInput={searchInput}
                         onTrashFile={onTrashFile}
                         handleSearch={handleSearch}
                         onTrashFolder={onTrashFolder}
+                        setLayoutView={setLayoutView}
                         handleFileItem={handleFileItem}
                         getTransformDate={getTransformDate}
                         handleFolderItem={handleFolderItem}
@@ -338,18 +344,21 @@ const CloudStorageApp = () => {
                         handleFileItemMove={handleFileItemMove}
                         handleMarkImportant={handleMarkImportant}
                         handleFolderItemMove={handleFolderItemMove}
+                        onCheckUserPermission={onCheckUserPermission}
                         handleBreadcrumbNavigate={handleBreadcrumbNavigate}
                     />
 
                     <ModalCloudFolder
                         toggleModal={() => setFolderModalOpen(!folderModalOpen)}
                         store={store}
-                        open={folderModalOpen}
-                        params={params}
+                        userId={userId}
                         dispatch={dispatch}
+                        open={folderModalOpen}
+                        folderSlug={folderSlug}
                         movItemFlag={movItemFlag}
                         setMoveItemFlag={setMoveItemFlag}
                         cloudStorageItem={cloudStorageItem}
+                        onCheckUserPermission={onCheckUserPermission}
                         defaultCloudStorageItem={defaultCloudStorageItem}
                         createCloudStorageFolder={createCloudStorageFolder}
                         updateCloudStorageFolder={updateCloudStorageFolder}
@@ -360,13 +369,15 @@ const CloudStorageApp = () => {
                     <ModalCloudUploadFile
                         toggleModal={() => setFileModalOpen(!fileModalOpen)}
                         store={store}
-                        open={fileModalOpen}
                         MySwal={MySwal}
-                        params={params}
+                        userId={userId}
                         dispatch={dispatch}
+                        open={fileModalOpen}
+                        folderSlug={folderSlug}
                         movItemFlag={movItemFlag}
                         setMoveItemFlag={setMoveItemFlag}
                         cloudStorageItem={cloudStorageItem}
+                        onCheckUserPermission={onCheckUserPermission}
                         createCloudStorageFile={createCloudStorageFile}
                         updateCloudStorageFile={updateCloudStorageFile}
                         defaultCloudStorageItem={defaultCloudStorageItem}

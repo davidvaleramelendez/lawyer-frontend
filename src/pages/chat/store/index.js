@@ -33,12 +33,12 @@ export const getChatContacts = createAsyncThunk('appContact/getChatContacts', as
     const response = await getChatContactsRequest(params)
     if (response && response.flag) {
       if (response.data) {
-        if (response.data.users && response.data.users.length) {
-          setTotalNumber(TN_CHAT_CONTACT, response.data.users.length)
+        if (response.data.users && response.data.users) {
+          setTotalNumber(TN_CHAT_CONTACT, response.data.users.length || 0)
         }
 
-        if (response.data.chats && Object.keys(response.data.chats).length) {
-          setTotalNumber(TN_CHAT, Object.keys(response.data.chats).length)
+        if (response.data.chats && Object.keys(response.data.chats)) {
+          setTotalNumber(TN_CHAT, Object.keys(response.data.chats).length || 0)
         }
       }
       return {
@@ -165,7 +165,7 @@ export const sendMessage = createAsyncThunk('appContact/sendMessage', async (pay
   try {
     const response = await sendMessageRequest(payload)
     if (response && response.flag) {
-      await dispatch(getChatHistory({ id: payload.receiver_id, payload: { chatCount: getState().chat.chatCount } }))
+      await dispatch(getChatHistory({ id: payload.receiver_id, payload: { user_id: payload.user_id || "", chatCount: getState().chat.chatCount } }))
       return {
         actionFlag: "MESSAGE_SENT",
         success: "",

@@ -16,6 +16,7 @@ import {
     Unlock,
     Monitor,
     Calendar,
+    HardDrive,
     Briefcase,
     CheckSquare,
     MessageCircle
@@ -29,6 +30,7 @@ import EmailComponent from '../components/email'
 import ChatComponent from '../components/chat'
 import TaskComponent from '../components/todo'
 import CalendarComponent from '../components/calendar'
+import CloudStorageComponent from '../components/cloudStorage'
 
 // ** Translation
 import { T } from '@localization'
@@ -106,7 +108,7 @@ const UserTabs = ({
                     </NavItem>
                 ) : null}
 
-                {onCheckUserPermission(12) ? (
+                {onCheckUserPermission(14) ? (
                     <NavItem>
                         <NavLink active={active === "5"} onClick={() => toggleTab("5")}>
                             <Calendar size={18} />
@@ -115,15 +117,24 @@ const UserTabs = ({
                     </NavItem>
                 ) : null}
 
+                {onCheckUserPermission(16) ? (
+                    <NavItem>
+                        <NavLink active={active === "6"} onClick={() => toggleTab("6")}>
+                            <HardDrive size={18} />
+                            <span className="fw-bold d-none d-sm-block ms-50">{T("Cloud Storage")}</span>
+                        </NavLink>
+                    </NavItem>
+                ) : null}
+
                 <NavItem>
-                    <NavLink active={active === "6"} onClick={() => toggleTab("6")}>
+                    <NavLink active={active === "7"} onClick={() => toggleTab("7")}>
                         <Unlock size={18} />
                         <span className="fw-bold d-none d-sm-block ms-50">{T("Permissions")}</span>
                     </NavLink>
                 </NavItem>
 
                 <NavItem>
-                    <NavLink active={active === "7"} onClick={() => toggleTab("7")}>
+                    <NavLink active={active === "8"} onClick={() => toggleTab("8")}>
                         <Monitor size={18} />
                         <span className="fw-bold d-none d-sm-block ms-50">{T("Recent devices")}</span>
                     </NavLink>
@@ -139,7 +150,7 @@ const UserTabs = ({
 
                 {onCheckUserPermission(8) ? (
                     <TabPane tabId="2">
-                        {/* Emails */}
+                        {/* User Emails */}
                         <div className="email-application user-detail-email">
                             <div className="content-area-wrapper container-xxl p-0">
                                 <EmailComponent
@@ -148,13 +159,13 @@ const UserTabs = ({
                                 />
                             </div>
                         </div>
-                        {/* /Emails */}
+                        {/* /User Emails */}
                     </TabPane>
                 ) : null}
 
                 {onCheckUserPermission(10) ? (
                     <TabPane tabId="3">
-                        {/* Chats */}
+                        {/* User Chats */}
                         <div className="chat-application user-detail-chat">
                             <div className="content-area-wrapper container-xxl p-0">
                                 <ChatComponent
@@ -163,12 +174,13 @@ const UserTabs = ({
                                 />
                             </div>
                         </div>
-                        {/* /Chats */}
+                        {/* /User Chats */}
                     </TabPane>
                 ) : null}
 
                 {onCheckUserPermission(12) ? (
                     <TabPane tabId="4">
+                        {/* User Tasks */}
                         <div className="todo-application user-detail-todo">
                             <div className="content-area-wrapper container-xxl p-0">
                                 <TaskComponent
@@ -177,25 +189,43 @@ const UserTabs = ({
                                 />
                             </div>
                         </div>
+                        {/* /User Tasks */}
                     </TabPane>
                 ) : null}
 
                 {onCheckUserPermission(14) ? (
                     <TabPane tabId="5">
+                        {/* User Calendars */}
                         <CalendarComponent
                             userId={id}
                             onCheckUserPermission={onCheckUserPermission}
                         />
+                        {/* /User Calendars */}
                     </TabPane>
                 ) : null}
 
-                <TabPane tabId="6">
+                {onCheckUserPermission(16) ? (
+                    <TabPane tabId="6">
+                        {/* User CloudStorage */}
+                        <div className="file-manager-application user-detail-file-manager">
+                            <div className="content-area-wrapper container-xxl p-0">
+                                <CloudStorageComponent
+                                    userId={id}
+                                    onCheckUserPermission={onCheckUserPermission}
+                                />
+                            </div>
+                        </div>
+                        {/* /User CloudStorage */}
+                    </TabPane>
+                ) : null}
+
+                <TabPane tabId="7">
                     {/* User permissions */}
                     <PermissionsTab permissions={permissions} />
                     {/* /User permissions */}
                 </TabPane>
 
-                <TabPane tabId="7">
+                <TabPane tabId="8">
                     {/* Device Log History listing */}
                     <RecentDevicesTab id={id} />
                     {/* /Device Log History listing */}

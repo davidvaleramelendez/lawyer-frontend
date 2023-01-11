@@ -3,9 +3,10 @@
 // ** Redux Imports
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-// Constant
+// ** Constant
 import {
-  contactItem
+  contactItem,
+  inquiryImapItem
 } from '@constant/reduxConstant'
 
 // ** Api endpoints
@@ -37,6 +38,7 @@ export const getContactList = createAsyncThunk('appContact/getContactList', asyn
         pagination: response.pagination,
         contactItem: contactItem,
         noteItems: [],
+        inquiryImapItem: inquiryImapItem,
         actionFlag: "",
         success: "",
         error: ""
@@ -48,6 +50,7 @@ export const getContactList = createAsyncThunk('appContact/getContactList', asyn
         pagination: null,
         contactItem: contactItem,
         noteItems: [],
+        inquiryImapItem: inquiryImapItem,
         actionFlag: "",
         success: "",
         error: ""
@@ -61,6 +64,7 @@ export const getContactList = createAsyncThunk('appContact/getContactList', asyn
       pagination: null,
       contactItem: contactItem,
       noteItems: [],
+      inquiryImapItem: inquiryImapItem,
       actionFlag: "",
       success: "",
       error: error
@@ -228,6 +232,7 @@ export const deleteContact = createAsyncThunk('appContact/deleteContact', async 
       }
     }
   } catch (error) {
+    console.log("deleteContact catch >>> ", error)
     return {
       actionFlag: "",
       success: "",
@@ -235,6 +240,107 @@ export const deleteContact = createAsyncThunk('appContact/deleteContact', async 
     }
   }
 })
+
+/* Inquiry Imap */
+async function getInquiryImapDetailRequest(params) {
+  return axios.get(`${API_ENDPOINTS.inquiryImap.detail}`, { params }).then((contact) => contact.data).catch((error) => error)
+}
+
+export const getInquiryImapDetail = createAsyncThunk('appContact/getInquiryImapDetail', async (params) => {
+  try {
+    const response = await getInquiryImapDetailRequest(params)
+    if (response && response.flag) {
+      return {
+        inquiryImapItem: response.data,
+        actionFlag: "CONTACT_IMAP",
+        success: "",
+        error: ""
+      }
+    } else {
+      return {
+        inquiryImapItem: inquiryImapItem,
+        actionFlag: "",
+        success: "",
+        error: ""
+      }
+    }
+  } catch (error) {
+    console.log("getInquiryImapDetail catch >>> ", error)
+    return {
+      inquiryImapItem: inquiryImapItem,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function createUpdateContactImapRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.inquiryImap.createUpdate}`, payload).then((contact) => contact.data).catch((error) => error)
+}
+
+export const createUpdateContactImap = createAsyncThunk('appContact/createUpdateContactImap', async (payload) => {
+  try {
+    const response = await createUpdateContactImapRequest(payload)
+    if (response && response.flag) {
+      return {
+        inquiryImapItem: response.data,
+        actionFlag: "CONTACT_IMAP",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        inquiryImapItem: inquiryImapItem,
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("createUpdateContactImap catch >>> ", error)
+    return {
+      inquiryImapItem: inquiryImapItem,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+/* /Inquiry Imap */
+
+/* Contact Imap cron */
+async function callContactImapCronRequest(params) {
+  return axios.get(`${API_ENDPOINTS.contacts.imapCron}`, { params }).then((contact) => contact.data).catch((error) => error)
+}
+
+export const callContactImapCron = createAsyncThunk('appContact/callContactImapCron', async (params, { dispatch, getState }) => {
+  try {
+    const response = await callContactImapCronRequest(params)
+    if (response && response.flag) {
+      await dispatch(getContactList(getState().contact.params))
+      return {
+        actionFlag: "",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("callContactImapCron catch >>> ", error)
+    return {
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+/* /Contact Imap cron */
 
 export const appContactSlice = createSlice({
   name: 'appContact',
@@ -246,6 +352,7 @@ export const appContactSlice = createSlice({
     laywerItems: [],
     typeItems: [],
     noteItems: [],
+    inquiryImapItem: inquiryImapItem,
     actionFlag: "",
     loading: false,
     success: "",
@@ -270,6 +377,7 @@ export const appContactSlice = createSlice({
         state.params = action.payload.params
         state.contactItem = action.payload.contactItem
         state.noteItems = action.payload.noteItems
+        state.inquiryImapItem = action.payload.inquiryImapItem
         state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success
@@ -310,6 +418,32 @@ export const appContactSlice = createSlice({
         state.success = action.payload.success
         state.error = action.payload.error
       })
+
+      /* Inquiry Imap */
+      .addCase(getInquiryImapDetail.fulfilled, (state, action) => {
+        state.inquiryImapItem = action.payload.inquiryImapItem
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(createUpdateContactImap.fulfilled, (state, action) => {
+        state.inquiryImapItem = action.payload.inquiryImapItem
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      /* /Inquiry Imap */
+
+      /* Contact Imap cron */
+      .addCase(callContactImapCron.fulfilled, (state, action) => {
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+    /* /Contact Imap cron */
   }
 })
 

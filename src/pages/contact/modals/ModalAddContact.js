@@ -54,6 +54,7 @@ const ModalAddContact = ({ open, toggleModal }) => {
     // Name: yup.string().required('Name is required!').matches(/^([a-zA-Z]+ [a-zA-Z]+)$/i, 'Invalid full name!'),
     Name: yup.string().required(T('Name is required!')),
     Email: yup.string().required(T('Email is required!')).email(T('Invalid email address!')),
+    subject: yup.string().required(T('Subject is required!')),
     PhoneNo: yup.string().required(T('Mobile is required!')).min(6, T("Mobile Must be 6 digit!")).max(16, T("Mobile Must be 16 digit!"))
   }).required()
 
@@ -73,7 +74,8 @@ const ModalAddContact = ({ open, toggleModal }) => {
     fullname: "John Doe",
     phoneno: "+4915901766553",
     emailAddress: "john.doe@example.com",
-    subject: T("Message")
+    subject: T("Subject"),
+    message: T("Message")
   }
 
   const [editorHtmlContent, setEditorHtmlContent] = useState("")
@@ -108,6 +110,7 @@ const ModalAddContact = ({ open, toggleModal }) => {
         name: values.Name,
         email: values.Email,
         phone: values.PhoneNo,
+        subject: values.subject,
         message: editorHtmlContent
       }
 
@@ -186,14 +189,30 @@ const ModalAddContact = ({ open, toggleModal }) => {
             </div>
 
             <div className='mb-1'>
-              <Label className='form-label' for='Subject'>
+              <Label className='form-label' for='subject'>
+                {T("Subject")}
+              </Label>
+              <Controller
+                defaultValue=""
+                name='subject'
+                id='subject'
+                control={control}
+                render={({ field }) => (
+                  <Input {...field} placeholder={PlaceholderSchema && PlaceholderSchema.subject} invalid={errors.subject && true} />
+                )}
+              />
+              <FormFeedback>{errors.subject?.message}</FormFeedback>
+            </div>
+
+            <div className='mb-1'>
+              <Label className='form-label' for='message'>
                 {T("Message")}
               </Label>
               <Controller
                 defaultValue=""
                 control={control}
-                id='Subject'
-                name='Subject'
+                id='message'
+                name='message'
                 render={({ field }) => (
                   <Editor
                     {...field}
@@ -212,11 +231,11 @@ const ModalAddContact = ({ open, toggleModal }) => {
                       }
                     }}
                     onEditorStateChange={handleEditorStateChange}
-                    placeholder={PlaceholderSchema && PlaceholderSchema.subject}
+                    placeholder={PlaceholderSchema && PlaceholderSchema.message}
                   />
                 )}
               />
-              <FormFeedback>{errors.Subject?.message}</FormFeedback>
+              <FormFeedback>{errors.message?.message}</FormFeedback>
             </div>
 
             <div className="d-flex justify-content-center mb-2 mt-2">

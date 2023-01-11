@@ -9,7 +9,8 @@ import {
     Card,
     Input,
     Button,
-    UncontrolledTooltip
+    UncontrolledTooltip,
+    Spinner
 } from 'reactstrap'
 
 // ** Utils
@@ -32,13 +33,16 @@ import {
 // ** Store & Actions
 import {
     getContactList,
+    updateContactLoader,
+    callContactImapCron,
     clearContactMessage
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Icons Import
 import {
-    Eye
+    Eye,
+    RefreshCw
 } from 'react-feather'
 
 // Modal
@@ -54,12 +58,19 @@ import DatatablePagination from '@components/datatable/DatatablePagination'
 import { T } from '@localization'
 
 const CustomHeader = ({
+    loading,
+    dispatch,
     searchInput,
     rowsPerPage,
     handleSearch,
     setModalOpen,
     handlePerPage
 }) => {
+    const handleRefreshCron = () => {
+        dispatch(updateContactLoader(false))
+        dispatch(callContactImapCron({}))
+    }
+
     return (<div className="invoice-list-table-header w-100 py-2">
         <Row>
             <Col lg={6} className="d-flex align-items-center px-0 px-lg-1">
@@ -96,6 +107,23 @@ const CustomHeader = ({
                         onChange={(event) => handleSearch(event.target.value)}
                     />
                 </div>
+
+                {loading ? (<>
+                    <RefreshCw
+                        size={28}
+                        id={`pw-tooltip-header-refresh-cron`}
+                        className="cursor-pointer"
+                        onClick={() => handleRefreshCron()}
+                    />
+                    <UncontrolledTooltip
+                        placement="top"
+                        target={`pw-tooltip-header-refresh-cron`}
+                    >
+                        {T('Refresh')}
+                    </UncontrolledTooltip>
+                </>) : (
+                    <Spinner />
+                )}
             </Col>
         </Row>
     </div>)
@@ -328,6 +356,8 @@ const ContactList = () => {
                     handlePagination={handlePagination}
                     subHeaderComponent={
                         <CustomHeader
+                            dispatch={dispatch}
+                            loading={store.loading}
                             searchInput={searchInput}
                             rowsPerPage={rowsPerPage}
                             handleSearch={handleSearch}

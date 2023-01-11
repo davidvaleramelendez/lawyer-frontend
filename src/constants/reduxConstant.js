@@ -1,5 +1,5 @@
 // Contact
-export const contactItem = { ContactID: null, Name: "", Email: "", Subject: "", PhoneNo: "", IsCase: 0, message_id: null }
+export const contactItem = { ContactID: null, Name: "", Email: "", Subject: "", PhoneNo: "", message: "", IsCase: 0, message_id: null }
 
 // ContactNotes
 export const contactNoteItem = { ContactNotesID: null, ContactID: null, Notes: "", UserID: null }
@@ -70,3 +70,6 @@ export const companyItem = { id: "", user_id: "", company: "", name: "", last_na
 
 // LetterTemplate
 export const letterTemplateItem = { id: "", subject: "", content: "", regard_title: "", status: "Active" }
+
+// InquiryImap
+export const inquiryImapItem = { id: "", imap_host: "", imap_email: "", imap_password: "", imap_port: "", imap_ssl: "" }

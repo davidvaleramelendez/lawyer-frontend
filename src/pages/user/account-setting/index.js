@@ -11,6 +11,9 @@ import {
   getCompanyDetail,
   clearUserMessage
 } from '@src/pages/user/store'
+import {
+  getInquiryImapDetail
+} from '@src/pages/contact/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** API calling components
@@ -88,6 +91,7 @@ const AccountSettingApp = () => {
     if (loadFirst) {
       dispatch(getAccountSetting({}))
       dispatch(getCompanyDetail({}))
+      dispatch(getInquiryImapDetail({}))
       getLanguages()
       setSelLanguage(store.userItem.language)
       setLoadFirst(false)

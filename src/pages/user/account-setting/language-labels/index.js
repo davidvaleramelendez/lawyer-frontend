@@ -111,7 +111,7 @@ const LanguageLabels = () => {
           }
         })
 
-        console.log('data: ', labels)
+        // console.log('data: ', labels)
         setTranslation(labels)
       })
       .catch((error) => {

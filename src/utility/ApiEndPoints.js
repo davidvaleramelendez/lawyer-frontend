@@ -158,7 +158,8 @@ export const API_ENDPOINTS = {
         create: `/api/admin/add_contact`,
         createNote: `/api/admin/contact/add_note`,
         convertToCase: `/api/admin/convert_contact_to_case`,
-        delete: `/api/admin/contact/delete`
+        delete: `/api/admin/contact/delete`,
+        imapCron: `/api/contact/contact-imap/cron`
     },
     /* /Contact module */
 
@@ -251,6 +252,14 @@ export const API_ENDPOINTS = {
         create: `/api/admin/letter-template/create`,
         update: `/api/admin/letter-template/update`,
         delete: `/api/admin/letter-template/delete`
-    }
+    },
     /* /Companies */
+
+    /* Inquiry Imap */
+    inquiryImap: {
+        createUpdate: `/api/admin/inquiry-imap/create_update`,
+        detail: `/api/admin/inquiry-imap/detail`,
+        delete: `/api/admin/inquiry-imap/delete`
+    }
+    /* /Inquiry Imap */
 }

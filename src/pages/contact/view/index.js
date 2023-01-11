@@ -160,8 +160,7 @@ const ContactView = () => {
                   <div>
                     {store.contactItem && store.contactItem.ContactID ? (
                       <Fragment>
-                        <h4 className={`mb-25`}>{(store.contactItem && store.contactItem.Name)}</h4>
-                        <span className={`mb-25`}>{(store.contactItem && store.contactItem.Email)}</span>
+                        <h4 className={`mb-25`}>{(store.contactItem && store.contactItem.Subject)}</h4>
                       </Fragment>
                     ) : (
                       <Fragment>
@@ -170,16 +169,6 @@ const ContactView = () => {
                             height: "20px",
                             width: 'max-content',
                             minWidth: "210px",
-                            borderRadius: "10px",
-                            marginBottom: '6px'
-                          }}
-                        />
-
-                        <LoadingPlaceHolder
-                          extraStyles={{
-                            height: "18px",
-                            width: 'max-content',
-                            minWidth: "268px",
                             borderRadius: "10px",
                             marginBottom: '6px'
                           }}
@@ -316,7 +305,7 @@ const ContactView = () => {
               <Row>
                 <span>
                   {store.contactItem && store.contactItem.ContactID ? (
-                    store.contactItem && setInnerHtml(store.contactItem.Subject)
+                    store.contactItem && setInnerHtml(store.contactItem.message)
                   ) : (
                     <LoadingPlaceHolder
                       extraStyles={{

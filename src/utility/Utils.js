@@ -38,6 +38,9 @@ export const kFormatter = (num) => (num > 999 ? `${(num / 1000).toFixed(1)}k` : 
 // ** Converts HTML to string
 export const htmlToString = (html) => html.replace(/<\/?[^>]+(>|$)/g, '')
 
+// Check is html or not
+export const isHtml = (string = "") => /<\/?[a-z][\s\S]*>/i.test(string)
+
 // ** Checks if the passed date is today
 const isToday = (date) => {
   const today = new Date()
@@ -378,32 +381,32 @@ export const setTotalNumber = (title, number) => {
 }
 /* Get time counter from local storage */
 export const getTimeCounter = () => {
-    let timecounter = null
-    try {
-      timecounter = localStorage.getItem(storageTimeCounter) !== null ? JSON.parse(localStorage.getItem(storageTimeCounter)) : {
-        interval_time: 0,
-        current_time: 0,
-        status: false
-      }
-    } catch (error) {
-      console.log('>>>>: src/utility/Utils.js  : getTimeCounter -> error', error)
-      timecounter = null
+  let timecounter = null
+  try {
+    timecounter = localStorage.getItem(storageTimeCounter) !== null ? JSON.parse(localStorage.getItem(storageTimeCounter)) : {
+      interval_time: 0,
+      current_time: 0,
+      status: false
     }
-    return timecounter
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js  : getTimeCounter -> error', error)
+    timecounter = null
   }
-  
-  /* Set time counter on local storage  */
-  export const setTimeCounter = (timecounter) => {
-    try {
-      if (timecounter) {
-        localStorage.setItem(storageTimeCounter, JSON.stringify(timecounter))
-      } else {
-        localStorage.removeItem(storageTimeCounter)
-      }
-    } catch (error) {
-      console.log('>>>>: src/utility/Utils.js : setTimeCounter -> error', error)
-   }
+  return timecounter
+}
+
+/* Set time counter on local storage  */
+export const setTimeCounter = (timecounter) => {
+  try {
+    if (timecounter) {
+      localStorage.setItem(storageTimeCounter, JSON.stringify(timecounter))
+    } else {
+      localStorage.removeItem(storageTimeCounter)
+    }
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js : setTimeCounter -> error', error)
   }
+}
 
 // Get current total number
 export const getCurrentPageNumber = (title, rowsPerPage, currentPage) => {
@@ -442,74 +445,74 @@ export const getSiteLayoutSetting = () => {
 
 /* Decrypting data */
 const decryptData = (encrypted = "") => {
-    try {
-      const key = CryptoEncHex.parse(cryptoKey)
-      const iv = CryptoEncHex.parse(cryptoIv)
-  
-      /* Decrypting */
-      let Decrypted = CryptoJSAES.decrypt(encrypted || "", key, { iv: iv, padding: padZeroPadding })
-      if (Decrypted) {
-        Decrypted = Decrypted.toString(CryptoJS.enc.Utf8)
-      }
-  
-      return Decrypted
-    } catch (error) {
-      console.log('>>>>: src/utility/Utils.js  : decryptData -> error', error)
-      return false
-    }
-  }
-  /* /Decrypting data */
-  
-  /* Encrypting auth remember me and setting to storage */
-  const setRememberMeAuthData = (data = null) => {
-    try {
-      let rememberMe = null
-      if (data) {
-        const Encrypted = encryptData(JSON.stringify(data || ""))
-        if (Encrypted) {
-          rememberMe = Encrypted
-          localStorage.setItem(storageRememberMeAuth, JSON.stringify(Encrypted))
-        } else {
-          localStorage.removeItem(storageRememberMeAuth)
-        }
-      } else {
-        rememberMe = null
-       localStorage.removeItem(storageRememberMeAuth)
-      }
-      return rememberMe
-   } catch (error) {
-      console.log('>>>>: src/utility/Utils.js  : setRememberMeAuthData -> error', error)
-     return data
-    }
-  }
-  /* /Encrypting auth remember me and setting to storage */
-  
-  /* Decrypting auth remember me and getting from storage */
+  try {
+    const key = CryptoEncHex.parse(cryptoKey)
+    const iv = CryptoEncHex.parse(cryptoIv)
 
-  const getRememberMeAuthData = () => {
+    /* Decrypting */
+    let Decrypted = CryptoJSAES.decrypt(encrypted || "", key, { iv: iv, padding: padZeroPadding })
+    if (Decrypted) {
+      Decrypted = Decrypted.toString(CryptoJS.enc.Utf8)
+    }
+
+    return Decrypted
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js  : decryptData -> error', error)
+    return false
+  }
+}
+/* /Decrypting data */
+
+/* Encrypting auth remember me and setting to storage */
+const setRememberMeAuthData = (data = null) => {
+  try {
     let rememberMe = null
-    try {
-      rememberMe = localStorage.getItem(storageRememberMeAuth) !== null ? JSON.parse(localStorage.getItem(storageRememberMeAuth)) : null
-      if (rememberMe) {
-        const Decrypted = decryptData(rememberMe)
-        if (Decrypted) {
-          rememberMe = JSON.parse(Decrypted)
-        }
+    if (data) {
+      const Encrypted = encryptData(JSON.stringify(data || ""))
+      if (Encrypted) {
+        rememberMe = Encrypted
+        localStorage.setItem(storageRememberMeAuth, JSON.stringify(Encrypted))
+      } else {
+        localStorage.removeItem(storageRememberMeAuth)
       }
-   } catch (error) {
-      console.log('>>>>: src/utility/Utils.js  : getRememberMeAuthData -> error', error)
+    } else {
       rememberMe = null
+      localStorage.removeItem(storageRememberMeAuth)
+    }
+    return rememberMe
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js  : setRememberMeAuthData -> error', error)
+    return data
   }
-   return rememberMe
+}
+/* /Encrypting auth remember me and setting to storage */
+
+/* Decrypting auth remember me and getting from storage */
+
+const getRememberMeAuthData = () => {
+  let rememberMe = null
+  try {
+    rememberMe = localStorage.getItem(storageRememberMeAuth) !== null ? JSON.parse(localStorage.getItem(storageRememberMeAuth)) : null
+    if (rememberMe) {
+      const Decrypted = decryptData(rememberMe)
+      if (Decrypted) {
+        rememberMe = JSON.parse(Decrypted)
+      }
+    }
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js  : getRememberMeAuthData -> error', error)
+    rememberMe = null
   }
-  
-  /* /Decrypting auth remember me and getting from storage */
-  /* Exporting functions */
-  export {
+  return rememberMe
+}
+
+/* /Decrypting auth remember me and getting from storage */
+/* Exporting functions */
+export {
   encryptData,
-    decryptData,
-    setRememberMeAuthData,
-    getRememberMeAuthData
+  decryptData,
+  setRememberMeAuthData,
+  getRememberMeAuthData
 }
 // Get language labels value
 export const getLanguageLabels = () => {
@@ -542,7 +545,7 @@ export const toTimeString = (seconds, mode = 'second') => {
     let hour = Math.floor(seconds / 3600)
     let min = Math.floor((seconds % 3600) / 60)
     let second = seconds % 60
-    
+
     hour = (hour < 10 ? '0' : '') + hour
     min = (min < 10 ? '0' : '') + min
     second = (second < 10 ? '0' : '') + second

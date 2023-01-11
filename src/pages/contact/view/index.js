@@ -39,6 +39,7 @@ import {
 
 // ** Utils
 import {
+  isHtml,
   setInnerHtml,
   isUserLoggedIn,
   getTransformDate
@@ -141,6 +142,11 @@ const ContactView = () => {
         dispatch(deleteContact(contId))
       }
     })
+  }
+
+  const newsBodyStyle = {}
+  if (!isHtml(store.contactItem.message)) {
+    newsBodyStyle.whiteSpace = 'pre-wrap'
   }
 
   return store ? (
@@ -303,10 +309,14 @@ const ContactView = () => {
 
             <CardBody>
               <Row>
-                <span>
-                  {store.contactItem && store.contactItem.ContactID ? (
-                    store.contactItem && setInnerHtml(store.contactItem.message)
-                  ) : (
+                <span style={newsBodyStyle}>
+                  {store.contactItem && store.contactItem.ContactID ? (<>
+                    {store.contactItem && isHtml(store.contactItem.message) ? (
+                      setInnerHtml(store.contactItem.message)
+                    ) : (
+                      store.contactItem.message
+                    )}
+                  </>) : (
                     <LoadingPlaceHolder
                       extraStyles={{
                         height: "21px",

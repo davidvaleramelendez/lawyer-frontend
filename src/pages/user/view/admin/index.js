@@ -44,7 +44,6 @@ import Notification from '@components/toast/notification'
 
 // ** User view Components
 import ProfileHeader from './ProfileHeader'
-import UserInfoCard from './UserInfoCard'
 import TabContents from './TabContents'
 
 // ** Styles

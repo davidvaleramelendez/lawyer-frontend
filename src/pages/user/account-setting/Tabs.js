@@ -17,17 +17,20 @@ import { T } from '@localization'
 import {
     Info,
     User,
-    Settings
+    Settings,
+    Lock
 } from 'react-feather'
 
 // ** Utils
 import {
+    encryptData,
     getCurrentUser,
     onImageSrcError
 } from '@utils'
 
 /* User tab view components */
 import AccountTab from './AccountTab'
+import SecurityTab from './SecurityTab'
 import LanguageLabels from './language-labels'
 import ImapTab from './ImapTab'
 import CompanySettingTab from './CompanySettingTab'
@@ -63,9 +66,16 @@ const Tabs = ({
                     </NavLink>
                 </NavItem>
 
+                <NavItem>
+                    <NavLink active={active === "2"} onClick={() => toggleTab("2")}>
+                        <Lock size={14} className="me-50" />
+                        <span className="fw-bold d-none d-sm-block">{T('Security')}</span>
+                    </NavLink>
+                </NavItem>
+
                 {denyTabPermissionAccess(11) ? (
                     <NavItem>
-                        <NavLink active={active === "2"} onClick={() => toggleTab("2")}>
+                        <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
                             <Settings size={14} className="me-50" />
                             <span className="fw-bold d-none d-sm-block">{T("Company Setting")}</span>
                         </NavLink>
@@ -74,7 +84,7 @@ const Tabs = ({
 
                 {denyTabPermissionAccess(11) ? (
                     <NavItem>
-                        <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
+                        <NavLink active={active === "4"} onClick={() => toggleTab("4")}>
                             <Info size={14} className="me-50" />
                             <span className="fw-bold d-none d-sm-block">{T('Language Labels')}</span>
                         </NavLink>
@@ -83,7 +93,7 @@ const Tabs = ({
 
                 {denyTabPermissionAccess(11) ? (
                     <NavItem>
-                        <NavLink active={active === "4"} onClick={() => toggleTab("4")}>
+                        <NavLink active={active === "5"} onClick={() => toggleTab("5")}>
                             <Info size={14} className="me-50" />
                             <span className="fw-bold d-none d-sm-block">{T('IMAP information')}</span>
                         </NavLink>
@@ -104,18 +114,30 @@ const Tabs = ({
                 </TabPane>
 
                 <TabPane tabId="2">
-                    <CompanySettingTab
-                        userData={userData}
+                    <SecurityTab
+                        encryptData={encryptData}
                     />
                 </TabPane>
 
-                <TabPane tabId="3">
-                    <LanguageLabels />
-                </TabPane>
+                {denyTabPermissionAccess(11) ? (
+                    <TabPane tabId="3">
+                        <CompanySettingTab
+                            userData={userData}
+                        />
+                    </TabPane>
+                ) : null}
 
-                <TabPane tabId="4">
-                    <ImapTab />
-                </TabPane>
+                {denyTabPermissionAccess(11) ? (
+                    <TabPane tabId="4">
+                        <LanguageLabels />
+                    </TabPane>
+                ) : null}
+
+                {denyTabPermissionAccess(11) ? (
+                    <TabPane tabId="5">
+                        <ImapTab />
+                    </TabPane>
+                ) : null}
             </TabContent>
         </Fragment>
     )

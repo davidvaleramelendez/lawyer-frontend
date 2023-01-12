@@ -61,7 +61,8 @@ export const API_ENDPOINTS = {
         getAccountSetting: `/api/admin/profile/get_setting`,
         saveAccount: `/api/admin/profile/save_account`,
         saveAccountSetting: `/api/admin/profile/save_account_setting`,
-        saveAccountImap: `/api/admin/profile/save_account_imap`
+        saveAccountImap: `/api/admin/profile/save_account_imap`,
+        updateAccountPassword: `/api/auth/user/change-password`
     },
     /* /Account Setting */
 

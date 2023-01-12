@@ -632,6 +632,7 @@ export const L10nKeys = {
     RequestSettings: 'Request & Settings',
     Settings: 'Settings',
     Profile: 'Profile',
+    Cloud: 'Cloud',
     Logout: 'Logout',
     FileLimitExceeded: 'File limit exceeded!',
     FileUploadingSizeExceeded: 'File uploading size exceeded!',
@@ -825,7 +826,7 @@ export const L10nOrgKeys = {
         'Sticky', 'Static', 'Hidden', 'FooterType', 'ApplySave'
     ],
     Common: [
-        'AppsMenu', 'RequestSettings', 'Profile', 'Logout', 'FileLimitExceeded', 'FileUploadingSizeExceeded', 'Okay', 'PleaseUploadMax', 'files', 'Showing', 'to', 'of', 'entries'
+        'AppsMenu', 'RequestSettings', 'Profile', 'Logout', 'FileLimitExceeded', 'FileUploadingSizeExceeded', 'Okay', 'PleaseUploadMax', 'files', 'Showing', 'to', 'of', 'entries', 'Cloud'
     ],
     Errors: ['Success', 'Failed', 'Error', 'Warning']
 }

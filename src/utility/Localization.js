@@ -427,11 +427,15 @@ export const L10nKeys = {
     RetypePasswordIsRequired: 'Retype Password is required!',
     RoleIsRequired: 'Role is required!',
     PasswordMustBe6Digit: 'Password Must be 6 digit!',
+    NewPasswordMustBe6Digit: 'New Password Must be 6 digit!',
     RetypePasswordMustMatchWithPassword: 'Retype Password must match with Password!',
+    RetypeNewPasswordMustMatchWithNewPassword: 'Retype New Password must match with New Password!',
     MobileMustBe6Digit: 'Mobile Must be 6 digit!',
     MobileMustBe16Digit: 'Mobile Must be 16 digit!',
     Password: 'Password',
     ChangePassword: 'Change Password',
+    CurrentPassword: 'Current Password',
+    NewPassword: 'New Password',
     RetypePassword: 'Retype Password',
     UserRole: 'User Role',
     // Submit: 'Submit',
@@ -527,6 +531,8 @@ export const L10nKeys = {
     IMAPPassword: 'IMAP Password',
     // Email: 'Email',
     TranslationIsRequired: 'Translation is required!',
+    NewPasswordIsRequired: 'New Password is required!',
+    RetypeNewPasswordisrequired: 'Retype New Password is required!',
     //** /Account App
 
     //** Email Template App
@@ -781,11 +787,11 @@ export const L10nOrgKeys = {
         ],
         Account: [
             'Account', 'Change', 'Username', 'UsernameIsRequired', 'NameIsRequired',
-            'InvalidUsername', 'EmailIsRequired', 'StatusIsRequired', 'SelectRole', 'RoleIsRequired',
-            'Name', 'Company', 'Language', 'SaveChange', 'LanguageLabels',
-            'Menu', 'Pages', 'Common', 'Errors', 'IMAPInformation',
-            'IMAPHost', 'IMAPPort', 'Secure', 'UseSSL', 'IMAPEmail',
-            'IMAPPassword', 'Email', 'TranslationIsRequired'
+            'InvalidUsername', 'EmailIsRequired', 'StatusIsRequired', 'SelectRole', 'RoleIsRequired', 'ChangePassword', 'NewPassword', 'NewPasswordIsRequired',
+            'Name', 'Company', 'Language', 'SaveChange', 'LanguageLabels', 'PasswordIsRequired',
+            'Menu', 'Pages', 'Common', 'Errors', 'IMAPInformation', 'PasswordMustBe6Digit',
+            'IMAPHost', 'IMAPPort', 'Secure', 'UseSSL', 'IMAPEmail', 'NewPasswordMustBe6Digit', 'RetypeNewPasswordisrequired', 'RetypeNewPasswordMustMatchWithNewPassword',
+            'IMAPPassword', 'Email', 'Contact', 'TranslationIsRequired', 'CurrentPassword'
         ],
         'Email Template': [
             'Show', 'AddEmailTemplate', 'EditEmailTemplate', 'Search', 'SearchEmailTemplate',

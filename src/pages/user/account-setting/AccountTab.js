@@ -26,10 +26,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 // ** Translation
 import { T } from '@localization'
 
-// ** Icons Import
-import {
-} from 'react-feather'
-
 const AccountTab = ({
     userData,
     languages,

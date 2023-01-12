@@ -522,6 +522,36 @@ export const saveAccountImap = createAsyncThunk('appUser/saveAccountImap', async
     }
   }
 })
+
+async function updateAccountPasswordRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.account.updateAccountPassword}`, payload).then((user) => user.data).catch((error) => error)
+}
+
+export const updateAccountPassword = createAsyncThunk('appUser/updateAccountPassword', async (payload) => {
+  try {
+    const response = await updateAccountPasswordRequest(payload)
+    if (response && response.flag) {
+      return {
+        actionFlag: "PASSWORD_UPDATED",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("updateAccountPassword catch ", error)
+    return {
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
 /* /Account */
 
 /* Login History */
@@ -781,6 +811,12 @@ export const appUserSlice = createSlice({
         state.roleItems = action.payload.roleItems
         state.accountItem = action.payload.accountItem
         state.imapItem = action.payload.imapItem
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(updateAccountPassword.fulfilled, (state, action) => {
         state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success

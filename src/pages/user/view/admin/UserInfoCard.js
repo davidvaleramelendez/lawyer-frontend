@@ -10,18 +10,12 @@ import {
     CardBody
 } from 'reactstrap'
 
-// ** Utils
-import {
-    onImageSrcError
-} from '@utils'
-
 // ** Custom Components
 import LoadingPlaceHolder from '@components/loadingPlaceHolder/LoadingPlaceHolder'
 
 // Constant
 import {
-    adminRoot,
-    roleColors
+    adminRoot
 } from '@constant/defaultValues'
 
 // ** Translation
@@ -49,87 +43,7 @@ const UserInfoCard = ({
         <Fragment>
             <Card>
                 <CardBody>
-                    <div className={`user-avatar-section`}>
-                        <div className="d-flex align-items-center flex-column">
-                            {userItem && userItem.profile_photo_path ? (
-                                <div
-                                    className="mt-3 mb-2 zindex-1"
-                                    style={{
-                                        minWidth: '110px',
-                                        minHeight: '110px'
-                                    }}
-                                >
-                                    {userItem && !userItem.id ? (
-                                        <LoadingPlaceHolder
-                                            extraStyles={{ width: '110px', height: '110px', position: 'absolute', zIndex: 1, borderRadius: '0.357rem' }}
-                                        />
-                                    ) : null}
-                                    <img
-                                        height="110"
-                                        width="110"
-                                        alt="user-avatar"
-                                        className={`img-fluid rounded`}
-                                        src={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${userItem.profile_photo_path}`}
-                                        onError={(currentTarget) => onImageSrcError(currentTarget)}
-                                    />
-                                </div>
-                            ) : (
-                                <div
-                                    className="mt-3 mb-2 zindex-1"
-                                    style={{
-                                        minWidth: '110px',
-                                        minHeight: '110px'
-                                    }}
-                                >
-                                    {userItem && !userItem.id ? (
-                                        <LoadingPlaceHolder
-                                            extraStyles={{ width: '110px', height: '110px', position: 'absolute', zIndex: 1, borderRadius: '0.357rem' }}
-                                        />
-                                    ) : null}
-
-                                    <img
-                                        height="110"
-                                        width="110"
-                                        alt="user-avatar"
-                                        className={`img-fluid rounded`}
-                                        src={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/images/avatars/avatar-blank.png`}
-                                        onError={(currentTarget) => onImageSrcError(currentTarget)}
-                                    />
-                                </div>
-                            )}
-
-                            <div className="d-flex flex-column align-items-center text-center w-100">
-                                <div className="user-info w-100">
-                                    {userItem && userItem.id ? (
-                                        <h4>
-                                            {(userItem && userItem.name) || ""}
-                                        </h4>
-                                    ) : (
-                                        <Fragment>
-                                            <LoadingPlaceHolder
-                                                extraStyles={{ height: '20px', width: 'max-content', minWidth: '210px', borderRadius: '10px', margin: '0 auto' }}
-                                            />
-
-                                            <LoadingPlaceHolder
-                                                extraStyles={{ height: '15px', width: 'max-content', minWidth: '76px', borderRadius: '10px', margin: '7px auto' }}
-                                            />
-                                        </Fragment>
-                                    )}
-
-                                    {userItem && userItem.role && userItem.role.role_id ? (
-                                        <Badge
-                                            className={`text-capitalize`}
-                                            color={roleColors[userItem.role.role_id] || roleColors[11]}
-                                        >
-                                            {(userItem.role && userItem.role.RoleName)}
-                                        </Badge>
-                                    ) : null}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <h4 className="fw-bolder border-bottom pb-50 mb-1">{T("Details")}</h4>
+                    <h4 className="fw-bolder border-bottom pb-50 mb-1">{T("ABOUT")}</h4>
                     <div className={`info-container`}>
                         <ul className="list-unstyled">
                             <li className="mb-75">

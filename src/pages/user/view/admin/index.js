@@ -30,8 +30,9 @@ import {
 
 // ** Utils
 import {
+  getCurrentUser,
   isUserLoggedIn,
-  getCurrentUser
+  onImageSrcError
 } from '@utils'
 
 // ** Third Party Components
@@ -42,12 +43,11 @@ import withReactContent from 'sweetalert2-react-content'
 import Notification from '@components/toast/notification'
 
 // ** User view Components
-import UserTabs from './Tabs'
-import UserInfoCard from './UserInfoCard'
+import ProfileHeader from './ProfileHeader'
+import TabContents from './TabContents'
 
 // ** Styles
-import '@styles/base/pages/app-invoice.scss'
-import '@styles/react/apps/app-users.scss'
+import '@styles/react/pages/page-profile.scss'
 
 // ** Translation
 import { T } from '@localization'
@@ -155,25 +155,34 @@ const UserView = () => {
 
   return store ? (
     <Fragment>
-      <div className="app-user-view">
+      <div id="user-profile">
         <Row>
-          <Col xl={4} lg={5} xs={{ order: 1 }} md={{ order: 0, size: 5 }}>
-            <UserInfoCard
-              id={id}
-              userItem={store.userItem}
-              onDeleteUser={onDeleteUser}
-              authUserItem={store.authUserItem}
-            />
-          </Col>
-
-          <Col xl={8} lg={7} xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
-            <UserTabs
+          <Col sm={12}>
+            <ProfileHeader
               id={id}
               active={active}
               toggleTab={toggleTab}
+              userItem={store.userItem}
               permissions={store.permissions}
-              authUserItem={store.authUserItem}
               getCurrentUser={getCurrentUser}
+              authUserItem={store.authUserItem}
+              onImageSrcError={onImageSrcError}
+            />
+          </Col>
+        </Row>
+
+        <Row>
+          <Col sm={12}>
+            <TabContents
+              id={id}
+              active={active}
+              toggleTab={toggleTab}
+              userItem={store.userItem}
+              onDeleteUser={onDeleteUser}
+              permissions={store.permissions}
+              getCurrentUser={getCurrentUser}
+              authUserItem={store.authUserItem}
+              onImageSrcError={onImageSrcError}
             />
           </Col>
         </Row>

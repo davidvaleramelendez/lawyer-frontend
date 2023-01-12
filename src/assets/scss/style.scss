@@ -1,5 +1,3 @@
-
-
 /* Invoice send modal  */
 .send-invoice-backdrop-modal {
 	background: rgb(34 41 47 / 10%) !important;
@@ -240,6 +238,17 @@ $email-dark-background-font-color: #ffffff;
 
 	.content-right {
 		width: 70% !important;
+	}
+}
+
+.user-profile-header {
+	.profile-header-nav {
+		margin-top: 35px;
+		margin-bottom: 15px;
+
+		.profile-tabs {
+			margin-left: 0;
+		}
 	}
 }
 /* /User module */

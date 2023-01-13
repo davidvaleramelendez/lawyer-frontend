@@ -4,8 +4,7 @@
 import { useEffect, useState } from 'react'
 
 // ** Store & Actions
-import { clearCaseMessage } from '../store'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 // ** Reactstrap Imports
 import {
@@ -21,9 +20,6 @@ import {
 import ModalCaseAddNoteText from './ModalCaseAddNoteText'
 import ModalCaseAddNoteFile from './ModalCaseAddNoteFile'
 
-// ** Styles
-import '@styles/base/pages/app-invoice.scss'
-
 // ** Translation
 import { T } from '@localization'
 
@@ -37,7 +33,6 @@ const ModalCaseNoteFile = ({
   const [fileModalOpen, setFileModalOpen] = useState(false)
 
   // ** Store vars
-  const dispatch = useDispatch()
   const store = useSelector((state) => state.cases)
 
   const handleReset = () => {
@@ -46,11 +41,7 @@ const ModalCaseNoteFile = ({
 
   // ** Get contact on mount based on id
   useEffect(() => {
-    /* For blank message api called inside */
-    if (store && (store.success || store.error || store.actionFlag)) {
-      dispatch(clearCaseMessage())
-    }
-  }, [dispatch, store.success, store.error, store.actionFlag])
+  }, [])
   // console.log("caseId Model >>>> ", caseId)
 
   return (

@@ -5,9 +5,8 @@ import { useEffect } from 'react'
 
 // ** Store & Actions
 import {
-  createNoteCaseRecord,
   updateCaseLoader,
-  clearCaseMessage
+  createNoteCaseRecord
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -27,10 +26,7 @@ import {
 import { useForm, Controller } from 'react-hook-form'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-grow-spinner'
-
-// ** Styles
-import '@styles/base/pages/app-invoice.scss'
+import DotPulse from '@components/dotpulse'
 
 // ** Translation
 import { T } from '@localization'
@@ -71,16 +67,11 @@ const ModalCaseAddNoteText = ({
 
   // ** Get contact on mount based on id
   useEffect(() => {
-    /* For blank message api called inside */
-    if (store && (store.success || store.error || store.actionFlag)) {
-      dispatch(clearCaseMessage())
-    }
-
     /* For reset form data and closing modal */
     if (store && store.actionFlag && store.actionFlag === "NOTE_RECORD_ADDED") {
       handleReset()
     }
-  }, [dispatch, store.success, store.error, store.actionFlag])
+  }, [store.actionFlag])
   // console.log("recordRowData Model >>>> ", recordRowData)
 
   /* Submitting data */
@@ -111,7 +102,7 @@ const ModalCaseAddNoteText = ({
         backdrop="static"
       >
         {!store.loading ? (
-          <Spinner
+          <DotPulse
             className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
           />
         ) : null}

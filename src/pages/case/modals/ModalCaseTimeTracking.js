@@ -3,10 +3,6 @@
 // ** React Imports
 import { useEffect } from 'react'
 
-// ** Store & Actions
-import { clearCaseMessage } from '../store'
-import { useDispatch, useSelector } from 'react-redux'
-
 // ** Reactstrap Imports
 import {
   Col,
@@ -28,9 +24,6 @@ import {
   recordItem
 } from '@constant/reduxConstant'
 
-// ** Styles
-import '@styles/base/pages/app-invoice.scss'
-
 // ** Translation
 import { T } from '@localization'
 
@@ -40,12 +33,6 @@ const ModalCaseTimeTracking = ({
   onTimeRecordStart,
   toggleModal
 }) => {
-
-  // ** Store vars
-  const dispatch = useDispatch()
-
-  const store = useSelector((state) => state.cases)
-
   const ValidationSchema = {
     subject: {
       placeholder: "Subject",
@@ -71,11 +58,7 @@ const ModalCaseTimeTracking = ({
 
   // ** Get contact on mount based on id
   useEffect(() => {
-    /* For blank message api called inside */
-    if (store && (store.success || store.error || store.actionFlag)) {
-      dispatch(clearCaseMessage())
-    }
-  }, [dispatch, store.success, store.error, store.actionFlag])
+  }, [])
 
   /* Submitting data */
   const onSubmit = async (values) => {

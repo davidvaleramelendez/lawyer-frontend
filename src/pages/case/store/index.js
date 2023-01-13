@@ -758,7 +758,7 @@ async function getTimeCaseRecordsRequest(id) {
 export const getTimeCaseRecords = createAsyncThunk('appCase/getTimeCase', async (id) => {
   try {
     const response = await getTimeCaseRecordsRequest(id)
-    console.log(response)
+    // console.log(response)
     if (response && response.flag) {
       return {
         timeCaseRecord: response.data,
@@ -907,7 +907,7 @@ async function getCaseRecordRequest(id) {
 export const getCaseRecord = createAsyncThunk('appCase/getCaseRecord', async (id) => {
   try {
     const response = await getCaseRecordRequest(id)
-    console.log(response)
+    // console.log(response)
     if (response && response.status === 'success') {
       return {
         mailCaseRecords: response.data,
@@ -991,7 +991,16 @@ export const appCaseSlice = createSlice({
     start_time: null,
     record_id: null,
     success: "",
-    error: ""
+    error: "",
+
+    // compose modal 
+    composeModal: {
+      open: false,
+      maximize: false,
+      mailTo: "",
+      subject: "",
+      editorHtmlContent: ""
+    }
   },
   reducers: {
     updateCaseLoader: (state, action) => {
@@ -1010,6 +1019,35 @@ export const appCaseSlice = createSlice({
 
     setStartTime: (state, action) => {
       state.start_time = action.payload || null
+    },
+
+    /** Compose related reducers */
+    toggleCompose: (state) => {
+      state.composeModal.open = !state.composeModal.open
+    },
+
+    setComposeMaximize: (state, action) => {
+      state.composeModal.maximize = action.payload || false
+    },
+
+    setComposeMailTo: (state, action) => {
+      state.composeModal.mailTo = action.payload || ""
+    },
+
+    setComposeSubject: (state, action) => {
+      state.composeModal.subject = action.payload || ""
+    },
+
+    setComposeEditorHtmlContent: (state, action) => {
+      state.composeModal.editorHtmlContent = action.payload || ""
+    },
+
+    resetComposeModal: (state) => {
+      state.composeModal.open = false
+      state.composeModal.maximize = false
+      state.composeModal.mailTo = ""
+      state.composeModal.subject = ""
+      state.composeModal.editorHtmlContent = ""
     }
   },
   extraReducers: (builder) => {
@@ -1224,10 +1262,16 @@ export const appCaseSlice = createSlice({
 })
 
 export const {
+  setStartTime,
+  toggleCompose,
   updateCaseLoader,
   clearCaseMessage,
+  setComposeMailTo,
+  resetComposeModal,
+  setComposeSubject,
+  setComposeMaximize,
   updateSelectedDetails,
-  setStartTime
+  setComposeEditorHtmlContent
 } = appCaseSlice.actions
 
 export default appCaseSlice.reducer

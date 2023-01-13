@@ -6,8 +6,7 @@ import { useEffect, useState } from 'react'
 // ** Store & Actions
 import {
   updateCase,
-  updateCaseLoader,
-  clearCaseMessage
+  updateCaseLoader
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -33,15 +32,12 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-grow-spinner'
+import DotPulse from '@components/dotpulse'
 
 // Constant
 import {
   caseStatus
 } from '@constant/defaultValues'
-
-// ** Styles
-import '@styles/base/pages/app-invoice.scss'
 
 // ** Translation
 import { T } from '@localization'
@@ -145,11 +141,6 @@ const ModalEditCaseClient = ({
   }
 
   useEffect(() => {
-    /* For blank message api called inside */
-    if (store && (store.success || store.error || store.actionFlag)) {
-      dispatch(clearCaseMessage())
-    }
-
     /* For reset form data and closing modal */
     if (store && store.actionFlag && store.actionFlag === "UPDATED_CASE") {
       handleReset()
@@ -178,7 +169,7 @@ const ModalEditCaseClient = ({
       })
     }
     setTypeOptions(list2)
-  }, [store.success, store.error, store.actionFlag, lawyers, groups])
+  }, [store.actionFlag, lawyers, groups])
   // console.log("caseData >>> ", caseData)
 
   /* Submitting data */
@@ -231,7 +222,7 @@ const ModalEditCaseClient = ({
         className="modal-dialog-centered modal-lg"
       >
         {!store.loading ? (
-          <Spinner
+          <DotPulse
             className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
           />
         ) : null}

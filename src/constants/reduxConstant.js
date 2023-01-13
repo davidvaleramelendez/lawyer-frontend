@@ -5,7 +5,7 @@ export const contactItem = { ContactID: null, Name: "", Email: "", Subject: "", 
 export const contactNoteItem = { ContactNotesID: null, ContactID: null, Notes: "", UserID: null }
 
 // Contact to Case
-export const caseItem = { CaseID: null, UserID: null, ContactID: null, LaywerID: null, CaseTypeID: null, Name: "", Email: "", PhoneNo: "", Address: "", City: "", Pincode: "" }
+export const caseItem = { CaseID: null, UserID: null, ContactID: null, LaywerID: null, CaseTypeID: null, Name: "", Email: "", PhoneNo: "", Address: "", Date: "", Status: "", City: "", Pincode: "" }
 
 // User
 export const userItem = { id: null, role_id: null, name: "", first_name: "", last_name: "", email: "", email_verified_at: null, password: "", two_factor_secret: null, two_factor_recovery_codes: null, remember_token: null, current_team_id: null, profile_photo_path: null, language: 'English', Status: "Active", Contact: "", Company: null, DOB: null, Gender: null, Address: null, Address1: null, Postcode: null, City: null, State: null, Country: null }

@@ -252,3 +252,16 @@ $email-dark-background-font-color: #ffffff;
 	}
 }
 /* /User module */
+
+.background-highlight-color {
+	background: var(--fc-highlight-color, rgba(188, 232, 241, 0.3));
+}
+
+/* Case module */
+.case-table-collapse {
+	box-shadow: 0 4px 24px 0 rgb(34 41 47 / 10%);
+	padding: 1.5rem;
+	border: 1px solid #ebe8e8;
+	border-radius: 4px;
+}
+/* /Case module */

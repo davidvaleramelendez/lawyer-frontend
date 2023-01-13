@@ -37,7 +37,6 @@ import { setTimeCounter, getTimeCounter, toTimeString } from '@utils'
 
 // ** Styles
 import 'react-circular-progressbar/dist/styles.css'
-import '@styles/base/pages/app-invoice.scss'
 import { Clock, Minus, Square } from 'react-feather'
 
 let myInterval = null
@@ -80,7 +79,7 @@ const TerminalCaseTimeTrackingCounter = ({
               if ((getTimeCounter()?.interval_time - prevTime) === 5) {
                 setAlarmModal(true)
               }
-      
+
               if (prevTime === getTimeCounter()?.interval_time) {
                 // clearInterval(myInterval)
                 setTimeCounter({
@@ -95,7 +94,7 @@ const TerminalCaseTimeTrackingCounter = ({
                   return prevContinue
                 })
               }
-    
+
               if (timeCounter.status && prevTime < timeCounter?.interval_time) {
                 setStatus(true)
                 setTimeCounter({
@@ -103,7 +102,7 @@ const TerminalCaseTimeTrackingCounter = ({
                   current_time: prevTime + 1
                 })
                 return prevTime + 1
-              } 
+              }
               setStatus(false)
               return prevTime
             })
@@ -113,7 +112,7 @@ const TerminalCaseTimeTrackingCounter = ({
       }, 1000)
     }
   }, [open])
-  
+
   const closeTimer = () => {
     const localTime = getTimeCounter()
     setStatus(false)
@@ -125,7 +124,7 @@ const TerminalCaseTimeTrackingCounter = ({
       completed: true,
       interval_time: currentTime
     })
-    
+
     setCompleted(false)
 
   }
@@ -200,7 +199,7 @@ const TerminalCaseTimeTrackingCounter = ({
       manual: CONTINUE_MODAL.CONFIRMED_STATE
     })
   }
-  
+
   const renderTerminal = () => {
     return (
       <div className={`${open ? '' : 'd-none'}`}>
@@ -215,29 +214,29 @@ const TerminalCaseTimeTrackingCounter = ({
                 <button className='btn btn-default' onClick={toggleDraggable(true)}>
                   <Square size={14} />
                 </button>
-                )
+              )
               }
             </div>
             <hr />
             <div className='row align-items-center'>
               <div className="col-7">
                 <div className="mx-auto time-tracking">
-                  <CircularProgressbar 
-                    value={currentTime * 100 / getTimeCounter().interval_time} 
+                  <CircularProgressbar
+                    value={currentTime * 100 / getTimeCounter().interval_time}
                     text={`${toTimeString(currentTime)}`}
                     styles={buildStyles({
                       textSize: '12px'
-                    })}                
-                  /> 
+                    })}
+                  />
                 </div>
               </div>
               <div className='col-5'>
                 <div className='d-flex'>
-                  <Clock size={16} className="me-1"/> <h5 className='mb-0'>Recorded Time</h5>
+                  <Clock size={16} className="me-1" /> <h5 className='mb-0'>Recorded Time</h5>
                 </div>
                 <h2 className='mt-2'>{toTimeString(currentTime, 'min')}</h2>
                 <div className='mt-5 d-flex'>
-                  <Clock size={16} className="me-1"/> <h5 className='mb-0'>Started Time</h5>
+                  <Clock size={16} className="me-1" /> <h5 className='mb-0'>Started Time</h5>
                 </div>
                 <h2 className='mt-2'>{`${getTimeCounter().start_time ?? ''}`}</h2>
               </div>
@@ -256,7 +255,7 @@ const TerminalCaseTimeTrackingCounter = ({
                       </Button>
                     </div>
                   </div>
-                  ) : (
+                ) : (
                   <Button className='d-flex justify-content-center' type="submit" size='lg' color="danger" onClick={() => setStopModal(true)}>
                     {t("Stop")}
                   </Button>
@@ -265,12 +264,13 @@ const TerminalCaseTimeTrackingCounter = ({
             </Row>
           </CardBody>
         </Card>
+
         <Modal
-            isOpen={alarmModal}
-            toggle={() => setAlarmModal(!alarmModal)}
-            modalClassName="modal-warning"
-            className='modal-dialog-centered'
-          >
+          isOpen={alarmModal}
+          toggle={() => setAlarmModal(!alarmModal)}
+          modalClassName="modal-warning"
+          className='modal-dialog-centered'
+        >
           <ModalHeader toggle={() => setAlarmModal(!alarmModal)}>Warning</ModalHeader>
           <ModalBody>
             Time is about to expired.
@@ -282,11 +282,11 @@ const TerminalCaseTimeTrackingCounter = ({
           </ModalFooter>
         </Modal>
         <Modal
-            isOpen={stopModal}
-            toggle={() => setStopModal(!stopModal)}
-            modalClassName="modal-warning"
-            className='modal-dialog-centered'
-          >
+          isOpen={stopModal}
+          toggle={() => setStopModal(!stopModal)}
+          modalClassName="modal-warning"
+          className='modal-dialog-centered'
+        >
           <ModalHeader toggle={() => setStopModal(!stopModal)}>Warning</ModalHeader>
           <ModalBody>
             Do you want to continue?
@@ -300,12 +300,13 @@ const TerminalCaseTimeTrackingCounter = ({
             </Button>
           </ModalFooter>
         </Modal>
+
         <Modal
-            isOpen={continueModal === CONTINUE_MODAL.OPENED_STATE}
-            toggle={() => {}}
-            modalClassName="modal-warning"
-            className='modal-dialog-centered'
-          >
+          isOpen={continueModal === CONTINUE_MODAL.OPENED_STATE}
+          toggle={() => { }}
+          modalClassName="modal-warning"
+          className='modal-dialog-centered'
+        >
           <ModalHeader>Warning</ModalHeader>
           <ModalBody className='mt-2'>
             <div>
@@ -313,7 +314,7 @@ const TerminalCaseTimeTrackingCounter = ({
               Do you want to continue?
             </div>
             <div className='mt-2 d-flex'>
-            <Button type="submit" size='lg' color="primary" className='me-2 ms-auto' onClick={handleTimeIncrease(5)}>
+              <Button type="submit" size='lg' color="primary" className='me-2 ms-auto' onClick={handleTimeIncrease(5)}>
                 {t("5")}
               </Button>
               <Button type="submit" size='lg' color="primary" className='me-2' onClick={handleTimeIncrease(10)}>
@@ -325,19 +326,18 @@ const TerminalCaseTimeTrackingCounter = ({
               <Button type="submit" size='lg' color="primary" className='me-2' onClick={handleTimeIncrease(20)}>
                 {t("20")}
               </Button>
-              <Button type="submit" size='lg' color="primary" className='me-auto'  onClick={handleTimeIncrease(25)}>
+              <Button type="submit" size='lg' color="primary" className='me-auto' onClick={handleTimeIncrease(25)}>
                 {t("25")}
               </Button>
             </div>
           </ModalBody>
-          <ModalFooter>
 
+          <ModalFooter>
             <div>
               <Button color="danger" onClick={() => handleConfirm()}>
                 Stop
               </Button>
             </div>
-
           </ModalFooter>
         </Modal>
       </div>
@@ -348,9 +348,9 @@ const TerminalCaseTimeTrackingCounter = ({
     <>
       {draggable ? (
         <div className='time-tracking-draggable mx-auto col-sm-8 col-md-6 col-xl-5'>
-        <Draggable handle='.card-body' className='time-tracking-draggable'>
-          {renderTerminal()}
-        </Draggable>
+          <Draggable handle='.card-body' className='time-tracking-draggable'>
+            {renderTerminal()}
+          </Draggable>
         </div>
       ) : (
         <>

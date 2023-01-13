@@ -1,103 +1,79 @@
 /* eslint-disable object-shorthand */
 
 // ** React Imports
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 // ** Store & Actions
 import {
-  createCaseLetter,
-  updateCaseLetter,
-  updateCaseLoader,
-  clearCaseMessage
+  toggleCompose,
+  setComposeMailTo,
+  resetComposeModal,
+  setComposeSubject,
+  setComposeMaximize,
+  setComposeEditorHtmlContent
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
-// ** Third Party Components
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
-import Flatpickr from 'react-flatpickr'
-
 // ** Reactstrap Imports
 import {
-  Row,
+  Button,
   Form,
   Input,
   Label,
   Modal,
-  Button,
   ModalBody,
-  ModalHeader,
-  FormFeedback
+  FormFeedback,
+  UncontrolledButtonDropdown
 } from 'reactstrap'
 
 import { useForm, Controller } from 'react-hook-form'
 
-// Constant
+// ** Icons Import
 import {
-  recordItem
-} from '@constant/reduxConstant'
+  X,
+  Disc,
+  Minus,
+  Trash,
+  Maximize2,
+  Minimize2
+} from 'react-feather'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-grow-spinner'
+import DotPulse from '@components/dotpulse'
 
-// ** Utils
+// ** React draggable Import
+import Draggable from 'react-draggable'
+
+// ** Constant
 import {
-  getTransformDate
-} from '@utils'
+  emailItem
+} from '@constant/reduxConstant'
 
-// ** Office Editor Component
+// ** Third Party Components
+import ResizeObserver from 'resize-observer-polyfill'
 import { Editor } from 'react-draft-wysiwyg'
-import draftToHtml from 'draftjs-to-html'
+import { EditorState, convertToRaw, ContentState } from 'draft-js'
 import htmlToDraft from 'html-to-draftjs'
-import { EditorState, ContentState, convertToRaw } from 'draft-js'
+import draftToHtml from 'draftjs-to-html'
 
 // ** Styles
-import '@styles/base/pages/app-invoice.scss'
-import '@styles/react/libs/flatpickr/flatpickr.scss'
+import '@styles/react/apps/app-email.scss'
 import '@styles/react/libs/editor/editor.scss'
 
 // ** Translation
 import { T } from '@localization'
 
 const ModalComposeMail = ({
-  open,
-  caseData,
-  toggleModal,
-  fighterData,
-  messageRowData,
-  setMessageRowData
+  caseData
 }) => {
-  const MySwal = withReactContent(Swal)
-
   // ** Store vars
   const dispatch = useDispatch()
   const store = useSelector((state) => state.cases)
 
   // ** States
-  const [editorStateContent, setEditorStateContent] = useState(messageRowData.Content)
-  const [editorHtmlContent, setEditorHtmlContent] = useState(messageRowData.Content)
-
-  const getInitialHTML = (value) => {
-    const contentBlock = htmlToDraft(value)
-    if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks)
-      const editorState = EditorState.createWithContent(contentState)
-      setEditorStateContent(editorState)
-      return editorState
-    }
-    return value
-  }
-
-  const ValidationSchema = {
-    subject: {
-      placeholder: "Subject",
-      required: "Subject is required!"
-    },
-    message: {
-      placeholder: "Message",
-      required: "Message is required!"
-    }
-  }
+  const [resized, setResized] = useState(false)
+  const [editorState, setEditorState] = useState(null)
+  const [mailToValid, setMailToValid] = useState(true)
 
   const {
     reset,
@@ -106,150 +82,283 @@ const ModalComposeMail = ({
     formState: { errors }
   } = useForm({
     mode: 'all',
-    defaultValues: messageRowData
+    defaultValues: store.composeModal
   })
 
-  const handleReset = async () => {
-    setEditorHtmlContent('')
-    if (recordItem && recordItem.Content) {
-      recordItem.Content = await getInitialHTML(recordItem.Content)
-    }
-    reset(recordItem)
-    setMessageRowData(recordItem)
-    toggleModal()
+  // ** close compose modal
+  const closeModal = () => {
+    setEditorState(null)
+    dispatch(resetComposeModal())
   }
 
-  const handleEditorStateChange = (state) => {
-    // console.log("handleEditorStateChange >>> ", state)
-    setEditorStateContent(state)
-    setEditorHtmlContent(draftToHtml(convertToRaw(state.getCurrentContent())))
+  // ** delete draft and close compose modal
+  const deleteAndClose = () => {
+    setEditorState(null)
+    dispatch(resetComposeModal())
   }
+
+  // ** Toggles Compose POPUP
+  const togglePopUp = (event) => {
+    if (event) {
+      event.preventDefault()
+    }
+    dispatch(setComposeMaximize(false))
+    dispatch(setComposeEditorHtmlContent(''))
+    reset(emailItem)
+    dispatch(toggleCompose())
+  }
+
+  // ** Minimize and maximize size of modal
+  const onToggleMinMaxSize = (event) => {
+    event.preventDefault()
+
+    const modalContents = document.getElementsByClassName('modal-content')
+    if (modalContents.length > 0 && modalContents[0].getAttribute('style') && modalContents[0].getAttribute('style') !== "") {
+      modalContents[0].setAttribute('style', '')
+      setResized(false)
+    } else {
+      dispatch(setComposeMaximize(!store.composeModal.maximize))
+    }
+  }
+
+  /* convert from html to editor state */
+  const htmlToEditorState = (html) => {
+    const contentBlock = htmlToDraft(html)
+    if (contentBlock) {
+      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks)
+      const editorState = EditorState.createWithContent(contentState)
+      return editorState
+    }
+
+    return null
+  }
+
+  // ** message editor state change
+  const handleEditorStateChange = (state) => {
+    dispatch(setComposeEditorHtmlContent(draftToHtml(convertToRaw(state.getCurrentContent()))))
+    setEditorState(state)
+  }
+
+  // ** Compose Modal Resize Observer
+  const ro = new ResizeObserver(() => {
+    const modalContents = document.getElementsByClassName('modal-content')
+    if (modalContents.length > 0 && modalContents[0].getAttribute('style') && modalContents[0].getAttribute('style') !== "") {
+      setResized(true)
+    } else {
+      setResized(false)
+    }
+  })
+
+  // ** modal open event
+  const onModalOpened = () => {
+    const modalContents = document.getElementsByClassName('modal-content')
+    if (modalContents.length > 0) {
+      ro.observe(modalContents[0])
+    }
+
+    if (caseData && caseData.user && caseData.user.email) {
+      dispatch(setComposeMailTo(caseData.user.email))
+    }
+
+    if (store.composeModal.editorHtmlContent !== '') {
+      const state = htmlToEditorState(store.composeModal.editorHtmlContent)
+      setEditorState(state)
+    } else {
+      setEditorState(null)
+    }
+  }
+
   // ** Get contact on mount based on id
   useEffect(() => {
-    
-    /* For blank message api called inside */
-    if (store && (store.success || store.error || store.actionFlag)) {
-      dispatch(clearCaseMessage())
+    /* Updating editor state */
+    if (store && store.composeModal.htmlToEditorState !== "") {
+      const state = htmlToEditorState(store.composeModal.editorHtmlContent)
+      setEditorState(state)
+    } else {
+      setEditorState(null)
     }
-
-    /* For reset form data and closing modal */
-    if (store && store.actionFlag && (store.actionFlag === "LETTER_CREATED" || store.actionFlag === "LETTER_UPDATED" || store.actionFlag === "LETTER_DELETED")) {
-      handleReset()
-    }
-
-    if (messageRowData && messageRowData.id) {
-      reset(messageRowData)
-    }
-    getInitialHTML(messageRowData.Content)
-  }, [dispatch, messageRowData, store.success, store.error, store.actionFlag])
+  }, [store.actionFlag])
   // console.log("store >>> ", store)
 
-  /* Submitting data */
-  const onSubmit = async (values) => {
-    if (values) {
-      const letterData = {
-        id: values.id,
-        case_id: caseData.CaseID,
-        subject: values.Subject,
-        message: values.message
-      }
+  const handleSubjectChange = (event) => {
+    dispatch(setComposeSubject(event.target.value))
+  }
 
-      if (editorHtmlContent) {
-          letterData.message = editorHtmlContent
-      }
-
-      if (values.fristDate && values.fristDate.length) {
-        letterData.frist_date = getTransformDate(values.fristDate[0], "YYYY-MM-DD")
-      } else if (values.fristDate) {
-        letterData.frist_date = getTransformDate(values.fristDate, "YYYY-MM-DD")
-      }
-
-      // console.log("onSubmit File >>> ", letterData, values)
-      if (letterData && letterData.case_id) {
-        if (letterData.id) {
-          dispatch(updateCaseLetter(letterData))
-        } else {
-          dispatch(createCaseLetter(letterData))
-        }
-        dispatch(updateCaseLoader(false))
-      }
+  // ** submit the email form
+  const onSubmit = async () => {
+    if (store.composeModal.mailTo.length === 0) {
+      setMailToValid(false)
+      return
     }
+
+    const mailData = {
+      email_to: store.composeModal.mailTo
+    }
+
+    if (store.composeModal && store.composeModal.subject) {
+      mailData.subject = store.composeModal.subject
+    }
+
+    if (store.composeModal.editorHtmlContent) {
+      mailData.message = store.composeModal.editorHtmlContent
+    }
+
+    console.log("onSubmit mailData >>> ", mailData)
   }
 
 
-  return store ? (
-    <div className='disabled-backdrop-modal'>
+  return (
+    <Draggable handle=".modal-header">
       <Modal
-        isOpen={open}
-        toggle={handleReset}
-        className='modal-dialog-centered modal-lg'
-        backdrop="static"
+        scrollable
+        fade={false}
+        keyboard={true}
+        backdrop={false}
+        id="compose-mail"
+        container=".case-detail-view"
+        className={`compose-modal ${store.composeModal.maximize ? "modal-large" : "modal-medium"}`}
+        isOpen={store.composeModal.open}
+        contentClassName="p-0"
+        toggle={toggleCompose}
+        modalClassName="compose-mask-modal email-application"
+        onOpened={onModalOpened}
       >
         {!store.loading ? (
-          <Spinner
+          <DotPulse
             className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
           />
         ) : null}
 
-        <ModalHeader toggle={handleReset}>{T("Write e-mail")}</ModalHeader>
-        <ModalBody>
-          <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-            <Row>
-              <div className='mb-1'>
-                <Label className='form-label' for='subject'>
-                  Subject
-                </Label>
-                <Controller
-                  defaultValue={`[Ticket#:${(new Date()).toISOString().replace(/[^0-9]/g, '').slice(0, -3)}]Case ID: ${caseData.CaseID}${caseData && caseData.type && caseData.type.CaseTypeID ? `, Case Type: ${caseData.type.CaseTypeName}` : ''}${fighterData && fighterData.name ? `, fighting Against: ${fighterData.name} ${fighterData.last_name}` : ''}`}
-                  id='Subject'
-                  name='Subject'
-                  control={control}
-                  rules={ValidationSchema.subject}
-                  render={({ field }) => <Input {...field} placeholder={ValidationSchema.subject && ValidationSchema.subject.placeholder} invalid={errors.Subject && true} />}
-                />
-                <FormFeedback>{errors.Subject?.message}</FormFeedback>
-              </div>
+        <div className="modal-header modal-movable">
+          <h5 className="modal-title">{T("Write e-mail")}</h5>
+          <div className="modal-actions">
+            <a
+              href="/"
+              className="text-body me-75"
+              onClick={togglePopUp}
+            >
+              <Minus size={14} />
+            </a>
 
-              <div className='mb-1'>
-                <Label className='form-label' for='message'>
-                  Message
-                </Label>
+            <a
+              href="/"
+              className="text-body me-75"
+              onClick={onToggleMinMaxSize}
+            >
+              {resized ? <>
+                <Disc size={12} />
+              </> : !store.composeModal.maximize ? <>
+                <Maximize2 size={14} />
+              </> : <>
+                <Minimize2 size={14} />
+              </>}
+            </a>
+
+            <a
+              className="text-body"
+              onClick={closeModal}
+            >
+              <X size={14} />
+            </a>
+          </div>
+        </div>
+
+        <ModalBody className="flex-grow-1 p-0">
+          <Form className="compose-form" autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+            <div className="compose-mail-form-field">
+              <Label for="mailTo" className="form-label">{T("To")}:</Label>
+              <div className='flex-grow-1 w-100'>
                 <Controller
                   defaultValue=""
-                  id='message'
-                  name='message'
+                  id="mailTo"
+                  name="mailTo"
                   control={control}
-                  rules={ValidationSchema.message}
-                  render={({ field }) => <Editor
+                  render={({ field }) => <Input
                     {...field}
-                    editorState={editorStateContent}
-                    onEditorStateChange={handleEditorStateChange}
-                    placeholder={ValidationSchema.message && ValidationSchema.message.placeholder}
+                    autoComplete="off"
+                    readOnly
+                    value={store.composeModal.mailTo}
+                    invalid={errors.mailTo && true}
+                  />}
                 />
-                }
-                />
-                <FormFeedback>{errors.message?.message}</FormFeedback>
               </div>
+              {!mailToValid ? (
+                <div className="invalid-feedback d-block">{T('To email is required!')}</div>
+              ) : null}
+            </div>
 
+            <div className="compose-mail-form-field">
+              <Label for="subject" className="form-label">{T("Subject")}:</Label>
+              <Controller
+                defaultValue=""
+                id="subject"
+                name="subject"
+                control={control}
+                render={({ field }) => <Input
+                  {...field}
+                  autoComplete="off"
+                  value={store.composeModal.subject}
+                  invalid={errors.subject && true}
+                  onChange={handleSubjectChange}
+                />}
+              />
+              {errors && errors.subject ? (
+                <FormFeedback className="d-block">{errors.subject?.message}</FormFeedback>
+              ) : null}
+            </div>
 
-            </Row>
+            <div id='editorHtmlContent' className='message-editor'>
+              <Controller
+                defaultValue=""
+                control={control}
+                id='editorHtmlContent'
+                name='editorHtmlContent'
+                render={({ field }) => (
+                  <Editor
+                    {...field}
+                    // placeholder={ValidationSchema.body && ValidationSchema.body.placeholder}
+                    toolbarClassName='rounded-0'
+                    wrapperClassName='toolbar-bottom'
+                    editorClassName='rounded-0 border-0'
+                    toolbar={{
+                      options: ['inline', 'textAlign'],
+                      inline: {
+                        inDropdown: false,
+                        options: ['bold', 'italic', 'underline', 'strikethrough']
+                      }
+                    }}
+                    onEditorStateChange={handleEditorStateChange}
+                    editorState={editorState}
+                  />
+                )}
+              />
+              {errors && errors.editorHtmlContent ? (
+                <FormFeedback className="d-block">{errors.editorHtmlContent?.message}</FormFeedback>
+              ) : null}
+            </div>
 
-            <Row className='mb-2 mt-2'>
-              <div className="d-flex justify-content-end">
+            <div className='compose-footer-wrapper'>
+              <div className='btn-wrapper d-flex align-items-center'>
+                <UncontrolledButtonDropdown direction='up' className='me-1'>
                   <Button
-                    type='submit'
-                    color="primary"
+                    type="submit"
+                    color='primary'
                     disabled={!store.loading}
                   >
-                    {T("Send E-Mail")}
+                    {T('Send')}
                   </Button>
+                </UncontrolledButtonDropdown>
               </div>
-            </Row>
+
+              <div className='footer-action d-flex align-items-center'>
+                <Trash className='cursor-pointer' size={18} onClick={deleteAndClose} />
+              </div>
+            </div>
           </Form>
         </ModalBody>
       </Modal>
-    </div>
-  ) : null
+    </Draggable>
+  )
 }
 
-export default ModalComposeMail
+export default React.memo(ModalComposeMail)

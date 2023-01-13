@@ -8,8 +8,7 @@ import {
   createCaseDocument,
   updateCaseDocument,
   deleteCaseDocument,
-  updateCaseLoader,
-  clearCaseMessage
+  updateCaseLoader
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -39,10 +38,7 @@ import {
 } from '@constant/reduxConstant'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-grow-spinner'
-
-// ** Styles
-import '@styles/base/pages/app-invoice.scss'
+import DotPulse from '@components/dotpulse'
 
 // ** Translation
 import { T } from '@localization'
@@ -95,11 +91,6 @@ const ModalCaseDocument = ({
 
   // ** Get contact on mount based on id
   useEffect(() => {
-    /* For blank message api called inside */
-    if (store && (store.success || store.error || store.actionFlag)) {
-      dispatch(clearCaseMessage())
-    }
-
     /* For reset form data and closing modal */
     if (store && store.actionFlag && (store.actionFlag === "DOCUMENT_CREATED" || store.actionFlag === "DOCUMENT_UPDATED" || store.actionFlag === "DOCUMENT_DELETED")) {
       handleReset()
@@ -108,7 +99,7 @@ const ModalCaseDocument = ({
     if (documentRowData && documentRowData.id) {
       reset(documentRowData)
     }
-  }, [dispatch, documentRowData, store.success, store.error, store.actionFlag])
+  }, [documentRowData, store.actionFlag])
   // console.log("documentRowData >>> ", documentRowData)
 
   /* Swal Alert */
@@ -218,7 +209,7 @@ const ModalCaseDocument = ({
         backdrop="static"
       >
         {!store.loading ? (
-          <Spinner
+          <DotPulse
             className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
           />
         ) : null}

@@ -29,6 +29,7 @@ import Select from 'react-select'
 import {
     getLetterTemplate,
     updateLetterTemplate,
+    updateLetterTemplateLoader,
     clearLetterTemplateMessage
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -201,7 +202,7 @@ const LetterTemplateEdit = () => {
             }
 
             // console.log("onSubmit >>> ", values, letterTemplateData)
-            dispatch(clearLetterTemplateMessage(false))
+            dispatch(updateLetterTemplateLoader(false))
             dispatch(updateLetterTemplate(letterTemplateData))
         }
     }
@@ -210,7 +211,7 @@ const LetterTemplateEdit = () => {
         <Card className="px-5">
             {!store.loading ? (
                 <DotPulse
-                    className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
+                    className="d-flex justify-content-center position-absolute top-50 w-100 zindex-3"
                 />
             ) : null}
 

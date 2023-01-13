@@ -4,10 +4,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-// ** Store & Actions
-import { clearCaseMessage } from '../store'
-import { useDispatch, useSelector } from 'react-redux'
-
 // ** Reactstrap Imports
 import {
   Modal,
@@ -38,9 +34,6 @@ import {
   caseItem
 } from '@constant/reduxConstant'
 
-// ** Styles
-import '@styles/base/pages/app-invoice.scss'
-
 // ** Translation
 import { T } from '@localization'
 
@@ -50,11 +43,6 @@ const ModalCaseDetail = ({
   caseRowData,
   setCaseRowData
 }) => {
-
-  // ** Store vars
-  const dispatch = useDispatch()
-  const store = useSelector((state) => state.cases)
-
   const handleReset = () => {
     setCaseRowData(caseItem)
     toggleModal()
@@ -62,11 +50,7 @@ const ModalCaseDetail = ({
 
   // ** Get contact on mount based on id
   useEffect(() => {
-    /* For blank message api called inside */
-    if (store && (store.success || store.error || store.actionFlag)) {
-      dispatch(clearCaseMessage())
-    }
-  }, [dispatch, store.success, store.error, store.actionFlag])
+  }, [])
   // console.log("caseRowData Model >>>> ", caseRowData)
 
   // ** Renders Case Columns

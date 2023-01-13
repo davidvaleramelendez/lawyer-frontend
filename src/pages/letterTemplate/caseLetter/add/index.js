@@ -263,7 +263,7 @@ const CaseLetterAdd = () => {
     return (<>
         {!store.loading || !caseStore.loading ? (
             <DotPulse
-                className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
+                className="d-flex justify-content-center position-absolute top-50 w-100 zindex-3"
             />
         ) : null}
 

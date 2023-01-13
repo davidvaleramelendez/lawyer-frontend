@@ -82,7 +82,7 @@ import {
   getRandColorClass
 } from '@utils'
 
-// Constant
+// ** Constant
 import {
   adminRoot
 } from '@constant/defaultValues'
@@ -394,7 +394,6 @@ const ModalComposeMail = () => {
     if (store && store.composeModal.htmlToEditorState !== "") {
       const state = htmlToEditorState(store.composeModal.editorHtmlContent)
       setEditorState(state)
-
     } else {
       setEditorState(null)
     }

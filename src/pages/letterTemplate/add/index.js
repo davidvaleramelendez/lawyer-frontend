@@ -164,7 +164,7 @@ const LetterTemplateAdd = () => {
             }
 
             // console.log("onSubmit >>> ", values, letterTemplateData)
-            dispatch(clearLetterTemplateMessage(false))
+            dispatch(updateLetterTemplateLoader(false))
             dispatch(createLetterTemplate(letterTemplateData))
         }
     }
@@ -173,7 +173,7 @@ const LetterTemplateAdd = () => {
         <Card className="px-5">
             {!store.loading ? (
                 <DotPulse
-                    className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
+                    className="d-flex justify-content-center position-absolute top-50 w-100 zindex-3"
                 />
             ) : null}
 

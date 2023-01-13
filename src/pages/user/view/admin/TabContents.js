@@ -90,7 +90,7 @@ const TabContents = ({
                 {onCheckUserPermission(8) ? (
                     <TabPane tabId="3">
                         {/* User Emails */}
-                        <div className="email-application user-detail-email">
+                        <div className="email-application">
                             <div className="content-area-wrapper container-xxl p-0">
                                 <EmailComponent
                                     userId={id}
@@ -105,7 +105,7 @@ const TabContents = ({
                 {onCheckUserPermission(10) ? (
                     <TabPane tabId="4">
                         {/* User Chats */}
-                        <div className="chat-application user-detail-chat">
+                        <div className="chat-application">
                             <div className="content-area-wrapper container-xxl p-0">
                                 <ChatComponent
                                     userId={id}
@@ -120,7 +120,7 @@ const TabContents = ({
                 {onCheckUserPermission(12) ? (
                     <TabPane tabId="5">
                         {/* User Tasks */}
-                        <div className="todo-application user-detail-todo">
+                        <div className="todo-application">
                             <div className="content-area-wrapper container-xxl p-0">
                                 <TaskComponent
                                     userId={id}
@@ -146,7 +146,7 @@ const TabContents = ({
                 {onCheckUserPermission(16) ? (
                     <TabPane tabId="7">
                         {/* User CloudStorage */}
-                        <div className="file-manager-application user-detail-file-manager">
+                        <div className="file-manager-application">
                             <div className="content-area-wrapper container-xxl p-0">
                                 <CloudStorageComponent
                                     userId={id}

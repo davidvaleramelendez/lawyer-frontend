@@ -5,11 +5,10 @@ import { useEffect, useState } from 'react'
 
 // ** Store & Actions
 import {
+  updateCaseLoader,
   createCaseAttachment,
   deleteCaseAttachment,
-  createNoteCaseRecord,
-  updateCaseLoader,
-  clearCaseMessage
+  createNoteCaseRecord
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -38,7 +37,7 @@ import {
 import { useForm, Controller } from 'react-hook-form'
 
 // ** Custom Components
-import Spinner from '@components/spinner/Simple-grow-spinner'
+import DotPulse from '@components/dotpulse'
 
 // Constant
 import {
@@ -47,9 +46,6 @@ import {
 
 // ** Translation
 import { T } from '@localization'
-
-// ** Styles
-import '@styles/base/pages/app-invoice.scss'
 
 const ModalCaseAddNoteFile = ({
   open,
@@ -178,11 +174,6 @@ const ModalCaseAddNoteFile = ({
 
   // ** Get contact on mount based on id
   useEffect(() => {
-    /* For blank message api called inside */
-    if (store && (store.success || store.error || store.actionFlag)) {
-      dispatch(clearCaseMessage())
-    }
-
     /* Updating uploaded files */
     if (store && store.actionFlag && store.actionFlag === "ATTACHMENT_ADDED") {
       setUploadedFiles(store.attachments)
@@ -193,7 +184,7 @@ const ModalCaseAddNoteFile = ({
       setUploadedFiles(store.attachments)
       handleReset()
     }
-  }, [dispatch, store.success, store.error, store.actionFlag])
+  }, [store.actionFlag])
 
   /* Submitting data */
   const onSubmit = async (values) => {
@@ -232,7 +223,7 @@ const ModalCaseAddNoteFile = ({
         className='modal-dialog-centered modal-lg'
       >
         {!store.loading ? (
-          <Spinner
+          <DotPulse
             className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
           />
         ) : null}

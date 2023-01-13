@@ -12,6 +12,7 @@ import moment from "moment"
 import {
   closeCase,
   getCaseView,
+  toggleCompose,
   getCaseLetters,
   getCaseDocuments,
   getCaseRecord,
@@ -34,7 +35,6 @@ import {
   CONTINUE_MODAL
 } from '@constant/defaultValues'
 import {
-  recordItem,
   letterItem,
   caseDocItem
 } from '@constant/reduxConstant'
@@ -48,7 +48,8 @@ import {
   Input,
   Table,
   Button,
-  CardBody
+  CardBody,
+  Collapse
 } from 'reactstrap'
 
 // ** Icons Import
@@ -61,22 +62,23 @@ import {
   Star,
   User,
   Type,
+  Edit,
+  Send,
   Check,
   Phone,
-  Calendar,
-  Paperclip,
-  Edit,
   Trash2,
-  Send,
-  EyeOff
+  EyeOff,
+  Calendar,
+  Paperclip
 } from 'react-feather'
 
 // ** Utils
 import {
-  isUserLoggedIn,
-  getTransformDate,
+  setInnerHtml,
   getTimeCounter,
-  setTimeCounter
+  setTimeCounter,
+  isUserLoggedIn,
+  getTransformDate
 } from '@utils'
 
 // ** Custom Components
@@ -92,7 +94,6 @@ import withReactContent from 'sweetalert2-react-content'
 import ModalEditCaseClient from '../modals/ModalEditCaseClient'
 import ModalEditCaseOpponent from '../modals/ModalEditCaseOpponent'
 import ModalCaseNoteFile from '../modals/ModalCaseNoteFile'
-import ModalCaseRecordDetail from '../modals/ModalCaseRecordDetail'
 import ModalCaseDocument from '../modals/ModalCaseDocument'
 import ModalCaseLetter from '../modals/ModalCaseLetter'
 import ModalCaseTimeTracking from '../modals/ModalCaseTimeTracking'
@@ -102,11 +103,11 @@ import ModalComposeMail from '../modals/ModalComposeMail'
 // ** Image icons
 import pdfPng from '@src/assets/images/icons/pdf.png'
 
-// ** Styles
-import '@styles/base/pages/app-invoice.scss'
-
 // ** Translation
 import { T } from '@localization'
+
+// ** Styles
+import '@styles/base/pages/app-invoice.scss'
 
 const CaseView = () => {
   // ** Hooks
@@ -119,22 +120,27 @@ const CaseView = () => {
   const navigate = useNavigate()
   const store = useSelector((state) => state.cases)
 
-
-  /* Constant */
+  // ** States
   const [loadFirst, setLoadFirst] = useState(true)
   const [editModalOpen, setEditModalOpen] = useState(false)
-  const [sendMailModalOpen, setSendMailModalOpen] = useState(false)
   const [opponentModalOpen, setOpponentModalOpen] = useState(false)
   const [noteFileModalOpen, setNoteFileModalOpen] = useState(false)
-  const [recordDetailModalOpen, setRecordDetailModalOpen] = useState(false)
-  const [caseRecordRowData, setCaseRecordRowData] = useState(recordItem)
   const [docUploadModalOpen, setDocUploadModalOpen] = useState(false)
   const [documentRowData, setDocumentRowData] = useState(caseDocItem)
   const [letterModalOpen, setLetterModalOpen] = useState(false)
   const [letterRowData, setLetterRowData] = useState(letterItem)
-  const [messageRowData, setMessageRowData] = useState(recordItem)
   const [timeTrackModalOpen, setTimeTrackModalOpen] = useState(false)
   const [timeCounterTerminalOpen, setTimeCounterTerminalOpen] = useState(false)
+
+  const [isCollapseOpen, setIsCollapseOpen] = useState('')
+
+  const handleCollapseAction = (value) => {
+    if (isCollapseOpen === value) {
+      setIsCollapseOpen('')
+      return
+    }
+    setIsCollapseOpen(value)
+  }
 
   // Check TimeCounterModal 
   useEffect(() => {
@@ -226,9 +232,9 @@ const CaseView = () => {
   }
 
   /* Case Send Mail */
-  const onSendCaseMail = (caseId) => {
-    console.log(caseId)
-    setSendMailModalOpen(true)
+  const onSendCaseMail = (caseData) => {
+    console.log(caseData)
+    dispatch(toggleCompose())
   }
 
   /* Change note history done status */
@@ -251,12 +257,6 @@ const CaseView = () => {
     })
   }
 
-  /* Case record detail popup */
-  const onCaseRecordDetail = (record) => {
-    setCaseRecordRowData(record)
-    setRecordDetailModalOpen(true)
-  }
-
   /* Change document done status */
   const onDocumentDone = (id) => {
     // console.log("onDocumentDone >>> ", id)
@@ -277,12 +277,6 @@ const CaseView = () => {
       }
     })
   }
-
-  // /* Detail view of Case Document */
-  // const onCaseDocumentDetail = (row) => {
-  //   setDocumentRowData({ ...row })
-  //   setDocUploadModalOpen(true)
-  // }
 
   /* Change letter done status */
   const onLetterDone = (id) => {
@@ -326,11 +320,6 @@ const CaseView = () => {
   }
   /* /Delete case letter */
 
-  // /* Detail view of Case Letter */
-  // const onCaseLetterDetail = (row) => {
-  //   setLetterRowData({ ...row })
-  //   setLetterModalOpen(true)
-  // }
   /* Details of record at the right side */
   const onRecordClick = (details, typeOf = "") => () => {
     details = { ...details, typeOf }
@@ -384,8 +373,8 @@ const CaseView = () => {
   }
   /* /Check case permission */
 
-  return store ? (
-    <div className='invoice-preview-wrapper'>
+  return (
+    <div className='invoice-preview-wrapper case-detail-view'>
       <Row className='match-height'>
         <Col xl={`${store.selectedItem ? '7' : '12'}`} md={12} sm={12}>
           {/* Header */}
@@ -542,19 +531,10 @@ const CaseView = () => {
                             outline
                             color="primary"
                             className={`btn-icon rounded-circle mb-1 ${store.caseItem && store.caseItem.CaseID ? '' : 'placeholder'}`}
-                            onClick={() => onSendCaseMail(id)}
+                            onClick={() => onSendCaseMail(store.caseItem)}
                           >
                             <Send size={16} />
                           </Button.Ripple>
-
-                          <ModalComposeMail
-                            open={sendMailModalOpen}
-                            toggleModal={() => setSendMailModalOpen(!sendMailModalOpen)}
-                            caseData={store.caseItem}
-                            fighterData={store.fighterItem}
-                            messageRowData={messageRowData}
-                            setMessageRowData={setMessageRowData}
-                          />
                         </div>
                       </div>
 
@@ -578,7 +558,13 @@ const CaseView = () => {
                           </div>
                         </div>
                       </div>
+
+                      <ModalComposeMail
+                        caseData={store.caseItem}
+                        fighterData={store.fighterItem}
+                      />
                     </Col>
+                    {/* /Client detail */}
 
                     {/* Opponent detail */}
                     <Col xl={3} md={3} sm={3}>
@@ -635,6 +621,7 @@ const CaseView = () => {
                           <p className='invoice-date'>{store.fighterItem && store.fighterItem.country}</p>
                         </div>
                       </div>
+
                       <div className="d-flex align-items-center user-total-numbers mt-1">
                         <div className="d-flex align-items-center mr-2">
                           <div className="color-box bg-light-primary rounded-circle">
@@ -654,21 +641,25 @@ const CaseView = () => {
                         </div>
                       </div>
                     </Col>
+                    {/* /Opponent detail */}
                   </Row>
                 </CardBody>
               </Card>
             </Col>
           </Row>
           {/* /Client && Opponent detail */}
+
+          {/* Time tracking terminal */}
           <Row>
-            <Col xl={5} md={6} sm={8} className="mx-auto">
-              <TerminalCaseTimeTrackingCounter
-                open={timeCounterTerminalOpen}
-                caseId={store.caseItem.CaseID}
-                closeTerminal={() => setTimeCounterTerminalOpen(false)}
-              />
-            </Col>
+            {/* <Col xl={5} md={6} sm={8} className="mx-auto"> */}
+            <TerminalCaseTimeTrackingCounter
+              open={timeCounterTerminalOpen}
+              caseId={store.caseItem.CaseID}
+              closeTerminal={() => setTimeCounterTerminalOpen(false)}
+            />
+            {/* </Col> */}
           </Row>
+          {/* /Time tracking terminal */}
 
           {/* Notes && Time Recording && Letter && Document History */}
           <Row className='invoice-preview'>
@@ -744,162 +735,387 @@ const CaseView = () => {
                         </thead>
                         <tbody>
                           {store.timeCaseRecord.map((record, index) => (
-                            record.end_time !== null ? <tr key={`record_${index}`} onClick={onRecordClick(record)} className="cursor-pointer">
-                              <td />
+                            record.end_time !== null ? (
+                              <Fragment key={`case_time_track_${index}`}>
+                                <tr
+                                  className={`cursor-pointer ${(isCollapseOpen === `case_time_track_${record.RecordID}` ? 'background-highlight-color' : '')}`}
+                                  onClick={() => handleCollapseAction(`case_time_track_${record.RecordID}`)}
+                                >
+                                  <td />
 
-                              <td>{record.CreatedAt && getTransformDate(record.CreatedAt, "DD.MM.YYYY")}</td>
+                                  <td>{record.CreatedAt && getTransformDate(record.CreatedAt, "DD.MM.YYYY")}</td>
 
-                              <td>{record.Subject}</td>
+                                  <td>{record.Subject}</td>
 
-                              <td>
-                                <div className='form-switch form-check-primary'>
-                                  <Input
-                                    type='switch'
-                                    checked={record.IsShare}
-                                    id={`record_${index}_${record.IsShare}`}
-                                    name={`record_${index}_${record.IsShare}`}
-                                    className="cursor-pointer"
-                                    onChange={() => onShareCaseRecord(record.RecordID)}
-                                  />
-                                  <Label className='form-check-label' htmlFor="icon-primary">
-                                    <span className='switch-icon-left'>
-                                      <Check size={14} />
-                                    </span>
-                                    <span className='switch-icon-right'>
-                                      <X size={14} />
-                                    </span>
-                                  </Label>
-                                </div>
-                              </td>
-                              <td>
-                                <Eye size={18} className="cursor-pointer" onClick={() => onRecordClick(record)} />
-                              </td>
-                            </tr> : null
+                                  <td>
+                                    <div className='form-switch form-check-primary'>
+                                      <Input
+                                        type='switch'
+                                        checked={record.IsShare}
+                                        id={`record_${index}_${record.IsShare}`}
+                                        name={`record_${index}_${record.IsShare}`}
+                                        className="cursor-pointer"
+                                        onChange={() => onShareCaseRecord(record.RecordID)}
+                                      />
+                                      <Label className='form-check-label' htmlFor="icon-primary">
+                                        <span className='switch-icon-left'>
+                                          <Check size={14} />
+                                        </span>
+                                        <span className='switch-icon-right'>
+                                          <X size={14} />
+                                        </span>
+                                      </Label>
+                                    </div>
+                                  </td>
+
+                                  <td>
+                                    <Eye size={18} className="cursor-pointer" onClick={() => handleCollapseAction(`case_time_track_${record.RecordID}`)} />
+                                  </td>
+                                </tr>
+
+                                <tr>
+                                  <td colSpan={5} className={`px-0 ${(isCollapseOpen === `case_time_track_${record.RecordID}` ? '' : 'border-0 py-0')}`}>
+                                    <Collapse
+                                      className="case-table-collapse"
+                                      isOpen={(isCollapseOpen === `case_time_track_${record.RecordID}`) || false}
+                                    >
+                                      <Row>
+                                        <div className="col-3">
+                                          <strong>{T("Date")}: </strong>
+                                        </div>
+                                        {(record && record.CreatedAt) && (
+                                          <div className="col-9">
+                                            {getTransformDate(record.CreatedAt, "DD.MM.YYYY")}
+                                          </div>
+                                        )}
+                                      </Row>
+
+                                      {(record && record.interval_time) && (
+                                        <Row className="mt-1">
+                                          <div className="col-3">
+                                            <strong>{T("Interval Time")}: </strong>
+                                          </div>
+                                          <div className="col-9">
+                                            {record.interval_time} S
+                                          </div>
+                                        </Row>
+                                      )}
+
+                                      {(record && record.start_time) && (
+                                        <Row className="mt-1">
+                                          <div className="col-3">
+                                            <strong>{T("Start Time")}: </strong>
+                                          </div>
+                                          <div className="col-9">
+                                            {record.start_time}
+                                          </div>
+                                        </Row>
+                                      )}
+
+                                      {(record && record.end_time) && (
+                                        <Row className="mt-1">
+                                          <div className="col-3">
+                                            <strong>{T("End Time")}: </strong>
+                                          </div>
+                                          <div className="col-9">
+                                            {record.end_time}
+                                          </div>
+                                        </Row>
+                                      )}
+                                    </Collapse>
+                                  </td>
+                                </tr>
+                              </Fragment>
+                            ) : null
                           ))}
+
                           {store.caseRecords.map((record, index) => (
-                            <tr key={`record_${index}`} onClick={onRecordClick(record)} className="cursor-pointer">
-                              <td>
-                                {record.Type === "File" ? <>
-                                  <Paperclip size={14} className="cursor-pointer" onClick={() => onCaseRecordDetail(record)} />
-                                </> : <>
-                                  <Type size={14} className="cursor-pointer" onClick={() => onCaseRecordDetail(record)} />
-                                </>}
-                              </td>
+                            <Fragment key={`case_record_${index}`}>
+                              <tr
+                                className={`cursor-pointer ${(isCollapseOpen === `case_record_${record.RecordID}` ? 'background-highlight-color' : '')}`}
+                                onClick={() => handleCollapseAction(`case_record_${record.RecordID}`)}
+                              >
+                                <td>
+                                  {record.Type === "File" ? <>
+                                    <Paperclip size={14} />
+                                  </> : <>
+                                    <Type size={14} />
+                                  </>}
+                                </td>
 
-                              <td>{record.CreatedAt && getTransformDate(record.CreatedAt, "DD.MM.YYYY")}</td>
+                                <td>{record.CreatedAt && getTransformDate(record.CreatedAt, "DD.MM.YYYY")}</td>
 
-                              <td>{record.Subject}</td>
+                                <td>{record.Subject}</td>
 
-                              <td>
-                                <div className='form-switch form-check-primary'>
-                                  <Input
-                                    type='switch'
-                                    checked={record.IsShare}
-                                    id={`record_${index}_${record.IsShare}`}
-                                    name={`record_${index}_${record.IsShare}`}
-                                    className="cursor-pointer"
-                                    onChange={() => onShareCaseRecord(record.RecordID)}
-                                  />
-                                  <Label className='form-check-label' htmlFor="icon-primary">
-                                    <span className='switch-icon-left'>
-                                      <Check size={14} />
-                                    </span>
-                                    <span className='switch-icon-right'>
-                                      <X size={14} />
-                                    </span>
-                                  </Label>
-                                </div>
-                              </td>
-                              <td>
-                                <Eye size={18} className="cursor-pointer" onClick={() => onRecordClick(record)} />
-                              </td>
-                            </tr>
+                                <td>
+                                  <div className='form-switch form-check-primary'>
+                                    <Input
+                                      type='switch'
+                                      checked={record.IsShare}
+                                      id={`record_${index}_${record.IsShare}`}
+                                      name={`record_${index}_${record.IsShare}`}
+                                      className="cursor-pointer"
+                                      onChange={() => onShareCaseRecord(record.RecordID)}
+                                    />
+                                    <Label className='form-check-label' htmlFor="icon-primary">
+                                      <span className='switch-icon-left'>
+                                        <Check size={14} />
+                                      </span>
+                                      <span className='switch-icon-right'>
+                                        <X size={14} />
+                                      </span>
+                                    </Label>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <Eye size={18} className="cursor-pointer" onClick={() => handleCollapseAction(`case_record_${record.RecordID}`)} />
+                                </td>
+                              </tr>
+
+                              <tr>
+                                <td colSpan={5} className={`px-0 ${(isCollapseOpen === `case_record_${record.RecordID}` ? '' : 'border-0 py-0')}`}>
+                                  <Collapse
+                                    className="case-table-collapse"
+                                    isOpen={(isCollapseOpen === `case_record_${record.RecordID}`) || false}
+                                  >
+                                    <Row>
+                                      <div className="col-3">
+                                        <strong>{T("Content")}: </strong>
+                                      </div>
+                                      <div className="col-9">
+                                        {(record && record.Content) || ""}
+                                      </div>
+                                    </Row>
+
+                                    {(record && record.CreatedAt) && (
+                                      <Row className="mt-1">
+                                        <div className="col-3">
+                                          <strong>{T("Date")}: </strong>
+                                        </div>
+                                        <div className="col-9">
+                                          {getTransformDate(record.CreatedAt, "DD.MM.YYYY")}
+                                        </div>
+                                      </Row>
+                                    )}
+
+                                    {record && record.attachment && record.attachment.length > 0 && (
+                                      <Row className="mt-1">
+                                        <div className="col-3">
+                                          <strong>{T("Files")}: </strong>
+                                        </div>
+                                        <div className="col-9">
+                                          {record.attachment.map((item, index) => {
+                                            return (
+                                              <div className="inline" key={`attachment_${index}`}>
+                                                <Paperclip className='cursor-pointer me-1' size={17} />
+                                                {item && item.path ? (
+                                                  <a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>
+                                                ) : null}
+                                              </div>
+                                            )
+                                          })}
+                                        </div>
+                                      </Row>
+                                    )}
+                                  </Collapse>
+                                </td>
+                              </tr>
+                            </Fragment>
                           ))}
+
                           {store.caseLetters.map((letter, index) => (
-                            <tr key={`letters_${index}`} onClick={onRecordClick(letter, 'letter')} className="cursor-pointer">
-                              <td />
-                              <td>{letter.created_at && getTransformDate(letter.created_at, "DD.MM.YYYY")}</td>
+                            <Fragment key={`case_letters_${index}`}>
+                              <tr
+                                className={`cursor-pointer ${(isCollapseOpen === `case_letters_${letter.id}` ? 'background-highlight-color' : '')}`}
+                                onClick={() => handleCollapseAction(`case_letters_${letter.id}`)}
+                              >
+                                <td />
+                                <td>{letter.created_at && getTransformDate(letter.created_at, "DD.MM.YYYY")}</td>
 
-                              <td>{letter.subject}</td>
+                                <td>{letter.subject}</td>
 
-                              <td>
-                                <div className='form-switch form-check-primary'>
-                                  <Input
-                                    type='switch'
-                                    checked={letter.isErledigt}
-                                    id={`letter_${index}_${letter.isErledigt}`}
-                                    name={`letter_${index}_${letter.isErledigt}`}
-                                    className="cursor-pointer"
-                                    onChange={() => onLetterDone(letter.id)}
-                                  />
-                                  <Label className='form-check-label' htmlFor="icon-primary">
-                                    <span className='switch-icon-left'>
-                                      <Check size={14} />
-                                    </span>
-                                    <span className='switch-icon-right'>
-                                      <X size={14} />
-                                    </span>
-                                  </Label>
-                                </div>
-                              </td>
+                                <td>
+                                  <div className='form-switch form-check-primary'>
+                                    <Input
+                                      type='switch'
+                                      checked={letter.isErledigt}
+                                      id={`letter_${index}_${letter.isErledigt}`}
+                                      name={`letter_${index}_${letter.isErledigt}`}
+                                      className="cursor-pointer"
+                                      onChange={() => onLetterDone(letter.id)}
+                                    />
+                                    <Label className='form-check-label' htmlFor="icon-primary">
+                                      <span className='switch-icon-left'>
+                                        <Check size={14} />
+                                      </span>
+                                      <span className='switch-icon-right'>
+                                        <X size={14} />
+                                      </span>
+                                    </Label>
+                                  </div>
+                                </td>
 
-                              <td>
-                                {/* <Eye size={18} className="cursor-pointer" onClick={() => onCaseLetterDetail(letter)} /> */}
-                                <Eye size={18} className="cursor-pointer" onClick={() => onRecordClick(letter)} />
-                              </td>
-                            </tr>
+                                <td>
+                                  <Eye size={18} className="cursor-pointer" onClick={() => handleCollapseAction(`case_letters_${letter.id}`)} />
+                                </td>
+                              </tr>
+
+                              <tr>
+                                <td colSpan={5} className={`px-0 ${(isCollapseOpen === `case_letters_${letter.id}` ? '' : 'border-0 py-0')}`}>
+                                  <Collapse
+                                    className="case-table-collapse"
+                                    isOpen={(isCollapseOpen === `case_letters_${letter.id}`) || false}
+                                  >
+                                    <Row>
+                                      <div className="col-3">
+                                        <strong>{T("Message")}: </strong>
+                                      </div>
+                                      {(letter && letter.message) && (
+                                        <div className="col-9">
+                                          {setInnerHtml(letter.message)}
+                                        </div>
+                                      )}
+                                    </Row>
+
+                                    <div className="mt-1">
+                                      {(letter && letter.pdf_path) && (
+                                        <Button.Ripple
+                                          outline
+                                          tag="a"
+                                          target="_blank"
+                                          color="primary"
+                                          className={`btn-icon rounded-circle me-50`}
+                                          href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${letter.pdf_path}`}
+                                        >
+                                          <Avatar
+                                            img={pdfPng}
+                                            imgWidth={16}
+                                            imgHeight={16}
+                                            className="bg-transparent"
+                                          />
+                                        </Button.Ripple>
+                                      )}
+
+                                      <Button.Ripple
+                                        outline
+                                        tag={Link}
+                                        color="primary"
+                                        to={`${adminRoot}/case/letter-template/edit/${id}/${letter.id}`}
+                                        className={`btn-icon rounded-circle me-50`}
+                                      >
+                                        <Edit size={16} />
+                                      </Button.Ripple>
+
+                                      <Button.Ripple
+                                        outline
+                                        color="danger"
+                                        className={`btn-icon rounded-circle`}
+                                        onClick={() => onDeleteLetter(letter.id)}
+                                      >
+                                        <Trash2 size={16} />
+                                      </Button.Ripple>
+                                    </div>
+                                  </Collapse>
+                                </td>
+                              </tr>
+                            </Fragment>
                           ))}
+
                           {store.caseDocs.map((doc, index) => (
-                            <tr key={`docs_${index}`} onClick={onRecordClick(doc)} className="cursor-pointer">
-                              <td />
-                              <td>{doc.created_at && getTransformDate(doc.created_at, "DD.MM.YYYY")}</td>
+                            <Fragment key={`case_docs_${index}`}>
+                              <tr
+                                className={`cursor-pointer ${(isCollapseOpen === `case_docs_${doc.id}` ? 'background-highlight-color' : '')}`}
+                                onClick={() => handleCollapseAction(`case_docs_${doc.id}`)}
+                              >
+                                <td />
+                                <td>{doc.created_at && getTransformDate(doc.created_at, "DD.MM.YYYY")}</td>
 
-                              <td>{doc.title}</td>
+                                <td>{doc.title}</td>
 
-                              <td>
-                                <div className='form-switch form-check-primary'>
-                                  <Input
-                                    type='switch'
-                                    checked={doc.isErledigt}
-                                    id={`docs_${index}_${doc.isErledigt}`}
-                                    name={`docs_${index}_${doc.isErledigt}`}
-                                    className="cursor-pointer"
-                                    onChange={() => onDocumentDone(doc.id)}
-                                  />
-                                  <Label className='form-check-label' htmlFor="icon-primary">
-                                    <span className='switch-icon-left'>
-                                      <Check size={14} />
-                                    </span>
-                                    <span className='switch-icon-right'>
-                                      <X size={14} />
-                                    </span>
-                                  </Label>
-                                </div>
-                              </td>
+                                <td>
+                                  <div className='form-switch form-check-primary'>
+                                    <Input
+                                      type='switch'
+                                      checked={doc.isErledigt}
+                                      id={`docs_${index}_${doc.isErledigt}`}
+                                      name={`docs_${index}_${doc.isErledigt}`}
+                                      className="cursor-pointer"
+                                      onChange={() => onDocumentDone(doc.id)}
+                                    />
+                                    <Label className='form-check-label' htmlFor="icon-primary">
+                                      <span className='switch-icon-left'>
+                                        <Check size={14} />
+                                      </span>
+                                      <span className='switch-icon-right'>
+                                        <X size={14} />
+                                      </span>
+                                    </Label>
+                                  </div>
+                                </td>
 
-                              <td>
-                                {/* <Eye size={18} className="cursor-pointer" onClick={() => onCaseDocumentDetail(doc)} /> */}
-                                <Eye size={18} className="cursor-pointer" onClick={() => onRecordClick(doc)} />
-                              </td>
-                            </tr>
+                                <td>
+                                  <Eye size={18} className="cursor-pointer" onClick={() => handleCollapseAction(`case_docs_${doc.id}`)} />
+                                </td>
+                              </tr>
+
+                              <tr>
+                                <td colSpan={5} className={`px-0 ${(isCollapseOpen === `case_docs_${doc.id}` ? '' : 'border-0 py-0')}`}>
+                                  <Collapse
+                                    className="case-table-collapse"
+                                    isOpen={(isCollapseOpen === `case_docs_${doc.id}`) || false}
+                                  >
+                                    <Row>
+                                      <div className="col-3">
+                                        <strong>{T("Content")}: </strong>
+                                      </div>
+                                      <div className="col-9">
+                                        {(doc && doc.description) || ""}
+                                      </div>
+                                    </Row>
+
+                                    {(doc && doc.created_at) && (
+                                      <Row className="mt-1">
+                                        <div className="col-3">
+                                          <strong>{T("Date")}: </strong>
+                                        </div>
+                                        <div className="col-9">
+                                          {getTransformDate(doc.created_at, "DD.MM.YYYY")}
+                                        </div>
+                                      </Row>
+                                    )}
+
+                                    {(doc && doc.attachment_pdf) && (
+                                      <Row className="mt-1">
+                                        <div className="col-3">
+                                          <strong>{T("File")}: </strong>
+                                        </div>
+                                        <div className="col-9">
+                                          <div className="inline">
+                                            <a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${doc.attachment_pdf}`} target="_blank" className="me-1">
+                                              <Paperclip className='cursor-pointer me-1' size={17} />
+                                              attachment
+                                            </a>
+                                          </div>
+                                        </div>
+                                      </Row>
+                                    )}
+                                  </Collapse>
+                                </td>
+                              </tr>
+                            </Fragment>
                           ))}
                         </tbody>
                       </Table>
                     </Col>
-                    <ModalCaseRecordDetail
-                      open={recordDetailModalOpen}
-                      toggleModal={() => setRecordDetailModalOpen(!recordDetailModalOpen)}
-                      caseRecordRowData={caseRecordRowData}
-                      setCaseRecordRowData={setCaseRecordRowData}
-                    />
                   </Row>
                 </CardBody>
               </Card>
             </Col>
-
           </Row>
           {/* /Notes && Time Recording && Letter && Document History */}
-          {/* Notes && Time Recording && Letter && Document History */}
+
+          {/* Email History */}
           <Row className='invoice-preview'>
             <Col xl={12} md={12} sm={12}>
               <Card className='invoice-preview-card'>
@@ -909,6 +1125,7 @@ const CaseView = () => {
                       <h3 className="invoice-date">{T("Email History")}</h3>
                     </div>
                   </div>
+
                   <Row className='mb-2'>
                     <Col xl={12} md={12} sm={12}>
                       <Table responsive>
@@ -924,38 +1141,39 @@ const CaseView = () => {
                         <tbody>
 
                           {store.mailCaseRecords.map((record, index) => (
-                            record.type === 'Email' ? <tr key={`docs_${index}`} onClick={onRecordClick(doc)} className="cursor-pointer">
-                              <td />
-                              <td>{doc.created_at && getTransformDate(doc.created_at, "DD.MM.YYYY")}</td>
+                            record.type === 'Email' ? (
+                              <tr key={`docs_${index}`} onClick={onRecordClick(doc)} className="cursor-pointer">
+                                <td />
+                                <td>{doc.created_at && getTransformDate(doc.created_at, "DD.MM.YYYY")}</td>
 
-                              <td>{doc.title}</td>
+                                <td>{doc.title}</td>
 
-                              <td>
-                                <div className='form-switch form-check-primary'>
-                                  <Input
-                                    type='switch'
-                                    checked={doc.isErledigt}
-                                    id={`docs_${index}_${doc.isErledigt}`}
-                                    name={`docs_${index}_${doc.isErledigt}`}
-                                    className="cursor-pointer"
-                                    onChange={() => onDocumentDone(doc.id)}
-                                  />
-                                  <Label className='form-check-label' htmlFor="icon-primary">
-                                    <span className='switch-icon-left'>
-                                      <Check size={14} />
-                                    </span>
-                                    <span className='switch-icon-right'>
-                                      <X size={14} />
-                                    </span>
-                                  </Label>
-                                </div>
-                              </td>
+                                <td>
+                                  <div className='form-switch form-check-primary'>
+                                    <Input
+                                      type='switch'
+                                      checked={doc.isErledigt}
+                                      id={`docs_${index}_${doc.isErledigt}`}
+                                      name={`docs_${index}_${doc.isErledigt}`}
+                                      className="cursor-pointer"
+                                      onChange={() => onDocumentDone(doc.id)}
+                                    />
+                                    <Label className='form-check-label' htmlFor="icon-primary">
+                                      <span className='switch-icon-left'>
+                                        <Check size={14} />
+                                      </span>
+                                      <span className='switch-icon-right'>
+                                        <X size={14} />
+                                      </span>
+                                    </Label>
+                                  </div>
+                                </td>
 
-                              <td>
-                                {/* <Eye size={18} className="cursor-pointer" onClick={() => onCaseDocumentDetail(doc)} /> */}
-                                <Eye size={18} className="cursor-pointer" onClick={() => onRecordClick(doc)} />
-                              </td>
-                            </tr> : null
+                                <td>
+                                  <Eye size={18} className="cursor-pointer" onClick={() => onRecordClick(doc)} />
+                                </td>
+                              </tr>
+                            ) : null
                           ))}
                         </tbody>
                       </Table>
@@ -965,7 +1183,7 @@ const CaseView = () => {
               </Card>
             </Col>
           </Row>
-          {/* /Notes && Time Recording && Letter && Document History */}
+          {/* /Email History */}
         </Col>
 
         <Col xl={5} md={12} sm={12}>
@@ -1031,7 +1249,7 @@ const CaseView = () => {
         </Col>
       </Row>
     </div>
-  ) : null
+  )
 }
 
 export default CaseView

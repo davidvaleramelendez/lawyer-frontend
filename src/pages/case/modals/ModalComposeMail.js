@@ -6,10 +6,15 @@ import React, { useEffect, useState } from 'react'
 // ** Store & Actions
 import {
   toggleCompose,
+  sendCaseEmail,
+  updateCaseLoader,
   setComposeMailTo,
   resetComposeModal,
   setComposeSubject,
   setComposeMaximize,
+  setComposeAttachments,
+  createEmailAttachment,
+  deleteEmailAttachment,
   setComposeEditorHtmlContent
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -33,9 +38,9 @@ import {
   X,
   Disc,
   Minus,
-  Trash,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Paperclip
 } from 'react-feather'
 
 // ** Custom Components
@@ -46,6 +51,9 @@ import Draggable from 'react-draggable'
 
 // ** Constant
 import {
+  adminRoot
+} from '@constant/defaultValues'
+import {
   emailItem
 } from '@constant/reduxConstant'
 
@@ -55,6 +63,8 @@ import { Editor } from 'react-draft-wysiwyg'
 import { EditorState, convertToRaw, ContentState } from 'draft-js'
 import htmlToDraft from 'html-to-draftjs'
 import draftToHtml from 'draftjs-to-html'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 // ** Styles
 import '@styles/react/apps/app-email.scss'
@@ -64,8 +74,12 @@ import '@styles/react/libs/editor/editor.scss'
 import { T } from '@localization'
 
 const ModalComposeMail = ({
+  caseId,
   caseData
 }) => {
+  // ** Hooks
+  const MySwal = withReactContent(Swal)
+
   // ** Store vars
   const dispatch = useDispatch()
   const store = useSelector((state) => state.cases)
@@ -74,6 +88,7 @@ const ModalComposeMail = ({
   const [resized, setResized] = useState(false)
   const [editorState, setEditorState] = useState(null)
   const [mailToValid, setMailToValid] = useState(true)
+  const [uploadedFiles, setUploadedFiles] = useState([])
 
   const {
     reset,
@@ -85,14 +100,13 @@ const ModalComposeMail = ({
     defaultValues: store.composeModal
   })
 
-  // ** close compose modal
-  const closeModal = () => {
-    setEditorState(null)
-    dispatch(resetComposeModal())
+  const PlaceholderSchema = {
+    subject: T("Subject"),
+    editorHtmlContent: T("Message")
   }
 
-  // ** delete draft and close compose modal
-  const deleteAndClose = () => {
+  // ** close compose modal
+  const closeModal = () => {
     setEditorState(null)
     dispatch(resetComposeModal())
   }
@@ -121,6 +135,41 @@ const ModalComposeMail = ({
     }
   }
 
+  /* Swal Alert */
+  const onAlertMessage = (title, text, icon) => {
+    MySwal.fire({
+      title: title ?? 'File limit exceeded!',
+      text: text ?? 'File uploading size exceeded!',
+      icon: icon ?? 'warning',
+      showCancelButton: false,
+      confirmButtonText: 'Okay',
+      customClass: {
+        confirmButton: 'btn btn-primary'
+      },
+      buttonsStyling: false
+    }).then(function (result) {
+      if (result.isConfirmed) {
+      }
+    })
+  }
+
+  /* Deleting uploaded files */
+  const onFileRemove = (event, id) => {
+    if (event) {
+      event.preventDefault()
+    }
+
+    const fileArray = [...uploadedFiles]
+    const index = fileArray.findIndex(x => x.id === id)
+    if (index !== -1) {
+      fileArray.splice(index, 1)
+      dispatch(deleteEmailAttachment({ id: id }))
+    }
+
+    setUploadedFiles([...fileArray])
+    dispatch(setComposeAttachments([...fileArray]))
+  }
+
   /* convert from html to editor state */
   const htmlToEditorState = (html) => {
     const contentBlock = htmlToDraft(html)
@@ -131,6 +180,58 @@ const ModalComposeMail = ({
     }
 
     return null
+  }
+
+  // Files converting to base64
+  const onFileChange = (event) => {
+    event.preventDefault()
+    const result = [...event.target.files]
+    let fileFlag = false
+    const fileArray = []
+
+    if (result && result.length) {
+      const fileSize = result.reduce(function (prev, file) { return prev + file.size }, 0)
+      const fileSizeKiloBytes = fileSize / 1024
+      const uploadLimit = process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE * 1024
+      if (fileSizeKiloBytes > uploadLimit) {
+        event.target.value = ""
+        onAlertMessage(T('File limit exceeded!'), `${T('Please upload max')} ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb ${T('files')}!`, 'warning')
+        return
+      }
+
+      result.map(((file, index) => {
+        const fileReader = new FileReader()
+        fileReader.readAsDataURL(file)
+        fileReader.onloadend = async () => {
+          const res = await fileReader.result
+          let fileName = file.name || ""
+          let extension = ""
+          if (fileName) {
+            fileName = fileName.split('.')
+            if (fileName && fileName.length > 0) {
+              extension = fileName[fileName.length - 1]
+            }
+          }
+          fileArray.push({ extension: extension, file: res })
+          fileFlag = false
+
+          if (result.length - 1 === index) {
+            fileFlag = true
+          }
+
+          let ids = []
+          if (uploadedFiles && uploadedFiles.length) {
+            ids = uploadedFiles.map((t) => t.id)
+          }
+
+          if (fileFlag) {
+            event.target.value = ""
+            dispatch(updateCaseLoader(false))
+            dispatch(createEmailAttachment({ attachment: fileArray, type: 'email', ids: ids, from: "COMPOSE" }))
+          }
+        }
+      }))
+    }
   }
 
   // ** message editor state change
@@ -177,6 +278,16 @@ const ModalComposeMail = ({
     } else {
       setEditorState(null)
     }
+
+    /* For reset form data and closing modal */
+    if (store && store.actionFlag && store.actionFlag === "CASE_MAIL_SENT") {
+      dispatch(resetComposeModal())
+    }
+
+    /* Updating uploaded files */
+    if (store && store.actionFlag && store.actionFlag === "ATTACHMENT_ADDED") {
+      setUploadedFiles(store.composeModal.attachments)
+    }
   }, [store.actionFlag])
   // console.log("store >>> ", store)
 
@@ -192,18 +303,25 @@ const ModalComposeMail = ({
     }
 
     const mailData = {
-      email_to: store.composeModal.mailTo
+      case_id: caseId,
+      subject: store.composeModal.subject ?? ""
     }
 
-    if (store.composeModal && store.composeModal.subject) {
-      mailData.subject = store.composeModal.subject
+    if (caseData && caseData.user && caseData.user.id) {
+      mailData.email_to = [caseData.user.id]
     }
 
     if (store.composeModal.editorHtmlContent) {
       mailData.message = store.composeModal.editorHtmlContent
     }
 
-    console.log("onSubmit mailData >>> ", mailData)
+    if (uploadedFiles && uploadedFiles.length) {
+      mailData.attachment_ids = uploadedFiles.map((t) => t.id)
+    }
+
+    // console.log("onSubmit mailData >>> ", mailData)
+    dispatch(updateCaseLoader(false))
+    dispatch(sendCaseEmail(mailData))
   }
 
 
@@ -297,6 +415,7 @@ const ModalComposeMail = ({
                 render={({ field }) => <Input
                   {...field}
                   autoComplete="off"
+                  placeholder={PlaceholderSchema && PlaceholderSchema.subject}
                   value={store.composeModal.subject}
                   invalid={errors.subject && true}
                   onChange={handleSubjectChange}
@@ -316,7 +435,7 @@ const ModalComposeMail = ({
                 render={({ field }) => (
                   <Editor
                     {...field}
-                    // placeholder={ValidationSchema.body && ValidationSchema.body.placeholder}
+                    placeholder={PlaceholderSchema && PlaceholderSchema.editorHtmlContent}
                     toolbarClassName='rounded-0'
                     wrapperClassName='toolbar-bottom'
                     editorClassName='rounded-0 border-0'
@@ -337,6 +456,34 @@ const ModalComposeMail = ({
               ) : null}
             </div>
 
+            {uploadedFiles && uploadedFiles.length ? <>
+              <div className="email-attachments mt-1 mb-1">
+                {uploadedFiles.map((item, index) => {
+                  return (
+                    <div className="inline" key={`attachment_${index}`}>
+                      <Paperclip
+                        size={17}
+                        className="cursor-pointer ms-1 me-1"
+                      />
+
+                      {item && item.path ? (<a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>) : null}
+
+                      <a
+                        href={`${adminRoot}/case/view/${caseId}`}
+                        onClick={(event) => onFileRemove(event, item.id)}
+                      >
+                        <X
+                          size={17}
+                          color="#FF0000"
+                          className="cursor-pointer"
+                        />
+                      </a>
+                    </div>
+                  )
+                })}
+              </div>
+            </> : null}
+
             <div className='compose-footer-wrapper'>
               <div className='btn-wrapper d-flex align-items-center'>
                 <UncontrolledButtonDropdown direction='up' className='me-1'>
@@ -348,10 +495,20 @@ const ModalComposeMail = ({
                     {T('Send')}
                   </Button>
                 </UncontrolledButtonDropdown>
-              </div>
 
-              <div className='footer-action d-flex align-items-center'>
-                <Trash className='cursor-pointer' size={18} onClick={deleteAndClose} />
+                <div className='email-attachement'>
+                  <Label className='mb-0' for='attach-email-item'>
+                    <Paperclip className='cursor-pointer ms-50' size={18} />
+                    <input
+                      hidden
+                      multiple
+                      type='file'
+                      name='attach-email-item'
+                      id='attach-email-item'
+                      onChange={(event) => onFileChange(event)}
+                    />
+                  </Label>
+                </div>
               </div>
             </div>
           </Form>

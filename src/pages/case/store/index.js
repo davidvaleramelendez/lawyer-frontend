@@ -41,7 +41,7 @@ export const getCaseList = createAsyncThunk('appCase/getCaseList', async (params
         caseDocs: [],
         caseRecords: [],
         timeCaseRecord: [],
-        mailCaseRecords: [],
+        caseEmailItems: [],
         caseLetters: [],
         actionFlag: "",
         success: "",
@@ -57,7 +57,7 @@ export const getCaseList = createAsyncThunk('appCase/getCaseList', async (params
         caseDocs: [],
         caseRecords: [],
         timeCaseRecord: [],
-        mailCaseRecords: [],
+        caseEmailItems: [],
         caseLetters: [],
         actionFlag: "",
         success: "",
@@ -72,6 +72,11 @@ export const getCaseList = createAsyncThunk('appCase/getCaseList', async (params
       pagination: null,
       caseItem: caseItem,
       fighterItem: fighterItem,
+      caseDocs: [],
+      caseRecords: [],
+      timeCaseRecord: [],
+      caseEmailItems: [],
+      caseLetters: [],
       actionFlag: "",
       success: "",
       error: error
@@ -177,7 +182,7 @@ export const closeCase = createAsyncThunk('appCase/closeCase', async (id) => {
         attachments: [],
         caseRecords: [],
         timeCaseRecord: [],
-        mailCaseRecords: [],
+        caseEmailItems: [],
         caseLetters: [],
         typeItems: [],
         laywerItems: [],
@@ -191,7 +196,7 @@ export const closeCase = createAsyncThunk('appCase/closeCase', async (id) => {
         attachments: [],
         caseRecords: [],
         timeCaseRecord: [],
-        mailCaseRecords: [],
+        caseEmailItems: [],
         caseLetters: [],
         typeItems: [],
         laywerItems: [],
@@ -207,7 +212,7 @@ export const closeCase = createAsyncThunk('appCase/closeCase', async (id) => {
       attachments: [],
       caseRecords: [],
       timeCaseRecord: [],
-      mailCaseRecords: [],
+      caseEmailItems: [],
       caseLetters: [],
       typeItems: [],
       laywerItems: [],
@@ -899,34 +904,36 @@ export const deleteTimeCaseRecord = createAsyncThunk('appCase/deleteTimeCaseReco
 
 /* Case RecordTime */
 
-/* Case SendMail */
-async function getCaseRecordRequest(id) {
-  return axios.get(`${API_ENDPOINTS.cases.getCaseRecord}/${id}`).then((cases) => cases.data).catch((error) => error)
+/* Mail */
+async function getCaseEmailsRequest(params) {
+  return axios.get(`${API_ENDPOINTS.cases.emails}`, { params }).then((cases) => cases.data).catch((error) => error)
 }
 
-export const getCaseRecord = createAsyncThunk('appCase/getCaseRecord', async (id) => {
+export const getCaseEmails = createAsyncThunk('appCase/getCaseEmails', async (params) => {
   try {
-    const response = await getCaseRecordRequest(id)
-    // console.log(response)
-    if (response && response.status === 'success') {
+    const response = await getCaseEmailsRequest(params)
+    if (response && response.flag) {
       return {
-        mailCaseRecords: response.data,
+        emailParams: params,
+        caseEmailItems: response.data.emails ?? [],
         actionFlag: "",
         success: "",
         error: ""
       }
     } else {
       return {
-        mailCaseRecords: [],
+        emailParams: params,
+        caseEmailItems: [],
         actionFlag: "",
         success: "",
         error: response.message
       }
     }
   } catch (error) {
-    console.log("getCaseRecord catch ", error)
+    console.log("getCaseEmails catch ", error)
     return {
-      mailCaseRecords: [],
+      emailParams: params,
+      caseEmailItems: [],
       actionFlag: "",
       success: "",
       error: error
@@ -934,17 +941,17 @@ export const getCaseRecord = createAsyncThunk('appCase/getCaseRecord', async (id
   }
 })
 
-async function createCaseEmailSendRequest(payload) {
-  return axios.post(`${API_ENDPOINTS.cases.createCaseEmailSend}`, payload).then((cases) => cases.data).catch((error) => error)
+async function sendCaseEmailRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.cases.sendEmail}`, payload).then((cases) => cases.data).catch((error) => error)
 }
 
-export const createCaseEmailSend = createAsyncThunk('appCase/createCaseEmailSend', async (payload, { dispatch, getState }) => {
+export const sendCaseEmail = createAsyncThunk('appCase/sendCaseEmail', async (payload, { dispatch, getState }) => {
   try {
-    const response = await createCaseEmailSendRequest(payload)
+    const response = await sendCaseEmailRequest(payload)
     if (response && response.flag) {
-      await dispatch(getCaseRecord(getState().cases.id))
+      await dispatch(getCaseEmails(getState().cases.emailParams))
       return {
-        actionFlag: "CASE_EMAIL_UPDATED",
+        actionFlag: "CASE_MAIL_SENT",
         success: response.message,
         error: ""
       }
@@ -956,7 +963,7 @@ export const createCaseEmailSend = createAsyncThunk('appCase/createCaseEmailSend
       }
     }
   } catch (error) {
-    console.log("updateTimeCaseRecord catch ", error)
+    console.log("sendCaseEmail catch ", error)
     return {
       actionFlag: "",
       success: "",
@@ -964,13 +971,144 @@ export const createCaseEmailSend = createAsyncThunk('appCase/createCaseEmailSend
     }
   }
 })
-/* Case SendMail */
 
+async function replyCaseEmailRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.cases.replyEmail}`, payload).then((cases) => cases.data).catch((error) => error)
+}
+
+export const replyCaseEmail = createAsyncThunk('appCase/replyCaseEmail', async (payload, { dispatch, getState }) => {
+  try {
+    const response = await replyCaseEmailRequest(payload)
+    if (response && response.flag) {
+      await dispatch(getCaseEmails(getState().cases.emailParams))
+      return {
+        actionFlag: "CASE_MAIL_REPLIED",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("replyCaseEmail catch ", error)
+    return {
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+/* /Mail */
+
+/* Mail attachment */
+async function createEmailAttachmentRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.attachments.create}`, payload).then((email) => email.data).catch((error) => error)
+}
+
+export const createEmailAttachment = createAsyncThunk('appCase/createEmailAttachment', async (payload) => {
+  try {
+    const response = await createEmailAttachmentRequest(payload)
+    if (response && response.flag) {
+      let composeAttachment = []
+      if (payload && payload.from === "COMPOSE") {
+        composeAttachment = response.data
+      }
+      return {
+        composeAttachment: composeAttachment,
+        attachments: response.data,
+        actionFlag: "ATTACHMENT_ADDED",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        attachments: [],
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("createEmailAttachment catch ", error)
+    return {
+      attachments: [],
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function deleteEmailAttachmentRequest(id) {
+  return axios.get(`${API_ENDPOINTS.attachments.delete}/${id}`).then((email) => email.data).catch((error) => error)
+}
+
+export const deleteEmailAttachment = createAsyncThunk('appCase/deleteEmailAttachment', async (params) => {
+  try {
+    const response = await deleteEmailAttachmentRequest(params.id)
+    if (response && response.flag) {
+      return {
+        actionFlag: "",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("deleteEmailAttachment catch ", error)
+    return {
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function deleteMultipleEmailAttachmentRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.attachments.multipleDelete}`, payload).then((email) => email.data).catch((error) => error)
+}
+
+export const deleteMultipleEmailAttachment = createAsyncThunk('appCase/deleteMultipleEmailAttachment', async (payload) => {
+  try {
+    const response = await deleteMultipleEmailAttachmentRequest(payload)
+    if (response && response.flag) {
+      return {
+        actionFlag: "",
+        success: "",
+        error: ""
+      }
+    } else {
+      return {
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("deleteMultipleEmailAttachment catch ", error)
+    return {
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+/* /Mail attachment */
 
 export const appCaseSlice = createSlice({
   name: 'appCase',
   initialState: {
     params: {},
+    emailParams: {},
     caseItems: [],
     pagination: null,
     caseItem: caseItem,
@@ -981,8 +1119,9 @@ export const appCaseSlice = createSlice({
     attachments: [],
     caseRecords: [],
     caseLetters: [],
+    attachments: [],
     timeCaseRecord: [],
-    mailCaseRecords: [],
+    caseEmailItems: [],
     typeItems: [],
     laywerItems: [],
     selectedItem: null,
@@ -999,7 +1138,8 @@ export const appCaseSlice = createSlice({
       maximize: false,
       mailTo: "",
       subject: "",
-      editorHtmlContent: ""
+      editorHtmlContent: "",
+      attachments: []
     }
   },
   reducers: {
@@ -1042,12 +1182,21 @@ export const appCaseSlice = createSlice({
       state.composeModal.editorHtmlContent = action.payload || ""
     },
 
+    setComposeAttachments: (state, action) => {
+      state.composeModal.attachments = action.payload || []
+    },
+
     resetComposeModal: (state) => {
       state.composeModal.open = false
       state.composeModal.maximize = false
       state.composeModal.mailTo = ""
       state.composeModal.subject = ""
       state.composeModal.editorHtmlContent = ""
+      state.composeModal.attachments = []
+    },
+
+    updateCaseEmailItemsData: (state, action) => {
+      state.caseEmailItems = action.payload || []
     }
   },
   extraReducers: (builder) => {
@@ -1061,7 +1210,7 @@ export const appCaseSlice = createSlice({
         state.caseDocs = action.payload.caseDocs
         state.caseRecords = action.payload.caseRecords
         state.timeCaseRecord = action.payload.timeCaseRecord
-        state.mailCaseRecords = action.payload.mailCaseRecords
+        state.caseEmailItems = action.payload.caseEmailItems
         state.caseLetters = action.payload.caseLetters
         state.actionFlag = action.payload.actionFlag
         state.loading = true
@@ -1086,7 +1235,7 @@ export const appCaseSlice = createSlice({
         state.caseDocs = action.payload.caseDocs
         state.caseRecords = action.payload.caseRecords
         state.timeCaseRecord = action.payload.timeCaseRecord
-        state.mailCaseRecords = action.payload.mailCaseRecords
+        state.caseEmailItems = action.payload.caseEmailItems
         state.attachments = action.payload.attachments
         state.caseLetters = action.payload.caseLetters
         state.typeItems = action.payload.typeItems
@@ -1214,6 +1363,7 @@ export const appCaseSlice = createSlice({
         state.error = action.payload.error
       })
       /* /Case Letters */
+
       /* Case RecordTime */
       .addCase(getTimeCaseRecords.fulfilled, (state, action) => {
         state.timeCaseRecord = action.payload.timeCaseRecord
@@ -1243,21 +1393,52 @@ export const appCaseSlice = createSlice({
         state.error = action.payload.error
       })
       /* Case RecordTime */
-      /* Case Mail Record */
-      .addCase(getCaseRecord.fulfilled, (state, action) => {
-        state.actionFlag = action.payload.actionFlag
-        state.mailCaseRecords = action.payload.mailCaseRecords
-        state.loading = true
-        state.success = action.payload.success
-        state.error = action.payload.error
-      })
-      .addCase(createCaseEmailSend.fulfilled, (state, action) => {
+
+      /* Mail */
+      .addCase(getCaseEmails.fulfilled, (state, action) => {
+        state.emailParams = action.payload.emailParams
+        state.caseEmailItems = action.payload.caseEmailItems
         state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success
         state.error = action.payload.error
       })
-    /* Case Mail Record */
+      .addCase(sendCaseEmail.fulfilled, (state, action) => {
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(replyCaseEmail.fulfilled, (state, action) => {
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      /* /Mail */
+
+      /* Mail attachment */
+      .addCase(createEmailAttachment.fulfilled, (state, action) => {
+        state.composeModal.attachments = action.payload.composeAttachment
+        state.attachments = action.payload.attachments
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(deleteEmailAttachment.fulfilled, (state, action) => {
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(deleteMultipleEmailAttachment.fulfilled, (state, action) => {
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+    /* /Mail attachment */
   }
 })
 
@@ -1270,7 +1451,9 @@ export const {
   resetComposeModal,
   setComposeSubject,
   setComposeMaximize,
+  setComposeAttachments,
   updateSelectedDetails,
+  updateCaseEmailItemsData,
   setComposeEditorHtmlContent
 } = appCaseSlice.actions
 

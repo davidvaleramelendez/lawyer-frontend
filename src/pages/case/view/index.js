@@ -15,7 +15,7 @@ import {
   toggleCompose,
   getCaseLetters,
   getCaseDocuments,
-  getCaseRecord,
+  getCaseEmails,
   getNoteCaseRecords,
   shareCaseRecord,
   statusCaseLetter,
@@ -24,9 +24,11 @@ import {
   updateSelectedDetails,
   getTimeCaseRecords,
   createTimeCaseRecord,
-  deleteCaseLetter
+  deleteCaseLetter,
+  updateCaseEmailItemsData
 } from '../store'
-import { getLetterTemplateList } from '../../letterTemplate/store'
+import { getMailDetail } from '@src/pages/email/store'
+import { getLetterTemplateList } from '@src/pages/letterTemplate/store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Constants
@@ -49,7 +51,14 @@ import {
   Table,
   Button,
   CardBody,
-  Collapse
+  Collapse,
+  ListGroup,
+  CardTitle,
+  CardHeader,
+  DropdownMenu,
+  ListGroupItem,
+  DropdownToggle,
+  UncontrolledDropdown
 } from 'reactstrap'
 
 // ** Icons Import
@@ -69,7 +78,9 @@ import {
   Trash2,
   EyeOff,
   Calendar,
-  Paperclip
+  Paperclip,
+  ChevronDown,
+  CornerUpRight
 } from 'react-feather'
 
 // ** Utils
@@ -89,6 +100,7 @@ import CardDetails from './CaseDetails'
 // ** Third Party Components
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import classnames from 'classnames'
 
 // Modals
 import ModalEditCaseClient from '../modals/ModalEditCaseClient'
@@ -133,13 +145,34 @@ const CaseView = () => {
   const [timeCounterTerminalOpen, setTimeCounterTerminalOpen] = useState(false)
 
   const [isCollapseOpen, setIsCollapseOpen] = useState('')
+  const [mailCollapseOne, setMailCollapseOne] = useState('')
 
   const handleCollapseAction = (value) => {
     if (isCollapseOpen === value) {
       setIsCollapseOpen('')
       return
     }
+
     setIsCollapseOpen(value)
+  }
+
+  const handleMailCollapseOneAction = (value, mailData = null) => {
+    if (mailCollapseOne === value) {
+      setMailCollapseOne('')
+      return
+    }
+
+    setMailCollapseOne(value)
+    if (mailData && mailData.id && !mailData.is_read) {
+      const caseEmailItems = [...store.caseEmailItems]
+      const index = caseEmailItems.findIndex((x) => x.id === mailData.id)
+      if (index !== -1) {
+        caseEmailItems[index] = { ...caseEmailItems[index], is_read: true }
+      }
+
+      dispatch(updateCaseEmailItemsData(caseEmailItems))
+      dispatch(getMailDetail({ id: mailData.id, payload: { email_group_id: mailData.email_group_id, type: "email" } }))
+    }
   }
 
   // Check TimeCounterModal 
@@ -180,7 +213,7 @@ const CaseView = () => {
       dispatch(getCaseLetters({ case_id: id }))
       dispatch(getCaseDocuments({ case_id: id }))
       dispatch(getNoteCaseRecords({ CaseID: id }))
-      dispatch(getCaseRecord(id))
+      dispatch(getCaseEmails({ case_id: id }))
       dispatch(getTimeCaseRecords(id))
       setLoadFirst(false)
     }
@@ -321,11 +354,11 @@ const CaseView = () => {
   /* /Delete case letter */
 
   /* Details of record at the right side */
-  const onRecordClick = (details, typeOf = "") => () => {
-    details = { ...details, typeOf }
-    dispatch(handleContentWidth('full'))
-    dispatch(updateSelectedDetails(details))
-  }
+  // const onRecordClick = (details, typeOf = "") => () => {
+  //   details = { ...details, typeOf }
+  //   dispatch(handleContentWidth('full'))
+  //   dispatch(updateSelectedDetails(details))
+  // }
 
   const handleTimeRecordStart = (values, caseId) => {
     const timeData = {
@@ -372,6 +405,186 @@ const CaseView = () => {
     return false
   }
   /* /Check case permission */
+
+  // ** Renders Attachments
+  const renderAttachments = (attachments) => {
+    if (attachments && attachments.length) {
+      return attachments.map((item, index) => {
+        return (
+          <a
+            key={`${index}_${item.name}`}
+            href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank"
+            className={classnames({
+              'mb-50': index + 1 !== attachments.length
+            })}
+          >
+            <span className='text-muted fw-bolder align-text-top'>{item.name}</span>
+          </a>
+        )
+      })
+    }
+  }
+
+  const renderEmailHistory = () => {
+    if (store.caseEmailItems && store.caseEmailItems.length) {
+      return (<ul className="timeline">
+        {store.caseEmailItems.map((mail, index) => (
+          <li
+            key={`mail-history-${index}`}
+            className="timeline-item"
+          >
+            <span
+              className="timeline-point timeline-point-primary cursor-pointer"
+              onClick={() => handleMailCollapseOneAction(`parent-${mail.id}`, mail)}
+            >
+              <Mail size={14} />
+            </span>
+            <Card className={`${!mail.is_read ? 'bg-light' : ''}`}>
+              <CardBody className="pb-0">
+                <div className='timeline-event'>
+                  <div
+                    className="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1 cursor-pointer"
+                    onClick={() => handleMailCollapseOneAction(`parent-${mail.id}`, mail)}
+                  >
+                    <h6 className="font-weight-bolder text-dark">
+                      {(mail && mail.subject) || ""} {mail && mail.email_group && mail.email_group.length ? (
+                        <span className="text-primary">({mail.email_group.length})</span>
+                      ) : null}
+                    </h6>
+
+
+                    <span className="timeline-event-time" align="right">
+                      {mail && mail.attachment && mail.attachment.length ? (
+                        <span className="me-50">
+                          <Paperclip size={16} />
+                        </span>
+                      ) : null}
+                      {(mail && mail.date && getTransformDate(mail.date, "DD-MM-YYYY HH:mm:ss")) || ""}
+                    </span>
+                  </div>
+
+                  <Collapse
+                    className="pb-1"
+                    isOpen={(mailCollapseOne === `parent-${mail.id}`) || false}
+                  >
+                    <div className="border-bottom py-1">
+                      <h5 className="mb-0">{(mail && mail.sender && mail.sender.name) || ""}</h5>
+                      <UncontrolledDropdown className='email-info-dropup'>
+                        <DropdownToggle className='font-small-3 text-muted cursor-pointer' tag='span' caret>
+                          <span className='me-25'>{(mail && mail.sender && mail.sender.email) || ""}</span>
+                          <ChevronDown size={17} />
+                        </DropdownToggle>
+                        <DropdownMenu>
+                          <Table className='font-small-3' size='sm' borderless>
+                            <tbody>
+                              <tr>
+                                <td className='text-end text-muted align-top'>From:</td>
+                                <td>{(mail && mail.sender && mail.sender.email) || ""}</td>
+                              </tr>
+
+                              <tr>
+                                <td className='text-end text-muted align-top'>To:</td>
+                                <td>{(mail && mail.receiver && mail.receiver.email) || ""}</td>
+                              </tr>
+
+                              <tr>
+                                <td className='text-end text-muted align-top'>Date:</td>
+                                {mail && mail.date ? (
+                                  <td>
+                                    {getTransformDate(mail.date, "DD-MM-YYYY HH:mm:ss")}
+                                  </td>
+                                ) : null}
+                              </tr>
+                            </tbody>
+                          </Table>
+                        </DropdownMenu>
+                      </UncontrolledDropdown>
+                    </div>
+
+                    {mail && mail.email_group && mail.email_group.length ? (
+                      <div className="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
+                        <ListGroup className="w-100 mt-1" flush>
+                          {mail.email_group.map((mailGroup, grpIndex) => (
+                            <ListGroupItem
+                              key={`mail-group-${grpIndex}`}
+                              className="list-group-item border-0"
+                            >
+                              <div
+                                className="case-card-collapse pb-1"
+                              >
+                                <div className="border-bottom py-1">
+                                  {grpIndex === mail.email_group.length - 1 ? (
+                                    <CornerUpRight
+                                      size={17}
+                                      className="cursor-pointer float-end"
+                                    />
+                                  ) : null}
+                                  <h5 className="mb-0">{(mailGroup && mailGroup.sender && mailGroup.sender.name) || ""}</h5>
+                                  <UncontrolledDropdown className='email-info-dropup'>
+                                    <DropdownToggle className='font-small-3 text-muted cursor-pointer' tag='div' caret>
+                                      <span className='me-25'>{(mailGroup && mailGroup.sender && mailGroup.sender.email) || ""}</span>
+                                      <ChevronDown size={17} />
+                                    </DropdownToggle>
+                                    <DropdownMenu>
+                                      <Table className='font-small-3' size='sm' borderless>
+                                        <tbody>
+                                          <tr>
+                                            <td className='text-end text-muted align-top'>From:</td>
+                                            <td>{(mailGroup && mailGroup.sender && mailGroup.sender.email) || ""}</td>
+                                          </tr>
+
+                                          <tr>
+                                            <td className='text-end text-muted align-top'>To:</td>
+                                            <td>{(mailGroup && mailGroup.receiver && mailGroup.receiver.email) || ""}</td>
+                                          </tr>
+
+                                          <tr>
+                                            <td className='text-end text-muted align-top'>Date:</td>
+                                            {mailGroup && mailGroup.date ? (
+                                              <td>
+                                                {getTransformDate(mailGroup.date, "DD-MM-YYYY HH:mm:ss")}
+                                              </td>
+                                            ) : null}
+                                          </tr>
+                                        </tbody>
+                                      </Table>
+                                    </DropdownMenu>
+                                  </UncontrolledDropdown>
+                                </div>
+
+                                <div className="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1 mt-1 cursor-pointer">
+                                  {mailGroup && mailGroup.body ? (setInnerHtml(mailGroup.body, "mail-message")) : null}
+                                </div>
+
+                                {mailGroup && mailGroup.attachment && mailGroup.attachment.length ? (
+                                  <div className="border-top pb-2">
+                                    <div className='mail-attachments'>
+                                      <div className='d-flex align-items-center my-1'>
+                                        <Paperclip size={16} />
+                                        <h5 className='fw-bolder text-body mb-0 ms-50'>{mailGroup.attachment.length} Attachment</h5>
+                                      </div>
+
+                                      <div className='d-flex flex-column'>
+                                        {renderAttachments(mailGroup.attachment)}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ) : null}
+                              </div>
+                            </ListGroupItem>
+                          ))}
+                        </ListGroup>
+                      </div>
+                    ) : null}
+                  </Collapse>
+                </div>
+              </CardBody>
+            </Card>
+          </li>
+        ))}
+      </ul>)
+    }
+  }
 
   return (
     <div className='invoice-preview-wrapper case-detail-view'>
@@ -560,6 +773,7 @@ const CaseView = () => {
                       </div>
 
                       <ModalComposeMail
+                        caseId={id}
                         caseData={store.caseItem}
                         fighterData={store.fighterItem}
                       />
@@ -776,7 +990,7 @@ const CaseView = () => {
                                 <tr>
                                   <td colSpan={5} className={`px-0 ${(isCollapseOpen === `case_time_track_${record.RecordID}` ? '' : 'border-0 py-0')}`}>
                                     <Collapse
-                                      className="case-table-collapse"
+                                      className="case-card-collapse"
                                       isOpen={(isCollapseOpen === `case_time_track_${record.RecordID}`) || false}
                                     >
                                       <Row>
@@ -876,7 +1090,7 @@ const CaseView = () => {
                               <tr>
                                 <td colSpan={5} className={`px-0 ${(isCollapseOpen === `case_record_${record.RecordID}` ? '' : 'border-0 py-0')}`}>
                                   <Collapse
-                                    className="case-table-collapse"
+                                    className="case-card-collapse"
                                     isOpen={(isCollapseOpen === `case_record_${record.RecordID}`) || false}
                                   >
                                     <Row>
@@ -964,7 +1178,7 @@ const CaseView = () => {
                               <tr>
                                 <td colSpan={5} className={`px-0 ${(isCollapseOpen === `case_letters_${letter.id}` ? '' : 'border-0 py-0')}`}>
                                   <Collapse
-                                    className="case-table-collapse"
+                                    className="case-card-collapse"
                                     isOpen={(isCollapseOpen === `case_letters_${letter.id}`) || false}
                                   >
                                     <Row>
@@ -1062,7 +1276,7 @@ const CaseView = () => {
                               <tr>
                                 <td colSpan={5} className={`px-0 ${(isCollapseOpen === `case_docs_${doc.id}` ? '' : 'border-0 py-0')}`}>
                                   <Collapse
-                                    className="case-table-collapse"
+                                    className="case-card-collapse"
                                     isOpen={(isCollapseOpen === `case_docs_${doc.id}`) || false}
                                   >
                                     <Row>
@@ -1138,44 +1352,6 @@ const CaseView = () => {
                             <th>{T('Action')}</th>
                           </tr>
                         </thead>
-                        <tbody>
-
-                          {store.mailCaseRecords.map((record, index) => (
-                            record.type === 'Email' ? (
-                              <tr key={`docs_${index}`} onClick={onRecordClick(doc)} className="cursor-pointer">
-                                <td />
-                                <td>{doc.created_at && getTransformDate(doc.created_at, "DD.MM.YYYY")}</td>
-
-                                <td>{doc.title}</td>
-
-                                <td>
-                                  <div className='form-switch form-check-primary'>
-                                    <Input
-                                      type='switch'
-                                      checked={doc.isErledigt}
-                                      id={`docs_${index}_${doc.isErledigt}`}
-                                      name={`docs_${index}_${doc.isErledigt}`}
-                                      className="cursor-pointer"
-                                      onChange={() => onDocumentDone(doc.id)}
-                                    />
-                                    <Label className='form-check-label' htmlFor="icon-primary">
-                                      <span className='switch-icon-left'>
-                                        <Check size={14} />
-                                      </span>
-                                      <span className='switch-icon-right'>
-                                        <X size={14} />
-                                      </span>
-                                    </Label>
-                                  </div>
-                                </td>
-
-                                <td>
-                                  <Eye size={18} className="cursor-pointer" onClick={() => onRecordClick(doc)} />
-                                </td>
-                              </tr>
-                            ) : null
-                          ))}
-                        </tbody>
                       </Table>
                     </Col>
                   </Row>
@@ -1183,6 +1359,21 @@ const CaseView = () => {
               </Card>
             </Col>
           </Row>
+
+          {/* Email History */}
+          <Row>
+            <Col xl={12} md={12} sm={12}>
+              <Card>
+                <CardHeader>
+                  <CardTitle tag='h4'>{T("Email History")}</CardTitle>
+                </CardHeader>
+              </Card>
+            </Col>
+          </Row>
+
+          {store && store.caseEmailItems && store.caseEmailItems.length ? (
+            renderEmailHistory()
+          ) : null}
           {/* /Email History */}
         </Col>
 

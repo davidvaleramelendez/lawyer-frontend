@@ -106,7 +106,7 @@ async function sendEmailRequest(payload) {
   return axios.post(`${API_ENDPOINTS.emails.send}`, payload).then((email) => email.data).catch((error) => error)
 }
 
-export const sendEmail = createAsyncThunk('appContact/sendEmail', async (payload, { dispatch, getState }) => {
+export const sendEmail = createAsyncThunk('appEmail/sendEmail', async (payload, { dispatch, getState }) => {
   try {
     const response = await sendEmailRequest(payload)
     if (response && response.flag) {
@@ -137,7 +137,7 @@ async function markEmailTrashRequest(payload) {
   return axios.post(`${API_ENDPOINTS.emails.markTrash}`, payload).then((email) => email.data).catch((error) => error)
 }
 
-export const markEmailTrash = createAsyncThunk('appContact/markEmailTrash', async (payload, { dispatch, getState }) => {
+export const markEmailTrash = createAsyncThunk('appEmail/markEmailTrash', async (payload, { dispatch, getState }) => {
   try {
     const response = await markEmailTrashRequest(payload)
     if (response && response.flag) {
@@ -168,7 +168,7 @@ async function markEmailDeleteRequest(payload) {
   return axios.post(`${API_ENDPOINTS.emails.markDelete}`, payload).then((email) => email.data).catch((error) => error)
 }
 
-export const markEmailDelete = createAsyncThunk('appContact/markEmailDelete', async (payload, { dispatch, getState }) => {
+export const markEmailDelete = createAsyncThunk('appEmail/markEmailDelete', async (payload, { dispatch, getState }) => {
   try {
     const response = await markEmailDeleteRequest(payload)
     if (response && response.flag) {
@@ -199,7 +199,7 @@ async function markEmailRestoreRequest(payload) {
   return axios.post(`${API_ENDPOINTS.emails.markRestore}`, payload).then((email) => email.data).catch((error) => error)
 }
 
-export const markEmailRestore = createAsyncThunk('appContact/markEmailRestore', async (payload, { dispatch, getState }) => {
+export const markEmailRestore = createAsyncThunk('appEmail/markEmailRestore', async (payload, { dispatch, getState }) => {
   try {
     const response = await markEmailRestoreRequest(payload)
     if (response && response.flag) {
@@ -230,7 +230,7 @@ async function markEmailImportantRequest(payload) {
   return axios.post(`${API_ENDPOINTS.emails.markImportant}`, payload).then((email) => email.data).catch((error) => error)
 }
 
-export const markEmailImportant = createAsyncThunk('appContact/markEmailImportant', async (payload, { dispatch, getState }) => {
+export const markEmailImportant = createAsyncThunk('appEmail/markEmailImportant', async (payload, { dispatch, getState }) => {
   try {
     const response = await markEmailImportantRequest(payload)
     if (response && response.flag) {
@@ -261,7 +261,7 @@ async function createEmailReplyRequest(payload) {
   return axios.post(`${API_ENDPOINTS.emails.createReply}`, payload).then((email) => email.data).catch((error) => error)
 }
 
-export const createEmailReply = createAsyncThunk('appContact/createEmailReply', async (payload, { dispatch }) => {
+export const createEmailReply = createAsyncThunk('appEmail/createEmailReply', async (payload, { dispatch }) => {
   try {
     const response = await createEmailReplyRequest(payload)
     if (response && response.flag) {
@@ -329,7 +329,7 @@ async function createEmailAttachmentRequest(payload) {
   return axios.post(`${API_ENDPOINTS.attachments.create}`, payload).then((email) => email.data).catch((error) => error)
 }
 
-export const createEmailAttachment = createAsyncThunk('appContact/createEmailAttachment', async (payload) => {
+export const createEmailAttachment = createAsyncThunk('appEmail/createEmailAttachment', async (payload) => {
   try {
     const response = await createEmailAttachmentRequest(payload)
     if (response && response.flag) {
@@ -837,6 +837,7 @@ export const appEmailSlice = createSlice({
         state.success = action.payload.success
         state.error = action.payload.error
       })
+
       /* Mail attachment */
       .addCase(createEmailAttachment.fulfilled, (state, action) => {
         state.composeModal.attachments = action.payload.composeAttachment

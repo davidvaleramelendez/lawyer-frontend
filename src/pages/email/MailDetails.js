@@ -221,9 +221,9 @@ const MailDetails = (props) => {
   // ** Renders Messages
   const renderMessage = (obj, index) => {
     return (
-      <Row className={`${index % 2 === 1 ? 'odd-even-reply' : ''}`}>
+      <Row>
         <Col sm={12}>
-          <Card>
+          <Card className={`${index % 2 === 1 ? 'odd-even-reply' : ''}`}>
             <CardHeader className='email-detail-head'>
               <div className='user-details d-flex justify-content-between align-items-center flex-wrap'>
                 <div className='mail-items'>

@@ -1,3 +1,5 @@
+/* eslint-disable object-shorthand */
+
 // ** React Imports
 import { Fragment, useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
@@ -12,19 +14,24 @@ import moment from "moment"
 import {
   closeCase,
   getCaseView,
-  toggleCompose,
-  getCaseLetters,
-  getCaseDocuments,
   getCaseEmails,
-  getNoteCaseRecords,
+  toggleCompose,
+  replyCaseEmail,
+  getCaseLetters,
   shareCaseRecord,
-  statusCaseLetter,
-  statusCaseDocument,
+  getCaseDocuments,
   clearCaseMessage,
-  updateSelectedDetails,
-  getTimeCaseRecords,
-  createTimeCaseRecord,
   deleteCaseLetter,
+  statusCaseLetter,
+  updateCaseLoader,
+  getNoteCaseRecords,
+  getTimeCaseRecords,
+  statusCaseDocument,
+  createTimeCaseRecord,
+  updateSelectedDetails,
+  createEmailAttachment,
+  deleteEmailAttachment,
+  setComposeAttachments,
   updateCaseEmailItemsData
 } from '../store'
 import { getMailDetail } from '@src/pages/email/store'
@@ -93,14 +100,18 @@ import {
 } from '@utils'
 
 // ** Custom Components
-import Avatar from '@components/avatar'
-import Notification from '@components/toast/notification'
 import CardDetails from './CaseDetails'
+import Avatar from '@components/avatar'
+import DotPulse from '@components/dotpulse'
+import Notification from '@components/toast/notification'
 
 // ** Third Party Components
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import classnames from 'classnames'
+import { Editor } from 'react-draft-wysiwyg'
+import { convertToRaw } from 'draft-js'
+import draftToHtml from 'draftjs-to-html'
 
 // Modals
 import ModalEditCaseClient from '../modals/ModalEditCaseClient'
@@ -120,6 +131,7 @@ import { T } from '@localization'
 
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
+import '@styles/react/libs/editor/editor.scss'
 
 const CaseView = () => {
   // ** Hooks
@@ -144,22 +156,37 @@ const CaseView = () => {
   const [timeTrackModalOpen, setTimeTrackModalOpen] = useState(false)
   const [timeCounterTerminalOpen, setTimeCounterTerminalOpen] = useState(false)
 
+  /* Collapse toggle */
   const [isCollapseOpen, setIsCollapseOpen] = useState('')
   const [mailCollapseOne, setMailCollapseOne] = useState('')
+  const [replyToggleCollapse, setReplyToggleCollapse] = useState('')
+  /* /Collapse toggle */
 
+  /* Reply editor */
+  const [editorHtmlContent, setEditorHtmlContent] = useState("")
+  const [editorStateContent, setEditorStateContent] = useState(null)
+  /* /Reply editor */
+  const [uploadedFiles, setUploadedFiles] = useState([])
+
+  /* Table collapse */
   const handleCollapseAction = (value) => {
     if (isCollapseOpen === value) {
       setIsCollapseOpen('')
-      return
+      return false
     }
 
     setIsCollapseOpen(value)
   }
+  /* /Table collapse */
 
+  /* Email history collapse */
   const handleMailCollapseOneAction = (value, mailData = null) => {
+    setReplyToggleCollapse('')
+    setEditorStateContent(null)
+    setEditorHtmlContent('')
     if (mailCollapseOne === value) {
       setMailCollapseOne('')
-      return
+      return false
     }
 
     setMailCollapseOne(value)
@@ -173,6 +200,25 @@ const CaseView = () => {
       dispatch(updateCaseEmailItemsData(caseEmailItems))
       dispatch(getMailDetail({ id: mailData.id, payload: { email_group_id: mailData.email_group_id, type: "email" } }))
     }
+  }
+
+  /* Reply collapse */
+  const handleReplyCollapseAction = (value) => {
+    if (replyToggleCollapse === value) {
+      setReplyToggleCollapse('')
+      setEditorStateContent(null)
+      setEditorHtmlContent('')
+      return false
+    }
+
+    setReplyToggleCollapse(value)
+  }
+  /* /Reply collapse */
+  /* /Email history collapse */
+
+  const handleEditorStateChange = (state) => {
+    setEditorStateContent(state)
+    setEditorHtmlContent(draftToHtml(convertToRaw(state.getCurrentContent())))
   }
 
   // Check TimeCounterModal 
@@ -241,6 +287,20 @@ const CaseView = () => {
     if (store.actionFlag && store.actionFlag === "DELETED") {
       navigate(`${adminRoot}/case`)
     }
+
+    /* Updating uploaded files */
+    if (store && store.actionFlag && store.actionFlag === "ATTACHMENT_ADDED") {
+      setUploadedFiles(store.attachments)
+    }
+
+    /* Updating editor data in detail page files */
+    if (store && store.actionFlag && store.actionFlag === "CASE_MAIL_REPLIED") {
+      setReplyToggleCollapse('')
+      setEditorHtmlContent("")
+      setEditorStateContent(null)
+      setUploadedFiles(store.attachments)
+      dispatch(setComposeAttachments([]))
+    }
   }, [store.success, store.error, store.actionFlag, loadFirst])
   // console.log("store >>>> ", store)
 
@@ -264,11 +324,11 @@ const CaseView = () => {
     })
   }
 
-  /* Case Send Mail */
-  const onSendCaseMail = (caseData) => {
-    console.log(caseData)
+  /* Case Compose Mail */
+  const onSendCaseMail = () => {
     dispatch(toggleCompose())
   }
+  /* /Case Compose Mail */
 
   /* Change note history done status */
   const onShareCaseRecord = (id) => {
@@ -406,7 +466,120 @@ const CaseView = () => {
   }
   /* /Check case permission */
 
-  // ** Renders Attachments
+  /* Swal Alert */
+  const onAlertMessage = (title, text, icon) => {
+    MySwal.fire({
+      title: title ?? 'File limit exceeded!',
+      text: text ?? 'File uploading size exceeded!',
+      icon: icon ?? 'warning',
+      showCancelButton: false,
+      confirmButtonText: 'Okay',
+      customClass: {
+        confirmButton: 'btn btn-primary'
+      },
+      buttonsStyling: false
+    }).then(function (result) {
+      if (result.isConfirmed) {
+      }
+    })
+  }
+
+  /* Deleting uploaded files */
+  const onFileRemove = (event, id) => {
+    if (event) {
+      event.preventDefault()
+    }
+
+    const fileArray = [...uploadedFiles]
+    const index = fileArray.findIndex(x => x.id === id)
+    if (index !== -1) {
+      fileArray.splice(index, 1)
+      dispatch(deleteEmailAttachment({ id: id }))
+    }
+
+    setUploadedFiles([...fileArray])
+  }
+
+  /* Files converting to base64 */
+  const onFileChange = (event) => {
+    event.preventDefault()
+    const result = [...event.target.files]
+    let fileFlag = false
+    const fileArray = []
+
+    if (result && result.length) {
+      const fileSize = result.reduce(function (prev, file) { return prev + file.size }, 0)
+      const fileSizeKiloBytes = fileSize / 1024
+      const uploadLimit = process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE * 1024
+      if (fileSizeKiloBytes > uploadLimit) {
+        onAlertMessage(T('File limit exceeded!'), `${T('Please upload max')} ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb ${T('files')}!`, 'warning')
+        return
+      }
+
+      result.map(((file, index) => {
+        const fileReader = new FileReader()
+        fileReader.readAsDataURL(file)
+        fileReader.onloadend = async () => {
+          const res = await fileReader.result
+          let fileName = file.name || ""
+          let extension = ""
+          if (fileName) {
+            fileName = fileName.split('.')
+            if (fileName && fileName.length > 0) {
+              extension = fileName[fileName.length - 1]
+            }
+          }
+          fileArray.push({ extension: extension, file: res })
+          fileFlag = false
+
+          if (result.length - 1 === index) {
+            fileFlag = true
+          }
+
+          let ids = []
+          if (uploadedFiles && uploadedFiles.length) {
+            ids = uploadedFiles.map((t) => t.id)
+          }
+
+          if (fileFlag) {
+            event.target.value = ""
+            dispatch(updateCaseLoader(false))
+            dispatch(createEmailAttachment({ attachment: fileArray, type: "email", ids: ids }))
+          }
+        }
+      }))
+    }
+  }
+  /* /Files converting to base64 */
+
+  const handleCaseSendReply = (values) => {
+    if (values) {
+      const replyData = {
+        id: values.id,
+        case_id: id,
+        email_group_id: values.email_group_id
+      }
+
+      if (store && store.caseItem && store.caseItem.user && store.caseItem.user.id) {
+        replyData.email_to = store.caseItem.user.id
+      }
+
+      if (editorHtmlContent) {
+        replyData.message = editorHtmlContent
+      }
+
+      if (uploadedFiles && uploadedFiles.length) {
+        replyData.attachment_ids = uploadedFiles.map((t) => t.id)
+      }
+
+      if (replyData && replyData.id && editorHtmlContent) {
+        dispatch(updateCaseLoader(false))
+        dispatch(replyCaseEmail(replyData))
+      }
+    }
+  }
+
+  /* Renders Attachments */
   const renderAttachments = (attachments) => {
     if (attachments && attachments.length) {
       return attachments.map((item, index) => {
@@ -424,167 +597,238 @@ const CaseView = () => {
       })
     }
   }
+  /* /Renders Attachments */
 
+  /* Renders email history */
   const renderEmailHistory = () => {
     if (store.caseEmailItems && store.caseEmailItems.length) {
-      return (<ul className="timeline">
-        {store.caseEmailItems.map((mail, index) => (
-          <li
-            key={`mail-history-${index}`}
-            className="timeline-item"
-          >
-            <span
-              className="timeline-point timeline-point-primary cursor-pointer"
-              onClick={() => handleMailCollapseOneAction(`parent-${mail.id}`, mail)}
+      return (
+        <ul className="timeline email-application">
+          {store.caseEmailItems.map((mail, index) => (
+            <li
+              key={`mail-history-${index}`}
+              className="timeline-item"
             >
-              <Mail size={14} />
-            </span>
-            <Card className={`${!mail.is_read ? 'bg-light' : ''}`}>
-              <CardBody className="pb-0">
-                <div className='timeline-event'>
-                  <div
-                    className="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1 cursor-pointer"
-                    onClick={() => handleMailCollapseOneAction(`parent-${mail.id}`, mail)}
-                  >
-                    <h6 className="font-weight-bolder text-dark">
-                      {(mail && mail.subject) || ""} {mail && mail.email_group && mail.email_group.length ? (
-                        <span className="text-primary">({mail.email_group.length})</span>
-                      ) : null}
-                    </h6>
+              <span
+                className="timeline-point timeline-point-primary cursor-pointer"
+                onClick={() => handleMailCollapseOneAction(`parent-${mail.id}`, mail)}
+              >
+                <Mail size={14} />
+              </span>
+              <Card className={`${!mail.is_read ? 'bg-light' : ''}`}>
+                <CardBody className="pb-0">
+                  <div className='timeline-event'>
+                    <div
+                      className="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1 cursor-pointer"
+                      onClick={() => handleMailCollapseOneAction(`parent-${mail.id}`, mail)}
+                    >
+                      <h6 className="font-weight-bolder text-dark">
+                        {(mail && mail.subject) || ""} {mail && mail.email_group && mail.email_group.length ? (
+                          <span className="text-primary">({mail.email_group.length})</span>
+                        ) : null}
+                      </h6>
 
 
-                    <span className="timeline-event-time" align="right">
-                      {mail && mail.attachment && mail.attachment.length ? (
-                        <span className="me-50">
-                          <Paperclip size={16} />
-                        </span>
-                      ) : null}
-                      {(mail && mail.date && getTransformDate(mail.date, "DD-MM-YYYY HH:mm:ss")) || ""}
-                    </span>
-                  </div>
-
-                  <Collapse
-                    className="pb-1"
-                    isOpen={(mailCollapseOne === `parent-${mail.id}`) || false}
-                  >
-                    <div className="border-bottom py-1">
-                      <h5 className="mb-0">{(mail && mail.sender && mail.sender.name) || ""}</h5>
-                      <UncontrolledDropdown className='email-info-dropup'>
-                        <DropdownToggle className='font-small-3 text-muted cursor-pointer' tag='span' caret>
-                          <span className='me-25'>{(mail && mail.sender && mail.sender.email) || ""}</span>
-                          <ChevronDown size={17} />
-                        </DropdownToggle>
-                        <DropdownMenu>
-                          <Table className='font-small-3' size='sm' borderless>
-                            <tbody>
-                              <tr>
-                                <td className='text-end text-muted align-top'>From:</td>
-                                <td>{(mail && mail.sender && mail.sender.email) || ""}</td>
-                              </tr>
-
-                              <tr>
-                                <td className='text-end text-muted align-top'>To:</td>
-                                <td>{(mail && mail.receiver && mail.receiver.email) || ""}</td>
-                              </tr>
-
-                              <tr>
-                                <td className='text-end text-muted align-top'>Date:</td>
-                                {mail && mail.date ? (
-                                  <td>
-                                    {getTransformDate(mail.date, "DD-MM-YYYY HH:mm:ss")}
-                                  </td>
-                                ) : null}
-                              </tr>
-                            </tbody>
-                          </Table>
-                        </DropdownMenu>
-                      </UncontrolledDropdown>
+                      <span className="timeline-event-time" align="right">
+                        {mail && mail.attachment && mail.attachment.length ? (
+                          <span className="me-50">
+                            <Paperclip size={16} />
+                          </span>
+                        ) : null}
+                        {(mail && mail.date && getTransformDate(mail.date, "DD-MM-YYYY HH:mm:ss")) || ""}
+                      </span>
                     </div>
 
-                    {mail && mail.email_group && mail.email_group.length ? (
-                      <div className="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
-                        <ListGroup className="w-100 mt-1" flush>
-                          {mail.email_group.map((mailGroup, grpIndex) => (
-                            <ListGroupItem
-                              key={`mail-group-${grpIndex}`}
-                              className="list-group-item border-0"
-                            >
-                              <div
-                                className="case-card-collapse pb-1"
-                              >
-                                <div className="border-bottom py-1">
-                                  {grpIndex === mail.email_group.length - 1 ? (
-                                    <CornerUpRight
-                                      size={17}
-                                      className="cursor-pointer float-end"
-                                    />
-                                  ) : null}
-                                  <h5 className="mb-0">{(mailGroup && mailGroup.sender && mailGroup.sender.name) || ""}</h5>
-                                  <UncontrolledDropdown className='email-info-dropup'>
-                                    <DropdownToggle className='font-small-3 text-muted cursor-pointer' tag='div' caret>
-                                      <span className='me-25'>{(mailGroup && mailGroup.sender && mailGroup.sender.email) || ""}</span>
-                                      <ChevronDown size={17} />
-                                    </DropdownToggle>
-                                    <DropdownMenu>
-                                      <Table className='font-small-3' size='sm' borderless>
-                                        <tbody>
-                                          <tr>
-                                            <td className='text-end text-muted align-top'>From:</td>
-                                            <td>{(mailGroup && mailGroup.sender && mailGroup.sender.email) || ""}</td>
-                                          </tr>
+                    <Collapse
+                      className="pb-1"
+                      isOpen={(mailCollapseOne === `parent-${mail.id}`) || false}
+                    >
+                      {mail && mail.email_group && mail.email_group.length ? (
+                        <div className="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
+                          <ListGroup className="w-100 mt-1" flush>
+                            {mail.email_group.map((mailGroup, grpIndex) => (
+                              <Fragment key={`mail-group-${grpIndex}`}>
+                                <ListGroupItem className="list-group-item border-0">
+                                  <div
+                                    className={`case-card-collapse pb-1 ${grpIndex % 2 === 1 ? 'odd-even-reply' : ''}`}
+                                  >
+                                    <div className="border-bottom py-1">
+                                      {grpIndex === mail.email_group.length - 1 ? (
+                                        <CornerUpRight
+                                          size={17}
+                                          className="cursor-pointer float-end"
+                                          onClick={() => handleReplyCollapseAction(`parent-child-reply-${mailGroup.id}`)}
+                                        />
+                                      ) : null}
+                                      <h5 className="mb-0">{(mailGroup && mailGroup.sender && mailGroup.sender.name) || ""}</h5>
+                                      <UncontrolledDropdown className='email-info-dropup'>
+                                        <DropdownToggle className='font-small-3 text-muted cursor-pointer' tag='span'>
+                                          <span className='me-25'>{(mailGroup && mailGroup.sender && mailGroup.sender.email) || ""}</span>
+                                          <ChevronDown size={17} />
+                                        </DropdownToggle>
+                                        <DropdownMenu>
+                                          <Table className='font-small-3' size='sm' borderless>
+                                            <tbody>
+                                              <tr>
+                                                <td className='text-end text-muted align-top'>From:</td>
+                                                <td>{(mailGroup && mailGroup.sender && mailGroup.sender.email) || ""}</td>
+                                              </tr>
 
-                                          <tr>
-                                            <td className='text-end text-muted align-top'>To:</td>
-                                            <td>{(mailGroup && mailGroup.receiver && mailGroup.receiver.email) || ""}</td>
-                                          </tr>
+                                              <tr>
+                                                <td className='text-end text-muted align-top'>To:</td>
+                                                <td>{(mailGroup && mailGroup.receiver && mailGroup.receiver.email) || ""}</td>
+                                              </tr>
 
-                                          <tr>
-                                            <td className='text-end text-muted align-top'>Date:</td>
-                                            {mailGroup && mailGroup.date ? (
-                                              <td>
-                                                {getTransformDate(mailGroup.date, "DD-MM-YYYY HH:mm:ss")}
-                                              </td>
-                                            ) : null}
-                                          </tr>
-                                        </tbody>
-                                      </Table>
-                                    </DropdownMenu>
-                                  </UncontrolledDropdown>
-                                </div>
+                                              <tr>
+                                                <td className='text-end text-muted align-top'>Date:</td>
+                                                {mailGroup && mailGroup.date ? (
+                                                  <td>
+                                                    {getTransformDate(mailGroup.date, "DD-MM-YYYY HH:mm:ss")}
+                                                  </td>
+                                                ) : null}
+                                              </tr>
+                                            </tbody>
+                                          </Table>
+                                        </DropdownMenu>
+                                      </UncontrolledDropdown>
+                                    </div>
 
-                                <div className="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1 mt-1 cursor-pointer">
-                                  {mailGroup && mailGroup.body ? (setInnerHtml(mailGroup.body, "mail-message")) : null}
-                                </div>
+                                    <div className="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1 mt-1 cursor-pointer">
+                                      {mailGroup && mailGroup.body ? (setInnerHtml(mailGroup.body, "mail-message")) : null}
+                                    </div>
 
-                                {mailGroup && mailGroup.attachment && mailGroup.attachment.length ? (
-                                  <div className="border-top pb-2">
-                                    <div className='mail-attachments'>
-                                      <div className='d-flex align-items-center my-1'>
-                                        <Paperclip size={16} />
-                                        <h5 className='fw-bolder text-body mb-0 ms-50'>{mailGroup.attachment.length} Attachment</h5>
+                                    {mailGroup && mailGroup.attachment && mailGroup.attachment.length ? (
+                                      <div className="border-top my-2">
+                                        <div className='mail-attachments'>
+                                          <div className='d-flex align-items-center my-1'>
+                                            <Paperclip size={16} />
+                                            <h5 className='fw-bolder text-body mb-0 ms-50'>{mailGroup.attachment.length} Attachment</h5>
+                                          </div>
+
+                                          <div className='d-flex flex-column'>
+                                            {renderAttachments(mailGroup.attachment)}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    ) : null}
+
+                                  </div>
+                                </ListGroupItem>
+
+                                <Collapse
+                                  className="pb-1"
+                                  isOpen={(replyToggleCollapse === `parent-child-reply-${mailGroup.id}`) || false}
+                                >
+                                  <ListGroupItem
+                                    id={`parent-child-reply-${mailGroup.id}`}
+                                    className="list-group-item border-0"
+                                  >
+                                    <div className="case-card-collapse pb-1">
+                                      {!store.loading ? (
+                                        <DotPulse
+                                          className="d-flex justify-content-center position-absolute top-50 w-100 zindex-1"
+                                        />
+                                      ) : null}
+
+                                      <h4 className="mb-1">Answers</h4>
+                                      <div id="message-editor">
+                                        <Editor
+                                          id={`parent-child-reply-editor-${mailGroup.id}`}
+                                          name={`parent-child-reply-editor-${mailGroup.id}`}
+                                          toolbarClassName="rounded-0"
+                                          wrapperClassName="toolbar-bottom"
+                                          editorClassName="rounded-0 border-1"
+                                          toolbar={{
+                                            options: ["inline", "textAlign"],
+                                            inline: {
+                                              inDropdown: false,
+                                              options: ["bold", "italic", "underline", "strikethrough"]
+                                            }
+                                          }}
+                                          defaultEditorState={editorStateContent}
+                                          onEditorStateChange={handleEditorStateChange}
+                                        />
                                       </div>
 
-                                      <div className='d-flex flex-column'>
-                                        {renderAttachments(mailGroup.attachment)}
+                                      {uploadedFiles && uploadedFiles.length ? (
+                                        <div className="email-attachments mt-1 mb-1">
+                                          {uploadedFiles.map((item, index) => {
+                                            return (
+                                              <div className="inline" key={`attachment_${index}`}>
+                                                <Paperclip className="cursor-pointer ms-50 me-1" size={17} />
+
+                                                {item && item.path ? (<a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>) : null}
+
+                                                <a
+                                                  href={`${adminRoot}/case/view/${id}`}
+                                                  onClick={(event) => onFileRemove(event, item.id)}
+                                                >
+                                                  <X
+                                                    size={17}
+                                                    color="#FF0000"
+                                                    className="cursor-pointer ms-50"
+                                                  />
+                                                </a>
+                                              </div>
+                                            )
+                                          })}
+                                        </div>
+                                      ) : null}
+
+                                      <div className="d-flex justify-content-between mt-2">
+                                        <h5 className="mb-0">
+                                          <Button
+                                            type="button"
+                                            color="primary"
+                                            disabled={!store.loading}
+                                            onClick={() => handleCaseSendReply(mailGroup)}
+                                          >
+                                            Send
+                                          </Button>
+
+                                          <Button
+                                            type="button"
+                                            color="warning"
+                                            className="ms-1"
+                                            onClick={() => handleReplyCollapseAction(`parent-child-reply-${mailGroup.id}`)}
+                                            disabled={!store.loading}
+                                          >
+                                            Cancel
+                                          </Button>
+
+                                          <Label className="mb-0 ms-1" for="attach-email-item">
+                                            <Paperclip className="cursor-pointer" size={17} />
+                                            <input
+                                              hidden
+                                              multiple
+                                              type="file"
+                                              name="attach-email-item"
+                                              id="attach-email-item"
+                                              disabled={!store.loading}
+                                              onChange={(event) => onFileChange(event)}
+                                            />
+                                          </Label>
+                                        </h5>
                                       </div>
                                     </div>
-                                  </div>
-                                ) : null}
-                              </div>
-                            </ListGroupItem>
-                          ))}
-                        </ListGroup>
-                      </div>
-                    ) : null}
-                  </Collapse>
-                </div>
-              </CardBody>
-            </Card>
-          </li>
-        ))}
-      </ul>)
+                                  </ListGroupItem>
+                                </Collapse>
+                              </Fragment>
+                            ))}
+                          </ListGroup>
+                        </div>
+                      ) : null}
+                    </Collapse>
+                  </div>
+                </CardBody>
+              </Card>
+            </li>
+          ))}
+        </ul>
+      )
     }
   }
+  /* /Renders email history */
 
   return (
     <div className='invoice-preview-wrapper case-detail-view'>
@@ -987,58 +1231,60 @@ const CaseView = () => {
                                   </td>
                                 </tr>
 
-                                <tr>
-                                  <td colSpan={5} className={`px-0 ${(isCollapseOpen === `case_time_track_${record.RecordID}` ? '' : 'border-0 py-0')}`}>
-                                    <Collapse
-                                      className="case-card-collapse"
-                                      isOpen={(isCollapseOpen === `case_time_track_${record.RecordID}`) || false}
-                                    >
-                                      <Row>
-                                        <div className="col-3">
-                                          <strong>{T("Date")}: </strong>
-                                        </div>
-                                        {(record && record.CreatedAt) && (
-                                          <div className="col-9">
-                                            {getTransformDate(record.CreatedAt, "DD.MM.YYYY")}
+                                {(isCollapseOpen === `case_time_track_${record.RecordID}`) ? (
+                                  <tr>
+                                    <td colSpan={5} className={`px-0 w-100 ${(isCollapseOpen === `case_time_track_${record.RecordID}` ? '' : 'border-0 py-0')}`}>
+                                      <Collapse
+                                        className="case-card-collapse"
+                                        isOpen={(isCollapseOpen === `case_time_track_${record.RecordID}`) || false}
+                                      >
+                                        <Row>
+                                          <div className="w-25">
+                                            <strong>{T("Date")}: </strong>
                                           </div>
+                                          {(record && record.CreatedAt) && (
+                                            <div className="w-75">
+                                              {getTransformDate(record.CreatedAt, "DD.MM.YYYY")}
+                                            </div>
+                                          )}
+                                        </Row>
+
+                                        {(record && record.interval_time) && (
+                                          <Row className="mt-1">
+                                            <div className="w-25">
+                                              <strong>{T("Interval Time")}: </strong>
+                                            </div>
+                                            <div className="w-75">
+                                              {record.interval_time} S
+                                            </div>
+                                          </Row>
                                         )}
-                                      </Row>
 
-                                      {(record && record.interval_time) && (
-                                        <Row className="mt-1">
-                                          <div className="col-3">
-                                            <strong>{T("Interval Time")}: </strong>
-                                          </div>
-                                          <div className="col-9">
-                                            {record.interval_time} S
-                                          </div>
-                                        </Row>
-                                      )}
+                                        {(record && record.start_time) && (
+                                          <Row className="mt-1">
+                                            <div className="w-25">
+                                              <strong>{T("Start Time")}: </strong>
+                                            </div>
+                                            <div className="w-75">
+                                              {record.start_time}
+                                            </div>
+                                          </Row>
+                                        )}
 
-                                      {(record && record.start_time) && (
-                                        <Row className="mt-1">
-                                          <div className="col-3">
-                                            <strong>{T("Start Time")}: </strong>
-                                          </div>
-                                          <div className="col-9">
-                                            {record.start_time}
-                                          </div>
-                                        </Row>
-                                      )}
-
-                                      {(record && record.end_time) && (
-                                        <Row className="mt-1">
-                                          <div className="col-3">
-                                            <strong>{T("End Time")}: </strong>
-                                          </div>
-                                          <div className="col-9">
-                                            {record.end_time}
-                                          </div>
-                                        </Row>
-                                      )}
-                                    </Collapse>
-                                  </td>
-                                </tr>
+                                        {(record && record.end_time) && (
+                                          <Row className="mt-1">
+                                            <div className="w-25">
+                                              <strong>{T("End Time")}: </strong>
+                                            </div>
+                                            <div className="w-75">
+                                              {record.end_time}
+                                            </div>
+                                          </Row>
+                                        )}
+                                      </Collapse>
+                                    </td>
+                                  </tr>
+                                ) : null}
                               </Fragment>
                             ) : null
                           ))}
@@ -1087,54 +1333,56 @@ const CaseView = () => {
                                 </td>
                               </tr>
 
-                              <tr>
-                                <td colSpan={5} className={`px-0 ${(isCollapseOpen === `case_record_${record.RecordID}` ? '' : 'border-0 py-0')}`}>
-                                  <Collapse
-                                    className="case-card-collapse"
-                                    isOpen={(isCollapseOpen === `case_record_${record.RecordID}`) || false}
-                                  >
-                                    <Row>
-                                      <div className="col-3">
-                                        <strong>{T("Content")}: </strong>
-                                      </div>
-                                      <div className="col-9">
-                                        {(record && record.Content) || ""}
-                                      </div>
-                                    </Row>
-
-                                    {(record && record.CreatedAt) && (
-                                      <Row className="mt-1">
-                                        <div className="col-3">
-                                          <strong>{T("Date")}: </strong>
+                              {(isCollapseOpen === `case_record_${record.RecordID}`) ? (
+                                <tr>
+                                  <td colSpan={5} className={`px-0 w-100 ${(isCollapseOpen === `case_record_${record.RecordID}` ? '' : 'border-0 py-0')}`}>
+                                    <Collapse
+                                      className="case-card-collapse"
+                                      isOpen={(isCollapseOpen === `case_record_${record.RecordID}`) || false}
+                                    >
+                                      <Row>
+                                        <div className="w-25">
+                                          <strong>{T("Content")}: </strong>
                                         </div>
-                                        <div className="col-9">
-                                          {getTransformDate(record.CreatedAt, "DD.MM.YYYY")}
+                                        <div className="w-75">
+                                          {(record && record.Content) || ""}
                                         </div>
                                       </Row>
-                                    )}
 
-                                    {record && record.attachment && record.attachment.length > 0 && (
-                                      <Row className="mt-1">
-                                        <div className="col-3">
-                                          <strong>{T("Files")}: </strong>
-                                        </div>
-                                        <div className="col-9">
-                                          {record.attachment.map((item, index) => {
-                                            return (
-                                              <div className="inline" key={`attachment_${index}`}>
-                                                <Paperclip className='cursor-pointer me-1' size={17} />
-                                                {item && item.path ? (
-                                                  <a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>
-                                                ) : null}
-                                              </div>
-                                            )
-                                          })}
-                                        </div>
-                                      </Row>
-                                    )}
-                                  </Collapse>
-                                </td>
-                              </tr>
+                                      {(record && record.CreatedAt) && (
+                                        <Row className="mt-1">
+                                          <div className="w-25">
+                                            <strong>{T("Date")}: </strong>
+                                          </div>
+                                          <div className="w-75">
+                                            {getTransformDate(record.CreatedAt, "DD.MM.YYYY")}
+                                          </div>
+                                        </Row>
+                                      )}
+
+                                      {record && record.attachment && record.attachment.length > 0 && (
+                                        <Row className="mt-1">
+                                          <div className="col-3">
+                                            <strong>{T("Files")}: </strong>
+                                          </div>
+                                          <div className="col-9">
+                                            {record.attachment.map((item, index) => {
+                                              return (
+                                                <div className="inline" key={`attachment_${index}`}>
+                                                  <Paperclip className='cursor-pointer me-1' size={17} />
+                                                  {item && item.path ? (
+                                                    <a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>
+                                                  ) : null}
+                                                </div>
+                                              )
+                                            })}
+                                          </div>
+                                        </Row>
+                                      )}
+                                    </Collapse>
+                                  </td>
+                                </tr>
+                              ) : null}
                             </Fragment>
                           ))}
 
@@ -1175,64 +1423,66 @@ const CaseView = () => {
                                 </td>
                               </tr>
 
-                              <tr>
-                                <td colSpan={5} className={`px-0 ${(isCollapseOpen === `case_letters_${letter.id}` ? '' : 'border-0 py-0')}`}>
-                                  <Collapse
-                                    className="case-card-collapse"
-                                    isOpen={(isCollapseOpen === `case_letters_${letter.id}`) || false}
-                                  >
-                                    <Row>
-                                      <div className="col-3">
-                                        <strong>{T("Message")}: </strong>
-                                      </div>
-                                      {(letter && letter.message) && (
-                                        <div className="col-9">
-                                          {setInnerHtml(letter.message)}
+                              {(isCollapseOpen === `case_letters_${letter.id}`) ? (
+                                <tr>
+                                  <td colSpan={5} className={`px-0 w-100 ${(isCollapseOpen === `case_letters_${letter.id}` ? '' : 'border-0 py-0')}`}>
+                                    <Collapse
+                                      className="case-card-collapse"
+                                      isOpen={(isCollapseOpen === `case_letters_${letter.id}`) || false}
+                                    >
+                                      <Row>
+                                        <div className="w-25">
+                                          <strong>{T("Message")}: </strong>
                                         </div>
-                                      )}
-                                    </Row>
+                                        {(letter && letter.message) && (
+                                          <div className="w-75">
+                                            {setInnerHtml(letter.message)}
+                                          </div>
+                                        )}
+                                      </Row>
 
-                                    <div className="mt-1">
-                                      {(letter && letter.pdf_path) && (
+                                      <div className="mt-1">
+                                        {(letter && letter.pdf_path) && (
+                                          <Button.Ripple
+                                            outline
+                                            tag="a"
+                                            target="_blank"
+                                            color="primary"
+                                            className={`btn-icon rounded-circle me-50`}
+                                            href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${letter.pdf_path}`}
+                                          >
+                                            <Avatar
+                                              img={pdfPng}
+                                              imgWidth={16}
+                                              imgHeight={16}
+                                              className="bg-transparent"
+                                            />
+                                          </Button.Ripple>
+                                        )}
+
                                         <Button.Ripple
                                           outline
-                                          tag="a"
-                                          target="_blank"
+                                          tag={Link}
                                           color="primary"
+                                          to={`${adminRoot}/case/letter-template/edit/${id}/${letter.id}`}
                                           className={`btn-icon rounded-circle me-50`}
-                                          href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${letter.pdf_path}`}
                                         >
-                                          <Avatar
-                                            img={pdfPng}
-                                            imgWidth={16}
-                                            imgHeight={16}
-                                            className="bg-transparent"
-                                          />
+                                          <Edit size={16} />
                                         </Button.Ripple>
-                                      )}
 
-                                      <Button.Ripple
-                                        outline
-                                        tag={Link}
-                                        color="primary"
-                                        to={`${adminRoot}/case/letter-template/edit/${id}/${letter.id}`}
-                                        className={`btn-icon rounded-circle me-50`}
-                                      >
-                                        <Edit size={16} />
-                                      </Button.Ripple>
-
-                                      <Button.Ripple
-                                        outline
-                                        color="danger"
-                                        className={`btn-icon rounded-circle`}
-                                        onClick={() => onDeleteLetter(letter.id)}
-                                      >
-                                        <Trash2 size={16} />
-                                      </Button.Ripple>
-                                    </div>
-                                  </Collapse>
-                                </td>
-                              </tr>
+                                        <Button.Ripple
+                                          outline
+                                          color="danger"
+                                          className={`btn-icon rounded-circle`}
+                                          onClick={() => onDeleteLetter(letter.id)}
+                                        >
+                                          <Trash2 size={16} />
+                                        </Button.Ripple>
+                                      </div>
+                                    </Collapse>
+                                  </td>
+                                </tr>
+                              ) : null}
                             </Fragment>
                           ))}
 
@@ -1273,50 +1523,52 @@ const CaseView = () => {
                                 </td>
                               </tr>
 
-                              <tr>
-                                <td colSpan={5} className={`px-0 ${(isCollapseOpen === `case_docs_${doc.id}` ? '' : 'border-0 py-0')}`}>
-                                  <Collapse
-                                    className="case-card-collapse"
-                                    isOpen={(isCollapseOpen === `case_docs_${doc.id}`) || false}
-                                  >
-                                    <Row>
-                                      <div className="col-3">
-                                        <strong>{T("Content")}: </strong>
-                                      </div>
-                                      <div className="col-9">
-                                        {(doc && doc.description) || ""}
-                                      </div>
-                                    </Row>
-
-                                    {(doc && doc.created_at) && (
-                                      <Row className="mt-1">
-                                        <div className="col-3">
-                                          <strong>{T("Date")}: </strong>
+                              {(isCollapseOpen === `case_docs_${doc.id}`) ? (
+                                <tr>
+                                  <td colSpan={5} className={`px-0 w-100 ${(isCollapseOpen === `case_docs_${doc.id}` ? '' : 'border-0 py-0')}`}>
+                                    <Collapse
+                                      className="case-card-collapse"
+                                      isOpen={(isCollapseOpen === `case_docs_${doc.id}`) || false}
+                                    >
+                                      <Row>
+                                        <div className="w-25">
+                                          <strong>{T("Content")}: </strong>
                                         </div>
-                                        <div className="col-9">
-                                          {getTransformDate(doc.created_at, "DD.MM.YYYY")}
+                                        <div className="w-75">
+                                          {(doc && doc.description) || ""}
                                         </div>
                                       </Row>
-                                    )}
 
-                                    {(doc && doc.attachment_pdf) && (
-                                      <Row className="mt-1">
-                                        <div className="col-3">
-                                          <strong>{T("File")}: </strong>
-                                        </div>
-                                        <div className="col-9">
-                                          <div className="inline">
-                                            <a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${doc.attachment_pdf}`} target="_blank" className="me-1">
-                                              <Paperclip className='cursor-pointer me-1' size={17} />
-                                              attachment
-                                            </a>
+                                      {(doc && doc.created_at) && (
+                                        <Row className="mt-1">
+                                          <div className="w-25">
+                                            <strong>{T("Date")}: </strong>
                                           </div>
-                                        </div>
-                                      </Row>
-                                    )}
-                                  </Collapse>
-                                </td>
-                              </tr>
+                                          <div className="w-75">
+                                            {getTransformDate(doc.created_at, "DD.MM.YYYY")}
+                                          </div>
+                                        </Row>
+                                      )}
+
+                                      {(doc && doc.attachment_pdf) && (
+                                        <Row className="mt-1">
+                                          <div className="w-25">
+                                            <strong>{T("File")}: </strong>
+                                          </div>
+                                          <div className="w-75">
+                                            <div className="inline">
+                                              <a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${doc.attachment_pdf}`} target="_blank" className="me-1">
+                                                <Paperclip className='cursor-pointer me-1' size={17} />
+                                                attachment
+                                              </a>
+                                            </div>
+                                          </div>
+                                        </Row>
+                                      )}
+                                    </Collapse>
+                                  </td>
+                                </tr>
+                              ) : null}
                             </Fragment>
                           ))}
                         </tbody>
@@ -1328,37 +1580,6 @@ const CaseView = () => {
             </Col>
           </Row>
           {/* /Notes && Time Recording && Letter && Document History */}
-
-          {/* Email History */}
-          <Row className='invoice-preview'>
-            <Col xl={12} md={12} sm={12}>
-              <Card className='invoice-preview-card'>
-                <CardBody className='invoice-padding pb-0'>
-                  <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
-                    <div className="d-flex flex-wrap">
-                      <h3 className="invoice-date">{T("Email History")}</h3>
-                    </div>
-                  </div>
-
-                  <Row className='mb-2'>
-                    <Col xl={12} md={12} sm={12}>
-                      <Table responsive>
-                        <thead>
-                          <tr>
-                            <th />
-                            <th>{T('Date')}</th>
-                            <th>{T('Subject')}</th>
-                            <th>{T('Done')}?</th>
-                            <th>{T('Action')}</th>
-                          </tr>
-                        </thead>
-                      </Table>
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
 
           {/* Email History */}
           <Row>

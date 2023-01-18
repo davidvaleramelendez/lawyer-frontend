@@ -183,7 +183,7 @@ const ModalComposeMail = ({
   }
 
   // Files converting to base64
-  const onFileChange = (event) => {
+  const onComposeFileChange = (event) => {
     event.preventDefault()
     const result = [...event.target.files]
     let fileFlag = false
@@ -497,15 +497,15 @@ const ModalComposeMail = ({
                 </UncontrolledButtonDropdown>
 
                 <div className='email-attachement'>
-                  <Label className='mb-0' for='attach-email-item'>
+                  <Label className='mb-0' for='compose-attach-email-item'>
                     <Paperclip className='cursor-pointer ms-50' size={18} />
                     <input
                       hidden
                       multiple
                       type='file'
-                      name='attach-email-item'
-                      id='attach-email-item'
-                      onChange={(event) => onFileChange(event)}
+                      name='compose-attach-email-item'
+                      id='compose-attach-email-item'
+                      onChange={(event) => onComposeFileChange(event)}
                     />
                   </Label>
                 </div>

@@ -23,7 +23,19 @@ import {
 
 export default [
   {
+    id: 'calendarApp',
+    title: 'Calendar',
+    icon: <Calendar size={20} />,
+    navLink: `${adminRoot}/calendar`
+  },
+  {
     header: 'Apps & Menu'
+  },
+  {
+    id: 'userApp',
+    title: 'User',
+    icon: <User size={20} />,
+    navLink: `${adminRoot}/user`
   },
   {
     id: 'emailApp',
@@ -33,7 +45,7 @@ export default [
   },
   {
     id: 'documentApp',
-    title: 'Documents',
+    title: 'Cases',
     icon: <Briefcase size={20} />,
     navLink: `${adminRoot}/case`
   },
@@ -50,14 +62,8 @@ export default [
     navLink: `${adminRoot}/todo`
   },
   {
-    id: 'calendarApp',
-    title: 'Calendar',
-    icon: <Calendar size={20} />,
-    navLink: `${adminRoot}/calendar`
-  },
-  {
     id: 'respiteApp',
-    title: 'Respites',
+    title: 'Deadline',
     icon: <CheckCircle size={20} />,
     navLink: `${adminRoot}/timeline`
   },
@@ -74,7 +80,10 @@ export default [
     navLink: `${adminRoot}/invoice`
   },
   {
-    header: 'Request & Settings'
+    id: 'cloudServerApp',
+    title: 'Cloud-Storage',
+    icon: <HardDrive size={20} />,
+    navLink: `${adminRoot}/cloud-storage`
   },
   {
     id: 'contactApp',
@@ -83,10 +92,7 @@ export default [
     navLink: `${adminRoot}/contact`
   },
   {
-    id: 'userApp',
-    title: 'User',
-    icon: <User size={20} />,
-    navLink: `${adminRoot}/user`
+    header: 'Einstellungen'
   },
   {
     id: 'accountApp',
@@ -105,12 +111,6 @@ export default [
     title: 'Letter Template',
     icon: <Codesandbox size={20} />,
     navLink: `${adminRoot}/letter-template`
-  },
-  {
-    id: 'cloudServerApp',
-    title: 'Cloud Server',
-    icon: <HardDrive size={20} />,
-    navLink: `${adminRoot}/cloud-storage`
   },
   {
     id: 'calendarSettingApp',

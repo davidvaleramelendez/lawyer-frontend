@@ -66,8 +66,8 @@ const AccountSettingApp = () => {
           langList.push('English')
         }
 
-        if (!langList.includes('Dutch')) {
-          langList.push('Dutch')
+        if (!langList.includes('Deutsch')) {
+          langList.push('Deutsch')
         }
         setLanguages(langList)
       })

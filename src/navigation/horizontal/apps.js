@@ -30,7 +30,7 @@ export default [
     children: [
       {
         id: 'emailApp',
-        title: 'Email',
+        title: 'E-Mail',
         icon: <Mail size={20} />,
         navLink: `${adminRoot}/email`
       },
@@ -48,7 +48,7 @@ export default [
       },
       {
         id: 'taskApp',
-        title: 'Task',
+        title: 'Aufgaben',
         icon: <CheckSquare size={20} />,
         navLink: `${adminRoot}/todo`
       },
@@ -60,19 +60,19 @@ export default [
       },
       {
         id: 'respiteApp',
-        title: 'Respites',
+        title: 'Fristen',
         icon: <CheckCircle size={20} />,
         navLink: `${adminRoot}/timeline`
       },
       {
         id: 'outboxApp',
-        title: 'Outbox',
+        title: 'Postausgang',
         icon: <Send size={20} />,
         navLink: `${adminRoot}/letter`
       },
       {
         id: 'billsApp',
-        title: 'Bills',
+        title: 'Rechnungen',
         icon: <FileText size={20} />,
         navLink: `${adminRoot}/invoice`
       }
@@ -85,7 +85,7 @@ export default [
     children: [
       {
         id: 'contactApp',
-        title: 'Inquiry',
+        title: 'Anfrage',
         icon: <MessageSquare size={20} />,
         navLink: `${adminRoot}/contact`
       },

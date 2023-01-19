@@ -1,3 +1,5 @@
+/* eslint-disable object-shorthand */
+
 // ** React Imports
 import { Fragment, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -74,7 +76,7 @@ const ChatApp = () => {
       handleUser({})
       setLoadFirst(false)
     }
-  }, [dispatch, loadFirst])
+  }, [loadFirst])
   // console.log("store >>> ", store)
 
   return (

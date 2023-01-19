@@ -32,7 +32,9 @@ import {
   X,
   User,
   Bell,
-  Search
+  Search,
+  Mail,
+  PhoneCall
 } from 'react-feather'
 
 // ** Reactstrap Imports
@@ -265,21 +267,21 @@ const SidebarLeft = (props) => {
             </div>
           </header>
           <PerfectScrollbar className="profile-sidebar-area" options={{ wheelPropagation: false }}>
-            <h6 className="section-label mb-1 mt-2">{T('Settings')}</h6>
+            <h6 className="section-label mb-1 mt-2">{T('Personal Information')}</h6>
             <ul className="list-unstyled">
-              <li className="d-flex justify-content-between align-items-center mb-1">
-                <div className="d-flex align-items-center">
-                  <Bell className="me-75" size="18" />
-                  <span className="align-middle">{T('Notification')}</span>
-                </div>
-              </li>
               <li className="d-flex align-items-center cursor-pointer mb-1">
-                <User className="me-75" size="18" />
-                <span className="align-middle">{T('Invite Friends')}</span>
+                <Mail className="me-75" size={17} />
+                <span className="align-middle">{(userProfile && userProfile.email) || ""}</span>
+              </li>
+
+              <li className="d-flex align-items-center cursor-pointer mb-1">
+                <PhoneCall className="me-75" size={17} />
+                <span className="align-middle">{(userProfile && userProfile.Contact) || ""}</span>
               </li>
             </ul>
           </PerfectScrollbar>
         </div>
+
         <div
           className={classnames("sidebar-content", {
             show: sidebar === true
@@ -288,6 +290,7 @@ const SidebarLeft = (props) => {
           <div className="sidebar-close-icon" onClick={handleSidebar}>
             <X size={14} />
           </div>
+
           <div className="chat-fixed-search">
             <div className="d-flex align-items-center w-100">
               <div

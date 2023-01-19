@@ -11,6 +11,7 @@ import Avatar from '@components/avatar'
 import {
   sendMessage,
   getChatHistory,
+  getChatContacts,
   clearChatMessage
 } from '@src/pages/chat/store'
 import { useDispatch } from 'react-redux'
@@ -56,6 +57,8 @@ const ChatLog = (props) => {
   const chatArea = useRef(null)
   const dispatch = useDispatch()
 
+  const timeOut = 5000
+
   // ** State
   const [message, setMessage] = useState('')
 
@@ -64,6 +67,24 @@ const ChatLog = (props) => {
     const chatContainer = ReactDOM.findDOMNode(chatArea.current)
     chatContainer.scrollTop = Number.MAX_SAFE_INTEGER
   }
+
+  const handleOnIntervalCalling = () => {
+    dispatch(getChatContacts({}))
+    if (selectedUser && selectedUser.id) {
+      dispatch(getChatHistory({ id: selectedUser.id, payload: { chatCount: chatCount } }))
+    }
+  }
+
+  /* Interval timing mount */
+  useEffect(() => {
+    if (store) {
+      const intervalID = setInterval(() => handleOnIntervalCalling(), timeOut)
+      return () => {
+        clearInterval(intervalID)
+      }
+    }
+  }, [store])
+  /* /Interval timing mount */
 
   // ** If user chat is not empty scrollToBottom
   useEffect(() => {

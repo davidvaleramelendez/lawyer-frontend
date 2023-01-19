@@ -253,7 +253,6 @@ const TimelineApp = () => {
                     <div className='timeline-event'>
                       <div className="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
                         <h6>{T("Subject")} : {letter && letter.subject}</h6>
-                        <span className="timeline-event-time" align="right">{T("First anniversary")} : {letter && letter.created_at && getTransformDate(letter.created_at, "DD.MM.YYYY")} </span>
                       </div>
 
                       <div className="d-flex justify-content-between flex-wrap flex-sm-row flex-column">

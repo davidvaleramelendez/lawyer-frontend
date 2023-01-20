@@ -7,8 +7,9 @@ import { T } from '@localization'
 
 // ** Store & Actions
 import {
-  getAccountSetting,
+  getPdfApiDetail,
   getCompanyDetail,
+  getAccountSetting,
   clearUserMessage
 } from '@src/pages/user/store'
 import {
@@ -92,6 +93,7 @@ const AccountSettingApp = () => {
       dispatch(getAccountSetting({}))
       dispatch(getCompanyDetail({}))
       dispatch(getInquiryImapDetail({}))
+      dispatch(getPdfApiDetail({}))
       getLanguages()
       setSelLanguage(store.userItem.language)
       setLoadFirst(false)

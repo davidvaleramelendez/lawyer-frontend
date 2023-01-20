@@ -11,6 +11,7 @@ import {
 import {
   userItem,
   imapItem,
+  pdfApiItem,
   accountItem,
   companyItem
 } from '@constant/reduxConstant'
@@ -362,6 +363,7 @@ export const getAccountSetting = createAsyncThunk('appUser/getAccountSetting', a
         userItem: response.data.userData,
         roleItems: response.data.roles,
         accountItem: response.data.account,
+        pdfApiItem: pdfApiItem,
         imapItem: response.data.imap,
         actionFlag: "ACCOUNT_SETTING",
         success: "",
@@ -372,6 +374,7 @@ export const getAccountSetting = createAsyncThunk('appUser/getAccountSetting', a
         userItem: userItem,
         roleItems: [],
         accountItem: accountItem,
+        pdfApiItem: pdfApiItem,
         imapItem: imapItem,
         actionFlag: "",
         success: "",
@@ -384,6 +387,7 @@ export const getAccountSetting = createAsyncThunk('appUser/getAccountSetting', a
       userItem: userItem,
       roleItems: [],
       accountItem: accountItem,
+      pdfApiItem: pdfApiItem,
       imapItem: imapItem,
       actionFlag: "",
       success: "",
@@ -666,6 +670,74 @@ export const createUpdateCompany = createAsyncThunk('appUser/createUpdateCompany
 })
 /* /Companies */
 
+/* Pdf Api */
+async function getPdfApiDetailRequest(params) {
+  return axios.get(`${API_ENDPOINTS.pdfApis.detail}`, { params }).then((user) => user.data).catch((error) => error)
+}
+
+export const getPdfApiDetail = createAsyncThunk('appUser/getPdfApiDetail', async (params) => {
+  try {
+    const response = await getPdfApiDetailRequest(params)
+    if (response && response.flag) {
+      return {
+        pdfApiItem: response.data || pdfApiItem,
+        actionFlag: "PDF_API_DETAIL",
+        success: "",
+        error: ""
+      }
+    } else {
+      return {
+        pdfApiItem: pdfApiItem,
+        actionFlag: "",
+        success: "",
+        error: ""
+      }
+    }
+  } catch (error) {
+    console.log("getPdfApiDetail catch ", error)
+    return {
+      pdfApiItem: pdfApiItem,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function createUpdatePdfApiRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.pdfApis.createUpdate}`, payload).then((user) => user.data).catch((error) => error)
+}
+
+export const createUpdatePdfApi = createAsyncThunk('appUser/createUpdatePdfApi', async (payload) => {
+  try {
+    const response = await createUpdatePdfApiRequest(payload)
+    if (response && response.flag) {
+      return {
+        pdfApiItem: response.data || pdfApiItem,
+        actionFlag: "PDF_API_DETAIL",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        pdfApiItem: pdfApiItem,
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("createUpdatePdfApi catch ", error)
+    return {
+      pdfApiItem: pdfApiItem,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+/* /Pdf Api */
+
 export const appUserSlice = createSlice({
   name: 'appUser',
   initialState: {
@@ -681,6 +753,7 @@ export const appUserSlice = createSlice({
     accountItem: accountItem,
     imapItem: imapItem,
     companyItem: companyItem,
+    pdfApiItem: pdfApiItem,
     permissions: [],
     roleItems: [],
     pagination: null,
@@ -782,6 +855,7 @@ export const appUserSlice = createSlice({
         state.userItem = action.payload.userItem
         state.roleItems = action.payload.roleItems
         state.accountItem = action.payload.accountItem
+        state.pdfApiItem = action.payload.pdfApiItem
         state.imapItem = action.payload.imapItem
         state.actionFlag = action.payload.actionFlag
         state.loading = true
@@ -852,7 +926,24 @@ export const appUserSlice = createSlice({
         state.success = action.payload.success
         state.error = action.payload.error
       })
-    /* /Companies */
+      /* /Companies */
+
+      /* Pdf Api */
+      .addCase(getPdfApiDetail.fulfilled, (state, action) => {
+        state.pdfApiItem = action.payload.pdfApiItem
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(createUpdatePdfApi.fulfilled, (state, action) => {
+        state.pdfApiItem = action.payload.pdfApiItem
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+    /* /Pdf Api */
   }
 })
 

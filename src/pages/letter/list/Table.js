@@ -20,6 +20,7 @@ import {
 import {
     isUserLoggedIn,
     getTotalNumber,
+    getTransformDate,
     getCurrentPageNumber
 } from '@utils'
 
@@ -223,9 +224,9 @@ const LetterList = () => {
         {
             name: T("Date"),
             sortable: true,
-            sortField: "last_date",
+            sortField: "created_date",
             minWidth: "18%",
-            cell: (row) => row.last_date,
+            cell: (row) => row.created_date && getTransformDate(row.created_date, "DD-MM-YYYY HH:mm:ss"),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '120px'

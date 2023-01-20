@@ -34,7 +34,7 @@ export const recordItem = { RecordID: "", CaseID: "", UserID: "", Email: "", Sub
 export const caseDocItem = { id: "", case_id: "", user_id: "", title: "", description: "", attachment: "", attachment_pdf: "", deleted: 0, is_archived: 0, is_print: 0, frist_date: "", isErledigt: 0 }
 
 // Letter
-export const letterItem = { id: "", user_id: "", case_id: "", letter_template_id: "", subject: "", message: "", best_regards: "", last_date: "", is_print: 0, deleted: 0, is_archived: 0, word_file: "", pdf_file: "", frist_date: "", isErledigt: 0 }
+export const letterItem = { id: "", user_id: "", case_id: "", letter_template_id: "", subject: "", message: "", best_regards: "", frist_date: "", created_date: "", last_date: "", is_print: 0, deleted: 0, is_archived: 0, word_file: "", pdf_file: "", isErledigt: 0 }
 
 // Todo
 export const todosMeta = { important: 0 }
@@ -73,3 +73,6 @@ export const letterTemplateItem = { id: "", subject: "", content: "", regard_tit
 
 // InquiryImap
 export const inquiryImapItem = { id: "", imap_host: "", imap_email: "", imap_password: "", imap_port: "", imap_ssl: "" }
+
+// Pdf Api
+export const pdfApiItem = { id: "", key: "", created_at: "", updated_at: "" }

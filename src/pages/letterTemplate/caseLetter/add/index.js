@@ -169,7 +169,8 @@ const CaseLetterAdd = () => {
         letterTemplateItem.letter_template_id = letterTemplateItem.id
         letterTemplateItem.id = ""
         letterTemplateItem.subject = subject || letterTemplateItem.subject
-        letterTemplateItem.fristDate = new Date()
+        letterTemplateItem.fristDate = getTransformDate(new Date(), "YYYY-MM-DD")
+        letterTemplateItem.created_date = getTransformDate(new Date(), "YYYY-MM-DD")
         reset(letterTemplateItem)
     }
 
@@ -249,9 +250,15 @@ const CaseLetterAdd = () => {
             }
 
             if (values.fristDate && typeof values.fristDate !== 'string' && values.fristDate.length) {
-                letterData.frist_date = getTransformDate(new Date(values.fristDate[0], "YYYY-MM-DD"))
+                letterData.frist_date = getTransformDate(values.fristDate[0], "YYYY-MM-DD")
             } else if (values.fristDate) {
                 letterData.frist_date = getTransformDate(values.fristDate, "YYYY-MM-DD")
+            }
+
+            if (values.created_date && typeof values.created_date !== 'string' && values.created_date.length) {
+                letterData.created_date = getTransformDate(values.created_date[0], "YYYY-MM-DD")
+            } else if (values.created_date) {
+                letterData.created_date = getTransformDate(values.created_date, "YYYY-MM-DD")
             }
 
             // console.log("onSubmit >>> ", values, letterData)
@@ -329,8 +336,36 @@ const CaseLetterAdd = () => {
                                 <Row className="date justify-content-end mb-2">
                                     <Col sm={6} md={6}>
                                         <div className="mx-md-5">
-                                            <Label className='fw-bold form-label' for='fristDate'>
+                                            <Label className='fw-bold form-label' for='created_date'>
                                                 {T('Date')}
+                                            </Label>
+                                            <Controller
+                                                defaultValue={new Date()}
+                                                id='created_date'
+                                                name='created_date'
+                                                control={control}
+                                                render={({ field }) => <Flatpickr
+                                                    {...field}
+                                                    id='created_date'
+                                                    className='form-control'
+                                                    options={{
+                                                        enableTime: false,
+                                                        dateFormat: "Y-m-d"
+                                                    }}
+                                                />}
+                                            />
+                                            <FormFeedback>{errors.created_date?.message}</FormFeedback>
+                                        </div>
+                                    </Col>
+                                </Row>
+                                {/* /Date */}
+
+                                {/* Deadline Date */}
+                                <Row className="date justify-content-end mb-2">
+                                    <Col sm={6} md={6}>
+                                        <div className="mx-md-5">
+                                            <Label className='fw-bold form-label' for='fristDate'>
+                                                {T('Deadline Date')}
                                             </Label>
                                             <Controller
                                                 defaultValue={new Date()}
@@ -351,7 +386,7 @@ const CaseLetterAdd = () => {
                                         </div>
                                     </Col>
                                 </Row>
-                                {/* /Date */}
+                                {/* /Deadline Date */}
 
                                 {/* Subject */}
                                 <Row className="subject mb-2">

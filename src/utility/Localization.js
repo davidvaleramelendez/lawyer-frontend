@@ -11,7 +11,7 @@ export const L10nKeys = {
     Task: 'Task',
     Calendar: 'Calendar',
     Deadline: 'Deadline',
-    CloudStorage:  'Cloud-Storage',
+    CloudStorage: 'Cloud-Storage',
     Outbox: 'Outbox',
     Bills: 'Bills',
     Inquiry: 'Inquiry',
@@ -431,6 +431,7 @@ export const L10nKeys = {
 
     //** Account App
     // Account: 'Account',
+    Key: 'Key',
     Change: 'Change',
     Username: 'Username',
     UsernameIsRequired: 'Username is required!',
@@ -448,6 +449,7 @@ export const L10nKeys = {
     PostcodeNoMoreThan6Chracters: 'Postcode no more than 6 characters!',
     StateIsRequired: 'State is required!',
     CountryIsRequired: 'Country is required!',
+    KeyIsRequired: 'Key is required!',
     // Name: 'Name',
     Company: 'Company',
     Language: 'Language',
@@ -458,6 +460,7 @@ export const L10nKeys = {
     Common: 'Common',
     Errors: 'Errors',
     IMAPInformation: 'IMAP information',
+    PDFApi: 'PDF Api',
     IMAPHost: 'IMAP Host',
     IMAPPort: 'IMAP Port',
     Secure: 'Secure',
@@ -710,7 +713,7 @@ export const L10nOrgKeys = {
             'Name', 'Company', 'Language', 'SaveChange', 'LanguageLabels', 'PasswordIsRequired',
             'Menu', 'Pages', 'Common', 'Errors', 'IMAPInformation', 'PasswordMustBe6Digit',
             'IMAPHost', 'IMAPPort', 'Secure', 'UseSSL', 'IMAPEmail', 'NewPasswordMustBe6Digit', 'RetypeNewPasswordisrequired', 'RetypeNewPasswordMustMatchWithNewPassword',
-            'IMAPPassword', 'Email', 'Contact', 'TranslationIsRequired', 'CurrentPassword'
+            'IMAPPassword', 'Email', 'Contact', 'TranslationIsRequired', 'CurrentPassword', 'PDFApi', 'Key', 'KeyIsRequired'
         ],
         'Email Template': [
             'Show', 'AddEmailTemplate', 'EditEmailTemplate', 'Search', 'SearchEmailTemplate',

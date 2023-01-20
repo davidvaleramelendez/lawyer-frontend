@@ -177,7 +177,7 @@ const ChangePassword = ({
                                 type="submit"
                                 className="me-1"
                                 color="primary"
-                            // disabled={!store.loading}
+                                disabled={!store.loading}
                             >
                                 {T("Save Change")}
                             </Button>

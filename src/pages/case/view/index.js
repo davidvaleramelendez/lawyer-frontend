@@ -1393,7 +1393,7 @@ const CaseView = () => {
                                 onClick={() => handleCollapseAction(`case_letters_${letter.id}`)}
                               >
                                 <td />
-                                <td>{letter.last_date && getTransformDate(letter.last_date, "DD.MM.YYYY")}</td>
+                                <td>{letter.created_date && getTransformDate(letter.created_date, "DD.MM.YYYY")}</td>
 
                                 <td>{letter.subject}</td>
 

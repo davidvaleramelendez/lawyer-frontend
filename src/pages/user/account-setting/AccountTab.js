@@ -144,7 +144,13 @@ const AccountTab = ({
                         <Row>
                             <Col xl={12} md={12} sm={12}>
                                 <div className="d-flex mb-2">
-                                    <div className="me-25">
+                                    <div
+                                        className="me-25"
+                                        style={{
+                                            minWidth: "100px",
+                                            minHeight: "100px"
+                                        }}
+                                    >
                                         <img
                                             className="rounded me-50"
                                             id="user-image"

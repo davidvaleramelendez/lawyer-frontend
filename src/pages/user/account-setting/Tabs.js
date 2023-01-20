@@ -15,10 +15,11 @@ import { T } from '@localization'
 
 // ** Icons Import
 import {
+    Key,
     Info,
+    Lock,
     User,
-    Settings,
-    Lock
+    Settings
 } from 'react-feather'
 
 // ** Utils
@@ -34,6 +35,7 @@ import SecurityTab from './SecurityTab'
 import LanguageLabels from './language-labels'
 import ImapTab from './ImapTab'
 import CompanySettingTab from './CompanySettingTab'
+import PdfApiKeyTab from './PdfApiKeyTab'
 
 const Tabs = ({
     active,
@@ -43,6 +45,7 @@ const Tabs = ({
     selLanguage,
     setSelLanguage
 }) => {
+    /* Not able to accessible based on role */
     const denyTabPermissionAccess = (roleId) => {
         if (userData && userData.id) {
             if (userData.role_id === roleId) {
@@ -55,6 +58,19 @@ const Tabs = ({
         }
         return true
     }
+    /* /Not able to accessible based on role */
+
+    /* Only accessible based on role */
+    const tabPermissionAccess = (roleId) => {
+        if (userData && userData.id) {
+            if (userData.role_id === roleId) {
+                return true
+            }
+            return false
+        }
+        return false
+    }
+    /* /Only accessible based on role */
 
     return (
         <Fragment>
@@ -99,6 +115,15 @@ const Tabs = ({
                         </NavLink>
                     </NavItem>
                 ) : null}
+
+                {tabPermissionAccess(10) ? (
+                    <NavItem>
+                        <NavLink active={active === "6"} onClick={() => toggleTab("6")}>
+                            <Key size={14} className="me-50" />
+                            <span className="fw-bold d-none d-sm-block">{T('PDF Api')}</span>
+                        </NavLink>
+                    </NavItem>
+                ) : null}
             </Nav>
 
             <TabContent activeTab={active}>
@@ -136,6 +161,12 @@ const Tabs = ({
                 {denyTabPermissionAccess(11) ? (
                     <TabPane tabId="5">
                         <ImapTab />
+                    </TabPane>
+                ) : null}
+
+                {tabPermissionAccess(10) ? (
+                    <TabPane tabId="6">
+                        <PdfApiKeyTab />
                     </TabPane>
                 ) : null}
             </TabContent>

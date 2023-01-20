@@ -262,6 +262,14 @@ export const API_ENDPOINTS = {
         createUpdate: `/api/admin/inquiry-imap/create_update`,
         detail: `/api/admin/inquiry-imap/detail`,
         delete: `/api/admin/inquiry-imap/delete`
-    }
+    },
     /* /Inquiry Imap */
+
+    /* Pdf Apis */
+    pdfApis: {
+        createUpdate: `/api/admin/pdf-api/create_update`,
+        detail: `/api/admin/pdf-api/detail`,
+        delete: `/api/admin/pdf-api/delete`
+    }
+    /* /Pdf Apis */
 }

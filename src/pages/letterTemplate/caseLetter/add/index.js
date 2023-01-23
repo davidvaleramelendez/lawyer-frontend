@@ -35,6 +35,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Utils
 import {
+    htmlToString,
     isUserLoggedIn,
     getTransformDate
 } from '@utils'
@@ -55,6 +56,8 @@ import {
 
 // ** Third Party Components
 import Flatpickr from 'react-flatpickr'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 // ** Constant
 import {
@@ -76,6 +79,7 @@ const CaseLetterAdd = () => {
     // ** Hooks
     const { caseId, letterTemplateId } = useParams()
     const navigate = useNavigate()
+    const MySwal = withReactContent(Swal)
 
     // ** Store vars
     const dispatch = useDispatch()
@@ -91,11 +95,6 @@ const CaseLetterAdd = () => {
     /* Validation schema */
     const LetterSchema = yup.object({
         subject: yup.string().required(T('Subject is required!')),
-        content: yup.object().shape({
-            blocks: yup.array().of(yup.object().shape({
-                text: yup.string().required(T('Content is required!'))
-            }).required(T('Content is required!')).nullable())
-        }).required(T('Content is required!')).nullable(),
         best_regards: yup.string().required(T('Best Regards is required!'))
     }).required()
     /* /Validation schema */
@@ -116,6 +115,23 @@ const CaseLetterAdd = () => {
         subject: T("Subject"),
         content: T("Content"),
         best_regards: T("Best Regards")
+    }
+
+    const onAlertMessage = (message, title, icon) => {
+        MySwal.fire({
+            title: title || 'Warning',
+            text: message || 'Something went wrong!',
+            icon: icon || 'warning',
+            showCancelButton: false,
+            confirmButtonText: 'Okay',
+            customClass: {
+                confirmButton: 'btn btn-primary'
+            },
+            buttonsStyling: false
+        }).then(function (result) {
+            if (result.isConfirmed) {
+            }
+        })
     }
 
     const handleEditorStateChange = (state) => {
@@ -176,11 +192,15 @@ const CaseLetterAdd = () => {
 
     const handleBackCase = () => {
         reset(letterItem)
+        setEditorHtmlContent('')
+        setEditorStateContent(null)
         navigate(`${adminRoot}/case/view/${caseId}`)
     }
 
     const handleReset = () => {
         reset(letterItem)
+        setEditorHtmlContent('')
+        setEditorStateContent(null)
     }
 
     useEffect(() => {
@@ -237,6 +257,11 @@ const CaseLetterAdd = () => {
     // console.log("caseStore >>> ", caseStore)
 
     const onSubmit = async (values) => {
+        if (!htmlToString(editorHtmlContent.trim())) {
+            onAlertMessage("Content is required!", "Warning", 'warning')
+            return
+        }
+
         if (values) {
             const letterData = {
                 case_id: caseId,
@@ -446,7 +471,11 @@ const CaseLetterAdd = () => {
                                                     />
                                                 )}
                                             />
-                                            <FormFeedback className="d-block">{errors.content?.message || (errors.content?.blocks && errors.content.blocks[0]?.text?.message)}</FormFeedback>
+                                            {!htmlToString(editorHtmlContent.trim()) ? (
+                                                <FormFeedback className="d-block">Content is required!</FormFeedback>
+                                            ) : (
+                                                <FormFeedback className="d-block">{errors.content?.message}</FormFeedback>
+                                            )}
                                         </div>
                                     </Col>
                                 </Row>

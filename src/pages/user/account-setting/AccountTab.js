@@ -124,11 +124,12 @@ const AccountTab = ({
 
     /* Check admin role permission */
     const checkAdminRoleAccess = () => {
-        const currentUser = getCurrentUser()
+        let currentUser = getCurrentUser()
+        if (store && store.userItem && store.userItem.role_id) {
+            currentUser = store.userItem
+        }
 
-        if (store.userItem && store.userItem.role_id === 10) {
-            return true
-        } else if (currentUser && currentUser.role_id === 10) {
+        if (currentUser && currentUser.role_id === 10) {
             return true
         }
 

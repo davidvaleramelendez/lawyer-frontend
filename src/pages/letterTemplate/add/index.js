@@ -37,9 +37,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Editor } from 'react-draft-wysiwyg'
 import { convertToRaw } from 'draft-js'
 import draftToHtml from 'draftjs-to-html'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 // ** Utils
 import {
+    htmlToString,
     isUserLoggedIn
 } from '@utils'
 
@@ -63,6 +66,7 @@ import { T } from '@localization'
 const LetterTemplateAdd = () => {
     // ** Hooks
     const navigate = useNavigate()
+    const MySwal = withReactContent(Swal)
 
     // ** Store vars
     const dispatch = useDispatch()
@@ -74,11 +78,6 @@ const LetterTemplateAdd = () => {
 
     const LetterTemplateSchema = yup.object({
         subject: yup.string().required(T('Subject is required!')),
-        content: yup.object().shape({
-            blocks: yup.array().of(yup.object().shape({
-                text: yup.string().required(T('Content is required!'))
-            }).required(T('Content is required!')).nullable())
-        }).required(T('Content is required!')).nullable(),
         Status: yup.object().required(T(`Status is required!`)).nullable()
     }).required()
 
@@ -99,6 +98,23 @@ const LetterTemplateAdd = () => {
         content: T("Content"),
         best_regards: T("Best Regards"),
         status: `${T("Select Status")}...`
+    }
+
+    const onAlertMessage = (message, title, icon) => {
+        MySwal.fire({
+            title: title || 'Warning',
+            text: message || 'Something went wrong!',
+            icon: icon || 'warning',
+            showCancelButton: false,
+            confirmButtonText: 'Okay',
+            customClass: {
+                confirmButton: 'btn btn-primary'
+            },
+            buttonsStyling: false
+        }).then(function (result) {
+            if (result.isConfirmed) {
+            }
+        })
     }
 
     const handleEditorStateChange = (state) => {
@@ -148,6 +164,11 @@ const LetterTemplateAdd = () => {
 
     /* Submitting data */
     const onSubmit = (values) => {
+        if (!htmlToString(editorHtmlContent.trim())) {
+            onAlertMessage("Content is required!", "Warning", 'warning')
+            return
+        }
+
         if (values) {
             const letterTemplateData = {
                 subject: values.subject,
@@ -231,7 +252,11 @@ const LetterTemplateAdd = () => {
                                     />
                                 )}
                             />
-                            <FormFeedback className="d-block">{errors.content?.message || (errors.content?.blocks && errors.content.blocks[0]?.text?.message)}</FormFeedback>
+                            {!htmlToString(editorHtmlContent.trim()) ? (
+                                <FormFeedback className="d-block">Content is required!</FormFeedback>
+                            ) : (
+                                <FormFeedback className="d-block">{errors.content?.message}</FormFeedback>
+                            )}
                         </Col>
 
                         <Col md={6} sm={6} className="mb-1">

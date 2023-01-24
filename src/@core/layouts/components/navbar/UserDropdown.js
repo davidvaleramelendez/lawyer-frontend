@@ -64,7 +64,7 @@ const UserDropdown = () => {
   //** ComponentDidMount
   useEffect(() => {
     /* Reset form data */
-    if (userStore && userStore.actionFlag && (userStore.actionFlag === "ACCOUNT_SETTING")) {
+    if (userStore && userStore.actionFlag && (userStore.actionFlag === "ACCOUNT_SETTING" || userStore.actionFlag === "IMAGE_UPDATED")) {
       setUserData(getCurrentUser)
     }
   }, [userStore.actionFlag])
@@ -109,8 +109,19 @@ const UserDropdown = () => {
     dispatch(logout())
   }
 
+  /* Rendering current user image */
+  const renderUserProfile = () => {
+    if (userData && userData.profile_photo_path) {
+      const imgUrl = userData.profile_photo_path.replace(/\//g, "*")
+      return `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/uploads/${imgUrl}`
+    }
+
+    return false
+  }
+  /* /Rendering current user image */
+
   //** Vars
-  const userAvatar = userData && userData.profile_photo_path ? `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${userData.profile_photo_path}` : defaultAvatar || defaultAvatar
+  const userAvatar = renderUserProfile() || defaultAvatar
 
   return (<>
     <UncontrolledDropdown tag='li' className='dropdown-user nav-item'>

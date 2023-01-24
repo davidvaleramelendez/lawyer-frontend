@@ -446,7 +446,7 @@ const CaseLetterAdd = () => {
                                                 {T('Content')}
                                             </Label>
                                             <Controller
-                                                defaultValue={editorStateContent}
+                                                defaultValue={null}
                                                 control={control}
                                                 id='content'
                                                 name='content'

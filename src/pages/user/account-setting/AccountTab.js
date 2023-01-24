@@ -3,7 +3,9 @@ import { Fragment, useState, useEffect } from 'react'
 
 // ** Store & Actions
 import {
-    saveAccount
+    saveAccount,
+    updateUserLoader,
+    updateAccountProfileImage
 } from '@src/pages/user/store'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -22,6 +24,12 @@ import {
 import { useForm, Controller } from 'react-hook-form'
 import * as yup from "yup"
 import { yupResolver } from '@hookform/resolvers/yup'
+
+// ** Custom Components
+import DotPulse from '@components/dotpulse'
+
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
 
 // ** Translation
 import { T } from '@localization'
@@ -82,9 +90,17 @@ const AccountTab = ({
     useEffect(() => {
         /* Reset form data */
         if (store && store.actionFlag && (store.actionFlag === "ACCOUNT_SETTING")) {
+            setImageUrl('')
             handleReset()
         }
+
+        if (store && store.actionFlag && (store.actionFlag === "IMAGE_UPDATED")) {
+            setImageUrl('')
+        }
     }, [store.actionFlag])
+    // const str = 'a/b/c'
+    // const replaced = str.replace(/\//g, "-")
+    // console.log("store >>> ", store)
 
     const onFileChange = (event) => {
         const fileReader = new FileReader()
@@ -93,6 +109,8 @@ const AccountTab = ({
         if (files && files.length > 0) {
             fileReader.onloadend = async () => {
                 setImageUrl(fileReader.result)
+                dispatch(updateUserLoader(false))
+                dispatch(updateAccountProfileImage({ image: fileReader.result }))
             }
             fileReader.readAsDataURL(files[0])
         }
@@ -111,10 +129,6 @@ const AccountTab = ({
                 email: values.email,
                 Company: values.company,
                 language: selLanguage
-            }
-
-            if (imageUrl) {
-                userData.image = imageUrl
             }
 
             // console.log("onSubmitAccount >>>>>>>>> ", userData)
@@ -137,54 +151,77 @@ const AccountTab = ({
     }
     /* /Check admin role permission */
 
+    /* Rendering current user image */
+    const renderUserProfile = () => {
+        let currentUser = getCurrentUser()
+        if (store && store.userItem && store.userItem.role_id) {
+            currentUser = store.userItem
+        }
+
+        if (currentUser && currentUser.profile_photo_path) {
+            const imgUrl = currentUser.profile_photo_path.replace(/\//g, "*")
+            return `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/uploads/${imgUrl}`
+        }
+
+        return false
+    }
+    /* /Rendering current user image */
+
     return (
         <Fragment>
+            {!store.loading ? (
+                <DotPulse
+                    className="d-flex justify-content-center position-absolute top-50 w-100 zindex-3"
+                />
+            ) : null}
+
             <Card className="user-edit-card">
                 <CardBody className="user-edit-card-body pl-4 pr-4">
-                    <Form id="account" onSubmit={acntHandleSubmit(onSubmitAccount)} autoComplete="off">
-                        <Row>
-                            <Col xl={12} md={12} sm={12}>
-                                <div className="d-flex mb-2">
-                                    <div
-                                        className="me-25"
-                                        style={{
-                                            minWidth: "100px",
-                                            minHeight: "100px"
-                                        }}
-                                    >
-                                        <img
-                                            className="rounded me-50"
-                                            id="user-image"
-                                            src={imageUrl ? imageUrl : store.userItem && store.userItem.profile_photo_path ? `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${store.userItem.profile_photo_path}` : `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/images/avatars/avatar-blank.png`}
-                                            onError={(currentTarget) => onImageSrcError(currentTarget)}
-                                            alt="user-avatar"
-                                            height="100"
-                                            width="100"
-                                        />
-                                    </div>
+                    <Row>
+                        <Col xl={12} md={12} sm={12}>
+                            <div className="d-flex mb-2">
+                                <div
+                                    className="me-25"
+                                    style={{
+                                        minWidth: "100px",
+                                        minHeight: "100px"
+                                    }}
+                                >
+                                    <img
+                                        className="rounded me-50"
+                                        id="user-image"
+                                        src={imageUrl ? imageUrl : renderUserProfile(store.userItem.profile_photo_path) || defaultAvatar}
+                                        onError={(currentTarget) => onImageSrcError(currentTarget)}
+                                        alt="user-avatar"
+                                        height="100"
+                                        width="100"
+                                    />
+                                </div>
 
-                                    <div className="d-flex mt-75 ms-1">
-                                        <div>
-                                            <h4 className="mb-50">
-                                                {(store.userItem && store.userItem.name) || (userData && userData.name) || ""}
-                                            </h4>
+                                <div className="d-flex mt-75 ms-1">
+                                    <div>
+                                        <h4 className="mb-50">
+                                            {(store.userItem && store.userItem.name) || (userData && userData.name) || ""}
+                                        </h4>
 
-                                            <Button
-                                                size="sm"
-                                                tag={Label}
-                                                type="button"
-                                                color="primary"
-                                                className="mb-75 me-75"
-                                            >
-                                                {T('Change')}
-                                                <Input type="file" hidden accept="image/*" onChange={(event) => onFileChange(event)} />
-                                            </Button>
-                                        </div>
+                                        <Button
+                                            size="sm"
+                                            tag={Label}
+                                            type="button"
+                                            color="primary"
+                                            className="mb-75 me-75"
+                                            disabled={!store.loading}
+                                        >
+                                            {T('Change')}
+                                            <Input type="file" hidden accept="image/*" onChange={(event) => onFileChange(event)} />
+                                        </Button>
                                     </div>
                                 </div>
-                            </Col>
-                        </Row>
+                            </div>
+                        </Col>
+                    </Row>
 
+                    <Form id="account" onSubmit={acntHandleSubmit(onSubmitAccount)} autoComplete="off">
                         <Row>
                             <Col xl={6} md={6} sm={6} className="mb-1">
                                 <Label className="form-label" for="first_name">
@@ -258,7 +295,7 @@ const AccountTab = ({
                             <Button
                                 type="submit"
                                 color="primary"
-                                disabled={store && store.userItem && !store.userItem.id}
+                                disabled={!store.loading || !store.userItem.id}
                             >
                                 {T("Save Change")}
                             </Button>

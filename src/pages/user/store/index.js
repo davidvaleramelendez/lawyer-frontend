@@ -556,6 +556,44 @@ export const updateAccountPassword = createAsyncThunk('appUser/updateAccountPass
     }
   }
 })
+
+async function updateAccountProfileImageRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.account.updateProfileImage}`, payload).then((user) => user.data).catch((error) => error)
+}
+
+export const updateAccountProfileImage = createAsyncThunk('appUser/updateAccountProfileImage', async (payload) => {
+  try {
+    const response = await updateAccountProfileImageRequest(payload)
+    if (response && response.flag) {
+      if (response.data) {
+        response.data.ability = [{ action: "manage", subject: "all" }]
+        setCurrentUser(response.data)
+      }
+
+      return {
+        userItem: response.data || userItem,
+        actionFlag: "IMAGE_UPDATED",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        userItem: userItem,
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("updateAccountProfileImage catch ", error)
+    return {
+      userItem: userItem,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
 /* /Account */
 
 /* Login History */
@@ -891,6 +929,13 @@ export const appUserSlice = createSlice({
         state.error = action.payload.error
       })
       .addCase(updateAccountPassword.fulfilled, (state, action) => {
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(updateAccountProfileImage.fulfilled, (state, action) => {
+        state.userItem = action.payload.userItem
         state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success

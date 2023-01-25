@@ -26,7 +26,8 @@ import {
 import {
     encryptData,
     getCurrentUser,
-    onImageSrcError
+    onImageSrcError,
+    getWebPreviewUrl
 } from '@utils'
 
 /* User tab view components */
@@ -135,6 +136,7 @@ const Tabs = ({
                         setSelLanguage={setSelLanguage}
                         getCurrentUser={getCurrentUser}
                         onImageSrcError={onImageSrcError}
+                        getWebPreviewUrl={getWebPreviewUrl}
                     />
                 </TabPane>
 

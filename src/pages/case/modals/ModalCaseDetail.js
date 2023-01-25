@@ -22,6 +22,7 @@ import {
 
 // ** Utils
 import {
+  getWebPreviewUrl,
   getTransformDate,
   getRandColorClass
 } from '@utils'
@@ -36,6 +37,9 @@ import {
 
 // ** Translation
 import { T } from '@localization'
+
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
 
 const ModalCaseDetail = ({
   open,
@@ -53,10 +57,27 @@ const ModalCaseDetail = ({
   }, [])
   // console.log("caseRowData Model >>>> ", caseRowData)
 
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
+
   // ** Renders Case Columns
   const renderCase = (row) => {
     if (row.profile_photo_path && row.profile_photo_path.length) {
-      return <Avatar className='me-1' img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`} width='32' height='32' />
+      return (
+        <Avatar
+          width='32'
+          height='32'
+          className='me-1'
+          img={renderFileWebUrlPreview(row.profile_photo_path) || defaultAvatar}
+        />
+      )
     } else {
       return (
         <Avatar

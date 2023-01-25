@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // ** Utils
 import {
   isUserLoggedIn,
+  getWebPreviewUrl,
   getDecimalFormat,
   getTransformDate
 } from '@utils'
@@ -111,6 +112,16 @@ const InvoiceView = () => {
   }, [store.success, store.error, store.actionFlag, userStore.success, userStore.error, userStore.actionFlag, loadFirst])
   // console.log("View store >>> ", store)
 
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
+
   return store ? (
     <div className="invoice-preview-wrapper">
       {!store.loading ? (
@@ -133,6 +144,7 @@ const InvoiceView = () => {
           <ViewActions
             invoiceItem={store.invoiceItem}
             setPaymentModalOpen={setPaymentModalOpen}
+            renderFileWebUrlPreview={renderFileWebUrlPreview}
             setSendInvoiceModalOpen={setSendInvoiceModalOpen}
           />
 

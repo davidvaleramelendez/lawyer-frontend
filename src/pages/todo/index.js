@@ -36,6 +36,7 @@ import {
 import {
   isUserLoggedIn,
   getTotalNumber,
+  getWebPreviewUrl,
   getTransformDate
 } from '@utils'
 
@@ -150,6 +151,16 @@ const TodoApp = () => {
   }, [store.userItems, paramsURL.filter, paramsURL.tag, store.success, store.error, store.actionFlag, searchInput, sort, loadFirst])
   // console.log("store >>> ", store)
 
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
+
   return (
     <Fragment>
       <Sidebar
@@ -196,6 +207,7 @@ const TodoApp = () => {
                 completeTodoItem={completeTodoItem}
                 handleMainSidebar={handleMainSidebar}
                 setOpenTaskSidebar={setOpenTaskSidebar}
+                renderFileWebUrlPreview={renderFileWebUrlPreview}
               />
             ) : null}
 
@@ -214,6 +226,7 @@ const TodoApp = () => {
               updateTaskLoader={updateTaskLoader}
               importantTodoItem={importantTodoItem}
               handleTaskSidebar={() => setOpenTaskSidebar(!openTaskSidebar)}
+              renderFileWebUrlPreview={renderFileWebUrlPreview}
             />
           </div>
         </div>

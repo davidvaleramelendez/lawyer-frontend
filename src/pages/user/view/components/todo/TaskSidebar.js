@@ -48,6 +48,9 @@ import {
 // ** Custom Components
 import DotPulse from '@components/dotpulse'
 
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
+
 // ** Styles Imports
 import '@styles/react/libs/editor/editor.scss'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
@@ -115,7 +118,8 @@ const TaskSidebar = (props) => {
     completeTodoItem,
     importantTodoItem,
     handleTaskSidebar,
-    onCheckUserPermission
+    onCheckUserPermission,
+    renderFileWebUrlPreview
   } = props
 
   // ** State Constant
@@ -182,12 +186,12 @@ const TaskSidebar = (props) => {
       <components.Option {...props}>
         <div className='d-flex align-items-center'>
           <img
-            className='d-block rounded-circle me-50'
-            src={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${data.img}`}
-            height='26'
             width='26'
+            height='26'
             alt={data.label}
+            className='d-block rounded-circle me-50'
             onError={(currentTarget) => onImageSrcError(currentTarget)}
+            src={renderFileWebUrlPreview(data.img) || defaultAvatar}
           />
           <p className='mb-0'>{data.label}</p>
         </div>

@@ -78,6 +78,7 @@ import DotPulse from '@components/dotpulse'
 
 // ** Utils
 import {
+  getWebPreviewUrl,
   selectThemeColors,
   getRandColorClass
 } from '@utils'
@@ -89,6 +90,9 @@ import {
 import {
   emailItem
 } from '@constant/reduxConstant'
+
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
 
 // ** Styles
 import '@styles/react/libs/editor/editor.scss'
@@ -288,6 +292,7 @@ const ModalComposeMail = () => {
       const fileSizeKiloBytes = fileSize / 1024
       const uploadLimit = process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE * 1024
       if (fileSizeKiloBytes > uploadLimit) {
+        event.target.value = ""
         onAlertMessage(T('File limit exceeded!'), `${T('Please upload max')} ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb ${T('files')}!`, 'warning')
         return
       }
@@ -318,6 +323,7 @@ const ModalComposeMail = () => {
           }
 
           if (fileFlag) {
+            event.target.value = ""
             dispatch(updateEmailLoader(false))
             dispatch(createEmailAttachment({ attachment: fileArray, type: 'email', ids: ids, from: "COMPOSE" }))
           }
@@ -468,15 +474,34 @@ const ModalComposeMail = () => {
     dispatch(setComposeSubject(event.target.value))
   }
 
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
+
   const SelectComponent = ({ data, ...props }) => {
     return (
       <components.Option {...props}>
-        <div className='d-flex flex-wrap align-items-center'>
-          {data && data.img ? <>
-            <Avatar className='my-0 me-50' size='sm' img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${data.img}`} />
-          </> : <>
-            <Avatar color={getRandColorClass()} className='me-50' content={data ? data.name : 'John Doe'} initials />
-          </>}
+        <div className="d-flex flex-wrap align-items-center">
+          {data && data.img ? (
+            <Avatar
+              size="sm"
+              className="my-0 me-50"
+              img={renderFileWebUrlPreview(data.img) || defaultAvatar}
+            />
+          ) : (
+            <Avatar
+              initials
+              className="me-50"
+              color={getRandColorClass()}
+              content={data ? data.name : "John Doe"}
+            />
+          )}
           {data.label}
         </div>
       </components.Option>
@@ -722,7 +747,15 @@ const ModalComposeMail = () => {
                         className="cursor-pointer ms-1 me-1"
                       />
 
-                      {item && item.path ? (<a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>) : null}
+                      {item && item.path ? (
+                        <a
+                          target="_blank"
+                          className="me-1"
+                          href={renderFileWebUrlPreview(item.path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
+                        >
+                          {item.name}
+                        </a>
+                      ) : null}
 
                       <a
                         href={`${adminRoot}/email`}

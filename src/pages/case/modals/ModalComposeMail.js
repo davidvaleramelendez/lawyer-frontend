@@ -33,6 +33,11 @@ import {
 
 import { useForm, Controller } from 'react-hook-form'
 
+// ** Utils
+import {
+  getWebPreviewUrl
+} from '@utils'
+
 // ** Icons Import
 import {
   X,
@@ -324,6 +329,15 @@ const ModalComposeMail = ({
     dispatch(sendCaseEmail(mailData))
   }
 
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
 
   return (
     <Draggable handle=".modal-header">
@@ -466,7 +480,15 @@ const ModalComposeMail = ({
                         className="cursor-pointer ms-1 me-1"
                       />
 
-                      {item && item.path ? (<a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>) : null}
+                      {item && item.path ? (
+                        <a
+                          target="_blank"
+                          className="me-1"
+                          href={renderFileWebUrlPreview(item.path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
+                        >
+                          {item.name}
+                        </a>
+                      ) : null}
 
                       <a
                         href={`${adminRoot}/case/view/${caseId}`}

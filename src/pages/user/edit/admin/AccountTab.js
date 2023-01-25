@@ -45,10 +45,14 @@ import {
 // ** Translation
 import { T } from '@localization'
 
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
+
 const AccountTab = ({
     id,
     onImageSrcError,
     getTransformDate,
+    getWebPreviewUrl,
     PlaceholderSchema
 }) => {
 
@@ -197,6 +201,16 @@ const AccountTab = ({
     }
     /* /Submitting Account data */
 
+    /* Rendering user image */
+    const renderUserProfilePicture = () => {
+        if (store && store.userItem && store.userItem.profile_photo_path) {
+            return getWebPreviewUrl(store.userItem.profile_photo_path)
+        }
+
+        return false
+    }
+    /* /Rendering user image */
+
     return (
         <Fragment>
             <Card>
@@ -206,13 +220,14 @@ const AccountTab = ({
                             <div className="me-25">
                                 <img
                                     className="rounded me-50"
-                                    src={imageUrl ? imageUrl : store.userItem.profile_photo_path ? `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${store.userItem.profile_photo_path}` : `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/images/avatars/avatar-blank.png`}
+                                    src={imageUrl ? imageUrl : store.userItem.profile_photo_path ? renderUserProfilePicture() : defaultAvatar}
                                     onError={(currentTarget) => onImageSrcError(currentTarget)}
                                     alt="user-avatar"
                                     height="100"
                                     width="100"
                                 />
                             </div>
+
                             <div className="d-flex mt-75 ms-1">
                                 <div>
                                     <h4

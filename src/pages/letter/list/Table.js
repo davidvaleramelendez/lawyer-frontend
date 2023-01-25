@@ -20,6 +20,7 @@ import {
 import {
     isUserLoggedIn,
     getTotalNumber,
+    getWebPreviewUrl,
     getTransformDate,
     getCurrentPageNumber
 } from '@utils'
@@ -181,6 +182,16 @@ const LetterList = () => {
     }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
     // console.log("store >>> ", store)
 
+    /* Rendering file preview web url */
+    const renderFileWebUrlPreview = (path) => {
+        if (path) {
+            return getWebPreviewUrl(path)
+        }
+
+        return false
+    }
+    /* /Rendering file preview web url */
+
     const onLetterArchive = (id, type) => {
         MySwal.fire({
             title: T('Are you sure?'),
@@ -202,7 +213,7 @@ const LetterList = () => {
 
     const onLetterPrint = (row) => {
         dispatch(updatePrintStatus({ id: row.id, payload: { status: true } }))
-        window.open(`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.pdf_path}`, '_blank', 'noopener,noreferrer')
+        window.open(renderFileWebUrlPreview(row.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`, '_blank', 'noopener,noreferrer')
     }
 
     /* Columns */
@@ -304,7 +315,7 @@ const LetterList = () => {
             name: T("View"),
             center: true,
             minWidth: "10%",
-            cell: (row) => <a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.pdf_path}`} target="_blank" className="d-flex align-items-center" onClick={(event) => {
+            cell: (row) => <a href={renderFileWebUrlPreview(row.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`} target="_blank" className="d-flex align-items-center" onClick={(event) => {
                 event.preventDefault()
                 onLetterPrint(row)
             }} rel="noopener noreferrer">

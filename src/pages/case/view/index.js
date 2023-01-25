@@ -96,6 +96,7 @@ import {
   getTimeCounter,
   setTimeCounter,
   isUserLoggedIn,
+  getWebPreviewUrl,
   getTransformDate
 } from '@utils'
 
@@ -303,6 +304,16 @@ const CaseView = () => {
     }
   }, [store.success, store.error, store.actionFlag, loadFirst])
   // console.log("store >>>> ", store)
+
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
 
   /* Delete case */
   const onDeleteFile = (caseId) => {
@@ -512,6 +523,7 @@ const CaseView = () => {
       const fileSizeKiloBytes = fileSize / 1024
       const uploadLimit = process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE * 1024
       if (fileSizeKiloBytes > uploadLimit) {
+        event.target.value = ""
         onAlertMessage(T('File limit exceeded!'), `${T('Please upload max')} ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb ${T('files')}!`, 'warning')
         return
       }
@@ -586,7 +598,7 @@ const CaseView = () => {
         return (
           <a
             key={`${index}_${item.name}`}
-            href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank"
+            href={renderFileWebUrlPreview(item.path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`} target="_blank"
             className={classnames({
               'mb-50': index + 1 !== attachments.length
             })}
@@ -757,7 +769,15 @@ const CaseView = () => {
                                               <div className="inline" key={`attachment_${index}`}>
                                                 <Paperclip className="cursor-pointer ms-50 me-1" size={17} />
 
-                                                {item && item.path ? (<a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>) : null}
+                                                {item && item.path ? (
+                                                  <a
+                                                    target="_blank"
+                                                    className="me-1"
+                                                    href={renderFileWebUrlPreview(item.path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
+                                                  >
+                                                    {item.name}
+                                                  </a>
+                                                ) : null}
 
                                                 <a
                                                   href={`${adminRoot}/case/view/${id}`}
@@ -1371,7 +1391,13 @@ const CaseView = () => {
                                                 <div className="inline" key={`attachment_${index}`}>
                                                   <Paperclip className='cursor-pointer me-1' size={17} />
                                                   {item && item.path ? (
-                                                    <a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>
+                                                    <a
+                                                      target="_blank"
+                                                      className="me-1"
+                                                      href={renderFileWebUrlPreview(item.path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
+                                                    >
+                                                      {item.name}
+                                                    </a>
                                                   ) : null}
                                                 </div>
                                               )
@@ -1449,7 +1475,7 @@ const CaseView = () => {
                                             target="_blank"
                                             color="primary"
                                             className={`btn-icon rounded-circle me-50`}
-                                            href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${letter.pdf_path}`}
+                                            href={renderFileWebUrlPreview(letter.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
                                           >
                                             <Avatar
                                               img={pdfPng}
@@ -1557,7 +1583,11 @@ const CaseView = () => {
                                           </div>
                                           <div className="w-75">
                                             <div className="inline">
-                                              <a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${doc.attachment_pdf}`} target="_blank" className="me-1">
+                                              <a
+                                                target="_blank"
+                                                className="me-1"
+                                                href={renderFileWebUrlPreview(doc.attachment_pdf) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
+                                              >
                                                 <Paperclip className='cursor-pointer me-1' size={17} />
                                                 attachment
                                               </a>
@@ -1614,7 +1644,7 @@ const CaseView = () => {
                             target="_blank"
                             color="primary"
                             className={`btn-icon rounded-circle me-50`}
-                            href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${store.selectedItem.pdf_path}`}
+                            href={renderFileWebUrlPreview(store.selectedItem.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
                           >
                             <Avatar
                               img={pdfPng}

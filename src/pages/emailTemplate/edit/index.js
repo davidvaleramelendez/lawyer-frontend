@@ -65,7 +65,8 @@ import withReactContent from 'sweetalert2-react-content'
 
 // ** Utils
 import {
-    isUserLoggedIn
+    isUserLoggedIn,
+    getWebPreviewUrl
 } from '@utils'
 
 // ** Custom Components
@@ -260,6 +261,7 @@ const EmailTemplateEdit = () => {
                 const fileSizeKiloBytes = files[0].size / 1024
                 const uploadLimit = process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE * 1024
                 if (fileSizeKiloBytes > uploadLimit) {
+                    event.target.value = ""
                     onAlertMessage(T('File limit exceeded!'), `${T('Please upload max')} ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb ${T('file')}!`, 'warning')
                     return false
                 }
@@ -309,6 +311,16 @@ const EmailTemplateEdit = () => {
             dispatch(updateEmailTemplate(emailTemplateData))
         }
     }
+
+    /* Rendering file preview web url */
+    const renderFileWebUrlPreview = (path) => {
+        if (path) {
+            return getWebPreviewUrl(path)
+        }
+
+        return false
+    }
+    /* /Rendering file preview web url */
 
     return store ? (
         <Card className="px-5">
@@ -473,7 +485,7 @@ const EmailTemplateEdit = () => {
                                                     tag="a"
                                                     color="primary"
                                                     target="_blank"
-                                                    href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${attached.path}`}
+                                                    href={renderFileWebUrlPreview(attached.path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
                                                 >
                                                     <Paperclip
                                                         size={17}

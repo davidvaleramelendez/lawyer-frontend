@@ -40,7 +40,8 @@ const AccountTab = ({
     selLanguage,
     setSelLanguage,
     getCurrentUser,
-    onImageSrcError
+    onImageSrcError,
+    getWebPreviewUrl
 }) => {
     // ** Store vars
     const dispatch = useDispatch()
@@ -152,15 +153,14 @@ const AccountTab = ({
     /* /Check admin role permission */
 
     /* Rendering current user image */
-    const renderUserProfile = () => {
+    const renderUserProfilePicture = () => {
         let currentUser = getCurrentUser()
         if (store && store.userItem && store.userItem.role_id) {
             currentUser = store.userItem
         }
 
         if (currentUser && currentUser.profile_photo_path) {
-            const imgUrl = currentUser.profile_photo_path.replace(/\//g, "*")
-            return `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/uploads/${imgUrl}`
+            return getWebPreviewUrl(currentUser.profile_photo_path)
         }
 
         return false
@@ -190,7 +190,7 @@ const AccountTab = ({
                                     <img
                                         className="rounded me-50"
                                         id="user-image"
-                                        src={imageUrl ? imageUrl : renderUserProfile(store.userItem.profile_photo_path) || defaultAvatar}
+                                        src={imageUrl ? imageUrl : renderUserProfilePicture(store.userItem.profile_photo_path) || defaultAvatar}
                                         onError={(currentTarget) => onImageSrcError(currentTarget)}
                                         alt="user-avatar"
                                         height="100"

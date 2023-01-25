@@ -12,6 +12,11 @@ import {
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
+// ** Utils
+import {
+  getWebPreviewUrl
+} from '@utils'
+
 // ** Third Party Components
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -134,6 +139,7 @@ const ModalCaseAddNoteFile = ({
       const fileSizeKiloBytes = fileSize / 1024
       const uploadLimit = process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE * 1024
       if (fileSizeKiloBytes > uploadLimit) {
+        event.target.value = ""
         onAlertMessage(T('File limit exceeded!'), `${T('Please upload max')} ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb ${T('files')}!`, 'warning')
         return
       }
@@ -164,6 +170,7 @@ const ModalCaseAddNoteFile = ({
           }
 
           if (fileFlag) {
+            event.target.value = ""
             dispatch(updateCaseLoader(false))
             dispatch(createCaseAttachment({ attachment: fileArray, type: 'case_record', ids: ids }))
           }
@@ -185,6 +192,16 @@ const ModalCaseAddNoteFile = ({
       handleReset()
     }
   }, [store.actionFlag])
+
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
 
   /* Submitting data */
   const onSubmit = async (values) => {
@@ -288,7 +305,15 @@ const ModalCaseAddNoteFile = ({
                         <div className="inline" key={`attachment_${index}`}>
                           <Paperclip className='cursor-pointer ms-50 me-1' size={17} />
 
-                          {item && item.path ? (<a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>) : null}
+                          {item && item.path ? (
+                            <a
+                              target="_blank"
+                              className="me-1"
+                              href={renderFileWebUrlPreview(item.path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
+                            >
+                              {item.name}
+                            </a>
+                          ) : null}
 
                           <a
                             href={`${adminRoot}/case/view/${caseId}`}

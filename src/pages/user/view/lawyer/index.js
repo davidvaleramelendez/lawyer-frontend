@@ -31,7 +31,9 @@ import {
 // ** Utils
 import {
   isUserLoggedIn,
-  getCurrentUser
+  getCurrentUser,
+  onImageSrcError,
+  getWebPreviewUrl
 } from '@utils'
 
 // ** Third Party Components
@@ -42,12 +44,11 @@ import withReactContent from 'sweetalert2-react-content'
 import Notification from '@components/toast/notification'
 
 // ** User view Components
-import UserTabs from './Tabs'
-import UserInfoCard from './UserInfoCard'
+import ProfileHeader from './ProfileHeader'
+import TabContents from './TabContents'
 
 // ** Styles
-import '@styles/base/pages/app-invoice.scss'
-import '@styles/react/apps/app-users.scss'
+import '@styles/react/pages/page-profile.scss'
 
 // ** Translation
 import { T } from '@localization'
@@ -153,31 +154,43 @@ const UserView = () => {
     })
   }
 
-  return store ? (<Fragment>
-    <div className="app-user-view">
-      <Row>
-        <Col xl={4} lg={5} xs={{ order: 1 }} md={{ order: 0, size: 5 }}>
-          <UserInfoCard
-            id={id}
-            userItem={store.userItem}
-            onDeleteUser={onDeleteUser}
-            authUserItem={store.authUserItem}
-          />
-        </Col>
+  return store ? (
+    <Fragment>
+      <div id="user-profile">
+        <Row>
+          <Col sm={12}>
+            <ProfileHeader
+              id={id}
+              active={active}
+              toggleTab={toggleTab}
+              userItem={store.userItem}
+              permissions={store.permissions}
+              getCurrentUser={getCurrentUser}
+              authUserItem={store.authUserItem}
+              onImageSrcError={onImageSrcError}
+              getWebPreviewUrl={getWebPreviewUrl}
+            />
+          </Col>
+        </Row>
 
-        <Col xl={8} lg={7} xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
-          <UserTabs
-            id={id}
-            active={active}
-            toggleTab={toggleTab}
-            permissions={store.permissions}
-            authUserItem={store.authUserItem}
-            getCurrentUser={getCurrentUser}
-          />
-        </Col>
-      </Row>
-    </div>
-  </Fragment>) : null
+        <Row>
+          <Col sm={12}>
+            <TabContents
+              id={id}
+              active={active}
+              toggleTab={toggleTab}
+              userItem={store.userItem}
+              onDeleteUser={onDeleteUser}
+              permissions={store.permissions}
+              getCurrentUser={getCurrentUser}
+              authUserItem={store.authUserItem}
+              onImageSrcError={onImageSrcError}
+            />
+          </Col>
+        </Row>
+      </div>
+    </Fragment>
+  ) : null
 }
 
 export default UserView

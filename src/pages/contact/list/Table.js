@@ -17,6 +17,7 @@ import {
 import {
     isUserLoggedIn,
     getTotalNumber,
+    getWebPreviewUrl,
     getRandColorClass,
     getCurrentPageNumber
 } from '@utils'
@@ -53,6 +54,9 @@ import Avatar from '@components/avatar'
 import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
+
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
 
 // ** Translation
 import { T } from '@localization'
@@ -235,6 +239,16 @@ const ContactList = () => {
     }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
     // console.log("store >>> ", store)
 
+    /* Rendering file preview web url */
+    const renderFileWebUrlPreview = (path) => {
+        if (path) {
+            return getWebPreviewUrl(path)
+        }
+
+        return false
+    }
+    /* /Rendering file preview web url */
+
     // ** renders contact column
     const renderContact = (row) => {
         if (row.image && row.image.length) {
@@ -243,7 +257,7 @@ const ContactList = () => {
                     width='32'
                     height='32'
                     className='me-50'
-                    img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.image}`}
+                    img={renderFileWebUrlPreview(row.image) || defaultAvatar}
                 />
             )
         } else {

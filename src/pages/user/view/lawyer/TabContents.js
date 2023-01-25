@@ -163,6 +163,12 @@ const TabContents = ({
                     <PermissionsTab permissions={permissions} />
                     {/* /User permissions */}
                 </TabPane>
+
+                <TabPane tabId="9">
+                    {/* Device Log History listing */}
+                    <RecentDevicesTab id={id} />
+                    {/* /Device Log History listing */}
+                </TabPane>
             </TabContent>
         </Fragment>
     )

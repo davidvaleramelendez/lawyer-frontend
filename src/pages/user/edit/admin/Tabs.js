@@ -21,6 +21,7 @@ import {
 import {
     encryptData,
     onImageSrcError,
+    getWebPreviewUrl,
     getTransformDate
 } from '@utils'
 
@@ -89,6 +90,7 @@ const UserTabs = ({
                         id={id}
                         onImageSrcError={onImageSrcError}
                         getTransformDate={getTransformDate}
+                        getWebPreviewUrl={getWebPreviewUrl}
                         PlaceholderSchema={PlaceholderSchema}
                     />
                 </TabPane>

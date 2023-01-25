@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // ** Utils
 import {
     getTotalNumber,
+    getWebPreviewUrl,
     getTransformDate,
     getRandColorClass,
     getCurrentPageNumber
@@ -56,6 +57,9 @@ import {
 
 // ** Modal
 import ModalCaseDetail from '@src/pages/case/modals/ModalCaseDetail'
+
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
 
 // ** Translation
 import { T } from '@localization'
@@ -272,6 +276,16 @@ const DocumentsTab = ({
         setDetailModalOpen(true)
     }
 
+    /* Rendering file preview web url */
+    const renderFileWebUrlPreview = (path) => {
+        if (path) {
+            return getWebPreviewUrl(path)
+        }
+
+        return false
+    }
+    /* /Rendering file preview web url */
+
     // ** renders case column
     const renderCase = (row) => {
         if (row && row.profile_photo_path && row.profile_photo_path.length) {
@@ -280,7 +294,7 @@ const DocumentsTab = ({
                     width="32"
                     height="32"
                     className="me-50"
-                    img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`}
+                    img={renderFileWebUrlPreview(row.profile_photo_path) || defaultAvatar}
                 />
             )
         } else {

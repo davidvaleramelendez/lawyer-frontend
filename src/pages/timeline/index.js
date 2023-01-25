@@ -18,6 +18,7 @@ import {
 // ** Utils
 import {
   isUserLoggedIn,
+  getWebPreviewUrl,
   getTransformDate
 } from '@utils'
 
@@ -125,6 +126,16 @@ const TimelineApp = () => {
     handleTimelineLists(searchLetterInput, value)
   }
 
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
+
   const renderInvoice = (invoice) => {
     if (invoice && invoice.id) {
       return (
@@ -150,7 +161,10 @@ const TimelineApp = () => {
                     <div className="mt-sm-0 mt-1">
                       <p className="text-muted mb-50 font-weight-bolder text-dark">{T("File")}:# {invoice.CaseID ? (<Link to={`${adminRoot}/case/view/${invoice.CaseID}`} target="_blank">{invoice.CaseID}</Link>) : null}</p>
                       <div className="media align-items-center">
-                        <a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${invoice.pdf_path}`} target="_blank">
+                        <a
+                          target="_blank"
+                          href={renderFileWebUrlPreview(invoice.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
+                        >
                           <img
                             className="me-1"
                             src={pdfImage}
@@ -267,7 +281,10 @@ const TimelineApp = () => {
                             />
                             <div className="media-body">
                               {letter && letter.pdf_path ? (
-                                <a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${letter.pdf_path}`} target="_blank">
+                                <a
+                                  target="_blank"
+                                  href={renderFileWebUrlPreview(letter.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
+                                >
                                   {letter && letter.pdf_file}
                                 </a>
                               ) : null}

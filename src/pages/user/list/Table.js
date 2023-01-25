@@ -37,6 +37,7 @@ import {
 import {
     getTotalNumber,
     isUserLoggedIn,
+    getWebPreviewUrl,
     getRandColorClass,
     getCurrentPageNumber
 } from '@utils'
@@ -67,14 +68,14 @@ import {
 import ModalAddUser from '../modals/ModalAddUser'
 import ModalUserDetail from '../modals/ModalUserDetail'
 
-// ** SVG image icons
-import avatarBlank from '@src/assets/images/avatars/avatar-blank.png'
-
 // ** Styles
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
 // ** Translation
 import { T } from '@localization'
+
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
 
 /* Get windows size */
 function getWindowSize() {
@@ -360,6 +361,16 @@ const UsersList = () => {
         return `${adminRoot}/user`
     }
 
+    /* Rendering user image */
+    const renderUserProfilePicture = (row) => {
+        if (row && row.profile_photo_path) {
+            return getWebPreviewUrl(row.profile_photo_path)
+        }
+
+        return false
+    }
+    /* /Rendering user image */
+
     /* Renders User Columns */
     const renderUser = (row) => {
         if (row && row.profile_photo_path && row.profile_photo_path.length) {
@@ -367,7 +378,7 @@ const UsersList = () => {
                 width="32"
                 height="32"
                 className="me-50"
-                img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`}
+                img={renderUserProfilePicture(row) || defaultAvatar}
             />
         } else if (row && row.role && row.role.role_id === 11) {
             return (
@@ -384,7 +395,7 @@ const UsersList = () => {
                     height="32"
                     width="32"
                     className="me-50"
-                    img={avatarBlank}
+                    img={defaultAvatar}
                 />
             )
         }

@@ -20,7 +20,8 @@ import { T } from '@localization'
 const ViewActions = ({
     invoiceItem,
     setPaymentModalOpen,
-    setSendInvoiceModalOpen
+    setSendInvoiceModalOpen,
+    renderFileWebUrlPreview
 }) => {
 
     return (
@@ -44,7 +45,7 @@ const ViewActions = ({
                     color="secondary"
                     rel="noopener noreferrer"
                     className={`mb-75`}
-                    href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${invoiceItem.pdf_path}`}
+                    href={renderFileWebUrlPreview(invoiceItem.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
                     disabled={invoiceItem && !invoiceItem.id}
                     onClick={(event) => invoiceItem && !invoiceItem.pdf_path && event.preventDefault()}
                 >
@@ -59,7 +60,7 @@ const ViewActions = ({
                     color="secondary"
                     rel="noopener noreferrer"
                     className={`mb-75`}
-                    href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${invoiceItem.pdf_path}`}
+                    href={renderFileWebUrlPreview(invoiceItem.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
                     disabled={invoiceItem && !invoiceItem.id}
                     onClick={(event) => invoiceItem && !invoiceItem.pdf_path && event.preventDefault()}
                 >

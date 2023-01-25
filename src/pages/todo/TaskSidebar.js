@@ -48,13 +48,16 @@ import {
 // ** Custom Components
 import DotPulse from '@components/dotpulse'
 
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
+
+// ** Translation
+import { T } from '@localization'
+
 // ** Styles Imports
 import '@styles/react/libs/editor/editor.scss'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 import '@styles/react/libs/react-select/_react-select.scss'
-
-// ** Translation
-import { T } from '@localization'
 
 // ** Modal Header
 const ModalHeader = (props) => {
@@ -110,7 +113,8 @@ const TaskSidebar = (props) => {
     updateTaskLoader,
     completeTodoItem,
     importantTodoItem,
-    handleTaskSidebar
+    handleTaskSidebar,
+    renderFileWebUrlPreview
   } = props
 
   // ** State Constant
@@ -177,12 +181,12 @@ const TaskSidebar = (props) => {
       <components.Option {...props}>
         <div className='d-flex align-items-center'>
           <img
-            className='d-block rounded-circle me-50'
-            src={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${data.img}`}
-            height='26'
             width='26'
+            height='26'
+            className='d-block rounded-circle me-50'
             alt={data.label}
             onError={(currentTarget) => onImageSrcError(currentTarget)}
+            src={renderFileWebUrlPreview(data.img) || defaultAvatar}
           />
           <p className='mb-0'>{data.label}</p>
         </div>

@@ -5,7 +5,10 @@ import {
 } from 'reactstrap'
 
 // ** Utils
-import { getTransformDate } from '@utils'
+import {
+  getWebPreviewUrl,
+  getTransformDate
+} from '@utils'
 
 // ** Icons Import
 import {
@@ -18,6 +21,15 @@ import {
 import { T } from '@localization'
 
 const CaseDetails = ({ details }) => {
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
   return (
     <div>
       {(details.subject || details.Subject) &&
@@ -90,7 +102,7 @@ const CaseDetails = ({ details }) => {
               return (
                 <div className="inline" key={`attachment_${index}`}>
                   <Paperclip className='cursor-pointer ms-50 me-1' size={17} />
-                  {item && item.path ? (<a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>) : null}
+                  {item && item.path ? (<a href={renderFileWebUrlPreview(item.path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`} target="_blank" className="me-1">{item.name}</a>) : null}
                 </div>
               )
             })}
@@ -105,7 +117,7 @@ const CaseDetails = ({ details }) => {
           <div className="col-9">
             <div className="inline">
               <Paperclip className='cursor-pointer ms-50 me-1' size={17} />
-              <a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${details.attachment}`} target="_blank" className="me-1">attachment</a>
+              <a href={renderFileWebUrlPreview(details.attachment) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`} target="_blank" className="me-1">attachment</a>
             </div>
           </div>
         </div>

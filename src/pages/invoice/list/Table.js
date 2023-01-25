@@ -26,6 +26,7 @@ import {
     isUserLoggedIn,
     getTotalNumber,
     getDecimalFormat,
+    getWebPreviewUrl,
     getTransformDate,
     getRandColorClass,
     getCurrentPageNumber,
@@ -83,6 +84,9 @@ import DatatablePagination from '@components/datatable/DatatablePagination'
 // Modal
 import ModalSendInvoice from '../modals/ModalSendInvoice'
 import ModalInvoiceDetail from '../modals/ModalInvoiceDetail'
+
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
 
 // ** Styles
 import '@styles/react/apps/app-invoice.scss'
@@ -344,6 +348,16 @@ const InvoiceList = () => {
     }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, windowSize, loadFirst])
     // console.log("store >>> ", store)
 
+    /* Rendering file preview web url */
+    const renderFileWebUrlPreview = (path) => {
+        if (path) {
+            return getWebPreviewUrl(path)
+        }
+
+        return false
+    }
+    /* /Rendering file preview web url */
+
     // ** renders contact column
     const renderUser = (row) => {
         if (row && row.profile_photo_path && row.profile_photo_path.length) {
@@ -352,7 +366,7 @@ const InvoiceList = () => {
                     width='32'
                     height='32'
                     className='me-50'
-                    img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`}
+                    img={renderFileWebUrlPreview(row.profile_photo_path) || defaultAvatar}
                 />
             )
         } else {
@@ -541,7 +555,7 @@ const InvoiceList = () => {
                                 target="_blank"
                                 className="w-100"
                                 rel="noopener noreferrer"
-                                href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.pdf_path}`}
+                                href={renderFileWebUrlPreview(row.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
                                 onClick={(event) => row && !row.pdf_path && event.preventDefault()}
                             >
                                 <Download size={17} className="me-50" />

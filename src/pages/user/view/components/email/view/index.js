@@ -44,6 +44,7 @@ import {
 import {
   setInnerHtml,
   isUserLoggedIn,
+  getWebPreviewUrl,
   getTransformDate
 } from '@utils'
 
@@ -87,16 +88,27 @@ const EmailDetailView = () => {
     }
   }
 
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
+
   // ** Renders Attachments
   const renderAttachments = (attachments) => {
     return attachments.map((item, index) => {
       return (
         <a
           key={`${index}_${item.name}`}
-          href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank"
+          target="_blank"
           className={classnames({
             'mb-50': index + 1 !== attachments.length
           })}
+          href={renderFileWebUrlPreview(item.path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
         >
           <span className='text-muted fw-bolder align-text-top'>{item.name}</span>
         </a>

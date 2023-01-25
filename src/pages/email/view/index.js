@@ -44,6 +44,7 @@ import {
 import {
   setInnerHtml,
   isUserLoggedIn,
+  getWebPreviewUrl,
   getTransformDate
 } from '@utils'
 
@@ -87,13 +88,24 @@ const EmailDetailView = () => {
     }
   }
 
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
+
   // ** Renders Attachments
   const renderAttachments = (attachments) => {
     return attachments.map((item, index) => {
       return (
         <a
           key={`${index}_${item.name}`}
-          href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank"
+          target="_blank"
+          href={renderFileWebUrlPreview(item.path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
           className={classnames({
             'mb-50': index + 1 !== attachments.length
           })}
@@ -137,7 +149,7 @@ const EmailDetailView = () => {
     if (store.error) {
       Notification(T("Error"), store.error, "warning")
     }
-  }, [dispatch, store.success, store.error, store.actionFlag, loadFirst])
+  }, [store.success, store.error, store.actionFlag, loadFirst])
 
   return store ? (
     <div className="d-flex justify-content-center p-4">

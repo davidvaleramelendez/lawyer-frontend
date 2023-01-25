@@ -103,11 +103,21 @@ const Tasks = (props) => {
     const item = task && task.assign ? task.assign : null
 
     if (item && (item.profile_photo_path === undefined || item.profile_photo_path === null)) {
-      return <Avatar color={resolveAvatarVariant(task.tag)} content={item.name} initials />
+      return (
+        <Avatar color={resolveAvatarVariant(task.tag)} content={item.name} initials />
+      )
     } else if (item && item.profile_photo_path !== '') {
-      return <Avatar img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.profile_photo_path}`} imgHeight='32' imgWidth='32' />
+      return (
+        <Avatar
+          imgWidth='32'
+          imgHeight='32'
+          img={renderFileWebUrlPreview(item.profile_photo_path) || blankAvatar}
+        />
+      )
     } else {
-      return <Avatar img={blankAvatar} imgHeight='32' imgWidth='32' />
+      return (
+        <Avatar img={blankAvatar} imgHeight='32' imgWidth='32' />
+      )
     }
   }
 

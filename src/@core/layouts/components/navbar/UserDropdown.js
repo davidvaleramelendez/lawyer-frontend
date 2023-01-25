@@ -8,7 +8,8 @@ import Avatar from '@components/avatar'
 // ** Utils
 import {
   getCurrentUser,
-  isUserLoggedIn
+  isUserLoggedIn,
+  getWebPreviewUrl
 } from '@utils'
 
 // ** Custom Components
@@ -110,10 +111,9 @@ const UserDropdown = () => {
   }
 
   /* Rendering current user image */
-  const renderUserProfile = () => {
+  const renderUserProfilePicture = () => {
     if (userData && userData.profile_photo_path) {
-      const imgUrl = userData.profile_photo_path.replace(/\//g, "*")
-      return `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/uploads/${imgUrl}`
+      return getWebPreviewUrl(userData.profile_photo_path)
     }
 
     return false
@@ -121,7 +121,7 @@ const UserDropdown = () => {
   /* /Rendering current user image */
 
   //** Vars
-  const userAvatar = renderUserProfile() || defaultAvatar
+  const userAvatar = renderUserProfilePicture() || defaultAvatar
 
   return (<>
     <UncontrolledDropdown tag='li' className='dropdown-user nav-item'>

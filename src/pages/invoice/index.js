@@ -25,6 +25,7 @@ import Select from 'react-select'
 import {
   isUserLoggedIn,
   getDecimalFormat,
+  getWebPreviewUrl,
   getTransformDate,
   getRandColorClass,
   capitalizeWordFirstLetter
@@ -81,11 +82,14 @@ import DatatablePagination from '@components/datatable/DatatablePagination'
 import ModalSendInvoice from './modals/ModalSendInvoice'
 import ModalInvoiceDetail from './modals/ModalInvoiceDetail'
 
-// ** Styles
-import '@styles/react/apps/app-invoice.scss'
-
 // ** Translation
 import { T } from '@localization'
+
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
+
+// ** Styles
+import '@styles/react/apps/app-invoice.scss'
 
 function getWindowSize() {
   const { innerWidth: width, innerHeight: height } = window
@@ -337,15 +341,38 @@ const InvoiceApp = () => {
     return () => {
       window.removeEventListener('resize', handleWindowResize)
     }
-  }, [dispatch, store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, windowSize, loadFirst])
+  }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, windowSize, loadFirst])
   // console.log("store >>> ", store)
+
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
 
   // ** renders contact column
   const renderUser = (row) => {
     if (row && row.profile_photo_path && row.profile_photo_path.length) {
-      return <Avatar className='me-1' img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`} width='32' height='32' />
+      return (
+        <Avatar
+          width='32'
+          height='32'
+          className='me-1'
+          img={renderFileWebUrlPreview(row.profile_photo_path) || defaultAvatar}
+        />
+      )
     } else {
-      return <Avatar color={getRandColorClass()} className='me-50' content={row ? row.name : 'John Doe'} initials />
+      return (
+        <Avatar
+          className='me-50'
+          color={getRandColorClass()}
+          content={row ? row.name : 'John Doe'} initials
+        />
+      )
     }
   }
 
@@ -460,7 +487,7 @@ const InvoiceApp = () => {
           </Link>
 
           <UncontrolledTooltip placement="top" target={`pw-view-tooltip-${row.id}`}>
-          {T('View Invoice')}
+            {T('View Invoice')}
           </UncontrolledTooltip>
 
           <UncontrolledButtonDropdown>
@@ -473,7 +500,7 @@ const InvoiceApp = () => {
                 target="_blank"
                 className="w-100"
                 rel="noopener noreferrer"
-                href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.pdf_path}`}
+                href={renderFileWebUrlPreview(row.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
                 onClick={(event) => row && !row.pdf_path && event.preventDefault()}
               >
                 <Download size={17} className="me-50" />

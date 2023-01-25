@@ -12,7 +12,8 @@ import {
 
 // ** Utils
 import {
-    onImageSrcError
+    onImageSrcError,
+    getWebPreviewUrl
 } from '@utils'
 
 // ** Custom Components
@@ -26,6 +27,9 @@ import {
 
 // ** Translation
 import { T } from '@localization'
+
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
 
 const UserInfoCard = ({
     id,
@@ -44,6 +48,16 @@ const UserInfoCard = ({
         return false
     }
     /* /Check permission */
+
+    /* Rendering user image */
+    const renderUserProfilePicture = () => {
+        if (userItem && userItem.profile_photo_path) {
+            return getWebPreviewUrl(userItem.profile_photo_path)
+        }
+
+        return false
+    }
+    /* /Rendering user image */
 
     return (
         <Fragment>
@@ -65,11 +79,11 @@ const UserInfoCard = ({
                                         />
                                     ) : null}
                                     <img
-                                        height="110"
                                         width="110"
+                                        height="110"
                                         alt="user-avatar"
                                         className={`img-fluid rounded`}
-                                        src={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${userItem.profile_photo_path}`}
+                                        src={renderUserProfilePicture() || defaultAvatar}
                                         onError={(currentTarget) => onImageSrcError(currentTarget)}
                                     />
                                 </div>
@@ -88,11 +102,11 @@ const UserInfoCard = ({
                                     ) : null}
 
                                     <img
-                                        height="110"
                                         width="110"
+                                        height="110"
                                         alt="user-avatar"
                                         className={`img-fluid rounded`}
-                                        src={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/images/avatars/avatar-blank.png`}
+                                        src={defaultAvatar}
                                         onError={(currentTarget) => onImageSrcError(currentTarget)}
                                     />
                                 </div>

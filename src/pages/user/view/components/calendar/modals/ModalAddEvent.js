@@ -12,6 +12,11 @@ import {
   addEventItem
 } from '@constant/reduxConstant'
 
+// ** Utils
+import {
+  getWebPreviewUrl
+} from '@utils'
+
 // ** Third Party Components
 import { X } from 'react-feather'
 import Flatpickr from 'react-flatpickr'
@@ -31,12 +36,15 @@ import {
   FormFeedback
 } from 'reactstrap'
 
+// ** Translation
+import { T } from '@localization'
+
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
+
 // ** Styles Imports
 import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
-
-// ** Translation
-import { T } from '@localization'
 
 const ModalAddEvent = (props) => {
   // ** Props
@@ -121,6 +129,16 @@ const ModalAddEvent = (props) => {
     }
   }
 
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
+
   // ** Custom select components
   const OptionComponent = ({ data, ...props }) => {
     return (
@@ -134,8 +152,12 @@ const ModalAddEvent = (props) => {
   const GuestsComponent = ({ data, ...props }) => {
     return (
       <components.Option {...props}>
-        <div className='d-flex flex-wrap align-items-center'>
-          <Avatar className='my-0 me-50' size='sm' img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${data.img}`} />
+        <div className="d-flex flex-wrap align-items-center">
+          <Avatar
+            size="sm"
+            className="my-0 me-50"
+            img={renderFileWebUrlPreview(data.img) || defaultAvatar}
+          />
           <div>{data.label}</div>
         </div>
       </components.Option>

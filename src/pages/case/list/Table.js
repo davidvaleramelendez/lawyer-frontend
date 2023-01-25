@@ -21,6 +21,7 @@ import Select from "react-select"
 import {
     isUserLoggedIn,
     getTotalNumber,
+    getWebPreviewUrl,
     getTransformDate,
     getRandColorClass,
     getCurrentPageNumber
@@ -59,6 +60,9 @@ import Avatar from "@components/avatar"
 import DotPulse from "@components/dotpulse"
 import Notification from '@components/toast/notification'
 import DatatablePagination from "@components/datatable/DatatablePagination"
+
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
 
 // ** Translation
 import { T } from '@localization'
@@ -285,6 +289,16 @@ const CaseList = () => {
     }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
     // console.log("store >>> ", store)
 
+    /* Rendering file preview web url */
+    const renderFileWebUrlPreview = (path) => {
+        if (path) {
+            return getWebPreviewUrl(path)
+        }
+
+        return false
+    }
+    /* /Rendering file preview web url */
+
     // ** renders case column
     const renderCase = (row) => {
         if (row && row.profile_photo_path && row.profile_photo_path.length) {
@@ -293,7 +307,7 @@ const CaseList = () => {
                     width="32"
                     height="32"
                     className="me-50"
-                    img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`}
+                    img={renderFileWebUrlPreview(row.profile_photo_path) || defaultAvatar}
                 />
             )
         } else {

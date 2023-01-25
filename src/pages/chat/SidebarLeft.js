@@ -20,6 +20,7 @@ import { useDispatch } from 'react-redux'
 // ** Utils
 import {
   isObjEmpty,
+  getWebPreviewUrl,
   getTransformDate
 } from '@utils'
 
@@ -30,10 +31,8 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 // ** Icons Import
 import {
   X,
-  User,
-  Bell,
-  Search,
   Mail,
+  Search,
   PhoneCall
 } from 'react-feather'
 
@@ -94,6 +93,16 @@ const SidebarLeft = (props) => {
   useEffect(() => {
   }, [])
 
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
+
   // ** Renders Chat
   const renderChats = () => {
     if (!loading && placeholderChats === 0) {
@@ -145,7 +154,11 @@ const SidebarLeft = (props) => {
                 active: active === `chat_${item.user_id}`
               })}
             >
-              <Avatar img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.profile_photo_path}`} imgHeight='42' imgWidth='42' />
+              <Avatar
+                imgHeight='42'
+                imgWidth='42'
+                img={renderFileWebUrlPreview(item.profile_photo_path) || avatarBlank}
+              />
               <div className='chat-info flex-grow-1'>
                 <h5 className='mb-0'>{item.name}</h5>
                 <CardText className='text-truncate'>
@@ -182,8 +195,8 @@ const SidebarLeft = (props) => {
             className="placeholder-glow"
           >
             <Avatar
-              imgHeight='42'
               imgWidth='42'
+              imgHeight='42'
               className="placeholder"
               img={avatarBlank}
             />
@@ -213,7 +226,11 @@ const SidebarLeft = (props) => {
                 active: active === `contact_${item.id}`
               })}
             >
-              <Avatar img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.profile_photo_path}`} imgHeight='42' imgWidth='42' />
+              <Avatar
+                imgWidth='42'
+                imgHeight='42'
+                img={renderFileWebUrlPreview(item.profile_photo_path) || avatarBlank}
+              />
               <div className='chat-info flex-grow-1'>
                 <h5 className='mb-0'>{item.name}</h5>
                 {/* <CardText className='text-truncate'>{item.about}</CardText> */}
@@ -252,7 +269,7 @@ const SidebarLeft = (props) => {
                 size={"xl"}
                 status={"online"}
                 className={`box-shadow-1 avatar-border ${isObjEmpty(userProfile) ? 'placeholder' : ''}`}
-                img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${userProfile.profile_photo_path}`}
+                img={renderFileWebUrlPreview(userProfile.profile_photo_path) || avatarBlank}
               />
               <h4
                 className={`chat-user-name ${isObjEmpty(userProfile) ? 'placeholder w-100' : ''}`}
@@ -299,19 +316,21 @@ const SidebarLeft = (props) => {
               >
                 {Object.keys(userProfile).length ? (
                   <Avatar
-                    className="avatar-border"
-                    img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${userProfile.profile_photo_path}`}
-                    status="online"
-                    imgHeight="42"
                     imgWidth="42"
+                    imgHeight="42"
+                    status="online"
+                    className="avatar-border"
+                    img={renderFileWebUrlPreview(userProfile.profile_photo_path) || avatarBlank}
                   />
-                ) : <Avatar
-                  className="avatar-border placeholder"
-                  img={avatarBlank}
-                  status="online"
-                  imgHeight="42"
-                  imgWidth="42"
-                />}
+                ) : (
+                  <Avatar
+                    imgWidth="42"
+                    imgHeight="42"
+                    status="online"
+                    className="avatar-border placeholder"
+                    img={avatarBlank}
+                  />
+                )}
               </div>
 
               <InputGroup className="input-group-merge ms-1 w-100">

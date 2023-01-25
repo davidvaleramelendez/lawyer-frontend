@@ -41,8 +41,12 @@ import {
 
 // ** Utils
 import {
+  getWebPreviewUrl,
   getTransformDate
 } from '@utils'
+
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
 
 // ** Translation
 import { T } from '@localization'
@@ -121,6 +125,16 @@ const ChatLog = (props) => {
     return formattedChatLog
   }
 
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
+
   // ** Renders user chat
   const renderChats = () => {
     return formattedChatData().map((item, index) => {
@@ -136,7 +150,7 @@ const ChatLog = (props) => {
               imgWidth={36}
               imgHeight={36}
               className='box-shadow-1 cursor-pointer'
-              img={item.senderId === selectedUser.id ? `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${selectedUser.profile_photo_path}` : `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${userProfile.profile_photo_path}`}
+              img={item.senderId === selectedUser.id ? renderFileWebUrlPreview(selectedUser.profile_photo_path) : renderFileWebUrlPreview(userProfile.profile_photo_path)}
             />
           </div>
 
@@ -204,9 +218,9 @@ const ChatLog = (props) => {
                   <Menu size={21} />
                 </div>
                 <Avatar
-                  imgHeight='36'
                   imgWidth='36'
-                  img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${selectedUser.profile_photo_path}`}
+                  imgHeight='36'
+                  img={renderFileWebUrlPreview(selectedUser.profile_photo_path) || defaultAvatar}
                   // status={selectedUser.contact.status}
                   className='avatar-border user-profile-toggle m-0 me-1'
                   onClick={() => handleAvatarClick(selectedUser)}

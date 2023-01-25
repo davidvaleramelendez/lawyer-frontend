@@ -4,16 +4,16 @@
 import {
   cryptoIv,
   cryptoKey,
+  storageTimeCounter,
+  storageSiteSetting,
   storageUserKeyName,
   storageTokenKeyName,
-  storageLoggedAtKeyName,
-  storageRefreshTokenKeyName,
-  storageTokenExpiresKeyName,
-  storageTotalNumberName,
-  storageSiteSetting,
   storageLanguageLabels,
-  storageTimeCounter,
-  storageRememberMeAuth
+  storageRememberMeAuth,
+  storageTotalNumberName,
+  storageLoggedAtKeyName,
+  storageTokenExpiresKeyName,
+  storageRefreshTokenKeyName
 } from '@constant/defaultValues'
 
 import {
@@ -30,16 +30,16 @@ const CryptoEncHex = require('crypto-js/enc-hex')
 const padZeroPadding = require('crypto-js/pad-zeropadding')
 
 // ** Checks if an object is empty (returns boolean)
-export const isObjEmpty = (obj) => Object.keys(obj).length === 0
+const isObjEmpty = (obj) => Object.keys(obj).length === 0
 
 // ** Returns K format from a number
-export const kFormatter = (num) => (num > 999 ? `${(num / 1000).toFixed(1)}k` : num)
+const kFormatter = (num) => (num > 999 ? `${(num / 1000).toFixed(1)}k` : num)
 
 // ** Converts HTML to string
-export const htmlToString = (html) => html.replace(/<\/?[^>]+(>|$)/g, '')
+const htmlToString = (html) => html.replace(/<\/?[^>]+(>|$)/g, '')
 
 // Check is html or not
-export const isHtml = (string = "") => /<\/?[a-z][\s\S]*>/i.test(string)
+const isHtml = (string = "") => /<\/?[a-z][\s\S]*>/i.test(string)
 
 // ** Checks if the passed date is today
 const isToday = (date) => {
@@ -60,13 +60,13 @@ const isToday = (date) => {
  * @param {String} value date to format
  * @param {Object} formatting Intl object to format with
  */
-export const formatDate = (value, formatting = { month: 'short', day: 'numeric', year: 'numeric' }) => {
+const formatDate = (value, formatting = { month: 'short', day: 'numeric', year: 'numeric' }) => {
   if (!value) return value
   return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
 }
 
 // ** Returns short month of passed date
-export const formatDateToMonthShort = (value, toTimeForCurrentDay = true) => {
+const formatDateToMonthShort = (value, toTimeForCurrentDay = true) => {
   const date = new Date(value)
   let formatting = { month: 'short', day: 'numeric' }
 
@@ -78,10 +78,10 @@ export const formatDateToMonthShort = (value, toTimeForCurrentDay = true) => {
 }
 
 // ** Function to capitalize the first letter of string
-export const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1)
+const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1)
 
 // Replace underscore and capitalize first letter of word in string
-export const capitalizeWordFirstLetter = (words) => {
+const capitalizeWordFirstLetter = (words) => {
   return words.replace(/_/g, ' ').replace(/(?: |\b)(\w)/g, function (key) { return key.toUpperCase() })
 }
 
@@ -91,11 +91,11 @@ export const capitalizeWordFirstLetter = (words) => {
  *  ? e.g. If you are using cookies to store the application please update this function
  */
 /* To check user is logged or not */
-export const isUserLoggedIn = () => localStorage.getItem(storageUserKeyName)
-export const getUserData = () => JSON.parse(localStorage.getItem(storageUserKeyName))
+const isUserLoggedIn = () => localStorage.getItem(storageUserKeyName)
+const getUserData = () => JSON.parse(localStorage.getItem(storageUserKeyName))
 
 /* Get logged user from local storage */
-export const getCurrentUser = () => {
+const getCurrentUser = () => {
   let user = null
   try {
     user = localStorage.getItem(storageUserKeyName) !== null ? JSON.parse(localStorage.getItem(storageUserKeyName)) : null
@@ -107,7 +107,7 @@ export const getCurrentUser = () => {
 }
 
 /* Set logged user on local storage  */
-export const setCurrentUser = (user) => {
+const setCurrentUser = (user) => {
   try {
     if (user) {
       localStorage.setItem(storageUserKeyName, JSON.stringify(user))
@@ -120,7 +120,7 @@ export const setCurrentUser = (user) => {
 }
 
 /* Get access token or token from local storage */
-export const getAccessToken = () => {
+const getAccessToken = () => {
   let token = null
   try {
     token = localStorage.getItem(storageTokenKeyName) !== null ? JSON.parse(localStorage.getItem(storageTokenKeyName)) : null
@@ -132,7 +132,7 @@ export const getAccessToken = () => {
 }
 
 /* Set access token or token on local storage */
-export const setAccessToken = (token) => {
+const setAccessToken = (token) => {
   try {
     if (token) {
       localStorage.setItem(storageTokenKeyName, JSON.stringify(token))
@@ -145,7 +145,7 @@ export const setAccessToken = (token) => {
 }
 
 /* Get refresh token from local storage */
-export const getRefreshToken = () => {
+const getRefreshToken = () => {
   let token = null
   try {
     token = localStorage.getItem(storageRefreshTokenKeyName) !== null ? JSON.parse(localStorage.getItem(storageRefreshTokenKeyName)) : null
@@ -157,7 +157,7 @@ export const getRefreshToken = () => {
 }
 
 /* Set refersh token on local storage */
-export const setRefreshToken = (token) => {
+const setRefreshToken = (token) => {
   // console.log("setRefreshToken ", storageRefreshTokenKeyName)
   try {
     if (token) {
@@ -171,7 +171,7 @@ export const setRefreshToken = (token) => {
 }
 
 /* Get Expiration token from local storage */
-export const getTokenExpires = () => {
+const getTokenExpires = () => {
   let expiresAt = null
   try {
     expiresAt = localStorage.getItem(storageTokenExpiresKeyName) !== null ? JSON.parse(localStorage.getItem(storageTokenExpiresKeyName)) : null
@@ -183,7 +183,7 @@ export const getTokenExpires = () => {
 }
 
 /* Set Expiration token on local storage */
-export const setTokenExpires = (time) => {
+const setTokenExpires = (time) => {
   // console.log("setTokenExpires ", storageTokenExpiresKeyName)
   try {
     if (time) {
@@ -197,7 +197,7 @@ export const setTokenExpires = (time) => {
 }
 
 /* Get login date time from local storage */
-export const getLoggedAt = () => {
+const getLoggedAt = () => {
   let loggedAt = null
   try {
     loggedAt = localStorage.getItem(storageLoggedAtKeyName) !== null ? JSON.parse(localStorage.getItem(storageLoggedAtKeyName)) : null
@@ -209,7 +209,7 @@ export const getLoggedAt = () => {
 }
 
 /* Set login date time on local storage */
-export const setLoggedAt = (dateTime) => {
+const setLoggedAt = (dateTime) => {
   // console.log("setLoggedAt ", storageLoggedAtKeyName)
   try {
     if (dateTime) {
@@ -222,12 +222,12 @@ export const setLoggedAt = (dateTime) => {
   }
 }
 
-export const getTransformDate = (date, format = 'MM-DD-YYYY') => {
+const getTransformDate = (date, format = 'MM-DD-YYYY') => {
   return moment(new Date(date)).format(format)
 }
 
 /* To compare login time and expire time based on that calling refresh token api */
-export const getCompareAndCallRefresh = () => {
+const getCompareAndCallRefresh = () => {
   try {
     const expiresAt = localStorage.getItem(storageTokenExpiresKeyName) !== null ? JSON.parse(localStorage.getItem(storageTokenExpiresKeyName)) : null
     const loggedAt = localStorage.getItem(storageLoggedAtKeyName) !== null ? JSON.parse(localStorage.getItem(storageLoggedAtKeyName)) : null
@@ -265,14 +265,14 @@ export const getCompareAndCallRefresh = () => {
  * ? NOTE: If you have different pages to navigate based on user ability then this function can be useful. However, you need to update it.
  * @param {String} userRole Role of user
  */
-export const getHomeRouteForLoggedInUser = (userRole) => {
+const getHomeRouteForLoggedInUser = (userRole) => {
   if (userRole === 'admin') return DefaultRoute
   if (userRole === 'client') return '/access-control'
   return '/login'
 }
 
 // ** React Select Theme Colors
-export const selectThemeColors = theme => ({
+const selectThemeColors = theme => ({
   ...theme,
   colors: {
     ...theme.colors,
@@ -299,19 +299,19 @@ const encryptData = (data = "") => {
 }
 
 /* Return html value inside inner html */
-export const setInnerHtml = (value = "", classValue = "m-0") => {
+const setInnerHtml = (value = "", classValue = "m-0") => {
   return <div className={classValue} dangerouslySetInnerHTML={{ __html: value }} />
 }
 
 /* Return default image if server image not found */
-export const onImageSrcError = ({ currentTarget }) => {
+const onImageSrcError = ({ currentTarget }) => {
   if (currentTarget) {
     currentTarget.onerror = null
     currentTarget.src = "/images/avatar-blank.png"
   }
 }
 
-export const getRandColorClass = () => {
+const getRandColorClass = () => {
   const index = Math.floor(Math.random() * 6)
   const colorClass = ['light-success', 'light-danger', 'light-warning', 'light-info', 'light-primary', 'light-secondary']
   const color = colorClass[index]
@@ -319,12 +319,12 @@ export const getRandColorClass = () => {
 }
 
 // Replace underscore and capitalize first letter of word in string
-export const underscoreCapitalizeWord = (words) => {
+const underscoreCapitalizeWord = (words) => {
   return words.replace(/_/g, ' ').replace(/(?: |\b)(\w)/g, function (key) { return key.toUpperCase() })
 }
 
 // Formatting value to 2 decimal format
-export const getDecimalFormat = (value) => {
+const getDecimalFormat = (value) => {
   if (value) {
     return parseFloat(value).toFixed(2)
   }
@@ -332,12 +332,12 @@ export const getDecimalFormat = (value) => {
 }
 
 // getting percentage from a value
-export const getPercentage = (num, per) => {
+const getPercentage = (num, per) => {
   return parseFloat((num / 100) * per).toFixed(2)
 }
 
 // Increase days in date with formatted
-export const increaseDaysDateFormat = (day, format = 'MM-DD-YYYY', date = new Date()) => {
+const increaseDaysDateFormat = (day, format = 'MM-DD-YYYY', date = new Date()) => {
   try {
     return moment(new Date(date)).add(day, 'day').format(format)
   } catch (error) {
@@ -347,7 +347,7 @@ export const increaseDaysDateFormat = (day, format = 'MM-DD-YYYY', date = new Da
 }
 
 // Increase custom type in date with formatted
-export const increaseCustomDateFormat = (type, value, format = 'MM-DD-YYYY', date = new Date()) => {
+const increaseCustomDateFormat = (type, value, format = 'MM-DD-YYYY', date = new Date()) => {
   try {
     return moment(new Date(date)).add(type, value).format(format)
   } catch (error) {
@@ -357,17 +357,17 @@ export const increaseCustomDateFormat = (type, value, format = 'MM-DD-YYYY', dat
 }
 
 // Get current total number
-export const getTotalNumber = (title) => {
+const getTotalNumber = (title) => {
   try {
     const total_numbers = JSON.parse(localStorage.getItem(storageTotalNumberName) ?? '{}')
     return total_numbers[title]
   } catch (error) {
-    console.log('>>>>: src/utility/Utils.js : setCurrentUser -> error', error)
+    console.log('>>>>: src/utility/Utils.js : getTotalNumber -> error', error)
   }
 }
 
 // Set current total number
-export const setTotalNumber = (title, number) => {
+const setTotalNumber = (title, number) => {
   try {
     let total_numbers = JSON.parse(localStorage.getItem(storageTotalNumberName) ?? '{}')
     total_numbers = {
@@ -380,7 +380,7 @@ export const setTotalNumber = (title, number) => {
   }
 }
 /* Get time counter from local storage */
-export const getTimeCounter = () => {
+const getTimeCounter = () => {
   let timecounter = null
   try {
     timecounter = localStorage.getItem(storageTimeCounter) !== null ? JSON.parse(localStorage.getItem(storageTimeCounter)) : {
@@ -396,7 +396,7 @@ export const getTimeCounter = () => {
 }
 
 /* Set time counter on local storage  */
-export const setTimeCounter = (timecounter) => {
+const setTimeCounter = (timecounter) => {
   try {
     if (timecounter) {
       localStorage.setItem(storageTimeCounter, JSON.stringify(timecounter))
@@ -409,17 +409,17 @@ export const setTimeCounter = (timecounter) => {
 }
 
 // Get current total number
-export const getCurrentPageNumber = (title, rowsPerPage, currentPage) => {
+const getCurrentPageNumber = (title, rowsPerPage, currentPage) => {
   try {
     const total_numbers = JSON.parse(localStorage.getItem(storageTotalNumberName) ?? '{}')[title]
     return Math.min(total_numbers, rowsPerPage * currentPage) - (rowsPerPage * (currentPage - 1))
   } catch (error) {
-    console.log('>>>>: src/utility/Utils.js : setCurrentUser -> error', error)
+    console.log('>>>>: src/utility/Utils.js : getCurrentPageNumber -> error', error)
   }
 }
 
 //Set Site layout Setting
-export const setSiteLayoutSetting = (siteSetting) => {
+const setSiteLayoutSetting = (siteSetting) => {
   try {
     if (siteSetting) {
       localStorage.setItem(storageSiteSetting, JSON.stringify(siteSetting))
@@ -432,7 +432,7 @@ export const setSiteLayoutSetting = (siteSetting) => {
 }
 
 // Get current Site Setting value
-export const getSiteLayoutSetting = () => {
+const getSiteLayoutSetting = () => {
   let _sitesetting = null
   try {
     _sitesetting = localStorage.getItem(storageSiteSetting) !== null ? JSON.parse(localStorage.getItem(storageSiteSetting)) : null
@@ -488,7 +488,6 @@ const setRememberMeAuthData = (data = null) => {
 /* /Encrypting auth remember me and setting to storage */
 
 /* Decrypting auth remember me and getting from storage */
-
 const getRememberMeAuthData = () => {
   let rememberMe = null
   try {
@@ -505,17 +504,10 @@ const getRememberMeAuthData = () => {
   }
   return rememberMe
 }
-
 /* /Decrypting auth remember me and getting from storage */
-/* Exporting functions */
-export {
-  encryptData,
-  decryptData,
-  setRememberMeAuthData,
-  getRememberMeAuthData
-}
+
 // Get language labels value
-export const getLanguageLabels = () => {
+const getLanguageLabels = () => {
   let _languageLabels = null
   try {
     _languageLabels = localStorage.getItem(storageLanguageLabels) !== null ? JSON.parse(localStorage.getItem(storageLanguageLabels)) : null
@@ -527,7 +519,7 @@ export const getLanguageLabels = () => {
 }
 
 // Set language labels value
-export const setLanguageLabels = (labels) => {
+const setLanguageLabels = (labels) => {
   try {
     if (labels) {
       localStorage.setItem(storageLanguageLabels, JSON.stringify(labels))
@@ -540,7 +532,7 @@ export const setLanguageLabels = (labels) => {
 }
 /* /Decrypting auth remember me and getting from storage */
 
-export const toTimeString = (seconds, mode = 'second') => {
+const toTimeString = (seconds, mode = 'second') => {
   try {
     let hour = Math.floor(seconds / 3600)
     let min = Math.floor((seconds % 3600) / 60)
@@ -554,4 +546,66 @@ export const toTimeString = (seconds, mode = 'second') => {
   } catch (error) {
     console.log('>>>>: src/utility/Utils.js : toTimeString -> error', error)
   }
+}
+
+/* Web preview url function */
+const getWebPreviewUrl = (path = "") => {
+  if (path) {
+    path = path.replace(/\//g, "*")
+    return `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/preview/${path}`
+  }
+
+  return false
+}
+/* /Web preview url function */
+
+/* Export functions */
+export {
+  isHtml,
+  kFormatter,
+  isObjEmpty,
+  formatDate,
+  setLoggedAt,
+  getLoggedAt,
+  encryptData,
+  decryptData,
+  getUserData,
+  htmlToString,
+  setInnerHtml,
+  toTimeString,
+  getPercentage,
+  getTotalNumber,
+  setTotalNumber,
+  setTimeCounter,
+  isUserLoggedIn,
+  getTimeCounter,
+  getCurrentUser,
+  setCurrentUser,
+  getAccessToken,
+  setAccessToken,
+  setTokenExpires,
+  setRefreshToken,
+  getTokenExpires,
+  onImageSrcError,
+  getRefreshToken,
+  getTransformDate,
+  getDecimalFormat,
+  getWebPreviewUrl,
+  setLanguageLabels,
+  getLanguageLabels,
+  selectThemeColors,
+  getRandColorClass,
+  getCurrentPageNumber,
+  setSiteLayoutSetting,
+  getSiteLayoutSetting,
+  setRememberMeAuthData,
+  capitalizeFirstLetter,
+  getRememberMeAuthData,
+  formatDateToMonthShort,
+  increaseDaysDateFormat,
+  increaseCustomDateFormat,
+  underscoreCapitalizeWord,
+  getCompareAndCallRefresh,
+  capitalizeWordFirstLetter,
+  getHomeRouteForLoggedInUser
 }

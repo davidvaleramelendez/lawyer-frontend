@@ -12,12 +12,30 @@ import {
   PhoneCall
 } from 'react-feather'
 
+// ** Utils
+import {
+  getWebPreviewUrl
+} from '@utils'
+
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
+
 // ** Translation
 import { T } from '@localization'
 
 const UserProfileSidebar = (props) => {
   // ** Props
   const { user, handleUserSidebarRight, userSidebarRight } = props
+
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
 
   return (
     <div className={classnames("user-profile-sidebar", { show: userSidebarRight === true })}>
@@ -27,11 +45,11 @@ const UserProfileSidebar = (props) => {
         </span>
         <div className="header-profile-sidebar">
           <Avatar
-            className="box-shadow-1 avatar-border"
             size="xl"
-            img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${user.profile_photo_path}`}
-            imgHeight="70"
             imgWidth="70"
+            imgHeight="70"
+            className="box-shadow-1 avatar-border"
+            img={renderFileWebUrlPreview(user.profile_photo_path) || defaultAvatar}
           />
           <h4 className="chat-user-name">{user && user.name}</h4>
           <span className="user-post">{user && user.role && user.role.RoleName}</span>

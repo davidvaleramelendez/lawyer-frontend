@@ -33,6 +33,7 @@ import {
 
 // ** Utils
 import {
+  getWebPreviewUrl,
   getRandColorClass
 } from '@utils'
 
@@ -43,6 +44,9 @@ import {
 import {
   userItem
 } from '@constant/reduxConstant'
+
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
 
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
@@ -73,13 +77,30 @@ const ModalUserDetail = ({
     if (store && (store.success || store.error || store.actionFlag)) {
       dispatch(clearUserMessage())
     }
-  }, [dispatch, store.success, store.error, store.actionFlag])
+  }, [store.success, store.error, store.actionFlag])
   // console.log("userItem Model >>>> ", userRowData)
+
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
 
   // ** Renders User Columns
   const renderUser = (row) => {
     if (row.profile_photo_path && row.profile_photo_path.length) {
-      return <Avatar className='me-1' img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`} width='32' height='32' />
+      return (
+        <Avatar
+          width='32'
+          height='32'
+          className='me-1'
+          img={renderFileWebUrlPreview(row.profile_photo_path) || defaultAvatar}
+        />
+      )
     } else {
       return (
         <Avatar

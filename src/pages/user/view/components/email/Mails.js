@@ -10,6 +10,7 @@ import MailDetails from './MailDetails'
 // ** Utils
 import {
   setInnerHtml,
+  getWebPreviewUrl,
   getTransformDate
 } from '@utils'
 
@@ -348,6 +349,7 @@ const Mails = (props) => {
         setInnerHtml={setInnerHtml}
         uploadedFiles={uploadedFiles}
         mailItem={store.currentMailItem}
+        getWebPreviewUrl={getWebPreviewUrl}
         getTransformDate={getTransformDate}
         setUploadedFiles={setUploadedFiles}
         createEmailReply={createEmailReply}

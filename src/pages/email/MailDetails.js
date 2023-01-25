@@ -66,6 +66,7 @@ const MailDetails = (props) => {
     uploadedFiles,
     setUploadedFiles,
     getTransformDate,
+    getWebPreviewUrl,
     createEmailReply,
     editorHtmlContent,
     updateEmailLoader,
@@ -141,6 +142,7 @@ const MailDetails = (props) => {
       const fileSizeKiloBytes = fileSize / 1024
       const uploadLimit = process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE * 1024
       if (fileSizeKiloBytes > uploadLimit) {
+        event.target.value = ""
         onAlertMessage(T('File limit exceeded!'), `${T('Please upload max')} ${process.env.REACT_APP_MAX_FILE_UPLOAD_SIZE} mb ${T('files')}!`, 'warning')
         return
       }
@@ -176,6 +178,7 @@ const MailDetails = (props) => {
           }
 
           if (fileFlag) {
+            event.target.value = ""
             dispatch(updateEmailLoader(false))
             dispatch(createEmailAttachment({ attachment: fileArray, type: type, ids: ids }))
           }
@@ -200,13 +203,24 @@ const MailDetails = (props) => {
     }
   }
 
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
+
   // ** Renders Attachments
   const renderAttachments = (attachments) => {
     return attachments.map((item, index) => {
       return (
         <a
           key={`${index}_${item.name}`}
-          href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank"
+          href={renderFileWebUrlPreview(item.path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
+          target="_blank"
           className={classnames({
             'mb-50': index + 1 !== attachments.length
           })}
@@ -519,7 +533,15 @@ const MailDetails = (props) => {
                                 <div className="inline" key={`attachment_${index}`}>
                                   <Paperclip className="cursor-pointer ms-50 me-1" size={17} />
 
-                                  {item && item.path ? (<a href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${item.path}`} target="_blank" className="me-1">{item.name}</a>) : null}
+                                  {item && item.path ? (
+                                    <a
+                                      target="_blank"
+                                      className="me-1"
+                                      href={renderFileWebUrlPreview(item.path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
+                                    >
+                                      {item.name}
+                                    </a>
+                                  ) : null}
 
                                   <a
                                     href={`${adminRoot}/email`}

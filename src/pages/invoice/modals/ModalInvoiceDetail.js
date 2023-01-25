@@ -45,6 +45,7 @@ import withReactContent from 'sweetalert2-react-content'
 // ** Utils
 import {
   getDecimalFormat,
+  getWebPreviewUrl,
   getTransformDate,
   getRandColorClass
 } from '@utils'
@@ -59,6 +60,9 @@ import {
 
 // Modal
 import ModalSendInvoice from './ModalSendInvoice'
+
+// ** Default Avatar Image
+import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
 
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
@@ -101,13 +105,30 @@ const ModalInvoiceDetail = ({
     if (store && (store.success || store.error || store.actionFlag)) {
       dispatch(clearInvoiceMessage())
     }
-  }, [dispatch, store.success, store.error, store.actionFlag])
+  }, [store.success, store.error, store.actionFlag])
   // console.log("invoiceItem Model >>>> ", invoiceRowData)
+
+  /* Rendering file preview web url */
+  const renderFileWebUrlPreview = (path) => {
+    if (path) {
+      return getWebPreviewUrl(path)
+    }
+
+    return false
+  }
+  /* /Rendering file preview web url */
 
   // ** Renders invoice Columns
   const renderCustomer = (row) => {
     if (row && row.profile_photo_path && row.profile_photo_path.length) {
-      return <Avatar className='me-1' img={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${row.profile_photo_path}`} width='32' height='32' />
+      return (
+        <Avatar
+          width='32'
+          height='32'
+          className='me-1'
+          img={renderFileWebUrlPreview(row.profile_photo_path) || defaultAvatar}
+        />
+      )
     } else {
       return (
         <Avatar
@@ -225,7 +246,7 @@ const ModalInvoiceDetail = ({
                         <Eye size={17} className="mx-1" />
                       </Link>
                       <UncontrolledTooltip placement="top" target={`pw-tooltip-${invoiceRowData.id}`}>
-                      {T('Preview Invoice')}
+                        {T('Preview Invoice')}
                       </UncontrolledTooltip>
 
                       <UncontrolledButtonDropdown>
@@ -236,9 +257,9 @@ const ModalInvoiceDetail = ({
                           <DropdownItem
                             tag="a"
                             target="_blank"
-                            rel="noopener noreferrer"
-                            href={`${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}/${invoiceRowData.pdf_path}`}
                             className="w-100"
+                            rel="noopener noreferrer"
+                            href={renderFileWebUrlPreview(invoiceRowData.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
                           >
                             <Download size={17} className="me-50" />
                             <span className="align-middle">{T('Download')}</span>

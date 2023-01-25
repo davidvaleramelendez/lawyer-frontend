@@ -32,7 +32,8 @@ import {
 import {
   getCurrentUser,
   isUserLoggedIn,
-  onImageSrcError
+  onImageSrcError,
+  getWebPreviewUrl
 } from '@utils'
 
 // ** Third Party Components
@@ -167,6 +168,7 @@ const UserView = () => {
               getCurrentUser={getCurrentUser}
               authUserItem={store.authUserItem}
               onImageSrcError={onImageSrcError}
+              getWebPreviewUrl={getWebPreviewUrl}
             />
           </Col>
         </Row>

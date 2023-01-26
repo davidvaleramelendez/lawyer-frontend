@@ -424,7 +424,7 @@ const MailDetails = (props) => {
             <div className="email-header-right ms-2 ps-1">
               <ul className="list-inline m-0">
                 {mailItem && mailItem.mail && mailItem.mail.id && !mailItem.mail.type ? (<li className="list-inline-item">
-                  <Link to={`${adminRoot}/email/view/${mailItem.mail.id}`} target="_blank">
+                  <Link to={`${adminRoot}/email/view/${mailItem.mail.id}?emailGroupId=${mailItem.mail.email_group_id}`} target="_blank">
                     <Eye size={18} className="mx-1" />
                   </Link>
                 </li>) : null}

@@ -219,7 +219,7 @@ const LetterList = () => {
     /* Columns */
     const columns = [
         {
-            name: T("Reference Number"),
+            name: T("CaseID"),
             sortable: true,
             sortField: "case_id",
             minWidth: "17%",
@@ -237,10 +237,10 @@ const LetterList = () => {
             sortable: true,
             sortField: "created_date",
             minWidth: "18%",
-            cell: (row) => row.created_date && getTransformDate(row.created_date, "DD-MM-YYYY HH:mm:ss"),
+            cell: (row) => row.created_date && getTransformDate(row.created_date, "DD-MM-YYYY"),
             /* Custom placeholder vars */
             contentExtraStyles: {
-                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '120px'
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
             },
             customLoaderCellClass: "",
             customLoaderContentClass: ""

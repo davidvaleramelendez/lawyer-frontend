@@ -220,10 +220,10 @@ const VoiceRecordingList = () => {
             sortable: true,
             sortField: "created_at",
             minWidth: "20%",
-            cell: (row) => row.created_at && getTransformDate(row.created_at, "DD-MM-YYYY HH:mm:ss"),
+            cell: (row) => row.created_at && getTransformDate(row.created_at, "DD-MM-YYYY"),
             /* Custom placeholder vars */
             contentExtraStyles: {
-                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '140px'
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
             },
             customLoaderCellClass: "",
             customLoaderContentClass: ""

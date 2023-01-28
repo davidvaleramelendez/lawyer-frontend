@@ -177,7 +177,7 @@ const VoiceRecordingList = () => {
             Notification(T("Error"), store.error, "warning")
         }
     }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
-    console.log("store >>> ", store)
+    // console.log("store >>> ", store)
 
     const handleMarkDone = (id) => {
         MySwal.fire({

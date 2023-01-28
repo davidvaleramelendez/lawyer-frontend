@@ -1,5 +1,6 @@
 // ** Icons Import
 import {
+  Mic,
   Mail,
   User,
   Send,
@@ -9,11 +10,11 @@ import {
   Calendar,
   HardDrive,
   Briefcase,
+  Codesandbox,
   CheckCircle,
   CheckSquare,
   MessageCircle,
-  MessageSquare,
-  Codesandbox
+  MessageSquare
 } from 'react-feather'
 
 // Constant
@@ -72,6 +73,12 @@ export default [
     title: 'Outbox',
     icon: <Send size={20} />,
     navLink: `${adminRoot}/letter`
+  },
+  {
+    id: 'voiceRecordingApp',
+    title: 'Voice Recording',
+    icon: <Mic size={20} />,
+    navLink: `${adminRoot}/voice-recording`
   },
   {
     id: 'billsApp',

@@ -124,7 +124,7 @@ const Sidebar = (props) => {
                 >
                   <Info size={18} className='me-75' />
                   <span className='align-middle'>{T("Spam")}</span>
-                  {store.emailsMeta.spam ? (
+                  {store.emailsMeta && store.emailsMeta.spam ? (
                     <Badge className='float-end' color='light-danger' pill>
                       {store.emailsMeta.spam}
                     </Badge>

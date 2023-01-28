@@ -3,11 +3,7 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 
-// Translation
-import { useTranslation } from 'react-i18next'
-
-// Redux
-
+// ** Redux
 import { useDispatch } from 'react-redux'
 import { updateTimeCaseRecord, deleteTimeCaseRecord } from '../store'
 
@@ -26,18 +22,23 @@ import {
   ModalFooter
 } from 'reactstrap'
 
-// Constant
+// ** Constant
 import { CONTINUE_MODAL } from '@constant/defaultValues'
 
-// Component
+// ** Component
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
 
-// Utils
+// ** Icons Import
+import { Clock, Minus, Square } from 'react-feather'
+
+// ** Utils
 import { setTimeCounter, getTimeCounter, toTimeString } from '@utils'
+
+// ** Translation
+import { T } from '@localization'
 
 // ** Styles
 import 'react-circular-progressbar/dist/styles.css'
-import { Clock, Minus, Square } from 'react-feather'
 
 let myInterval = null
 
@@ -45,9 +46,6 @@ const TerminalCaseTimeTrackingCounter = ({
   open,
   closeTerminal
 }) => {
-  // ** Hooks for tanslation
-  const { t } = useTranslation()
-
   // ** Store vars
   const [currentTime, setCurrentTime] = useState(getTimeCounter()?.current_time ?? 0)
   const [status, setStatus] = useState(getTimeCounter()?.status ?? false)
@@ -206,16 +204,16 @@ const TerminalCaseTimeTrackingCounter = ({
         <Card>
           <CardBody className='card-body'>
             <div className='d-flex justify-content-between'>
-              <h3>{t("Terminal")}</h3>
+              <h3>{T("Terminal")}</h3>
               {draggable ? (
                 <button className='btn btn-default' onClick={toggleDraggable(false)}>
                   <Minus size={14} />
-                </button>) : (
+                </button>
+              ) : (
                 <button className='btn btn-default' onClick={toggleDraggable(true)}>
                   <Square size={14} />
                 </button>
-              )
-              }
+              )}
             </div>
             <hr />
             <div className='row align-items-center'>
@@ -230,6 +228,7 @@ const TerminalCaseTimeTrackingCounter = ({
                   />
                 </div>
               </div>
+
               <div className='col-5'>
                 <div className='d-flex'>
                   <Clock size={16} className="me-1" /> <h5 className='mb-0'>Recorded Time</h5>
@@ -248,16 +247,16 @@ const TerminalCaseTimeTrackingCounter = ({
                   <div>
                     <div className='mt-2 d-flex justify-content-center'>
                       <Button type="submit" size='lg' color="success" className='me-3' onClick={handleSave}>
-                        {t("Save")}
+                        {T("Save")}
                       </Button>
                       <Button type="submit" size='lg' color="danger" onClick={handleDelete}>
-                        {t("Delete")}
+                        {T("Delete")}
                       </Button>
                     </div>
                   </div>
                 ) : (
                   <Button className='d-flex justify-content-center' type="submit" size='lg' color="danger" onClick={() => setStopModal(true)}>
-                    {t("Stop")}
+                    {T("Stop")}
                   </Button>
                 )}
               </div>
@@ -281,6 +280,7 @@ const TerminalCaseTimeTrackingCounter = ({
             </Button>
           </ModalFooter>
         </Modal>
+
         <Modal
           isOpen={stopModal}
           toggle={() => setStopModal(!stopModal)}
@@ -315,19 +315,19 @@ const TerminalCaseTimeTrackingCounter = ({
             </div>
             <div className='mt-2 d-flex'>
               <Button type="submit" size='lg' color="primary" className='me-2 ms-auto' onClick={handleTimeIncrease(5)}>
-                {t("5")}
+                {T("5")}
               </Button>
               <Button type="submit" size='lg' color="primary" className='me-2' onClick={handleTimeIncrease(10)}>
-                {t("10")}
+                {T("10")}
               </Button>
               <Button type="submit" size='lg' color="primary" className='me-2' onClick={handleTimeIncrease(15)}>
-                {t("15")}
+                {T("15")}
               </Button>
               <Button type="submit" size='lg' color="primary" className='me-2' onClick={handleTimeIncrease(20)}>
-                {t("20")}
+                {T("20")}
               </Button>
               <Button type="submit" size='lg' color="primary" className='me-auto' onClick={handleTimeIncrease(25)}>
-                {t("25")}
+                {T("25")}
               </Button>
             </div>
           </ModalBody>

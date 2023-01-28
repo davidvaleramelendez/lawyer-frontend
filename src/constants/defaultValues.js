@@ -12,6 +12,7 @@ export const storageSiteSetting = "siteSetting"
 export const storageTimeCounter = "timecounter"
 export const storageRememberMeAuth = "LWY_KP_329"
 export const storageLanguageLabels = "languageLabels"
+export const storageRecordedItemKeyName = "caseRecodedVoice"
 
 /* Hexadecimal key for encryption */
 export const cryptoKey = '731fc6d09baf51f8361fa6408f306ca9'
@@ -87,6 +88,7 @@ export const TN_CHAT_CONTACT = "chat_contact"
 export const TN_TASK = "task"
 export const TN_RECENT_DEVICE_LOGS = "recent_device_logs"
 export const TN_LETTER_TEMPLATE = "letter_template"
+export const TN_VOICE_RECORDING = "voice_recording"
 /* /Total Number Titles */
 
 /* Continue Modal Status */

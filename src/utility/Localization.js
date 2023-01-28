@@ -304,6 +304,7 @@ export const L10nKeys = {
     // Delete: 'Delete',
     Duplicate: 'Duplicate',
     // Open: 'Open',
+    CaseID: "CaseID",
     DateIsRequired: 'Date is required!',
     MaturityDateIsRequired: 'Maturity date is required!',
     CaseIDIsRequired: 'CaseID is required!',
@@ -584,7 +585,9 @@ export const L10nKeys = {
 
     WriteALetter: 'Write a letter',
     CreateLetter: 'Create Letter',
-    UpdateLetter: 'Update Letter'
+    UpdateLetter: 'Update Letter',
+    VoiceRecording: "Voice Recording",
+    SearchVoiceRecording: 'Search Voice Recording'
 }
 
 export const L10nOrgKeys = {
@@ -665,7 +668,7 @@ export const L10nOrgKeys = {
             'YesDeleteIt', 'InvoiceNumber', 'Status', 'Client', 'Total',
             'DueDate', 'Action', 'SendMail', 'ViewInvoice', 'Download',
             'Edit', 'Delete', 'Duplicate', 'Open', 'DateIsRequired',
-            'MaturityDateIsRequired', 'CaseIDIsRequired', 'ClientIsRequired', 'DescriptionIsRequired', 'PriceIsRequired',
+            'MaturityDateIsRequired', 'CaseIDIsRequired', 'ClientIsRequired', 'DescriptionIsRequired', 'PriceIsRequired', 'CaseID',
             'PickAtLeast1Item', 'ItemsIsRequired', 'MethodIsRequired', 'StatusIsRequired', 'Number',
             'Date', 'Maturity', 'SelectCaseID', 'InvoiceTo', 'Client',
             'Description', 'Amount', 'Vat', 'AddInvoiceItem', 'Net',
@@ -738,6 +741,9 @@ export const L10nOrgKeys = {
             'Show', 'AddLetterTemplate', 'EditLetterTemplate', 'Search', 'SearchLetterTemplate',
             'AreYouSure', 'YouWontBeAbleToRevertThis', 'YesDeleteIt', 'Subject', 'Status',
             'Action', 'Edit', 'Delete', 'SubjectIsRequired', 'StatusIsRequired', 'ContentIsRequired', 'SelectStatus', 'Content', 'Submit', 'Back', 'LetterTemplateIsRequired', 'ContentHeadingIsRequired', 'BestRegardsIsRequired', 'WriteALetter', 'CreateLetter', 'UpdateLetter'
+        ],
+        "Voice Recording": [
+            "CaseID", "Subject", "VoiceRecording", "SearchVoiceRecording"
         ]
     },
     'UI Setting': [

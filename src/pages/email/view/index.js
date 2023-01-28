@@ -7,6 +7,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 // ** Store & Actions
 import {
   getMailDetail,
+  markEmailTrash,
   createEmailReply,
   clearEmailMessage,
   updateEmailLoader,
@@ -163,6 +164,11 @@ const EmailDetailView = () => {
       setUploadedFiles(store.attachments)
       setEditorStateContent(null)
       dispatch(setComposeAttachments([]))
+    }
+
+    /* Navigate to email list */
+    if (store && store.actionFlag && store.actionFlag === "TRASH_MAIL") {
+      navigate(`${adminRoot}/email`)
     }
   }, [store.success, store.error, store.actionFlag, loadFirst])
   // console.log("store >>> ", store)
@@ -371,6 +377,30 @@ const EmailDetailView = () => {
     }
   }
 
+  /* Mail move to trash */
+  const handleDeleteMail = (event) => {
+    if (event) {
+      event.preventDefault()
+    }
+
+    MySwal.fire({
+      title: 'Are you sure?',
+      text: "You can restore from trash!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-danger ms-1'
+      },
+      buttonsStyling: false
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        dispatch(markEmailTrash({ emailIds: [{ id: store.currentMailItem.mail, type: 'both' }] }))
+      }
+    })
+  }
+
   /* Send reply with attachment */
   const handleSendReply = (event) => {
     if (event) {
@@ -449,13 +479,15 @@ const EmailDetailView = () => {
                             Reply
                           </Button>
 
-                          <Button
-                            type="button"
-                            color="danger"
-                          // onClick={handleDeleteMail}
-                          >
-                            Delete
-                          </Button>
+                          {store.currentMailItem && store.currentMailItem.mail && !store.currentMailItem.mail.is_trash ? (
+                            <Button
+                              type="button"
+                              color="danger"
+                              onClick={handleDeleteMail}
+                            >
+                              Delete
+                            </Button>
+                          ) : null}
                         </h5>
                       </div>
                     </CardBody>

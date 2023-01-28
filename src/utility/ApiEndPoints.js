@@ -271,6 +271,17 @@ export const API_ENDPOINTS = {
         createUpdate: `/api/admin/pdf-api/create_update`,
         detail: `/api/admin/pdf-api/detail`,
         delete: `/api/admin/pdf-api/delete`
-    }
+    },
     /* /Pdf Apis */
+
+    /* Voice Recordings */
+    voiceRecordings: {
+        list: `/api/admin/voice-recording/list`,
+        view: `/api/admin/voice-recording`,
+        create: `/api/admin/voice-recording/create`,
+        update: `/api/admin/voice-recording/update`,
+        delete: `/api/admin/voice-recording/delete`,
+        isErledigt: `/api/admin/voice-recording/is-erledigt`
+    }
+    /* /Voice Recordings */
 }

@@ -1,5 +1,6 @@
 // ** Icons Import
 import {
+  Mic,
   Box,
   Mail,
   User,
@@ -69,6 +70,12 @@ export default [
         title: 'Postausgang',
         icon: <Send size={20} />,
         navLink: `${adminRoot}/letter`
+      },
+      {
+        id: 'voiceRecordingApp',
+        title: 'Voice Recording',
+        icon: <Mic size={20} />,
+        navLink: `${adminRoot}/voice-recording`
       },
       {
         id: 'billsApp',

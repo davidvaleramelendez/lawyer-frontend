@@ -34,6 +34,10 @@ import {
   setComposeAttachments,
   updateCaseEmailItemsData
 } from '../store'
+import {
+  getVoiceRecordingList,
+  markDoneVoiceRecording
+} from '@src/pages/voiceRecording/store'
 import { getMailDetail } from '@src/pages/email/store'
 import { getLetterTemplateList } from '@src/pages/letterTemplate/store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -97,7 +101,9 @@ import {
   setTimeCounter,
   isUserLoggedIn,
   getWebPreviewUrl,
-  getTransformDate
+  getTransformDate,
+  getCaseRecordedVoice,
+  setCaseRecordedVoice
 } from '@utils'
 
 // ** Custom Components
@@ -115,14 +121,17 @@ import { convertToRaw } from 'draft-js'
 import draftToHtml from 'draftjs-to-html'
 
 // Modals
+import ModalCaseLetter from '../modals/ModalCaseLetter'
+import ModalComposeMail from '../modals/ModalComposeMail'
+import ModalCaseDocument from '../modals/ModalCaseDocument'
+import ModalCaseNoteFile from '../modals/ModalCaseNoteFile'
 import ModalEditCaseClient from '../modals/ModalEditCaseClient'
 import ModalEditCaseOpponent from '../modals/ModalEditCaseOpponent'
-import ModalCaseNoteFile from '../modals/ModalCaseNoteFile'
-import ModalCaseDocument from '../modals/ModalCaseDocument'
-import ModalCaseLetter from '../modals/ModalCaseLetter'
 import ModalCaseTimeTracking from '../modals/ModalCaseTimeTracking'
+import TerminalVoiceRecording from '../modals/TerminalVoiceRecording'
+import ModalCaseVoiceRecording from '../modals/ModalCaseVoiceRecording'
+import TerminalVoiceRecordedDetail from '../modals/TerminalVoiceRecordedDetail'
 import TerminalCaseTimeTrackingCounter from '../modals/TerminalCaseTimeTrackingCounter'
-import ModalComposeMail from '../modals/ModalComposeMail'
 
 // ** Image icons
 import pdfPng from '@src/assets/images/icons/pdf.png'
@@ -144,6 +153,7 @@ const CaseView = () => {
   // ** Store vars
   const navigate = useNavigate()
   const store = useSelector((state) => state.cases)
+  const voiceRecordingStore = useSelector((state) => state.voiceRecording)
 
   // ** States
   const [loadFirst, setLoadFirst] = useState(true)
@@ -156,10 +166,13 @@ const CaseView = () => {
   const [letterRowData, setLetterRowData] = useState(letterItem)
   const [timeTrackModalOpen, setTimeTrackModalOpen] = useState(false)
   const [timeCounterTerminalOpen, setTimeCounterTerminalOpen] = useState(false)
+  const [voiceRecordingModalOpen, setVoiceRecordingModalOpen] = useState(false)
+  const [voiceRecorderTerminalOpen, setVoiceRecorderTerminalOpen] = useState(false)
+  const [voiceRecordedTerminalOpen, setVoiceRecordedTerminalOpen] = useState(false)
 
   /* Collapse toggle */
   const [isCollapseOpen, setIsCollapseOpen] = useState('')
-  const [mailCollapseOne, setMailCollapseOne] = useState('')
+  const [mailCollapse, setMailCollapse] = useState('')
   const [replyToggleCollapse, setReplyToggleCollapse] = useState('')
   /* /Collapse toggle */
 
@@ -181,16 +194,16 @@ const CaseView = () => {
   /* /Table collapse */
 
   /* Email history collapse */
-  const handleMailCollapseOneAction = (value, mailData = null) => {
+  const handleMailCollapseAction = (value, mailData = null) => {
     setReplyToggleCollapse('')
     setEditorStateContent(null)
     setEditorHtmlContent('')
-    if (mailCollapseOne === value) {
-      setMailCollapseOne('')
+    if (mailCollapse === value) {
+      setMailCollapse('')
       return false
     }
 
-    setMailCollapseOne(value)
+    setMailCollapse(value)
     if (mailData && mailData.id && !mailData.is_read) {
       const caseEmailItems = [...store.caseEmailItems]
       const index = caseEmailItems.findIndex((x) => x.id === mailData.id)
@@ -222,6 +235,29 @@ const CaseView = () => {
     setEditorHtmlContent(draftToHtml(convertToRaw(state.getCurrentContent())))
   }
 
+  /* Detail view of case voice recording in terminal */
+  const terminalDetailVoiceRecording = (data) => {
+    setCaseRecordedVoice({ ...data, terminal: "DETAIL_VIEW" })
+    setVoiceRecordedTerminalOpen(true)
+  }
+
+  const onCheckVoiceRecordedItem = (key) => {
+    const voiceItem = getCaseRecordedVoice()
+    if (voiceItem && (voiceItem.terminal === key)) {
+      setVoiceRecordedTerminalOpen(true)
+      return true
+    }
+
+    return false
+  }
+
+  const closeRecordedDetailViewTerminal = () => {
+    setVoiceRecordedTerminalOpen(false)
+    setCaseRecordedVoice()
+  }
+  /* /Detail view of case voice recording in terminal */
+
+
   // Check TimeCounterModal 
   useEffect(() => {
     const time_modal_status = getTimeCounter().status
@@ -241,7 +277,7 @@ const CaseView = () => {
   }
   /* /Format Details of record */
 
-  // ** Get contact on mount based on id
+  // ** Get mount
   useEffect(() => {
     /* If id not present then navigate */
     if (!id) {
@@ -257,9 +293,11 @@ const CaseView = () => {
     if (loadFirst) {
       dispatch(getCaseView(id))
       dispatch(getLetterTemplateList({}))
+      onCheckVoiceRecordedItem("DETAIL_VIEW")
       dispatch(getCaseLetters({ case_id: id }))
       dispatch(getCaseDocuments({ case_id: id }))
       dispatch(getNoteCaseRecords({ CaseID: id }))
+      dispatch(getVoiceRecordingList({ case_id: id }))
       dispatch(getCaseEmails({ case_id: id }))
       dispatch(getTimeCaseRecords(id))
       setLoadFirst(false)
@@ -423,6 +461,27 @@ const CaseView = () => {
     })
   }
   /* /Delete case letter */
+
+  /* Mark done voice recording */
+  const handleMarkDone = (id) => {
+    MySwal.fire({
+      title: T('Are you sure?'),
+      text: T("You want to done this!"),
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: T('Yes, done it!'),
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-danger ms-1'
+      },
+      buttonsStyling: false
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        dispatch(markDoneVoiceRecording(id))
+      }
+    })
+    /* Mark done voice recording */
+  }
 
   /* Details of record at the right side */
   // const onRecordClick = (details, typeOf = "") => () => {
@@ -623,7 +682,7 @@ const CaseView = () => {
             >
               <span
                 className="timeline-point timeline-point-primary cursor-pointer"
-                onClick={() => handleMailCollapseOneAction(`parent-${mail.id}`, mail)}
+                onClick={() => handleMailCollapseAction(`parent-${mail.id}`, mail)}
               >
                 <Mail size={14} />
               </span>
@@ -632,7 +691,7 @@ const CaseView = () => {
                   <div className='timeline-event'>
                     <div
                       className="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1 cursor-pointer"
-                      onClick={() => handleMailCollapseOneAction(`parent-${mail.id}`, mail)}
+                      onClick={() => handleMailCollapseAction(`parent-${mail.id}`, mail)}
                     >
                       <h6 className="font-weight-bolder text-dark">
                         {(mail && mail.subject) || ""} {mail && mail.email_group && mail.email_group.length ? (
@@ -653,7 +712,7 @@ const CaseView = () => {
 
                     <Collapse
                       className="pb-1"
-                      isOpen={(mailCollapseOne === `parent-${mail.id}`) || false}
+                      isOpen={(mailCollapse === `parent-${mail.id}`) || false}
                     >
                       {mail && mail.email_group && mail.email_group.length ? (
                         <div className="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">
@@ -1139,6 +1198,16 @@ const CaseView = () => {
           </Row>
           {/* /Time tracking terminal */}
 
+          {/* Voice recording terminal */}
+          <Row>
+            <TerminalVoiceRecording
+              open={voiceRecorderTerminalOpen}
+              caseId={store.caseItem.CaseID}
+              closeTerminal={() => setVoiceRecorderTerminalOpen(false)}
+            />
+          </Row>
+          {/* /Voice recording terminal */}
+
           {/* Notes && Time Recording && Letter && Document History */}
           <Row className='invoice-preview'>
             <Col xl={12} md={12} sm={12}>
@@ -1146,7 +1215,7 @@ const CaseView = () => {
                 <CardBody className='invoice-padding pb-0'>
                   <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
                     <div className="d-flex flex-wrap">
-                      <Button className="mt-1" color="primary" onClick={() => setNoteFileModalOpen(true)}>
+                      <Button className="mt-50" color="primary" onClick={() => setNoteFileModalOpen(true)}>
                         {T("Add a note")}
                       </Button>
 
@@ -1156,7 +1225,7 @@ const CaseView = () => {
                         caseId={store.caseItem.CaseID}
                       />
 
-                      <Button className="ms-2 mt-1" color="primary" onClick={() => setTimeTrackModalOpen(true)}>
+                      <Button className="ms-50 mt-50" color="primary" onClick={() => setTimeTrackModalOpen(true)}>
                         {T("Add Time Tracking")}
                       </Button>
 
@@ -1167,7 +1236,7 @@ const CaseView = () => {
                         onTimeRecordStart={handleTimeRecordStart}
                       />
 
-                      <Button className="ms-2 mt-1" color="primary" onClick={() => setLetterModalOpen(true)}>
+                      <Button className="ms-50 mt-50" color="primary" onClick={() => setLetterModalOpen(true)}>
                         {T("Write a letter now")}
                       </Button>
 
@@ -1180,7 +1249,7 @@ const CaseView = () => {
                         setLetterRowData={setLetterRowData}
                       />
 
-                      <Button className="ms-2 mt-1" color="primary" onClick={() => setDocUploadModalOpen(true)}>
+                      <Button className="ms-50 mt-50" color="primary" onClick={() => setDocUploadModalOpen(true)}>
                         {T("Upload document")}
                       </Button>
 
@@ -1191,6 +1260,17 @@ const CaseView = () => {
                         caseId={store.caseItem && store.caseItem.CaseID}
                         documentRowData={documentRowData}
                         setDocumentRowData={setDocumentRowData}
+                      />
+
+                      <Button className="ms-50 mt-50" color="primary" onClick={() => setVoiceRecordingModalOpen(true)}>
+                        {T("Voice Recording")}
+                      </Button>
+
+                      <ModalCaseVoiceRecording
+                        open={voiceRecordingModalOpen}
+                        toggleModal={() => setVoiceRecordingModalOpen(!voiceRecordingModalOpen)}
+                        caseId={(store.caseItem && store.caseItem.CaseID) || ""}
+                        setVoiceRecorderTerminalOpen={setVoiceRecorderTerminalOpen}
                       />
                     </div>
 
@@ -1601,6 +1681,45 @@ const CaseView = () => {
                               ) : null}
                             </Fragment>
                           ))}
+
+                          {voiceRecordingStore && voiceRecordingStore.voiceRecordingItems.map((recordingItem, index) => (
+                            <Fragment key={`voice_recording_${index}`}>
+                              <tr
+                                className={`cursor-pointer`}
+                                onClick={() => terminalDetailVoiceRecording(recordingItem)}
+                              >
+                                <td />
+                                <td>{recordingItem.created_at && getTransformDate(recordingItem.created_at, "DD.MM.YYYY")}</td>
+
+                                <td>{recordingItem.subject}</td>
+
+                                <td>
+                                  <div className='form-switch form-check-primary'>
+                                    <Input
+                                      type='switch'
+                                      checked={recordingItem.isErledigt}
+                                      id={`recording_done_${index}_${recordingItem.isErledigt}`}
+                                      name={`recording_done_${index}_${recordingItem.isErledigt}`}
+                                      className="cursor-pointer"
+                                      onChange={() => handleMarkDone(recordingItem.id)}
+                                    />
+                                    <Label className='form-check-label' htmlFor="icon-primary">
+                                      <span className='switch-icon-left'>
+                                        <Check size={14} />
+                                      </span>
+                                      <span className='switch-icon-right'>
+                                        <X size={14} />
+                                      </span>
+                                    </Label>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <Eye size={18} className="cursor-pointer" onClick={() => terminalDetailVoiceRecording(recordingItem)} />
+                                </td>
+                              </tr>
+                            </Fragment>
+                          ))}
                         </tbody>
                       </Table>
                     </Col>
@@ -1610,6 +1729,18 @@ const CaseView = () => {
             </Col>
           </Row>
           {/* /Notes && Time Recording && Letter && Document History */}
+
+          {/* Voice recording detail view terminal */}
+          <Row>
+            <TerminalVoiceRecordedDetail
+              open={voiceRecordedTerminalOpen}
+              getTransformDate={getTransformDate}
+              recordedVoiceItem={getCaseRecordedVoice()}
+              renderFileWebUrlPreview={renderFileWebUrlPreview}
+              closeTerminal={() => closeRecordedDetailViewTerminal()}
+            />
+          </Row>
+          {/* Voice recording detail view terminal */}
 
           {/* Email History */}
           <Row>

@@ -76,3 +76,6 @@ export const inquiryImapItem = { id: "", imap_host: "", imap_email: "", imap_pas
 
 // Pdf Api
 export const pdfApiItem = { id: "", key: "", created_at: "", updated_at: "" }
+
+// Voice Recording
+export const voiceRecordingItem = { id: "", case_id: "", name: "", subject: "", path: "" }

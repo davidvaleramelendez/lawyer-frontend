@@ -110,5 +110,13 @@ export const bookmarks = [
         title: 'Letter Template',
         icon: "Codesandbox",
         link: "letter-template"
+    },
+    {
+        bookmark_id: 15,
+        target: 'voiceRecordingApp',
+        is_bookmarked: 0,
+        title: 'Voice Recording',
+        icon: "Mic",
+        link: "voice-recording"
     }
 ]

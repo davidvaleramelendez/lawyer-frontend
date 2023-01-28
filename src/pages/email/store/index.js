@@ -143,7 +143,7 @@ export const markEmailTrash = createAsyncThunk('appEmail/markEmailTrash', async 
     if (response && response.flag) {
       await dispatch(getMails(getState().email.params))
       return {
-        actionFlag: "",
+        actionFlag: "TRASH_MAIL",
         success: response.message,
         error: ""
       }

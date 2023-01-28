@@ -349,7 +349,7 @@ const CaseList = () => {
             /* /Custom placeholder vars */
         },
         {
-            name: `${T("Reference Number")}#`,
+            name: `${T("CaseID")}#`,
             sortable: true,
             sortField: "CaseID",
             minWidth: "13%",

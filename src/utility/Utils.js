@@ -13,7 +13,8 @@ import {
   storageTotalNumberName,
   storageLoggedAtKeyName,
   storageTokenExpiresKeyName,
-  storageRefreshTokenKeyName
+  storageRefreshTokenKeyName,
+  storageRecordedItemKeyName
 } from '@constant/defaultValues'
 
 import {
@@ -559,6 +560,32 @@ const getWebPreviewUrl = (path = "") => {
 }
 /* /Web preview url function */
 
+/* Get case recorded voice */
+const getCaseRecordedVoice = () => {
+  let recordedVoiceItem = null
+  try {
+    recordedVoiceItem = localStorage.getItem(storageRecordedItemKeyName) !== null ? JSON.parse(localStorage.getItem(storageRecordedItemKeyName)) : null
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js : getCaseRecordedVoice -> error', error)
+  }
+  return recordedVoiceItem
+}
+/* /Get case recorded voice */
+
+/* Set case recorded voice */
+const setCaseRecordedVoice = (voiceItem) => {
+  try {
+    if (voiceItem) {
+      localStorage.setItem(storageRecordedItemKeyName, JSON.stringify(voiceItem))
+    } else {
+      localStorage.removeItem(storageRecordedItemKeyName)
+    }
+  } catch (error) {
+    console.log('>>>>: src/utility/Utils.js : setCaseRecordedVoice -> error', error)
+  }
+}
+/* /Set case recorded voice */
+
 /* Export functions */
 export {
   isHtml,
@@ -598,6 +625,8 @@ export {
   getCurrentPageNumber,
   setSiteLayoutSetting,
   getSiteLayoutSetting,
+  getCaseRecordedVoice,
+  setCaseRecordedVoice,
   setRememberMeAuthData,
   capitalizeFirstLetter,
   getRememberMeAuthData,

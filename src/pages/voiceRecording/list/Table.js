@@ -2,7 +2,7 @@
 
 // ** React Imports
 import { useState, useEffect, Fragment } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 // ** Reactstrap Imports
 import {
@@ -11,7 +11,6 @@ import {
     Card,
     Input,
     Label,
-    Badge,
     CardHeader,
     CardTitle
 } from 'reactstrap'
@@ -20,7 +19,6 @@ import {
 import {
     isUserLoggedIn,
     getTotalNumber,
-    getWebPreviewUrl,
     getTransformDate,
     getCurrentPageNumber
 } from '@utils'
@@ -28,22 +26,21 @@ import {
 // Constant
 import {
     root,
-    TN_OUTBOX
+    adminRoot,
+    TN_VOICE_RECORDING
 } from '@constant/defaultValues'
 
 // ** Store & Actions
 import {
-    getLetterList,
-    archiveLetter,
-    updatePrintStatus,
-    clearLetterMessage
+    getVoiceRecordingList,
+    markDoneVoiceRecording,
+    clearVoiceRecordingMessage
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Icons Import
 import {
     X,
-    Eye,
     Check
 } from 'react-feather'
 
@@ -89,11 +86,11 @@ const CustomHeader = ({
                     <div className="d-flex align-items-center">
                         <label htmlFor="search-letter">{T('Search')}</label>
                         <Input
-                            id="search-letter"
+                            id="search-voice-recording"
                             className="ms-50 me-2 w-100"
                             type="text"
                             value={searchInput}
-                            placeholder={T('Search Letter')}
+                            placeholder={T('Search Voice Recording')}
                             onChange={(event) => handleSearch(event.target.value)}
                         />
                     </div>
@@ -103,14 +100,14 @@ const CustomHeader = ({
     )
 }
 
-const LetterList = () => {
+const VoiceRecordingList = () => {
     /* Hook */
     const navigate = useNavigate()
     const MySwal = withReactContent(Swal)
 
     // ** Store vars
     const dispatch = useDispatch()
-    const store = useSelector((state) => state.letter)
+    const store = useSelector((state) => state.voiceRecording)
 
     // ** States
     const [loadFirst, setLoadFirst] = useState(true)
@@ -120,9 +117,9 @@ const LetterList = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(10)
 
-    const handleLetterLists = (sorting = sort, search = searchInput, sortCol = sortColumn, page = currentPage, perPage = rowsPerPage) => {
+    const handleVoiceRecordingLists = (sorting = sort, search = searchInput, sortCol = sortColumn, page = currentPage, perPage = rowsPerPage) => {
         dispatch(
-            getLetterList({
+            getVoiceRecordingList({
                 sort: sorting,
                 search: search,
                 sortColumn: sortCol,
@@ -134,24 +131,24 @@ const LetterList = () => {
 
     const handlePerPage = (value) => {
         setRowsPerPage(parseInt(value))
-        handleLetterLists(sort, searchInput, sortColumn, currentPage, parseInt(value))
+        handleVoiceRecordingLists(sort, searchInput, sortColumn, currentPage, parseInt(value))
     }
 
     const handleSearch = (val) => {
         setSearchInput(val)
-        handleLetterLists(sort, val, sortColumn, currentPage, rowsPerPage)
+        handleVoiceRecordingLists(sort, val, sortColumn, currentPage, rowsPerPage)
     }
 
     const handleSort = (column, sortDirection) => {
         setSort(sortDirection)
         setSortColumn(column.sortField)
-        handleLetterLists(sortDirection, searchInput, column.sortField, currentPage, rowsPerPage)
+        handleVoiceRecordingLists(sortDirection, searchInput, column.sortField, currentPage, rowsPerPage)
     }
 
     const handlePagination = (page) => {
         // console.log("handlePagination >>>>>>> ", page)
         setCurrentPage(page + 1)
-        handleLetterLists(sort, searchInput, sortColumn, page + 1, rowsPerPage)
+        handleVoiceRecordingLists(sort, searchInput, sortColumn, page + 1, rowsPerPage)
     }
 
     useEffect(() => {
@@ -161,13 +158,13 @@ const LetterList = () => {
         }
 
         if (loadFirst) {
-            handleLetterLists()
+            handleVoiceRecordingLists()
             setLoadFirst(false)
         }
 
         /* For blank message api called inside */
         if (store && (store.success || store.error || store.actionFlag)) {
-            dispatch(clearLetterMessage())
+            dispatch(clearVoiceRecordingMessage())
         }
 
         /* Succes toast notification */
@@ -182,23 +179,13 @@ const LetterList = () => {
     }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
     // console.log("store >>> ", store)
 
-    /* Rendering file preview web url */
-    const renderFileWebUrlPreview = (path) => {
-        if (path) {
-            return getWebPreviewUrl(path)
-        }
-
-        return false
-    }
-    /* /Rendering file preview web url */
-
-    const onLetterArchive = (id, type) => {
+    const handleMarkDone = (id) => {
         MySwal.fire({
             title: T('Are you sure?'),
-            text: T("You want to archive this!"),
+            text: T("You want to done this!"),
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: T('Yes, archive it!'),
+            confirmButtonText: T('Yes, done it!'),
             customClass: {
                 confirmButton: 'btn btn-primary',
                 cancelButton: 'btn btn-outline-danger ms-1'
@@ -206,14 +193,9 @@ const LetterList = () => {
             buttonsStyling: false
         }).then(function (result) {
             if (result.isConfirmed) {
-                dispatch(archiveLetter({ id: id, payload: { type: type } }))
+                dispatch(markDoneVoiceRecording(id))
             }
         })
-    }
-
-    const onLetterPrint = (row) => {
-        dispatch(updatePrintStatus({ id: row.id, payload: { status: true } }))
-        window.open(renderFileWebUrlPreview(row.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`, '_blank', 'noopener,noreferrer')
     }
 
     /* Columns */
@@ -222,8 +204,9 @@ const LetterList = () => {
             name: T("CaseID"),
             sortable: true,
             sortField: "case_id",
-            minWidth: "17%",
-            cell: (row) => row.case_id,
+            minWidth: "20%",
+            // cell: (row) => row.case_id,
+            cell: (row) => (<Link to={`${adminRoot}/case/view/${row.case_id}`}>{`#${row.case_id}`}</Link>),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '90px'
@@ -235,9 +218,9 @@ const LetterList = () => {
         {
             name: T("Date"),
             sortable: true,
-            sortField: "created_date",
-            minWidth: "18%",
-            cell: (row) => row.created_date && getTransformDate(row.created_date, "DD-MM-YYYY"),
+            sortField: "created_at",
+            minWidth: "20%",
+            cell: (row) => row.created_at && getTransformDate(row.created_at, "DD-MM-YYYY"),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
@@ -249,7 +232,7 @@ const LetterList = () => {
         {
             name: T("Subject"),
             sortable: true,
-            minWidth: "30%",
+            minWidth: "40%",
             sortField: "subject",
             cell: (row) => row.subject,
             /* Custom placeholder vars */
@@ -261,19 +244,19 @@ const LetterList = () => {
             /* /Custom placeholder vars */
         },
         {
-            name: T("Printed"),
+            name: `${T('Done')}?`,
             sortable: true,
-            minWidth: "13%",
-            sortField: "is_print",
+            minWidth: "20%",
+            sortField: "isErledigt",
             cell: (row) => (
                 <div className="form-switch form-check-primary">
                     <Input
                         type="switch"
-                        checked={row.is_print}
-                        id={`invoice_${row.id}_${row.is_print}`}
-                        name={`invoice_${row.id}_${row.is_print}`}
+                        checked={row.isErledigt}
+                        id={`invoice_${row.id}_${row.isErledigt}`}
+                        name={`invoice_${row.id}_${row.isErledigt}`}
                         className="cursor-pointer"
-                        onChange={(event) => event.preventDefault()}
+                        onChange={() => handleMarkDone(row.id)}
                     />
                     <Label className="form-check-label" htmlFor="icon-primary">
                         <span className="switch-icon-left">
@@ -292,76 +275,42 @@ const LetterList = () => {
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
-        },
-        {
-            name: `${T('Done')}?`,
-            sortable: true,
-            minWidth: "12%",
-            sortField: "is_archived",
-            cell: (row) => (
-                <Badge className="text-capitalize cursor-pointer" color="light-success" pill onClick={() => onLetterArchive(row.id, "letter")}>
-                    Done
-                </Badge>
-            ),
-            /* Custom placeholder vars */
-            contentExtraStyles: {
-                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '45px'
-            },
-            customLoaderCellClass: "",
-            customLoaderContentClass: "rounded-pill"
-            /* /Custom placeholder vars */
-        },
-        {
-            name: T("View"),
-            center: true,
-            minWidth: "10%",
-            cell: (row) => <a href={renderFileWebUrlPreview(row.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`} target="_blank" className="d-flex align-items-center" onClick={(event) => {
-                event.preventDefault()
-                onLetterPrint(row)
-            }} rel="noopener noreferrer">
-                <Eye size={14} />
-            </a>,
-            /* Custom placeholder vars */
-            contentExtraStyles: {
-                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '30px'
-            },
-            customLoaderCellClass: "text-center",
-            customLoaderContentClass: ""
-            /* /Custom placeholder vars */
         }
     ]
 
-    return store ? (<Fragment>
-        <Card className="overflow-hidden">
-            <CardHeader className="border-bottom">
-                <CardTitle tag="h4">{T('Outbox')}</CardTitle>
-            </CardHeader>
-            {(!store.loading && !getTotalNumber(TN_OUTBOX)) ? (
-                <DotPulse />
-            ) : (
-                <DatatablePagination
-                    customClass="react-dataTable"
-                    columns={columns}
-                    loading={store.loading}
-                    data={store.letterItems}
-                    pagination={store.loading ? store.pagination : {
-                        ...store.pagination,
-                        perPage: getCurrentPageNumber(TN_OUTBOX, rowsPerPage, currentPage)
-                    }}
-                    handleSort={handleSort}
-                    handlePagination={handlePagination}
-                    subHeaderComponent={
-                        <CustomHeader
-                            searchInput={searchInput}
-                            rowsPerPage={rowsPerPage}
-                            handleSearch={handleSearch}
-                            handlePerPage={handlePerPage}
-                        />
-                    }
-                />
-            )}
-        </Card>
-    </Fragment>) : null
+    return store ? (
+        <Fragment>
+            <Card className="overflow-hidden">
+                <CardHeader className="border-bottom">
+                    <CardTitle tag="h4">{T('Voice Recording')}</CardTitle>
+                </CardHeader>
+                {(!store.loading && !getTotalNumber(TN_VOICE_RECORDING)) ? (
+                    <DotPulse />
+                ) : (
+                    <DatatablePagination
+                        customClass="react-dataTable"
+                        columns={columns}
+                        loading={store.loading}
+                        data={store.voiceRecordingItems}
+                        pagination={store.loading ? store.pagination : {
+                            ...store.pagination,
+                            perPage: getCurrentPageNumber(TN_VOICE_RECORDING, rowsPerPage, currentPage)
+                        }}
+                        handleSort={handleSort}
+                        handlePagination={handlePagination}
+                        subHeaderComponent={
+                            <CustomHeader
+                                searchInput={searchInput}
+                                rowsPerPage={rowsPerPage}
+                                handleSearch={handleSearch}
+                                handlePerPage={handlePerPage}
+                            />
+                        }
+                    />
+                )}
+            </Card>
+        </Fragment>
+    ) : null
 }
 
-export default LetterList
+export default VoiceRecordingList

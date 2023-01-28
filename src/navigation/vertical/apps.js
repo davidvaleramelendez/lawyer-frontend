@@ -13,6 +13,7 @@ import {
   Codesandbox,
   CheckCircle,
   CheckSquare,
+  UploadCloud,
   MessageCircle,
   MessageSquare
 } from 'react-feather'
@@ -73,6 +74,12 @@ export default [
     title: 'Outbox',
     icon: <Send size={20} />,
     navLink: `${adminRoot}/letter`
+  },
+  {
+    id: 'importLetterFileApp',
+    title: 'Import Letter File',
+    icon: <UploadCloud size={20} />,
+    navLink: `${adminRoot}/import-letter-file`
   },
   {
     id: 'voiceRecordingApp',

@@ -11,14 +11,17 @@ import {
     Card,
     Input,
     Label,
+    Button,
+    CardTitle,
     CardHeader,
-    CardTitle
+    UncontrolledTooltip
 } from 'reactstrap'
 
 // ** Utils
 import {
     isUserLoggedIn,
     getTotalNumber,
+    getWebPreviewUrl,
     getTransformDate,
     getCurrentPageNumber
 } from '@utils'
@@ -27,21 +30,24 @@ import {
 import {
     root,
     adminRoot,
-    TN_VOICE_RECORDING
+    TN_IMPORT_LETTER_FILE
 } from '@constant/defaultValues'
 
 // ** Store & Actions
 import {
-    getVoiceRecordingList,
-    markDoneVoiceRecording,
-    clearVoiceRecordingMessage
+    deleteImportLetterFile,
+    getImportLetterFileList,
+    markDoneImportLetterFile,
+    clearImportLetterFileMessage
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Icons Import
 import {
     X,
-    Check
+    Eye,
+    Check,
+    Trash2
 } from 'react-feather'
 
 // ** Third Party Components
@@ -53,6 +59,9 @@ import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
 
+// ** Modal
+import ModalImportFile from '../modals/ModalImportFile'
+
 // ** Translation
 import { T } from '@localization'
 
@@ -60,6 +69,7 @@ const CustomHeader = ({
     searchInput,
     rowsPerPage,
     handleSearch,
+    setModalOpen,
     handlePerPage
 }) => {
     return (
@@ -80,6 +90,9 @@ const CustomHeader = ({
                             <option value="50">50</option>
                         </Input>
                     </div>
+                    <Button color="primary" onClick={() => setModalOpen(true)}>
+                        {T('Import File')}
+                    </Button>
                 </Col>
 
                 <Col lg={6} className="actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0">
@@ -90,7 +103,7 @@ const CustomHeader = ({
                             className="ms-50 me-2 w-100"
                             type="text"
                             value={searchInput}
-                            placeholder={T('Search Voice Recording')}
+                            placeholder={T('Search Imported Letter File')}
                             onChange={(event) => handleSearch(event.target.value)}
                         />
                     </div>
@@ -100,26 +113,27 @@ const CustomHeader = ({
     )
 }
 
-const VoiceRecordingList = () => {
-    /* Hook */
+const ImportLetterFileList = () => {
+    // ** Hook
     const navigate = useNavigate()
     const MySwal = withReactContent(Swal)
 
     // ** Store vars
     const dispatch = useDispatch()
-    const store = useSelector((state) => state.voiceRecording)
+    const store = useSelector((state) => state.importLetterFile)
 
     // ** States
     const [loadFirst, setLoadFirst] = useState(true)
+    const [modalOpen, setModalOpen] = useState(false)
     const [searchInput, setSearchInput] = useState('')
     const [sort, setSort] = useState('desc')
     const [sortColumn, setSortColumn] = useState('id')
     const [currentPage, setCurrentPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(10)
 
-    const handleVoiceRecordingLists = (sorting = sort, search = searchInput, sortCol = sortColumn, page = currentPage, perPage = rowsPerPage) => {
+    const handleImportLetterFileLists = (sorting = sort, search = searchInput, sortCol = sortColumn, page = currentPage, perPage = rowsPerPage) => {
         dispatch(
-            getVoiceRecordingList({
+            getImportLetterFileList({
                 sort: sorting,
                 search: search,
                 sortColumn: sortCol,
@@ -131,24 +145,24 @@ const VoiceRecordingList = () => {
 
     const handlePerPage = (value) => {
         setRowsPerPage(parseInt(value))
-        handleVoiceRecordingLists(sort, searchInput, sortColumn, currentPage, parseInt(value))
+        handleImportLetterFileLists(sort, searchInput, sortColumn, currentPage, parseInt(value))
     }
 
     const handleSearch = (val) => {
         setSearchInput(val)
-        handleVoiceRecordingLists(sort, val, sortColumn, currentPage, rowsPerPage)
+        handleImportLetterFileLists(sort, val, sortColumn, currentPage, rowsPerPage)
     }
 
     const handleSort = (column, sortDirection) => {
         setSort(sortDirection)
         setSortColumn(column.sortField)
-        handleVoiceRecordingLists(sortDirection, searchInput, column.sortField, currentPage, rowsPerPage)
+        handleImportLetterFileLists(sortDirection, searchInput, column.sortField, currentPage, rowsPerPage)
     }
 
     const handlePagination = (page) => {
         // console.log("handlePagination >>>>>>> ", page)
         setCurrentPage(page + 1)
-        handleVoiceRecordingLists(sort, searchInput, sortColumn, page + 1, rowsPerPage)
+        handleImportLetterFileLists(sort, searchInput, sortColumn, page + 1, rowsPerPage)
     }
 
     useEffect(() => {
@@ -158,13 +172,13 @@ const VoiceRecordingList = () => {
         }
 
         if (loadFirst) {
-            handleVoiceRecordingLists()
+            handleImportLetterFileLists()
             setLoadFirst(false)
         }
 
         /* For blank message api called inside */
         if (store && (store.success || store.error || store.actionFlag)) {
-            dispatch(clearVoiceRecordingMessage())
+            dispatch(clearImportLetterFileMessage())
         }
 
         /* Succes toast notification */
@@ -178,6 +192,26 @@ const VoiceRecordingList = () => {
         }
     }, [store.success, store.error, store.actionFlag, loadFirst])
     // console.log("store >>> ", store)
+
+    const handleDelete = (id) => {
+        MySwal.fire({
+            title: T('Are you sure?'),
+            text: T("You won't be able to revert this!"),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: T('Yes, delete it!'),
+            customClass: {
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-outline-danger ms-1'
+            },
+            buttonsStyling: false
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                // console.log("handleDelete >>> ", id)
+                dispatch(deleteImportLetterFile(id))
+            }
+        })
+    }
 
     const handleMarkDone = (id) => {
         MySwal.fire({
@@ -193,10 +227,20 @@ const VoiceRecordingList = () => {
             buttonsStyling: false
         }).then(function (result) {
             if (result.isConfirmed) {
-                dispatch(markDoneVoiceRecording(id))
+                dispatch(markDoneImportLetterFile(id))
             }
         })
     }
+
+    /* Rendering file preview web url */
+    const renderFileWebUrlPreview = (path) => {
+        if (path) {
+            return getWebPreviewUrl(path)
+        }
+
+        return false
+    }
+    /* /Rendering file preview web url */
 
     /* Columns */
     const columns = [
@@ -204,7 +248,7 @@ const VoiceRecordingList = () => {
             name: T("CaseID"),
             sortable: true,
             sortField: "case_id",
-            minWidth: "20%",
+            minWidth: "18%",
             // cell: (row) => row.case_id,
             cell: (row) => (<Link to={`${adminRoot}/case/view/${row.case_id}`}>{`#${row.case_id}`}</Link>),
             /* Custom placeholder vars */
@@ -216,11 +260,11 @@ const VoiceRecordingList = () => {
             /* /Custom placeholder vars */
         },
         {
-            name: T("Date"),
+            name: T("Deadline Date"),
             sortable: true,
-            sortField: "created_at",
-            minWidth: "20%",
-            cell: (row) => row.created_at && getTransformDate(row.created_at, "DD-MM-YYYY"),
+            sortField: "frist_date",
+            minWidth: "18%",
+            cell: (row) => row.frist_date && getTransformDate(row.frist_date, "DD-MM-YYYY"),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
@@ -232,7 +276,7 @@ const VoiceRecordingList = () => {
         {
             name: T("Subject"),
             sortable: true,
-            minWidth: "40%",
+            minWidth: "34%",
             sortField: "subject",
             cell: (row) => row.subject,
             /* Custom placeholder vars */
@@ -275,6 +319,42 @@ const VoiceRecordingList = () => {
             customLoaderCellClass: "",
             customLoaderContentClass: ""
             /* /Custom placeholder vars */
+        },
+        {
+            name: T("Action"),
+            center: true,
+            minWidth: "10%",
+            cell: (row) => (
+                <div className='column-action d-flex align-items-center'>
+                    <a
+                        target="_blank"
+                        id={`pw-view-pdf-tooltip-${row.id}`}
+                        href={renderFileWebUrlPreview(row.file_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
+                    >
+                        <Eye size={14} />
+                    </a>
+                    <UncontrolledTooltip placement="top" target={`pw-view-pdf-tooltip-${row.id}`}>
+                        {T('Open file')}
+                    </UncontrolledTooltip>
+
+                    <Trash2
+                        size={17}
+                        id={`pw-delete-tooltip-${row.id}`}
+                        onClick={() => handleDelete(row.id)}
+                        className='cursor-pointer mb-0 ms-50'
+                    />
+                    <UncontrolledTooltip placement="top" target={`pw-delete-tooltip-${row.id}`}>
+                        {T('Delete')}
+                    </UncontrolledTooltip>
+                </div>
+            ),
+            /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '30px'
+            },
+            customLoaderCellClass: "text-center",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
         }
     ]
 
@@ -282,19 +362,19 @@ const VoiceRecordingList = () => {
         <Fragment>
             <Card className="overflow-hidden">
                 <CardHeader className="border-bottom">
-                    <CardTitle tag="h4">{T('Voice Recording')}</CardTitle>
+                    <CardTitle tag="h4">{T('Import Letter File')}</CardTitle>
                 </CardHeader>
-                {(!store.loading && !getTotalNumber(TN_VOICE_RECORDING)) ? (
+                {(!store.loading && !getTotalNumber(TN_IMPORT_LETTER_FILE)) ? (
                     <DotPulse />
                 ) : (
                     <DatatablePagination
                         customClass="react-dataTable"
                         columns={columns}
                         loading={store.loading}
-                        data={store.voiceRecordingItems}
+                        data={store.importLetterFileItems}
                         pagination={store.loading ? store.pagination : {
                             ...store.pagination,
-                            perPage: getCurrentPageNumber(TN_VOICE_RECORDING, rowsPerPage, currentPage)
+                            perPage: getCurrentPageNumber(TN_IMPORT_LETTER_FILE, rowsPerPage, currentPage)
                         }}
                         handleSort={handleSort}
                         handlePagination={handlePagination}
@@ -304,13 +384,19 @@ const VoiceRecordingList = () => {
                                 rowsPerPage={rowsPerPage}
                                 handleSearch={handleSearch}
                                 handlePerPage={handlePerPage}
+                                setModalOpen={setModalOpen}
                             />
                         }
                     />
                 )}
+
+                <ModalImportFile
+                    toggleModal={() => setModalOpen(!modalOpen)}
+                    open={modalOpen}
+                />
             </Card>
         </Fragment>
     ) : null
 }
 
-export default VoiceRecordingList
+export default ImportLetterFileList

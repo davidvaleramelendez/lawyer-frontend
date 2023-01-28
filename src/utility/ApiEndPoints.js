@@ -282,6 +282,18 @@ export const API_ENDPOINTS = {
         update: `/api/admin/voice-recording/update`,
         delete: `/api/admin/voice-recording/delete`,
         isErledigt: `/api/admin/voice-recording/is-erledigt`
+    },
+    /* /Voice Recordings */
+
+    /* Voice Recordings */
+    importLetterFiles: {
+        list: `/api/admin/import-letter-file/list`,
+        view: `/api/admin/import-letter-file`,
+        create: `/api/admin/import-letter-file/create`,
+        update: `/api/admin/import-letter-file/update`,
+        delete: `/api/admin/import-letter-file/delete`,
+        isErledigt: `/api/admin/import-letter-file/is-erledigt`,
+        createMultiple: `/api/admin/import-letter-file/create-multiple`
     }
     /* /Voice Recordings */
 }

@@ -118,5 +118,13 @@ export const bookmarks = [
         title: 'Voice Recording',
         icon: "Mic",
         link: "voice-recording"
+    },
+    {
+        bookmark_id: 16,
+        target: 'importLetterFileApp',
+        is_bookmarked: 0,
+        title: 'Import Letter File',
+        icon: "Mic",
+        link: "import-letter-file"
     }
 ]

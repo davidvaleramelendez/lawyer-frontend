@@ -94,17 +94,12 @@ const EmailDropdown = () => {
                 to={`${adminRoot}/email/view/${item.id}`}
                 onClick={() => handleDropdownItemClick()}
               >
-                <div className='list-item-body flex-grow-1'>
-                  <div className='media-heading'>
-                    <h6 className='cart-item-title'>
-                      {(item && item.subject) || ""}
-                    </h6>
-                    <small className='cart-item-by'>{(item && item.sender && item.sender.name) || ""}</small>
-                  </div>
-
-                  <div className='media-heading'>
-                    <small className='cart-item-by'>{(item.created_at && getTransformDate(item.created_at, "DD MMM YYYY HH:mm")) || ""}</small>
-                  </div>
+              <div className='chat-info flex-grow-1'>
+                    <h5 className='mb-0'>{(item && item.subject) || ""}</h5>
+                    <div class="chat-meta text-nowrap">
+                    <p className='float-end mb-25 chat-time enotification'>{(item.created_at && getTransformDate(item.created_at, "D.MM.YYYY")) || ""}</p>
+                    <p className='card-text text-truncate'>{(item && item.sender && item.sender.name) || ""}</p>
+                    </div>
                 </div>
               </Link>
             </div>

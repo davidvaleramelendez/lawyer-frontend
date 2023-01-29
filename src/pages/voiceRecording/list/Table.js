@@ -1,59 +1,18 @@
 /* eslint-disable object-shorthand */
 
-// ** React Imports
 import { useState, useEffect, Fragment } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-
-// ** Reactstrap Imports
-import {
-    Col,
-    Row,
-    Card,
-    Input,
-    Label,
-    CardHeader,
-    CardTitle
-} from 'reactstrap'
-
-// ** Utils
-import {
-    isUserLoggedIn,
-    getTotalNumber,
-    getTransformDate,
-    getCurrentPageNumber
-} from '@utils'
-
-// Constant
-import {
-    root,
-    adminRoot,
-    TN_VOICE_RECORDING
-} from '@constant/defaultValues'
-
-// ** Store & Actions
-import {
-    getVoiceRecordingList,
-    markDoneVoiceRecording,
-    clearVoiceRecordingMessage
-} from '../store'
+import { Col, Row, Card, Input, Label, CardHeader, CardTitle} from 'reactstrap'
+import {isUserLoggedIn, getTotalNumber, getTransformDate, getCurrentPageNumber} from '@utils'
+import { root, adminRoot, TN_VOICE_RECORDING } from '@constant/defaultValues'
+import { getVoiceRecordingList, markDoneVoiceRecording, clearVoiceRecordingMessage } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
-
-// ** Icons Import
-import {
-    X,
-    Check
-} from 'react-feather'
-
-// ** Third Party Components
+import { X, Check } from 'react-feather'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-
-// ** Custom Components
 import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
-
-// ** Translation
 import { T } from '@localization'
 
 const CustomHeader = ({
@@ -79,6 +38,7 @@ const CustomHeader = ({
                             <option value="25">25</option>
                             <option value="50">50</option>
                         </Input>
+                        <label className="entries"> entries </label>
                     </div>
                 </Col>
 

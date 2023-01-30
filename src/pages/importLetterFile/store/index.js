@@ -298,6 +298,37 @@ export const moveToLetterImportedFile = createAsyncThunk('appImportLetterFile/mo
     }
 })
 
+async function callImportDropboxPdfCronRequest(params) {
+    return axios.get(`${API_ENDPOINTS.importLetterFiles.cronDropBoxImportPdf}`, { params }).then((importLetterFile) => importLetterFile.data).catch((error) => error)
+}
+
+export const callImportDropboxPdfCron = createAsyncThunk('appImportLetterFile/callImportDropboxPdfCron', async (params, { dispatch, getState }) => {
+    try {
+        const response = await callImportDropboxPdfCronRequest(params)
+        if (response && response.flag) {
+            await dispatch(getImportLetterFileList(getState().importLetterFile.params))
+            return {
+                actionFlag: "IMPORT_PDF_DROPBOX_CRON",
+                success: response.message,
+                error: ""
+            }
+        } else {
+            return {
+                actionFlag: "",
+                success: "",
+                error: response.message
+            }
+        }
+    } catch (error) {
+        console.log("callImportDropboxPdfCron catch ", error)
+        return {
+            actionFlag: "",
+            success: "",
+            error: error
+        }
+    }
+})
+
 export const appImportLetterFileSlice = createSlice({
     name: 'appImportLetterFile',
     initialState: {
@@ -318,6 +349,10 @@ export const appImportLetterFileSlice = createSlice({
 
         setSelectedItemValues: (state, action) => {
             state.selectedImportItem = action.payload || []
+        },
+
+        setImportLetterFileItem: (state, action) => {
+            state.importLetterFileItem = action.payload || importLetterFileItem
         },
 
         clearImportLetterFileMessage: (state) => {
@@ -383,11 +418,19 @@ export const appImportLetterFileSlice = createSlice({
                 state.success = action.payload.success
                 state.error = action.payload.error
             })
+            .addCase(callImportDropboxPdfCron.fulfilled, (state, action) => {
+                state.selectedImportItem = action.payload.selectedImportItem
+                state.actionFlag = action.payload.actionFlag
+                state.loading = true
+                state.success = action.payload.success
+                state.error = action.payload.error
+            })
     }
 })
 
 export const {
     setSelectedItemValues,
+    setImportLetterFileItem,
     updateImportLetterFileLoader,
     clearImportLetterFileMessage
 } = appImportLetterFileSlice.actions

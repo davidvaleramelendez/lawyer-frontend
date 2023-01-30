@@ -12,6 +12,7 @@ import {
     Input,
     Label,
     Button,
+    Spinner,
     CardTitle,
     CardHeader,
     UncontrolledTooltip
@@ -37,9 +38,12 @@ import {
 import {
     setSelectedItemValues,
     deleteImportLetterFile,
+    setImportLetterFileItem,
     getImportLetterFileList,
+    callImportDropboxPdfCron,
     moveToLetterImportedFile,
     markDoneImportLetterFile,
+    updateImportLetterFileLoader,
     clearImportLetterFileMessage
 } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -48,8 +52,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
     X,
     Eye,
+    Edit,
     Check,
-    Trash2
+    Trash2,
+    RefreshCw
 } from 'react-feather'
 
 // ** Third Party Components
@@ -63,11 +69,14 @@ import DatatablePagination from '@components/datatable/DatatablePagination'
 
 // ** Modal
 import ModalImportFile from '../modals/ModalImportFile'
+import ModalEditImportFile from '../modals/ModalEditImportFile'
 
 // ** Translation
 import { T } from '@localization'
 
 const CustomHeader = ({
+    loading,
+    dispatch,
     searchInput,
     rowsPerPage,
     handleSearch,
@@ -78,6 +87,11 @@ const CustomHeader = ({
     handleSelectedImportMove,
     handleSelectedAllImportChecked
 }) => {
+    const handleRefreshCron = () => {
+        dispatch(updateImportLetterFileLoader(false))
+        dispatch(callImportDropboxPdfCron({}))
+    }
+
     return (
         <div className="invoice-list-table-header w-100 py-1">
             <Row>
@@ -143,6 +157,23 @@ const CustomHeader = ({
                             onChange={(event) => handleSearch(event.target.value)}
                         />
                     </div>
+
+                    {loading ? (<>
+                        <RefreshCw
+                            size={28}
+                            id={`pw-tooltip-header-refresh-cron`}
+                            className="cursor-pointer"
+                            onClick={() => handleRefreshCron()}
+                        />
+                        <UncontrolledTooltip
+                            placement="top"
+                            target={`pw-tooltip-header-refresh-cron`}
+                        >
+                            {T('Refresh')}
+                        </UncontrolledTooltip>
+                    </>) : (
+                        <Spinner />
+                    )}
                 </Col>
             </Row>
         </div>
@@ -161,6 +192,7 @@ const ImportLetterFileList = () => {
     // ** States
     const [loadFirst, setLoadFirst] = useState(true)
     const [modalOpen, setModalOpen] = useState(false)
+    const [editModalOpen, setEditModalOpen] = useState(false)
     const [searchInput, setSearchInput] = useState('')
     const [sort, setSort] = useState('desc')
     const [sortColumn, setSortColumn] = useState('id')
@@ -266,6 +298,12 @@ const ImportLetterFileList = () => {
                 dispatch(markDoneImportLetterFile(id))
             }
         })
+    }
+
+    const handleEditModal = (row) => {
+        return
+        dispatch(setImportLetterFileItem(row))
+        setEditModalOpen(true)
     }
 
     /* Select import item checkbox event */
@@ -375,7 +413,9 @@ const ImportLetterFileList = () => {
             sortable: true,
             sortField: "case_id",
             minWidth: "14%",
-            cell: (row) => (<Link to={`${adminRoot}/case/view/${row.case_id}`}>{`#${row.case_id}`}</Link>),
+            cell: (row) => (
+                <Link to={`${adminRoot}/case/view/${row.case_id}`}>{`#${row.case_id}`}</Link>
+            ),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '90px'
@@ -462,6 +502,16 @@ const ImportLetterFileList = () => {
                         {T('Open file')}
                     </UncontrolledTooltip>
 
+                    <Edit
+                        size={17}
+                        id={`pw-edit-tooltip-${row.id}`}
+                        onClick={() => handleEditModal(row)}
+                        className='cursor-pointer mb-0 ms-50'
+                    />
+                    <UncontrolledTooltip placement="top" target={`pw-edit-tooltip-${row.id}`}>
+                        {T('Edit')}
+                    </UncontrolledTooltip>
+
                     <Trash2
                         size={17}
                         id={`pw-delete-tooltip-${row.id}`}
@@ -475,7 +525,7 @@ const ImportLetterFileList = () => {
             ),
             /* Custom placeholder vars */
             contentExtraStyles: {
-                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '50px'
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '60px'
             },
             customLoaderCellClass: "text-center",
             customLoaderContentClass: ""
@@ -505,6 +555,8 @@ const ImportLetterFileList = () => {
                         handlePagination={handlePagination}
                         subHeaderComponent={
                             <CustomHeader
+                                loading={store.loading}
+                                dispatch={dispatch}
                                 searchInput={searchInput}
                                 rowsPerPage={rowsPerPage}
                                 handleSearch={handleSearch}
@@ -522,6 +574,11 @@ const ImportLetterFileList = () => {
                 <ModalImportFile
                     toggleModal={() => setModalOpen(!modalOpen)}
                     open={modalOpen}
+                />
+
+                <ModalImportFile
+                    toggleModal={() => setEditModalOpen(!editModalOpen)}
+                    open={editModalOpen}
                 />
             </Card>
         </Fragment>

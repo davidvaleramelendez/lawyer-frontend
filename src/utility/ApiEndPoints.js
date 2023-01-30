@@ -294,7 +294,8 @@ export const API_ENDPOINTS = {
         delete: `/api/admin/import-letter-file/delete`,
         isErledigt: `/api/admin/import-letter-file/is-erledigt`,
         createMultiple: `/api/admin/import-letter-file/create-multiple`,
-        moveToLetter: `/api/admin/import-letter-file/move-to-letter`
+        moveToLetter: `/api/admin/import-letter-file/move-to-letter`,
+        cronDropBoxImportPdf: `/api/import-letter-file/cron/import-pdf`
     }
     /* /Voice Recordings */
 }

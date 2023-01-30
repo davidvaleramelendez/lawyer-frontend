@@ -1,70 +1,22 @@
 /* eslint-disable object-shorthand */
 /* eslint-disable no-confusing-arrow */
 
-// ** React Imports
-import { useState, useEffect, useCallback } from "react"
-import { useNavigate, Link } from "react-router-dom"
-
-// ** Reactstrap Imports
-import {
-    Col,
-    Row,
-    Card,
-    Input,
-    Button
-} from "reactstrap"
-
-// ** React Dropdown Import
+import {useState, useEffect, useCallback } from "react"
+import {useNavigate, Link } from "react-router-dom"
+import {Col, Row, Card, CardHeader, CardTitle, Input, Button} from "reactstrap"
 import Select from "react-select"
-
-// ** Utils
-import {
-    isUserLoggedIn,
-    getTotalNumber,
-    getWebPreviewUrl,
-    getTransformDate,
-    getRandColorClass,
-    getCurrentPageNumber
-} from "@utils"
-
-// Constant
-import {
-    root,
-    TN_CASES,
-    adminRoot,
-    perPageRowItems,
-    defaultPerPageRow
-} from "@constant/defaultValues"
-import {
-    caseItem
-} from "@constant/reduxConstant"
-
-// ** Store & Actions
-import {
-    getCaseList,
-    clearCaseMessage
-} from "../store"
+import {isUserLoggedIn, getTotalNumber, getWebPreviewUrl, getTransformDate, getRandColorClass, getCurrentPageNumber} from "@utils"
+import {root, TN_CASES, adminRoot, perPageRowItems, defaultPerPageRow} from "@constant/defaultValues"
+import {caseItem } from "@constant/reduxConstant"
+import {getCaseList, clearCaseMessage} from "../store"
 import { useDispatch, useSelector } from "react-redux"
-
-// Modal
 import ModalCaseDetail from "../modals/ModalCaseDetail"
-
-// ** Icons Import
-import {
-    Eye,
-    PlusCircle
-} from "react-feather"
-
-// ** Custom Components
+import {Eye, PlusCircle } from "react-feather"
 import Avatar from "@components/avatar"
 import DotPulse from "@components/dotpulse"
 import Notification from '@components/toast/notification'
 import DatatablePagination from "@components/datatable/DatatablePagination"
-
-// ** Default Avatar Image
 import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
-
-// ** Translation
 import { T } from '@localization'
 
 /* Get windows size */
@@ -85,7 +37,12 @@ const CustomHeader = ({
     statusFilter,
     handleStatusFilter
 }) => {
-    return (<div className="invoice-list-table-header w-100 py-2">
+    return (<div className="w-100 py-2">
+          <Card className="overflow-hidden">
+            <CardHeader className="border-bottom">
+                <CardTitle tag="h4">{T('Cases')}</CardTitle>
+            </CardHeader>
+            </Card>
         <Row>
             <Col lg={6} className="d-flex align-items-center px-0 px-lg-1">
                 <div className="d-flex align-items-center me-2">
@@ -103,7 +60,8 @@ const CustomHeader = ({
                             ))}
                         </>) : null}
                     </Input>
-                </div>
+                    <label className="entries"> entries </label>
+                </div>  
             </Col>
 
             <Col lg={6} className="actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0">
@@ -132,6 +90,7 @@ const CustomHeader = ({
                     />
                 </div>
             </Col>
+            
         </Row>
     </div>)
 }

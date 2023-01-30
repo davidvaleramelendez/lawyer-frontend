@@ -17,7 +17,8 @@ const menuConfig = {
     cloudServerApp: true,
     letterTemplateApp: true,
     calendarSettingApp: true,
-    voiceRecordingApp: true
+    voiceRecordingApp: true,
+    importLetterFileApp: true
   },
   Lawyer: {
     emailApp: true,
@@ -35,7 +36,8 @@ const menuConfig = {
     cloudServerApp: true,
     letterTemplateApp: true,
     calendarSettingApp: true,
-    voiceRecordingApp: true
+    voiceRecordingApp: true,
+    importLetterFileApp: true
   },
   Partner: {
     emailApp: true,
@@ -53,7 +55,8 @@ const menuConfig = {
     cloudServerApp: true,
     letterTemplateApp: true,
     calendarSettingApp: true,
-    voiceRecordingApp: true
+    voiceRecordingApp: true,
+    importLetterFileApp: true
   },
   Customer: {
     emailApp: true,
@@ -71,7 +74,8 @@ const menuConfig = {
     cloudServerApp: true,
     letterTemplateApp: true,
     calendarSettingApp: true,
-    voiceRecordingApp: true
+    voiceRecordingApp: true,
+    importLetterFileApp: true
   }
 }
 

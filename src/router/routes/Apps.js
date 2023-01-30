@@ -79,6 +79,9 @@ const CaseLetterTemplateEdit = lazy(() => import('@src/pages/letterTemplate/case
 // Voice Recording
 const VoiceRecordingList = lazy(() => import('@src/pages/voiceRecording/list'))
 
+// Import Letter File
+const ImportLetterFileList = lazy(() => import('@src/pages/importLetterFile/list'))
+
 const AppRoutes = [
   /* Contact */
   {
@@ -458,8 +461,19 @@ const AppRoutes = [
       id: "voiceRecordingApp",
       restrictRole: [11]
     }
-  }
+  },
   /* /Voice Recording */
+
+  /* Import Letter File */
+  {
+    path: `${adminRoot}/import-letter-file`,
+    element: <ImportLetterFileList />,
+    meta: {
+      id: "importLetterFileApp",
+      restrictRole: [11]
+    }
+  }
+  /* /Import Letter File */
 ]
 
 export default AppRoutes

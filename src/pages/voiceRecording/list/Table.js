@@ -136,7 +136,7 @@ const VoiceRecordingList = () => {
         if (store && store.error) {
             Notification(T("Error"), store.error, "warning")
         }
-    }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
+    }, [store.success, store.error, store.actionFlag, loadFirst])
     // console.log("store >>> ", store)
 
     const handleMarkDone = (id) => {

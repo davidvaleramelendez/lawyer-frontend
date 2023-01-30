@@ -19,6 +19,7 @@ import emailTemplate from '@src/pages/emailTemplate/store'
 import navTopNotification from '@store/navTopNotification'
 import letterTemplate from '@src/pages/letterTemplate/store'
 import voiceRecording from '@src/pages/voiceRecording/store'
+import importLetterFile from '@src/pages/importLetterFile/store'
 
 const rootReducer = {
   auth,
@@ -40,7 +41,8 @@ const rootReducer = {
   navGlobalSearch,
   navTopNotification,
   letterTemplate,
-  voiceRecording
+  voiceRecording,
+  importLetterFile
 }
 
 export default rootReducer

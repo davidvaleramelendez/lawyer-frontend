@@ -237,6 +237,7 @@ const CaseView = () => {
 
   /* Detail view of case voice recording in terminal */
   const terminalDetailVoiceRecording = (data) => {
+    setIsCollapseOpen('')
     setCaseRecordedVoice({ ...data, terminal: "DETAIL_VIEW" })
     setVoiceRecordedTerminalOpen(true)
   }
@@ -1291,6 +1292,7 @@ const CaseView = () => {
                             <th>{T('Action')}</th>
                           </tr>
                         </thead>
+
                         <tbody>
                           {store.timeCaseRecord.map((record, index) => (
                             record.end_time !== null ? (
@@ -1581,6 +1583,95 @@ const CaseView = () => {
                                           color="danger"
                                           className={`btn-icon rounded-circle`}
                                           onClick={() => onDeleteLetter(letter.id)}
+                                        >
+                                          <Trash2 size={16} />
+                                        </Button.Ripple>
+                                      </div>
+                                    </Collapse>
+                                  </td>
+                                </tr>
+                              ) : null}
+                            </Fragment>
+                          ))}
+
+                          {store.importedCaseLetters.map((importedLetter, index) => (
+                            <Fragment key={`imported_case_letters_${index}`}>
+                              <tr
+                                className={`cursor-pointer ${(isCollapseOpen === `imported_case_letters_${importedLetter.id}` ? 'background-highlight-color' : '')}`}
+                                onClick={() => handleCollapseAction(`imported_case_letters_${importedLetter.id}`)}
+                              >
+                                <td>
+                                  {(importedLetter && importedLetter.pdf_path) && (
+                                    <Avatar
+                                      img={pdfPng}
+                                      imgWidth={16}
+                                      imgHeight={16}
+                                      className="bg-transparent"
+                                    />
+                                  )}
+                                </td>
+
+                                <td>{importedLetter.created_date && getTransformDate(importedLetter.created_date, "DD.MM.YYYY")}</td>
+
+                                <td>{importedLetter.subject}</td>
+
+                                <td>
+                                  <div className='form-switch form-check-primary'>
+                                    <Input
+                                      type='switch'
+                                      checked={importedLetter.isErledigt}
+                                      id={`imported_letter_${index}_${importedLetter.isErledigt}`}
+                                      name={`imported_letter_${index}_${importedLetter.isErledigt}`}
+                                      className="cursor-pointer"
+                                      onChange={() => onLetterDone(importedLetter.id)}
+                                    />
+                                    <Label className='form-check-label' htmlFor="icon-primary">
+                                      <span className='switch-icon-left'>
+                                        <Check size={14} />
+                                      </span>
+                                      <span className='switch-icon-right'>
+                                        <X size={14} />
+                                      </span>
+                                    </Label>
+                                  </div>
+                                </td>
+
+                                <td>
+                                  <Eye size={18} className="cursor-pointer" onClick={() => handleCollapseAction(`imported_case_letters_${importedLetter.id}`)} />
+                                </td>
+                              </tr>
+
+                              {(isCollapseOpen === `imported_case_letters_${importedLetter.id}`) ? (
+                                <tr>
+                                  <td colSpan={5} className={`px-0 w-100 ${(isCollapseOpen === `imported_case_letters_${importedLetter.id}` ? '' : 'border-0 py-0')}`}>
+                                    <Collapse
+                                      className="case-card-collapse"
+                                      isOpen={(isCollapseOpen === `imported_case_letters_${importedLetter.id}`) || false}
+                                    >
+                                      <div>
+                                        {(importedLetter && importedLetter.pdf_path) && (
+                                          <Button.Ripple
+                                            outline
+                                            tag="a"
+                                            target="_blank"
+                                            color="primary"
+                                            className={`btn-icon rounded-circle me-50`}
+                                            href={renderFileWebUrlPreview(importedLetter.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
+                                          >
+                                            <Avatar
+                                              img={pdfPng}
+                                              imgWidth={16}
+                                              imgHeight={16}
+                                              className="bg-transparent"
+                                            />
+                                          </Button.Ripple>
+                                        )}
+
+                                        <Button.Ripple
+                                          outline
+                                          color="danger"
+                                          className={`btn-icon rounded-circle`}
+                                          onClick={() => onDeleteLetter(importedLetter.id)}
                                         >
                                           <Trash2 size={16} />
                                         </Button.Ripple>

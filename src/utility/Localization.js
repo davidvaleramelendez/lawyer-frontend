@@ -21,6 +21,8 @@ export const L10nKeys = {
     'Cloud-Storage': 'Cloud-Storage',
     'Calendar Setting': 'Calendar Setting',
     'Letter Template': 'Letter Template',
+    "Voice Recording": "Voice Recording",
+    "Import Letter File": 'Import Letter File',
     //** /Menus
 
     //** Dashboards
@@ -587,14 +589,18 @@ export const L10nKeys = {
     CreateLetter: 'Create Letter',
     UpdateLetter: 'Update Letter',
     VoiceRecording: "Voice Recording",
-    SearchVoiceRecording: 'Search Voice Recording'
+    SearchVoiceRecording: 'Search Voice Recording',
+
+    MoveToLetter: 'Move to Letter',
+    ImportLetterFile: 'Import Letter File',
+    ImportFile: 'Import File'
 }
 
 export const L10nOrgKeys = {
     Menu: [
         'Email', 'Cases', 'Chat', 'Task', 'Calendar',
         'Deadline', 'Outbox', 'Bills', 'Inquiry', 'User',
-        'Account', 'Email Template', 'CloudStorage', 'Calendar Setting'
+        'Account', 'Email Template', 'CloudStorage', 'Calendar Setting', 'Letter Template', "Voice Recording", "Import Letter File"
     ],
     Dashboards: [
         'Hello', 'YouHave', 'OpenCases', 'ViewAllCases', 'DashboardOverview',
@@ -744,6 +750,9 @@ export const L10nOrgKeys = {
         ],
         "Voice Recording": [
             "CaseID", "Subject", "VoiceRecording", "SearchVoiceRecording"
+        ],
+        "Import Letter File": [
+            "ImportFile", "ImportLetterFile", "MoveToLetter"
         ]
     },
     'UI Setting': [
@@ -772,7 +781,9 @@ export const L10nMenuItemIDKeys = {
     Account: 'accountApp',
     'Email Template': 'emailTemplateApp',
     'Cloud-Storage': 'cloudServerApp',
-    'Letter Template': 'letterTemplateApp'
+    'Letter Template': 'letterTemplateApp',
+    'Voice Recording': 'voiceRecordingApp',
+    'Import Letter File': 'importLetterFileApp'
 }
 
 export const getDefaultLanguageLabels = () => {

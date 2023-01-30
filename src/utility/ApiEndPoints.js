@@ -112,7 +112,7 @@ export const API_ENDPOINTS = {
         updateDocument: `/api/admin/case/case_document_update`,
         isErledigtDocument: `/api/admin/case/case_document_isErledigt`,
         deleteDocument: `/api/admin/case/case_document_delete`,
-        letterList: `/api/admin/letter/get_list`,
+        letterList: `/api/admin/case/letter/list`,
         createLetter: `/api/admin/case/add_letter`,
         updateLetter: `/api/admin/case/update_letter`,
         deleteLetter: `/api/admin/case/delete_letter`,
@@ -293,7 +293,8 @@ export const API_ENDPOINTS = {
         update: `/api/admin/import-letter-file/update`,
         delete: `/api/admin/import-letter-file/delete`,
         isErledigt: `/api/admin/import-letter-file/is-erledigt`,
-        createMultiple: `/api/admin/import-letter-file/create-multiple`
+        createMultiple: `/api/admin/import-letter-file/create-multiple`,
+        moveToLetter: `/api/admin/import-letter-file/move-to-letter`
     }
     /* /Voice Recordings */
 }

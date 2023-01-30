@@ -37,8 +37,7 @@ const DatatablePagination = ({
     handleSort,
     handlePagination,
     subHeaderComponent,
-    displayEntriesLabel = true,
-    showSelectableRows = false
+    displayEntriesLabel = true
     // noDataComponent = "There are no records to display..."
 }) => {
     /* Page change function */
@@ -104,7 +103,6 @@ const DatatablePagination = ({
                 columns={columns}
                 responsive={true}
                 onSort={handleSort}
-                selectableRows={showSelectableRows}
                 persistTableHead={true}
                 paginationServer={true}
                 progressPending={!loading}

@@ -35,8 +35,10 @@ import {
 
 // ** Store & Actions
 import {
+    setSelectedItemValues,
     deleteImportLetterFile,
     getImportLetterFileList,
+    moveToLetterImportedFile,
     markDoneImportLetterFile,
     clearImportLetterFileMessage
 } from '../store'
@@ -70,13 +72,32 @@ const CustomHeader = ({
     rowsPerPage,
     handleSearch,
     setModalOpen,
-    handlePerPage
+    handlePerPage,
+    selectedImportItem,
+    onSelectAllImportItem,
+    handleSelectedImportMove,
+    handleSelectedAllImportChecked
 }) => {
     return (
         <div className="invoice-list-table-header w-100 py-1">
             <Row>
-                <Col lg={6} className="mt-1 d-flex align-items-center px-0 px-lg-1">
-                    <div className="d-flex align-items-center me-2">
+                <Col lg={8} className="d-flex align-items-center flex-wrap mt-lg-0 mt-1 px-0 px-lg-1">
+                    <div className="form-check mt-lg-0 mt-1 me-1">
+                        <Input
+                            type="checkbox"
+                            id="import-item-select-all"
+                            checked={handleSelectedAllImportChecked()}
+                            onChange={(event) => onSelectAllImportItem(event.target.checked)}
+                        />
+                        <Label
+                            for="import-item-select-all"
+                            className="form-check-label fw-bold"
+                        >
+                            {T("Select All")}
+                        </Label>
+                    </div>
+
+                    <div className="d-flex align-items-center mt-lg-0 mt-1 me-2">
                         <label htmlFor="rows-per-page">{T('Show')}</label>
                         <Input
                             type="select"
@@ -90,12 +111,27 @@ const CustomHeader = ({
                             <option value="50">50</option>
                         </Input>
                     </div>
-                    <Button color="primary" onClick={() => setModalOpen(true)}>
+
+                    <Button
+                        color="primary"
+                        className="mt-lg-0 mt-1"
+                        onClick={() => setModalOpen(true)}
+                    >
                         {T('Import File')}
                     </Button>
+
+                    {selectedImportItem && selectedImportItem.length ? (
+                        <Button
+                            color="primary"
+                            className="ms-1 mt-lg-0 mt-1"
+                            onClick={() => handleSelectedImportMove()}
+                        >
+                            {T('Move to Letter')}
+                        </Button>
+                    ) : null}
                 </Col>
 
-                <Col lg={6} className="actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0">
+                <Col lg={4} className="actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0">
                     <div className="d-flex align-items-center">
                         <label htmlFor="search-letter">{T('Search')}</label>
                         <Input
@@ -232,6 +268,73 @@ const ImportLetterFileList = () => {
         })
     }
 
+    /* Select import item checkbox event */
+    const onSelectAllImportItem = (checked) => {
+        let selectedItemArr = []
+        if (checked) {
+            if (store && store.importLetterFileItems && store.importLetterFileItems.length) {
+                selectedItemArr = store.importLetterFileItems.map((t) => t.id)
+            }
+        } else {
+            selectedItemArr = []
+        }
+
+        dispatch(setSelectedItemValues(selectedItemArr))
+    }
+
+    const onSelectImportItem = (item) => {
+        const selectedItemArr = [...store.selectedImportItem]
+        if (item && item.id) {
+            const index = selectedItemArr.indexOf(item.id)
+            if (index !== -1) {
+                selectedItemArr.splice(index, 1)
+            } else {
+                selectedItemArr.push(item.id)
+            }
+            dispatch(setSelectedItemValues(selectedItemArr))
+        }
+    }
+
+    const handleSelectedAllImportChecked = () => {
+        if (store && store.importLetterFileItems && store.importLetterFileItems.length) {
+            if (store.selectedImportItem && (store.selectedImportItem.length === store.importLetterFileItems.length)) {
+                return true
+            }
+        }
+        return false
+    }
+
+    const handleSelectedImportChecked = (item) => {
+        if (item && item.id) {
+            if (store && store.selectedImportItem && store.selectedImportItem.length) {
+                if (store.selectedImportItem.indexOf(item.id || "") !== -1) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    const handleSelectedImportMove = () => {
+        MySwal.fire({
+            title: T('Are you sure?'),
+            text: T("You won't be able to revert this!"),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: T('Yes, move it!'),
+            customClass: {
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-outline-danger ms-1'
+            },
+            buttonsStyling: false
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                dispatch(moveToLetterImportedFile({ ids: store.selectedImportItem }))
+            }
+        })
+    }
+    /* /Select import item checkbox event */
+
     /* Rendering file preview web url */
     const renderFileWebUrlPreview = (path) => {
         if (path) {
@@ -245,11 +348,33 @@ const ImportLetterFileList = () => {
     /* Columns */
     const columns = [
         {
+            name: "",
+            center: true,
+            minWidth: "6%",
+            cell: (row) => (
+                <div className="form-check">
+                    <Input
+                        type="checkbox"
+                        id={`import-item-action-${row.id}`}
+                        name={`import-item-action-${row.id}`}
+                        onChange={() => onSelectImportItem(row)}
+                        checked={handleSelectedImportChecked(row)}
+                    />
+                </div>
+            ),
+            /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '20px', width: 'auto', borderRadius: '6px', display: 'inline-block', minWidth: '20px'
+            },
+            customLoaderCellClass: "text-center",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
+        },
+        {
             name: T("CaseID"),
             sortable: true,
             sortField: "case_id",
-            minWidth: "18%",
-            // cell: (row) => row.case_id,
+            minWidth: "14%",
             cell: (row) => (<Link to={`${adminRoot}/case/view/${row.case_id}`}>{`#${row.case_id}`}</Link>),
             /* Custom placeholder vars */
             contentExtraStyles: {
@@ -290,7 +415,7 @@ const ImportLetterFileList = () => {
         {
             name: `${T('Done')}?`,
             sortable: true,
-            minWidth: "20%",
+            minWidth: "18%",
             sortField: "isErledigt",
             cell: (row) => (
                 <div className="form-switch form-check-primary">
@@ -350,7 +475,7 @@ const ImportLetterFileList = () => {
             ),
             /* Custom placeholder vars */
             contentExtraStyles: {
-                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '30px'
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '50px'
             },
             customLoaderCellClass: "text-center",
             customLoaderContentClass: ""
@@ -383,8 +508,12 @@ const ImportLetterFileList = () => {
                                 searchInput={searchInput}
                                 rowsPerPage={rowsPerPage}
                                 handleSearch={handleSearch}
-                                handlePerPage={handlePerPage}
                                 setModalOpen={setModalOpen}
+                                handlePerPage={handlePerPage}
+                                selectedImportItem={store.selectedImportItem}
+                                onSelectAllImportItem={onSelectAllImportItem}
+                                handleSelectedImportMove={handleSelectedImportMove}
+                                handleSelectedAllImportChecked={handleSelectedAllImportChecked}
                             />
                         }
                     />

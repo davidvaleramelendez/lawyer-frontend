@@ -43,6 +43,7 @@ export const getCaseList = createAsyncThunk('appCase/getCaseList', async (params
         timeCaseRecord: [],
         caseEmailItems: [],
         caseLetters: [],
+        importedCaseLetters: [],
         actionFlag: "",
         success: "",
         error: ""
@@ -59,6 +60,7 @@ export const getCaseList = createAsyncThunk('appCase/getCaseList', async (params
         timeCaseRecord: [],
         caseEmailItems: [],
         caseLetters: [],
+        importedCaseLetters: [],
         actionFlag: "",
         success: "",
         error: ""
@@ -77,6 +79,7 @@ export const getCaseList = createAsyncThunk('appCase/getCaseList', async (params
       timeCaseRecord: [],
       caseEmailItems: [],
       caseLetters: [],
+      importedCaseLetters: [],
       actionFlag: "",
       success: "",
       error: error
@@ -184,6 +187,7 @@ export const closeCase = createAsyncThunk('appCase/closeCase', async (id) => {
         timeCaseRecord: [],
         caseEmailItems: [],
         caseLetters: [],
+        importedCaseLetters: [],
         typeItems: [],
         laywerItems: [],
         actionFlag: "DELETED",
@@ -198,6 +202,7 @@ export const closeCase = createAsyncThunk('appCase/closeCase', async (id) => {
         timeCaseRecord: [],
         caseEmailItems: [],
         caseLetters: [],
+        importedCaseLetters: [],
         typeItems: [],
         laywerItems: [],
         actionFlag: "",
@@ -214,6 +219,7 @@ export const closeCase = createAsyncThunk('appCase/closeCase', async (id) => {
       timeCaseRecord: [],
       caseEmailItems: [],
       caseLetters: [],
+      importedCaseLetters: [],
       typeItems: [],
       laywerItems: [],
       actionFlag: "",
@@ -603,7 +609,8 @@ export const getCaseLetters = createAsyncThunk('appCase/getCaseLetters', async (
     const response = await getCaseLettersRequest(params)
     if (response && response.flag) {
       return {
-        caseLetters: response.data,
+        caseLetters: (response.data && response.data.letters) || [],
+        importedCaseLetters: (response.data && response.data.importedLetterFiles) || [],
         actionFlag: "",
         success: "",
         error: ""
@@ -611,6 +618,7 @@ export const getCaseLetters = createAsyncThunk('appCase/getCaseLetters', async (
     } else {
       return {
         caseLetters: [],
+        importedCaseLetters: [],
         actionFlag: "",
         success: "",
         error: ""
@@ -620,6 +628,7 @@ export const getCaseLetters = createAsyncThunk('appCase/getCaseLetters', async (
     console.log("getCaseLetters catch ", error)
     return {
       caseLetters: [],
+      importedCaseLetters: [],
       actionFlag: "",
       success: "",
       error: error
@@ -1119,6 +1128,7 @@ export const appCaseSlice = createSlice({
     attachments: [],
     caseRecords: [],
     caseLetters: [],
+    importedCaseLetters: [],
     attachments: [],
     timeCaseRecord: [],
     caseEmailItems: [],
@@ -1212,6 +1222,7 @@ export const appCaseSlice = createSlice({
         state.timeCaseRecord = action.payload.timeCaseRecord
         state.caseEmailItems = action.payload.caseEmailItems
         state.caseLetters = action.payload.caseLetters
+        state.importedCaseLetters = action.payload.importedCaseLetters
         state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success
@@ -1238,6 +1249,7 @@ export const appCaseSlice = createSlice({
         state.caseEmailItems = action.payload.caseEmailItems
         state.attachments = action.payload.attachments
         state.caseLetters = action.payload.caseLetters
+        state.importedCaseLetters = action.payload.importedCaseLetters
         state.typeItems = action.payload.typeItems
         state.laywerItems = action.payload.laywerItems
         state.actionFlag = action.payload.actionFlag
@@ -1333,6 +1345,7 @@ export const appCaseSlice = createSlice({
       /* Case Letters */
       .addCase(getCaseLetters.fulfilled, (state, action) => {
         state.caseLetters = action.payload.caseLetters
+        state.importedCaseLetters = action.payload.importedCaseLetters
         state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success

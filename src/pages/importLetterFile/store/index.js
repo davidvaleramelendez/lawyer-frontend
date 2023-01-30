@@ -41,6 +41,7 @@ export const getImportLetterFileList = createAsyncThunk('appImportLetterFile/get
                 importLetterFileItems: response.data,
                 pagination: response.pagination,
                 importLetterFileItem: importLetterFileItem,
+                selectedImportItem: [],
                 actionFlag: "",
                 success: "",
                 error: ""
@@ -51,6 +52,7 @@ export const getImportLetterFileList = createAsyncThunk('appImportLetterFile/get
                 importLetterFileItems: [],
                 pagination: null,
                 importLetterFileItem: importLetterFileItem,
+                selectedImportItem: [],
                 actionFlag: "",
                 success: "",
                 error: ""
@@ -63,6 +65,7 @@ export const getImportLetterFileList = createAsyncThunk('appImportLetterFile/get
             importLetterFileItems: [],
             pagination: null,
             importLetterFileItem: importLetterFileItem,
+            selectedImportItem: [],
             actionFlag: "",
             success: "",
             error: error
@@ -261,12 +264,47 @@ export const createMultipleImportLetterFile = createAsyncThunk('appImportLetterF
     }
 })
 
+async function moveToLetterImportedFileRequest(payload) {
+    return axios.post(`${API_ENDPOINTS.importLetterFiles.moveToLetter}`, payload).then((importLetterFile) => importLetterFile.data).catch((error) => error)
+}
+
+export const moveToLetterImportedFile = createAsyncThunk('appImportLetterFile/moveToLetterImportedFile', async (payload, { dispatch, getState }) => {
+    try {
+        const response = await moveToLetterImportedFileRequest(payload)
+        if (response && response.flag) {
+            await dispatch(getImportLetterFileList(getState().importLetterFile.params))
+            return {
+                selectedImportItem: [],
+                actionFlag: "MOVED_TO_LETTER",
+                success: response.message,
+                error: ""
+            }
+        } else {
+            return {
+                selectedImportItem: [],
+                actionFlag: "",
+                success: "",
+                error: response.error
+            }
+        }
+    } catch (error) {
+        console.log("moveToLetterImportedFile catch ", error)
+        return {
+            selectedImportItem: [],
+            actionFlag: "",
+            success: "",
+            error: error
+        }
+    }
+})
+
 export const appImportLetterFileSlice = createSlice({
     name: 'appImportLetterFile',
     initialState: {
         params: {},
         importLetterFileItem: importLetterFileItem,
         importLetterFileItems: [],
+        selectedImportItem: [],
         pagination: null,
         actionFlag: "",
         loading: false,
@@ -276,6 +314,10 @@ export const appImportLetterFileSlice = createSlice({
     reducers: {
         updateImportLetterFileLoader: (state, action) => {
             state.loading = action.payload || false
+        },
+
+        setSelectedItemValues: (state, action) => {
+            state.selectedImportItem = action.payload || []
         },
 
         clearImportLetterFileMessage: (state) => {
@@ -291,6 +333,7 @@ export const appImportLetterFileSlice = createSlice({
                 state.importLetterFileItems = action.payload.importLetterFileItems
                 state.pagination = action.payload.pagination
                 state.importLetterFileItem = action.payload.importLetterFileItem
+                state.selectedImportItem = action.payload.selectedImportItem
                 state.actionFlag = action.payload.actionFlag
                 state.loading = true
                 state.success = action.payload.success
@@ -333,10 +376,18 @@ export const appImportLetterFileSlice = createSlice({
                 state.success = action.payload.success
                 state.error = action.payload.error
             })
+            .addCase(moveToLetterImportedFile.fulfilled, (state, action) => {
+                state.selectedImportItem = action.payload.selectedImportItem
+                state.actionFlag = action.payload.actionFlag
+                state.loading = true
+                state.success = action.payload.success
+                state.error = action.payload.error
+            })
     }
 })
 
 export const {
+    setSelectedItemValues,
     updateImportLetterFileLoader,
     clearImportLetterFileMessage
 } = appImportLetterFileSlice.actions

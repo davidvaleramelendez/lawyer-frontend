@@ -1,57 +1,19 @@
 // ** React Imports
 import { useContext, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-
-// ** Custom Hooks
 import { useSkin } from '@hooks/useSkin'
-
-// ** Store & Actions
-import {
-  login,
-  updateAuthLoader,
-  cleanAuthMessage
-} from '../store'
+import { login, updateAuthLoader, cleanAuthMessage } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
-
-// ** Third Party Components
 import { useForm, Controller } from 'react-hook-form'
 import * as yup from "yup"
 import { yupResolver } from '@hookform/resolvers/yup'
-
-// ** Context
 import { AbilityContext } from '@src/utility/context/Can'
-
-// ** Custom Components
 import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 import InputPasswordToggle from '@components/input-password-toggle'
-
-// Translation
 import { useTranslation } from 'react-i18next'
-
-// ** Utils
-import {
-  encryptData,
-  decryptData,
-  isUserLoggedIn,
-  getRememberMeAuthData,
-  setRememberMeAuthData
-} from '@utils'
-
-// ** Reactstrap Imports
-import {
-  Col,
-  Row,
-  Form,
-  Input,
-  Label,
-  Button,
-  CardText,
-  CardTitle,
-  FormFeedback
-} from 'reactstrap'
-
-// ** Styles
+import { encryptData,  decryptData, isUserLoggedIn, getRememberMeAuthData, setRememberMeAuthData } from '@utils'
+import {  Col, Row, Form, Input, Label, Button, CardText, CardTitle, FormFeedback } from 'reactstrap'
 import '@styles/react/pages/page-authentication.scss'
 
 const LoginCover = () => {
@@ -90,13 +52,11 @@ const LoginCover = () => {
   }
 
   const PlaceholderSchema = {
-    email: 'john@example.com'
+    email: 'E-Mail-Adresse eingeben'
   }
 
   /* Yup validation schema */
   const LoginSchema = yup.object({
-    email: yup.string().required('Email is required!').email('Invalid email address!'),
-    password: yup.string().required('Password is required!').min(6, "Password Must be 6 digit!")
   }).required()
 
   const {
@@ -166,11 +126,7 @@ const LoginCover = () => {
         />
       ) : null}
 
-      <Row className="auth-inner m-0">
-        <Link className="brand-logo" to="/" onClick={(event) => event.preventDefault()}>
-          <h2 className="brand-text text-primary ms-1">{t("Lawyer")}</h2>
-        </Link>
-
+      <Row className="auth-inner mb-0">
         <Col
           lg={8}
           sm={12}
@@ -191,9 +147,9 @@ const LoginCover = () => {
             md={6}
             lg={12}
           >
-            <CardTitle tag="h2" className="fw-bold mb-1">
-              Welcome to {t("Lawyer")}
-            </CardTitle>
+          <Link className="brand-logo" to="/" onClick={(event) => event.preventDefault()}>
+          <h2 className="brand-text text-primary ms-0">{t("Lawyer")}</h2>
+        </Link>
 
             <CardText className="mb-2">Please sign-in to your account</CardText>
 
@@ -203,9 +159,6 @@ const LoginCover = () => {
               onSubmit={handleSubmit(onSubmit)}
             >
               <div className="mb-1">
-                <Label className="form-label" for="email">
-                  Email
-                </Label>
                 <Controller
                   id="email"
                   name="email"
@@ -226,9 +179,6 @@ const LoginCover = () => {
 
               <div className="mb-1">
                 <div className="d-flex justify-content-between">
-                  <Label className="form-label" for="password">
-                    Password
-                  </Label>
                   <Link to="/forgot-password">
                     <small>Forgot Password?</small>
                   </Link>
@@ -246,6 +196,11 @@ const LoginCover = () => {
                   )}
                 />
                 <FormFeedback>{errors.password?.message}</FormFeedback>
+                <div className="forgot-password">
+                <Link to="/forgot-password">
+                    <small>Forgot Password</small>
+                </Link>
+                </div>
               </div>
 
               <div className="form-check mb-1">

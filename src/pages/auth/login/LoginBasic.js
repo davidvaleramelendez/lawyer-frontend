@@ -1,57 +1,16 @@
-// ** React Imports
 import { useEffect, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-
-// Translation
 import { useTranslation } from 'react-i18next'
-
-// ** Store & Actions
-import {
-  login,
-  updateAuthLoader,
-  cleanAuthMessage
-} from '../store'
+import { login, updateAuthLoader, cleanAuthMessage } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
-
-// ** Custom Components
 import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 import InputPasswordToggle from '@components/input-password-toggle'
-
-// ** Reactstrap Imports
-import {
-  Card,
-  Form,
-  Label,
-  Input,
-  Button,
-  CardBody,
-  CardText,
-  CardTitle,
-  FormFeedback
-} from 'reactstrap'
-
-// ** Third Party Components
+import { Card, Form, Label, Input, Button, CardBody, CardText, FormFeedback } from 'reactstrap'
 import { useForm, Controller } from 'react-hook-form'
-import * as yup from "yup"
-import { yupResolver } from '@hookform/resolvers/yup'
-
-// ** Utils
-import {
-  encryptData,
-  decryptData,
-  isUserLoggedIn,
-  getRememberMeAuthData,
-  setRememberMeAuthData
-} from '@utils'
-
-// ** Context
+import { encryptData, decryptData, isUserLoggedIn, getRememberMeAuthData, setRememberMeAuthData } from '@utils'
 import { AbilityContext } from '@src/utility/context/Can'
-
-// ** Styles
 import '@styles/react/pages/page-authentication.scss'
-
-// ** Translation
 import { T } from '@localization'
 
 const LoginBasic = () => {
@@ -89,23 +48,18 @@ const LoginBasic = () => {
   }
 
   const PlaceholderSchema = {
-    email: 'john@example.com'
+    email: 'E-Mail-Adresse eingeben'
   }
 
   /* Yup validation schema */
-  const LoginSchema = yup.object({
-    email: yup.string().required('Email is required!').email('Invalid email address!'),
-    password: yup.string().required('Password is required!').min(6, "Password Must be 6 digit!")
-  }).required()
-
+ 
   const {
     control,
     handleSubmit,
     formState: { errors }
   } = useForm({
     mode: 'all',
-    defaultValues,
-    resolver: yupResolver(LoginSchema)
+    defaultValues
   })
 
   useEffect(() => {
@@ -162,17 +116,12 @@ const LoginBasic = () => {
         />
       ) : null}
 
-      <div className="auth-inner my-2">
+      <div className="auth-inner auth-inner-login my-2">
         <Card className="mb-0">
           <CardBody>
             <Link className="brand-logo" to="/" onClick={(event) => event.preventDefault()}>
-              <h2 className="brand-text text-primary ms-1">{t("Lawyer")}</h2>
+              <h2 className="brand-text text-primary ms-0">{t("Lawyer")}</h2>
             </Link>
-
-            <CardTitle tag="h4" className="mb-1">
-              Welcome to {t("Lawyer")}
-            </CardTitle>
-
             <CardText className="mb-2">Please sign-in to your account</CardText>
 
             <Form
@@ -207,9 +156,7 @@ const LoginBasic = () => {
                   <Label className="form-label" for="password">
                     Password
                   </Label>
-                  <Link to="/forgot-password">
-                    <small>Forgot Password?</small>
-                  </Link>
+
                 </div>
                 <Controller
                   id="password"
@@ -224,6 +171,11 @@ const LoginBasic = () => {
                   )}
                 />
                 <FormFeedback>{errors.password?.message}</FormFeedback>
+                <div className="forgot-password">
+                <Link to="/forgot-password">
+                    <small>Forgot Password</small>
+                </Link>
+                </div>
               </div>
 
               <div className="form-check mb-1">

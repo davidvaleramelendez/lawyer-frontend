@@ -301,7 +301,6 @@ const ImportLetterFileList = () => {
     }
 
     const handleEditModal = (row) => {
-        return
         dispatch(setImportLetterFileItem(row))
         setEditModalOpen(true)
     }
@@ -571,14 +570,14 @@ const ImportLetterFileList = () => {
                     />
                 )}
 
-                <ModalImportFile
-                    toggleModal={() => setModalOpen(!modalOpen)}
-                    open={modalOpen}
+                <ModalEditImportFile
+                    toggleModal={() => setEditModalOpen(!editModalOpen)}
+                    open={editModalOpen}
                 />
 
                 <ModalImportFile
-                    toggleModal={() => setEditModalOpen(!editModalOpen)}
-                    open={editModalOpen}
+                    toggleModal={() => setModalOpen(!modalOpen)}
+                    open={modalOpen}
                 />
             </Card>
         </Fragment>

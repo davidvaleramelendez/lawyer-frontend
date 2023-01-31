@@ -593,7 +593,8 @@ export const L10nKeys = {
 
     MoveToLetter: 'Move to Letter',
     ImportLetterFile: 'Import Letter File',
-    ImportFile: 'Import File'
+    ImportFile: 'Import File',
+    DeadlineDateIsRequired: 'Deadline Date is required!'
 }
 
 export const L10nOrgKeys = {
@@ -752,7 +753,7 @@ export const L10nOrgKeys = {
             "CaseID", "Subject", "VoiceRecording", "SearchVoiceRecording"
         ],
         "Import Letter File": [
-            "ImportFile", "ImportLetterFile", "MoveToLetter"
+            "ImportFile", "ImportLetterFile", "MoveToLetter", "DeadlineDateIsRequired"
         ]
     },
     'UI Setting': [

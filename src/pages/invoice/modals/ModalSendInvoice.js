@@ -89,7 +89,14 @@ const ModalSendInvoice = ({
       dispatch(clearInvoiceMessage())
     }
   }, [store.success, store.error, store.actionFlag])
-  // console.log("ModalSendInvoice >>>> ", invoiceData)
+  console.log("ModalSendInvoice >>>> ", invoiceData)
+
+  const handleModalOpened = () => {
+    setValue('to', (invoiceData && invoiceData.customer && invoiceData.customer.email) || "")
+    setValue('subject', `${T("Your")} ${T("bill")}# ${(invoiceData && invoiceData.invoice_no) || ""}`)
+    setValue('message', `€ ${(invoiceData && invoiceData.total_price) || 0}
+    ${(invoiceData && invoiceData.invoice_due_date) || ""}`)
+  }
 
   const handleSidebarClosed = () => {
     setValue('to', (invoiceData && invoiceData.customer && invoiceData.customer.email) || "")
@@ -122,6 +129,7 @@ const ModalSendInvoice = ({
       backdrop="static"
       className="sidebar-lg send-invoice-modal"
       toggle={handleReset}
+      onOpened={handleModalOpened}
       onClosed={handleSidebarClosed}
       contentClassName="p-0 overflow-hidden"
       modalClassName="modal-slide-in"

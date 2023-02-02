@@ -29,7 +29,15 @@ import {
   cleanAuthMessage
 } from '@src/pages/auth/store'
 
-// ** Third Party Components
+// ** Reactstrap Imports
+import {
+  DropdownMenu,
+  DropdownItem,
+  DropdownToggle,
+  UncontrolledDropdown
+} from 'reactstrap'
+
+// ** Icons Import
 import {
   User,
   Mail,
@@ -38,13 +46,8 @@ import {
   MessageSquare
 } from 'react-feather'
 
-// ** Reactstrap Imports
-import {
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
-  UncontrolledDropdown
-} from 'reactstrap'
+// ** Third Party Components
+import { socketIo } from '@src/index'
 
 // ** Default Avatar Image
 import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg'
@@ -61,6 +64,7 @@ const UserDropdown = () => {
 
   // ** State
   const [userData, setUserData] = useState(getCurrentUser)
+  const [loadFirst, setLoadFirst] = useState(true)
 
   //** ComponentDidMount
   useEffect(() => {
@@ -78,6 +82,11 @@ const UserDropdown = () => {
 
     if (isUserLoggedIn() === null) {
       navigate(root)
+    }
+
+    if (loadFirst) {
+      socketIo.emit('SET_SOCKET_ID', { user_id: (userData && userData.id) || "" })
+      setLoadFirst(false)
     }
 
     /* For blank message api called inside */
@@ -99,7 +108,7 @@ const UserDropdown = () => {
     if (store && store.error) {
       Notification(T("Error"), store.error, "warning")
     }
-  }, [store.success, store.error, store.actionFlag])
+  }, [store.success, store.error, store.actionFlag, loadFirst])
 
   const onLogoutHandle = (event) => {
     if (event) {

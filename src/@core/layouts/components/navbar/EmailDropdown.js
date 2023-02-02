@@ -94,12 +94,12 @@ const EmailDropdown = () => {
                 to={`${adminRoot}/email/view/${item.id}`}
                 onClick={() => handleDropdownItemClick()}
               >
-              <div className='chat-info flex-grow-1'>
-                    <h5 className='mb-0'>{(item && item.subject) || ""}</h5>
-                    <div class="chat-meta text-nowrap">
+                <div className='chat-info flex-grow-1'>
+                  <h5 className='mb-0'>{(item && item.subject) || ""}</h5>
+                  <div className="chat-meta text-nowrap">
                     <p className='float-end mb-25 chat-time enotification'>{(item.created_at && getTransformDate(item.created_at, "D.MM.YYYY")) || ""}</p>
                     <p className='card-text text-truncate'>{(item && item.sender && item.sender.name) || ""}</p>
-                    </div>
+                  </div>
                 </div>
               </Link>
             </div>

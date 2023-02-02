@@ -74,12 +74,13 @@ const SidebarLeft = (props) => {
   const dispatch = useDispatch()
 
   // ** State
-  const [searchInput, setSearchInput] = useState('')
   const [active, setActive] = useState('')
+  const [searchInput, setSearchInput] = useState('')
 
   // ** Handles User Chat Click
   const handleUserClick = (id, from = '') => {
     dispatch(getContactChat({ id: id, chatCount: 0 }))
+
     setActive(`${from}_${id}`)
     if (sidebar === true) {
       handleSidebar()

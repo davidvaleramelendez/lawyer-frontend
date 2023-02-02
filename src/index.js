@@ -18,11 +18,11 @@ import themeConfig from './configs/themeConfig'
 // ** Toast
 import { Toaster } from 'react-hot-toast'
 
+// ** Third Party Components
+import io from "socket.io-client"
+
 // ** i18n
 import './configs/i18n'
-
-// ** Spinner (Splash Screen)
-// import Spinner from './@core/components/spinner/Fallback-spinner'
 
 // ** Ripple Button
 import './@core/components/ripple-button'
@@ -49,6 +49,8 @@ const LazyAppIntercept = lazy(() => import('./AppIntercept'))
 
 const container = document.getElementById('root')
 const root = createRoot(container)
+
+export const socketIo = io.connect(process.env.REACT_APP_NODE_ENDPOINT_URL)
 
 root.render(
   <BrowserRouter>

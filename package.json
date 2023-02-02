@@ -64,6 +64,7 @@
     "redux-thunk": "^2.4.1",
     "resize-observer-polyfill": "^1.5.1",
     "sass": "^1.51.0",
+    "socket.io-client": "^4.5.4",
     "sortablejs": "^1.12.0",
     "styled-components": "^5.3.5",
     "sweetalert2": "^11.4.14",

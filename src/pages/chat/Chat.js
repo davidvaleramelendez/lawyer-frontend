@@ -14,6 +14,9 @@ import {
   getChatContacts,
   clearChatMessage
 } from '@src/pages/chat/store'
+import {
+  getChatNotification
+} from '@store/navTopNotification'
 import { useDispatch } from 'react-redux'
 
 // ** Third Party Components
@@ -54,14 +57,12 @@ import { T } from '@localization'
 
 const ChatLog = (props) => {
   // ** Props & Store
-  const { store, handleUser, handleUserSidebarRight, handleSidebar, userSidebarLeft } = props
+  const { store, socketIo, handleUser, handleUserSidebarRight, handleSidebar, userSidebarLeft } = props
   const { userProfile, selectedUser, chats, chatCount, totalChatCount, success, error, actionFlag } = store
 
   // ** Refs & Dispatch
   const chatArea = useRef(null)
   const dispatch = useDispatch()
-
-  const timeOut = 5000
 
   // ** State
   const [message, setMessage] = useState('')
@@ -73,6 +74,7 @@ const ChatLog = (props) => {
   }
 
   const handleOnIntervalCalling = () => {
+    dispatch(getChatNotification({}))
     dispatch(getChatContacts({}))
     if (selectedUser && selectedUser.id) {
       dispatch(getChatHistory({ id: selectedUser.id, payload: { chatCount: chatCount } }))
@@ -81,13 +83,13 @@ const ChatLog = (props) => {
 
   /* Interval timing mount */
   useEffect(() => {
-    if (store) {
-      const intervalID = setInterval(() => handleOnIntervalCalling(), timeOut)
-      return () => {
-        clearInterval(intervalID)
-      }
+    socketIo.on('NEW_CHAT_REQUEST', () => {
+      handleOnIntervalCalling()
+    })
+    return () => {
+      socketIo.off('NEW_CHAT_REQUEST')
     }
-  }, [store])
+  })
   /* /Interval timing mount */
 
   // ** If user chat is not empty scrollToBottom
@@ -106,6 +108,7 @@ const ChatLog = (props) => {
     /* For reset message state */
     if (actionFlag && actionFlag === "MESSAGE_SENT") {
       setMessage('')
+      socketIo.emit('SEND_MESSAGE', { sender_id: userProfile.id, receiver_id: selectedUser.id || "" })
     }
   }, [chats, error, success, actionFlag])
 
@@ -171,7 +174,7 @@ const ChatLog = (props) => {
               imgWidth={36}
               imgHeight={36}
               className='box-shadow-1 cursor-pointer'
-              img={item.senderId === selectedUser.id ? renderFileWebUrlPreview(selectedUser.profile_photo_path) : renderFileWebUrlPreview(userProfile.profile_photo_path)}
+              img={item.senderId === selectedUser.id ? renderFileWebUrlPreview(selectedUser.profile_photo_path) || defaultAvatar : renderFileWebUrlPreview(userProfile.profile_photo_path) || defaultAvatar}
             />
           </div>
 
@@ -285,7 +288,9 @@ const ChatLog = (props) => {
           </div>
 
           <ChatWrapper ref={chatArea} className='user-chats' options={{ wheelPropagation: false }}>
-            {chats && chats.length ? <div className='chats'>{renderChats()}</div> : null}
+            {chats && chats.length ? (
+              <div className='chats'>{renderChats()}</div>
+            ) : null}
           </ChatWrapper>
 
           <Form className='chat-app-form' onSubmit={(event) => handleSendMsg(event)}>
@@ -296,6 +301,7 @@ const ChatLog = (props) => {
                 placeholder='Type your message or use speech to text'
               />
             </InputGroup>
+
             <Button className='send' color='primary'>
               <Send size={14} className='d-lg-none' />
               <span className='d-none d-lg-block'>{T('Send')}</span>

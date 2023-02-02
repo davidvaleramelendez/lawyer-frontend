@@ -24,6 +24,7 @@ import {
 
 // ** Third Party Components
 import classnames from 'classnames'
+import { socketIo } from '@src/index'
 
 // ** Store & Actions
 import { useDispatch, useSelector } from 'react-redux'
@@ -101,6 +102,7 @@ const ChatApp = () => {
             ></div>
             <Chat
               store={store}
+              socketIo={socketIo}
               handleUser={handleUser}
               handleSidebar={handleSidebar}
               userSidebarLeft={userSidebarLeft}

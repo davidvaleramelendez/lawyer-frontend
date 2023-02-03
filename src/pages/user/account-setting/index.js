@@ -7,7 +7,6 @@ import { T } from '@localization'
 
 // ** Store & Actions
 import {
-  getPdfApiDetail,
   getCompanyDetail,
   getAccountSetting,
   clearUserMessage
@@ -47,7 +46,7 @@ const AccountSettingApp = () => {
   const dispatch = useDispatch()
   const store = useSelector((state) => state.user)
 
-  /* Constant */
+  // ** State
   const [loadFirst, setLoadFirst] = useState(true)
   const [active, setActive] = useState('1')
   const [languages, setLanguages] = useState([])
@@ -93,7 +92,6 @@ const AccountSettingApp = () => {
       dispatch(getAccountSetting({}))
       dispatch(getCompanyDetail({}))
       dispatch(getInquiryImapDetail({}))
-      dispatch(getPdfApiDetail({}))
       getLanguages()
       setSelLanguage(store.userItem.language)
       setLoadFirst(false)

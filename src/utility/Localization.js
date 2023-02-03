@@ -23,6 +23,7 @@ export const L10nKeys = {
     'Letter Template': 'Letter Template',
     "Voice Recording": "Voice Recording",
     "Import Letter File": 'Import Letter File',
+    "Placetel Call": 'Placetel Call',
     //** /Menus
 
     //** Dashboards
@@ -594,7 +595,16 @@ export const L10nKeys = {
     MoveToLetter: 'Move to Letter',
     ImportLetterFile: 'Import Letter File',
     ImportFile: 'Import File',
-    DeadlineDateIsRequired: 'Deadline Date is required!'
+    SearchImportLetterFile: 'Search Import Letter File',
+    DeadlineDateIsRequired: 'Deadline Date is required!',
+
+    PlacetelCall: "Placetel Call",
+    SearchPlacetelCall: "Search Placetel Call",
+    ReceivedCalls: "Received calls",
+    MissedCall: "Missed call",
+    BlockedCalls: "Blocked Calls",
+    VoiceMessages: "Voice messages"
+
 }
 
 export const L10nOrgKeys = {
@@ -753,7 +763,10 @@ export const L10nOrgKeys = {
             "CaseID", "Subject", "VoiceRecording", "SearchVoiceRecording"
         ],
         "Import Letter File": [
-            "ImportFile", "ImportLetterFile", "MoveToLetter", "DeadlineDateIsRequired"
+            "ImportFile", "ImportLetterFile", "MoveToLetter", "DeadlineDateIsRequired", "SearchImportLetterFile"
+        ],
+        "Placetel Call": [
+            "PlacetelCall", "SearchPlacetelCall", "ReceivedCalls", "MissedCall", "BlockedCalls", "VoiceMessages"
         ]
     },
     'UI Setting': [
@@ -784,7 +797,8 @@ export const L10nMenuItemIDKeys = {
     'Cloud-Storage': 'cloudServerApp',
     'Letter Template': 'letterTemplateApp',
     'Voice Recording': 'voiceRecordingApp',
-    'Import Letter File': 'importLetterFileApp'
+    'Import Letter File': 'importLetterFileApp',
+    'Placetel Call': 'placetelCallApp'
 }
 
 export const getDefaultLanguageLabels = () => {

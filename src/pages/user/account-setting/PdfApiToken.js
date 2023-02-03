@@ -1,8 +1,9 @@
 // ** React Imports
-import { Fragment, useEffect } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 // ** Store & Actions
 import {
+    getPdfApiDetail,
     updateUserLoader,
     createUpdatePdfApi
 } from '@src/pages/user/store'
@@ -18,8 +19,6 @@ import {
     Input,
     Button,
     CardBody,
-    CardTitle,
-    CardHeader,
     FormFeedback
 } from 'reactstrap'
 import { useForm, Controller } from 'react-hook-form'
@@ -29,10 +28,13 @@ import { yupResolver } from '@hookform/resolvers/yup'
 // ** Translation
 import { T } from '@localization'
 
-const PdfApiKeyTab = () => {
+const PdfApiToken = () => {
     // ** Store vars
     const dispatch = useDispatch()
     const store = useSelector((state) => state.user)
+
+    // ** State
+    const [loadFirst, setLoadFirst] = useState(true)
 
     const PdfApiSchema = yup.object({
         key: yup.string().required('Key is required!')
@@ -59,11 +61,16 @@ const PdfApiKeyTab = () => {
     }
 
     useEffect(() => {
+        if (loadFirst) {
+            dispatch(getPdfApiDetail({}))
+            setLoadFirst(false)
+        }
+
         /* Reset form data */
         if (store && store.actionFlag && (store.actionFlag === "PDF_API_DETAIL")) {
             handleReset()
         }
-    }, [store.actionFlag])
+    }, [store.actionFlag, loadFirst])
 
     /* Submitting pdf api data */
     const onSubmitPdfApi = (values) => {
@@ -82,10 +89,6 @@ const PdfApiKeyTab = () => {
     return (
         <Fragment>
             <Card>
-                <CardHeader className="border-bottom">
-                    <CardTitle tag="h4">{T("PDF Api")}</CardTitle>
-                </CardHeader>
-
                 <CardBody className="pt-1">
                     <Form onSubmit={handleSubmit(onSubmitPdfApi)} autoComplete="off">
                         <Row>
@@ -123,4 +126,4 @@ const PdfApiKeyTab = () => {
     )
 }
 
-export default PdfApiKeyTab
+export default PdfApiToken

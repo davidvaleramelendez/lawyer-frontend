@@ -18,7 +18,8 @@ const menuConfig = {
     letterTemplateApp: true,
     calendarSettingApp: true,
     voiceRecordingApp: true,
-    importLetterFileApp: true
+    importLetterFileApp: true,
+    placetelCallApp: true
   },
   Lawyer: {
     emailApp: true,
@@ -37,7 +38,8 @@ const menuConfig = {
     letterTemplateApp: true,
     calendarSettingApp: true,
     voiceRecordingApp: true,
-    importLetterFileApp: true
+    importLetterFileApp: true,
+    placetelCallApp: true
   },
   Partner: {
     emailApp: true,
@@ -56,7 +58,8 @@ const menuConfig = {
     letterTemplateApp: true,
     calendarSettingApp: true,
     voiceRecordingApp: true,
-    importLetterFileApp: true
+    importLetterFileApp: true,
+    placetelCallApp: true
   },
   Customer: {
     emailApp: true,
@@ -75,7 +78,8 @@ const menuConfig = {
     letterTemplateApp: true,
     calendarSettingApp: true,
     voiceRecordingApp: true,
-    importLetterFileApp: true
+    importLetterFileApp: true,
+    placetelCallApp: true
   }
 }
 

@@ -296,6 +296,27 @@ export const API_ENDPOINTS = {
         createMultiple: `/api/admin/import-letter-file/create-multiple`,
         moveToLetter: `/api/admin/import-letter-file/move-to-letter`,
         cronDropBoxImportPdf: `/api/import-letter-file/cron/import-pdf`
-    }
+    },
     /* /Voice Recordings */
+
+    /* Placetel Calls */
+    placetelCalls: {
+        statsCount: `/api/admin/placetel-call/stats-count`,
+        list: `/api/admin/placetel-call/list`,
+        view: `/api/admin/placetel-call`,
+        create: `/api/admin/placetel-call/create`,
+        update: `/api/admin/placetel-call/update`,
+        delete: `/api/admin/placetel-call/delete`,
+        deleteMultiple: `/api/admin/placetel-call/delete-multiple`,
+        fetchIncomingCallsApi: `/api/admin/placetel-call/fetch/incoming-calls`
+    },
+    /* /Placetel Calls */
+
+    /* Placetel Call Api Token */
+    placetelCallTokenApis: {
+        createUpdate: `/api/admin/placetel-call-api-token/create_update`,
+        detail: `/api/admin/placetel-call-api-token/detail`,
+        delete: `/api/admin/placetel-call-api-token/delete`
+    }
+    /* /Placetel Call Api Token */
 }

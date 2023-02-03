@@ -13,7 +13,8 @@ import {
   imapItem,
   pdfApiItem,
   accountItem,
-  companyItem
+  companyItem,
+  placetelCallApiTokenItem
 } from '@constant/reduxConstant'
 
 // ** Utils
@@ -364,6 +365,7 @@ export const getAccountSetting = createAsyncThunk('appUser/getAccountSetting', a
         roleItems: response.data.roles,
         accountItem: response.data.account,
         pdfApiItem: pdfApiItem,
+        placetelCallApiTokenItem: placetelCallApiTokenItem,
         imapItem: response.data.imap,
         actionFlag: "ACCOUNT_SETTING",
         success: "",
@@ -375,6 +377,7 @@ export const getAccountSetting = createAsyncThunk('appUser/getAccountSetting', a
         roleItems: [],
         accountItem: accountItem,
         pdfApiItem: pdfApiItem,
+        placetelCallApiTokenItem: placetelCallApiTokenItem,
         imapItem: imapItem,
         actionFlag: "",
         success: "",
@@ -388,6 +391,7 @@ export const getAccountSetting = createAsyncThunk('appUser/getAccountSetting', a
       roleItems: [],
       accountItem: accountItem,
       pdfApiItem: pdfApiItem,
+      placetelCallApiTokenItem: placetelCallApiTokenItem,
       imapItem: imapItem,
       actionFlag: "",
       success: "",
@@ -776,6 +780,74 @@ export const createUpdatePdfApi = createAsyncThunk('appUser/createUpdatePdfApi',
 })
 /* /Pdf Api */
 
+/* Pdf Api */
+async function getPlacetelCallApiTokenDetailRequest(params) {
+  return axios.get(`${API_ENDPOINTS.placetelCallTokenApis.detail}`, { params }).then((user) => user.data).catch((error) => error)
+}
+
+export const getPlacetelCallApiTokenDetail = createAsyncThunk('appUser/getPlacetelCallApiTokenDetail', async (params) => {
+  try {
+    const response = await getPlacetelCallApiTokenDetailRequest(params)
+    if (response && response.flag) {
+      return {
+        placetelCallApiTokenItem: response.data || placetelCallApiTokenItem,
+        actionFlag: "PLACETEL_CALL_API_TOKEN_DETAIL",
+        success: "",
+        error: ""
+      }
+    } else {
+      return {
+        placetelCallApiTokenItem: placetelCallApiTokenItem,
+        actionFlag: "",
+        success: "",
+        error: ""
+      }
+    }
+  } catch (error) {
+    console.log("getPlacetelCallApiTokenDetail catch ", error)
+    return {
+      placetelCallApiTokenItem: placetelCallApiTokenItem,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function createUpdatePlacetelCallApiTokenRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.placetelCallTokenApis.createUpdate}`, payload).then((user) => user.data).catch((error) => error)
+}
+
+export const createUpdatePlacetelCallApiToken = createAsyncThunk('appUser/createUpdatePlacetelCallApiToken', async (payload) => {
+  try {
+    const response = await createUpdatePlacetelCallApiTokenRequest(payload)
+    if (response && response.flag) {
+      return {
+        placetelCallApiTokenItem: response.data || placetelCallApiTokenItem,
+        actionFlag: "PLACETEL_CALL_API_TOKEN_DETAIL",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        placetelCallApiTokenItem: placetelCallApiTokenItem,
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("createUpdatePlacetelCallApiToken catch ", error)
+    return {
+      placetelCallApiTokenItem: placetelCallApiTokenItem,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+/* /Pdf Api */
+
 export const appUserSlice = createSlice({
   name: 'appUser',
   initialState: {
@@ -792,6 +864,7 @@ export const appUserSlice = createSlice({
     imapItem: imapItem,
     companyItem: companyItem,
     pdfApiItem: pdfApiItem,
+    placetelCallApiTokenItem: placetelCallApiTokenItem,
     permissions: [],
     roleItems: [],
     pagination: null,
@@ -894,6 +967,7 @@ export const appUserSlice = createSlice({
         state.roleItems = action.payload.roleItems
         state.accountItem = action.payload.accountItem
         state.pdfApiItem = action.payload.pdfApiItem
+        state.placetelCallApiTokenItem = action.payload.placetelCallApiTokenItem
         state.imapItem = action.payload.imapItem
         state.actionFlag = action.payload.actionFlag
         state.loading = true
@@ -988,7 +1062,24 @@ export const appUserSlice = createSlice({
         state.success = action.payload.success
         state.error = action.payload.error
       })
-    /* /Pdf Api */
+      /* /Pdf Api */
+
+      /* Placetel Call Api Token */
+      .addCase(getPlacetelCallApiTokenDetail.fulfilled, (state, action) => {
+        state.placetelCallApiTokenItem = action.payload.placetelCallApiTokenItem
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(createUpdatePlacetelCallApiToken.fulfilled, (state, action) => {
+        state.placetelCallApiTokenItem = action.payload.placetelCallApiTokenItem
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+    /* /Placetel Call Api Token */
   }
 })
 

@@ -20,6 +20,7 @@ import navTopNotification from '@store/navTopNotification'
 import letterTemplate from '@src/pages/letterTemplate/store'
 import voiceRecording from '@src/pages/voiceRecording/store'
 import importLetterFile from '@src/pages/importLetterFile/store'
+import placetelCall from '@src/pages/placetelCall/store'
 
 const rootReducer = {
   auth,
@@ -42,7 +43,8 @@ const rootReducer = {
   navTopNotification,
   letterTemplate,
   voiceRecording,
-  importLetterFile
+  importLetterFile,
+  placetelCall
 }
 
 export default rootReducer

@@ -82,3 +82,9 @@ export const voiceRecordingItem = { id: "", case_id: "", name: "", subject: "", 
 
 // Import Letter File
 export const importLetterFileItem = { id: "", user_id: "", case_id: "", name: "", subject: "", frist_date: "", file_name: "", file_path: "", isErledigt: 0 }
+
+// Placetel Call
+export const placetelCallItem = { id: "", user_id: "", placetel_call_id: "", type: "", from_number: "", response: null, unread: true }
+
+// Placetel Call Api Token
+export const placetelCallApiTokenItem = { id: "", token: "", created_at: "", updated_at: "" }

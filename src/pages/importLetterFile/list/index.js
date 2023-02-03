@@ -1,10 +1,10 @@
 // ** React Imports
 import { Fragment } from 'react'
 
-// ** Letter List Component
+// ** Import Letter File List Component
 import Table from './Table'
 
-const VoiceRecordingList = () => {
+const ImportLetterFileList = () => {
     return (
         <Fragment>
             <Table />
@@ -12,4 +12,4 @@ const VoiceRecordingList = () => {
     )
 }
 
-export default VoiceRecordingList
+export default ImportLetterFileList

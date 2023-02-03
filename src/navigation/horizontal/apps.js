@@ -5,6 +5,7 @@ import {
   Mail,
   User,
   Send,
+  Phone,
   Codepen,
   FileText,
   Settings,
@@ -102,6 +103,12 @@ export default [
         title: 'Anfrage',
         icon: <MessageSquare size={20} />,
         navLink: `${adminRoot}/contact`
+      },
+      {
+        id: 'placetelCallApp',
+        title: 'Placetel Call',
+        icon: <Phone size={20} />,
+        navLink: `${adminRoot}/placetel-call`
       },
       {
         id: 'userApp',

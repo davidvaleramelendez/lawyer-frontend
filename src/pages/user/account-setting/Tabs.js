@@ -36,7 +36,7 @@ import SecurityTab from './SecurityTab'
 import LanguageLabels from './language-labels'
 import ImapTab from './ImapTab'
 import CompanySettingTab from './CompanySettingTab'
-import PdfApiKeyTab from './PdfApiKeyTab'
+import ApiTokenTab from './ApiTokenTab'
 
 const Tabs = ({
     active,
@@ -121,7 +121,7 @@ const Tabs = ({
                     <NavItem>
                         <NavLink active={active === "6"} onClick={() => toggleTab("6")}>
                             <Key size={14} className="me-50" />
-                            <span className="fw-bold d-none d-sm-block">{T('PDF Api')}</span>
+                            <span className="fw-bold d-none d-sm-block">{T('Api Token')}</span>
                         </NavLink>
                     </NavItem>
                 ) : null}
@@ -168,7 +168,7 @@ const Tabs = ({
 
                 {tabPermissionAccess(10) ? (
                     <TabPane tabId="6">
-                        <PdfApiKeyTab />
+                        <ApiTokenTab />
                     </TabPane>
                 ) : null}
             </TabContent>

@@ -90,6 +90,7 @@ export const TN_RECENT_DEVICE_LOGS = "recent_device_logs"
 export const TN_LETTER_TEMPLATE = "letter_template"
 export const TN_VOICE_RECORDING = "voice_recording"
 export const TN_IMPORT_LETTER_FILE = "import_letter_file"
+export const TN_PLACETEL_CALL = "placetel_call"
 /* /Total Number Titles */
 
 /* Continue Modal Status */

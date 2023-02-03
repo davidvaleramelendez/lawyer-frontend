@@ -82,6 +82,9 @@ const VoiceRecordingList = lazy(() => import('@src/pages/voiceRecording/list'))
 // Import Letter File
 const ImportLetterFileList = lazy(() => import('@src/pages/importLetterFile/list'))
 
+// Placetel Call
+const PlacetelCallList = lazy(() => import('@src/pages/placetelCall/list'))
+
 const AppRoutes = [
   /* Contact */
   {
@@ -470,6 +473,17 @@ const AppRoutes = [
     element: <ImportLetterFileList />,
     meta: {
       id: "importLetterFileApp",
+      restrictRole: [11]
+    }
+  },
+  /* /Import Letter File */
+
+  /* Import Letter File */
+  {
+    path: `${adminRoot}/placetel-call`,
+    element: <PlacetelCallList />,
+    meta: {
+      id: "placetelCallApp",
       restrictRole: [11]
     }
   }

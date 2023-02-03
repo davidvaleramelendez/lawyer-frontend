@@ -126,5 +126,13 @@ export const bookmarks = [
         title: 'Import Letter File',
         icon: "Mic",
         link: "import-letter-file"
+    },
+    {
+        bookmark_id: 17,
+        target: 'placetelCallApp',
+        is_bookmarked: 0,
+        title: 'Placetel Call',
+        icon: "Phone",
+        link: "placetel-call"
     }
 ]

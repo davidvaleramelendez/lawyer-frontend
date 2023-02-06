@@ -37,7 +37,7 @@ const PlacetelCallApiToken = () => {
     const [loadFirst, setLoadFirst] = useState(true)
 
     const ApiTokenSchema = yup.object({
-        token: yup.string().required('Token is required!')
+        token: yup.string().required(T('Token is required!'))
     }).required()
 
     /* Placeholder texts */
@@ -73,13 +73,13 @@ const PlacetelCallApiToken = () => {
     }, [store.actionFlag, loadFirst])
 
     /* Submitting placetel call api token data */
-    const onSubmitPdfApi = (values) => {
+    const onSubmit = (values) => {
         if (values) {
             const tokenData = {
                 token: values.token
             }
 
-            // console.log("onSubmitPdfApi >>> ", tokenData)
+            // console.log("onSubmit >>> ", tokenData)
             dispatch(updateUserLoader(false))
             dispatch(createUpdatePlacetelCallApiToken(tokenData))
         }
@@ -90,7 +90,7 @@ const PlacetelCallApiToken = () => {
         <Fragment>
             <Card>
                 <CardBody className="pt-1">
-                    <Form onSubmit={handleSubmit(onSubmitPdfApi)} autoComplete="off">
+                    <Form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
                         <Row>
                             <Col sm={12} className="mb-1">
                                 <Label className="form-label" for="token">

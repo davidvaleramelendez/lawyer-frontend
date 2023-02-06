@@ -88,3 +88,6 @@ export const placetelCallItem = { id: "", user_id: "", placetel_call_id: "", typ
 
 // Placetel Call Api Token
 export const placetelCallApiTokenItem = { id: "", token: "", created_at: "", updated_at: "" }
+
+// Dropbox Api Token
+export const dropboxApiTokenItem = { id: "", client_id: "", secret: "", token: "", access_type: "" }

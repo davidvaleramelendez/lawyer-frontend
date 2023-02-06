@@ -18,6 +18,7 @@ import {
 // ** Api token components
 import PdfApiToken from './PdfApiToken'
 import PlacetelCallApiToken from './PlacetelCallApiToken'
+import DropboxApiToken from './DropboxApiToken'
 
 // ** Translation
 import { T } from '@localization'
@@ -35,6 +36,7 @@ const ApiTokenTab = () => {
                         <TabList>
                             <Tab>{T("PDF")}</Tab>
                             <Tab>{T("Placetel Call")}</Tab>
+                            <Tab>{T("Dropbox")}</Tab>
                         </TabList>
 
                         <TabPanel>
@@ -43,6 +45,10 @@ const ApiTokenTab = () => {
 
                         <TabPanel>
                             <PlacetelCallApiToken />
+                        </TabPanel>
+
+                        <TabPanel>
+                            <DropboxApiToken />
                         </TabPanel>
                     </Tabs>
                 </CardBody>

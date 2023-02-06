@@ -317,6 +317,14 @@ export const API_ENDPOINTS = {
         createUpdate: `/api/admin/placetel-call-api-token/create_update`,
         detail: `/api/admin/placetel-call-api-token/detail`,
         delete: `/api/admin/placetel-call-api-token/delete`
-    }
+    },
     /* /Placetel Call Api Token */
+
+    /* Dropbox Api Token */
+    dropboxTokenApis: {
+        createUpdate: `/api/admin/dropbox-api-token/create_update`,
+        detail: `/api/admin/dropbox-api-token/detail`,
+        delete: `/api/admin/dropbox-api-token/delete`
+    }
+    /* /Dropbox Api Token */
 }

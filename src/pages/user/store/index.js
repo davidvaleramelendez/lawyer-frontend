@@ -14,6 +14,7 @@ import {
   pdfApiItem,
   accountItem,
   companyItem,
+  dropboxApiTokenItem,
   placetelCallApiTokenItem
 } from '@constant/reduxConstant'
 
@@ -366,6 +367,7 @@ export const getAccountSetting = createAsyncThunk('appUser/getAccountSetting', a
         accountItem: response.data.account,
         pdfApiItem: pdfApiItem,
         placetelCallApiTokenItem: placetelCallApiTokenItem,
+        dropboxApiTokenItem: dropboxApiTokenItem,
         imapItem: response.data.imap,
         actionFlag: "ACCOUNT_SETTING",
         success: "",
@@ -378,6 +380,7 @@ export const getAccountSetting = createAsyncThunk('appUser/getAccountSetting', a
         accountItem: accountItem,
         pdfApiItem: pdfApiItem,
         placetelCallApiTokenItem: placetelCallApiTokenItem,
+        dropboxApiTokenItem: dropboxApiTokenItem,
         imapItem: imapItem,
         actionFlag: "",
         success: "",
@@ -392,6 +395,7 @@ export const getAccountSetting = createAsyncThunk('appUser/getAccountSetting', a
       accountItem: accountItem,
       pdfApiItem: pdfApiItem,
       placetelCallApiTokenItem: placetelCallApiTokenItem,
+      dropboxApiTokenItem: dropboxApiTokenItem,
       imapItem: imapItem,
       actionFlag: "",
       success: "",
@@ -780,7 +784,7 @@ export const createUpdatePdfApi = createAsyncThunk('appUser/createUpdatePdfApi',
 })
 /* /Pdf Api */
 
-/* Pdf Api */
+/* Placetel Call Api Token */
 async function getPlacetelCallApiTokenDetailRequest(params) {
   return axios.get(`${API_ENDPOINTS.placetelCallTokenApis.detail}`, { params }).then((user) => user.data).catch((error) => error)
 }
@@ -846,7 +850,75 @@ export const createUpdatePlacetelCallApiToken = createAsyncThunk('appUser/create
     }
   }
 })
-/* /Pdf Api */
+/* /Placetel Call Api Token */
+
+/* Dropbox Api Token */
+async function getDropboxApiTokenDetailRequest(params) {
+  return axios.get(`${API_ENDPOINTS.dropboxTokenApis.detail}`, { params }).then((user) => user.data).catch((error) => error)
+}
+
+export const getDropboxApiTokenDetail = createAsyncThunk('appUser/getDropboxApiTokenDetail', async (params) => {
+  try {
+    const response = await getDropboxApiTokenDetailRequest(params)
+    if (response && response.flag) {
+      return {
+        dropboxApiTokenItem: response.data || dropboxApiTokenItem,
+        actionFlag: "DROPBOX_API_TOKEN_DETAIL",
+        success: "",
+        error: ""
+      }
+    } else {
+      return {
+        dropboxApiTokenItem: dropboxApiTokenItem,
+        actionFlag: "",
+        success: "",
+        error: ""
+      }
+    }
+  } catch (error) {
+    console.log("getDropboxApiTokenDetail catch ", error)
+    return {
+      dropboxApiTokenItem: dropboxApiTokenItem,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function createUpdateDropboxApiTokenRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.dropboxTokenApis.createUpdate}`, payload).then((user) => user.data).catch((error) => error)
+}
+
+export const createUpdateDropboxApiToken = createAsyncThunk('appUser/createUpdateDropboxApiToken', async (payload) => {
+  try {
+    const response = await createUpdateDropboxApiTokenRequest(payload)
+    if (response && response.flag) {
+      return {
+        dropboxApiTokenItem: response.data || dropboxApiTokenItem,
+        actionFlag: "DROPBOX_API_TOKEN_DETAIL",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        dropboxApiTokenItem: dropboxApiTokenItem,
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("createUpdateDropboxApiToken catch ", error)
+    return {
+      dropboxApiTokenItem: dropboxApiTokenItem,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+/* /Dropbox Api Token */
 
 export const appUserSlice = createSlice({
   name: 'appUser',
@@ -865,6 +937,7 @@ export const appUserSlice = createSlice({
     companyItem: companyItem,
     pdfApiItem: pdfApiItem,
     placetelCallApiTokenItem: placetelCallApiTokenItem,
+    dropboxApiTokenItem: dropboxApiTokenItem,
     permissions: [],
     roleItems: [],
     pagination: null,
@@ -968,6 +1041,7 @@ export const appUserSlice = createSlice({
         state.accountItem = action.payload.accountItem
         state.pdfApiItem = action.payload.pdfApiItem
         state.placetelCallApiTokenItem = action.payload.placetelCallApiTokenItem
+        state.dropboxApiTokenItem = action.payload.dropboxApiTokenItem
         state.imapItem = action.payload.imapItem
         state.actionFlag = action.payload.actionFlag
         state.loading = true
@@ -1079,7 +1153,24 @@ export const appUserSlice = createSlice({
         state.success = action.payload.success
         state.error = action.payload.error
       })
-    /* /Placetel Call Api Token */
+      /* /Placetel Call Api Token */
+
+      /* Dropbox Api Token */
+      .addCase(getDropboxApiTokenDetail.fulfilled, (state, action) => {
+        state.dropboxApiTokenItem = action.payload.dropboxApiTokenItem
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(createUpdateDropboxApiToken.fulfilled, (state, action) => {
+        state.dropboxApiTokenItem = action.payload.dropboxApiTokenItem
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+    /* /Dropbox Api Token */
   }
 })
 

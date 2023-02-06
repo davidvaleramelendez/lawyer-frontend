@@ -297,12 +297,48 @@ export const fetchIncomingCallsApi = createAsyncThunk('appPlacetelCall/fetchInco
     }
 })
 
+/* Placetel Api Sipuid */
+async function initiatePlacetelCallRequest(payload) {
+    return axios.post(`${API_ENDPOINTS.placetelApiSipuids.initiateCall}`, payload).then((placetelCall) => placetelCall.data).catch((error) => error)
+}
+
+export const initiatePlacetelCall = createAsyncThunk('appPlacetelCall/initiatePlacetelCall', async (payload) => {
+    try {
+        const response = await initiatePlacetelCallRequest(payload)
+        if (response && response.flag) {
+            return {
+                initiatedCallItem: response.data || placetelCallItem,
+                actionFlag: "PLACETEL_CALL_INITIATED",
+                success: response.message,
+                error: ""
+            }
+        } else {
+            return {
+                initiatedCallItem: placetelCallItem,
+                actionFlag: "",
+                success: "",
+                error: response.message
+            }
+        }
+    } catch (error) {
+        console.log("initiatePlacetelCall catch ", error)
+        return {
+            initiatedCallItem: placetelCallItem,
+            actionFlag: "",
+            success: "",
+            error: error
+        }
+    }
+})
+/* /Placetel Api Sipuid */
+
 export const appPlacetelCallSlice = createSlice({
     name: 'appPlacetelCall',
     initialState: {
         params: {},
         placetelCallStatsCount: null,
         placetelCallItem: placetelCallItem,
+        initiatedCallItem: placetelCallItem,
         placetelCallItems: [],
         selectedPlacetelCallIds: [],
         pagination: null,
@@ -318,6 +354,10 @@ export const appPlacetelCallSlice = createSlice({
 
         setPlacetelCallItem: (state, action) => {
             state.placetelCallItem = action.payload || placetelCallItem
+        },
+
+        setInitiateCallItem: (state, action) => {
+            state.initiatedCallItem = action.payload || placetelCallItem
         },
 
         setSelectedPlacetelCallIds: (state, action) => {
@@ -387,6 +427,16 @@ export const appPlacetelCallSlice = createSlice({
                 state.success = action.payload.success
                 state.error = action.payload.error
             })
+
+            /* Placetel Api Sipuid */
+            .addCase(initiatePlacetelCall.fulfilled, (state, action) => {
+                state.initiatedCallItem = action.payload.initiatedCallItem
+                state.actionFlag = action.payload.actionFlag
+                state.loading = true
+                state.success = action.payload.success
+                state.error = action.payload.error
+            })
+        /* /Placetel Api Sipuid */
     }
 })
 
@@ -394,7 +444,8 @@ export const {
     setSelectedPlacetelCallIds,
     clearPlacetelCallMessage,
     updatePlacetelCallLoader,
-    setPlacetelCallItem
+    setPlacetelCallItem,
+    setInitiateCallItem
 } = appPlacetelCallSlice.actions
 
 export default appPlacetelCallSlice.reducer

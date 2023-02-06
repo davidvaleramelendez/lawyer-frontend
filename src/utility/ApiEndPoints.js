@@ -325,6 +325,16 @@ export const API_ENDPOINTS = {
         createUpdate: `/api/admin/dropbox-api-token/create_update`,
         detail: `/api/admin/dropbox-api-token/detail`,
         delete: `/api/admin/dropbox-api-token/delete`
-    }
+    },
     /* /Dropbox Api Token */
+
+    /* Placetel Api Sipuid */
+    placetelApiSipuids: {
+        list: `/api/admin/placetel-api-sip-user/list`,
+        createUpdate: `/api/admin/placetel-api-sip-user/create_update`,
+        detail: `/api/admin/placetel-api-sip-user/detail`,
+        delete: `/api/admin/placetel-api-sip-user/delete`,
+        initiateCall: `/api/admin/placetel-api-sip-user/initiate/call`
+    }
+    /* /Placetel Api Sipuid */
 }

@@ -15,6 +15,7 @@ import {
   accountItem,
   companyItem,
   dropboxApiTokenItem,
+  placetelSipUserIdItem,
   placetelCallApiTokenItem
 } from '@constant/reduxConstant'
 
@@ -368,6 +369,7 @@ export const getAccountSetting = createAsyncThunk('appUser/getAccountSetting', a
         pdfApiItem: pdfApiItem,
         placetelCallApiTokenItem: placetelCallApiTokenItem,
         dropboxApiTokenItem: dropboxApiTokenItem,
+        placetelSipUserIdItem: placetelSipUserIdItem,
         imapItem: response.data.imap,
         actionFlag: "ACCOUNT_SETTING",
         success: "",
@@ -381,6 +383,7 @@ export const getAccountSetting = createAsyncThunk('appUser/getAccountSetting', a
         pdfApiItem: pdfApiItem,
         placetelCallApiTokenItem: placetelCallApiTokenItem,
         dropboxApiTokenItem: dropboxApiTokenItem,
+        placetelSipUserIdItem: placetelSipUserIdItem,
         imapItem: imapItem,
         actionFlag: "",
         success: "",
@@ -396,6 +399,7 @@ export const getAccountSetting = createAsyncThunk('appUser/getAccountSetting', a
       pdfApiItem: pdfApiItem,
       placetelCallApiTokenItem: placetelCallApiTokenItem,
       dropboxApiTokenItem: dropboxApiTokenItem,
+      placetelSipUserIdItem: placetelSipUserIdItem,
       imapItem: imapItem,
       actionFlag: "",
       success: "",
@@ -920,6 +924,107 @@ export const createUpdateDropboxApiToken = createAsyncThunk('appUser/createUpdat
 })
 /* /Dropbox Api Token */
 
+/* Placetel Sip User Id */
+async function getPlacetelSipUserIdListRequest(params) {
+  return axios.get(`${API_ENDPOINTS.placetelApiSipuids.list}`, { params }).then((user) => user.data).catch((error) => error)
+}
+
+export const getPlacetelSipUserIdList = createAsyncThunk('appUser/getPlacetelSipUserIdList', async (params) => {
+  try {
+    const response = await getPlacetelSipUserIdListRequest(params)
+    if (response && response.flag) {
+      return {
+        placetelSipUserIdItems: response.data || [],
+        actionFlag: "PLACETEL_SIP_USERID_LIST",
+        success: "",
+        error: ""
+      }
+    } else {
+      return {
+        placetelSipUserIdItems: [],
+        actionFlag: "",
+        success: "",
+        error: ""
+      }
+    }
+  } catch (error) {
+    console.log("getPlacetelSipUserIdList catch ", error)
+    return {
+      placetelSipUserIdItems: [],
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function getPlacetelSipUserIdDetailRequest(params) {
+  return axios.get(`${API_ENDPOINTS.placetelApiSipuids.detail}`, { params }).then((user) => user.data).catch((error) => error)
+}
+
+export const getPlacetelSipUserIdDetail = createAsyncThunk('appUser/getPlacetelSipUserIdDetail', async (params) => {
+  try {
+    const response = await getPlacetelSipUserIdDetailRequest(params)
+    if (response && response.flag) {
+      return {
+        placetelSipUserIdItem: response.data || placetelSipUserIdItem,
+        actionFlag: "PLACETEL_SIP_USERID_DETAIL",
+        success: "",
+        error: ""
+      }
+    } else {
+      return {
+        placetelSipUserIdItem: placetelSipUserIdItem,
+        actionFlag: "",
+        success: "",
+        error: ""
+      }
+    }
+  } catch (error) {
+    console.log("getPlacetelSipUserIdDetail catch ", error)
+    return {
+      placetelSipUserIdItem: placetelSipUserIdItem,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function createUpdatePlacetelSipUserIdRequest(payload) {
+  return axios.post(`${API_ENDPOINTS.placetelApiSipuids.createUpdate}`, payload).then((user) => user.data).catch((error) => error)
+}
+
+export const createUpdatePlacetelSipUserId = createAsyncThunk('appUser/createUpdatePlacetelSipUserId', async (payload) => {
+  try {
+    const response = await createUpdatePlacetelSipUserIdRequest(payload)
+    if (response && response.flag) {
+      return {
+        placetelSipUserIdItem: response.data || placetelSipUserIdItem,
+        actionFlag: "PLACETEL_SIP_USERID_DETAIL",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        placetelSipUserIdItem: placetelSipUserIdItem,
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("createUpdatePlacetelSipUserId catch ", error)
+    return {
+      placetelSipUserIdItem: placetelSipUserIdItem,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+/* /Placetel Sip User Id */
+
 export const appUserSlice = createSlice({
   name: 'appUser',
   initialState: {
@@ -938,6 +1043,8 @@ export const appUserSlice = createSlice({
     pdfApiItem: pdfApiItem,
     placetelCallApiTokenItem: placetelCallApiTokenItem,
     dropboxApiTokenItem: dropboxApiTokenItem,
+    placetelSipUserIdItem: placetelSipUserIdItem,
+    placetelSipUserIdItems: [],
     permissions: [],
     roleItems: [],
     pagination: null,
@@ -1042,6 +1149,7 @@ export const appUserSlice = createSlice({
         state.pdfApiItem = action.payload.pdfApiItem
         state.placetelCallApiTokenItem = action.payload.placetelCallApiTokenItem
         state.dropboxApiTokenItem = action.payload.dropboxApiTokenItem
+        state.placetelSipUserIdItem = action.payload.placetelSipUserIdItem
         state.imapItem = action.payload.imapItem
         state.actionFlag = action.payload.actionFlag
         state.loading = true
@@ -1170,7 +1278,31 @@ export const appUserSlice = createSlice({
         state.success = action.payload.success
         state.error = action.payload.error
       })
-    /* /Dropbox Api Token */
+      /* /Dropbox Api Token */
+
+      /* Placetel Sip User Id */
+      .addCase(getPlacetelSipUserIdList.fulfilled, (state, action) => {
+        state.placetelSipUserIdItems = action.payload.placetelSipUserIdItems
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(getPlacetelSipUserIdDetail.fulfilled, (state, action) => {
+        state.placetelSipUserIdItem = action.payload.placetelSipUserIdItem
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(createUpdatePlacetelSipUserId.fulfilled, (state, action) => {
+        state.placetelSipUserIdItem = action.payload.placetelSipUserIdItem
+        state.actionFlag = action.payload.actionFlag
+        state.loading = true
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+    /* /Placetel Sip User Id */
   }
 })
 

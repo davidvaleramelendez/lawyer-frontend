@@ -19,6 +19,7 @@ import {
     Info,
     Lock,
     User,
+    Phone,
     Settings
 } from 'react-feather'
 
@@ -37,6 +38,7 @@ import LanguageLabels from './language-labels'
 import ImapTab from './ImapTab'
 import CompanySettingTab from './CompanySettingTab'
 import ApiTokenTab from './ApiTokenTab'
+import PlacetelSipUserIdVoIP from './PlacetelSipUserIdVoIP'
 
 const Tabs = ({
     active,
@@ -125,6 +127,15 @@ const Tabs = ({
                         </NavLink>
                     </NavItem>
                 ) : null}
+
+                {tabPermissionAccess(10) ? (
+                    <NavItem>
+                        <NavLink active={active === "7"} onClick={() => toggleTab("7")}>
+                            <Phone size={14} className="me-50" />
+                            <span className="fw-bold d-none d-sm-block">{T('Placetel VoIP')}</span>
+                        </NavLink>
+                    </NavItem>
+                ) : null}
             </Nav>
 
             <TabContent activeTab={active}>
@@ -169,6 +180,12 @@ const Tabs = ({
                 {tabPermissionAccess(10) ? (
                     <TabPane tabId="6">
                         <ApiTokenTab />
+                    </TabPane>
+                ) : null}
+
+                {denyTabPermissionAccess(11) ? (
+                    <TabPane tabId="7">
+                        <PlacetelSipUserIdVoIP />
                     </TabPane>
                 ) : null}
             </TabContent>

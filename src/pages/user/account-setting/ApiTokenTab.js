@@ -35,7 +35,7 @@ const ApiTokenTab = () => {
                     <Tabs>
                         <TabList>
                             <Tab>{T("PDF")}</Tab>
-                            <Tab>{T("Placetel Call")}</Tab>
+                            <Tab>{T("Placetel Token")}</Tab>
                             <Tab>{T("Dropbox")}</Tab>
                         </TabList>
 

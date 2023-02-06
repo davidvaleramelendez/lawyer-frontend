@@ -242,7 +242,7 @@ const PlacetelCallList = () => {
             Notification(T("Error"), store.error, "warning")
         }
     }, [store.success, store.error, store.actionFlag, loadFirst])
-    console.log("store >>> ", store)
+    // console.log("store >>> ", store)
 
     const handleDelete = (id) => {
         MySwal.fire({

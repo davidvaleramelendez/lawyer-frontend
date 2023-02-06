@@ -37,7 +37,7 @@ const PlacetelCallApiToken = () => {
     const [loadFirst, setLoadFirst] = useState(true)
 
     const ApiTokenSchema = yup.object({
-        token: yup.string().required('Token is required!')
+        token: yup.string().required(T('Token is required!'))
     }).required()
 
     /* Placeholder texts */

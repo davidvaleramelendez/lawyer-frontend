@@ -465,6 +465,8 @@ export const L10nKeys = {
     Errors: 'Errors',
     IMAPInformation: 'IMAP information',
     PDFApi: 'PDF Api',
+    APIToken: 'API Token',
+    PDF: 'PDF',
     IMAPHost: 'IMAP Host',
     IMAPPort: 'IMAP Port',
     Secure: 'Secure',
@@ -589,21 +591,39 @@ export const L10nKeys = {
     WriteALetter: 'Write a letter',
     CreateLetter: 'Create Letter',
     UpdateLetter: 'Update Letter',
+
+    /* Voice Recording */
     VoiceRecording: "Voice Recording",
     SearchVoiceRecording: 'Search Voice Recording',
+    /* /Voice Recording */
 
+    /* Import Letter File */
     MoveToLetter: 'Move to Letter',
     ImportLetterFile: 'Import Letter File',
     ImportFile: 'Import File',
     SearchImportLetterFile: 'Search Import Letter File',
     DeadlineDateIsRequired: 'Deadline Date is required!',
+    /* /Import Letter File */
 
+    /* Placetel Call */
     PlacetelCall: "Placetel Call",
     SearchPlacetelCall: "Search Placetel Call",
     ReceivedCalls: "Received calls",
     MissedCall: "Missed call",
     BlockedCalls: "Blocked Calls",
-    VoiceMessages: "Voice messages"
+    VoiceMessages: "Voice messages",
+    /* /Placetel Call */
+
+    /* Dropbox */
+    Dropbox: "Dropbox",
+    Secret: "Secret",
+    Token: "Token",
+    AccessType: "Access Type",
+    ClientId: "Client Id",
+    SecretIsRequired: "Secret is required!",
+    TokenIsRequired: "Token is required!",
+    ClientIdIsRequired: "Client Id is required!"
+    /* /Dropbox */
 
 }
 
@@ -728,12 +748,7 @@ export const L10nOrgKeys = {
             'Country', 'SaveChange', 'Update', 'Account', 'Security'
         ],
         Account: [
-            'Account', 'Change', 'Username', 'UsernameIsRequired', 'NameIsRequired',
-            'InvalidUsername', 'EmailIsRequired', 'StatusIsRequired', 'SelectRole', 'RoleIsRequired', 'ChangePassword', 'NewPassword', 'NewPasswordIsRequired',
-            'Name', 'Company', 'Language', 'SaveChange', 'LanguageLabels', 'PasswordIsRequired',
-            'Menu', 'Pages', 'Common', 'Errors', 'IMAPInformation', 'PasswordMustBe6Digit',
-            'IMAPHost', 'IMAPPort', 'Secure', 'UseSSL', 'IMAPEmail', 'NewPasswordMustBe6Digit', 'RetypeNewPasswordisrequired', 'RetypeNewPasswordMustMatchWithNewPassword',
-            'IMAPPassword', 'Email', 'Contact', 'TranslationIsRequired', 'CurrentPassword', 'PDFApi', 'Key', 'KeyIsRequired'
+            'Account', 'Change', 'Username', 'UsernameIsRequired', 'NameIsRequired', 'InvalidUsername', 'EmailIsRequired', 'StatusIsRequired', 'SelectRole', 'RoleIsRequired', 'ChangePassword', 'NewPassword', 'NewPasswordIsRequired', 'Name', 'Company', 'Language', 'SaveChange', 'LanguageLabels', 'PasswordIsRequired', 'Menu', 'Pages', 'Common', 'Errors', 'IMAPInformation', 'PasswordMustBe6Digit', 'IMAPHost', 'IMAPPort', 'Secure', 'UseSSL', 'IMAPEmail', 'NewPasswordMustBe6Digit', 'RetypeNewPasswordisrequired', 'RetypeNewPasswordMustMatchWithNewPassword', 'IMAPPassword', 'Email', 'Contact', 'TranslationIsRequired', 'CurrentPassword', 'PDFApi', 'Key', 'KeyIsRequired', 'PDF', 'APIToken', 'Dropbox', 'ClientId', 'Secret', 'Token', 'AccessType', 'SecretIsRequired', 'TokenIsRequired', 'ClientIdIsRequired'
         ],
         'Email Template': [
             'Show', 'AddEmailTemplate', 'EditEmailTemplate', 'Search', 'SearchEmailTemplate',

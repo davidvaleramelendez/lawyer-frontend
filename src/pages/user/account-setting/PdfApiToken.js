@@ -37,7 +37,7 @@ const PdfApiToken = () => {
     const [loadFirst, setLoadFirst] = useState(true)
 
     const PdfApiSchema = yup.object({
-        key: yup.string().required('Key is required!')
+        key: yup.string().required(T('Key is required!'))
     }).required()
 
     /* Placeholder texts */

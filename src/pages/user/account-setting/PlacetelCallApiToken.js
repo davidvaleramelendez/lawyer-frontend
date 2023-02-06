@@ -42,7 +42,7 @@ const PlacetelCallApiToken = () => {
 
     /* Placeholder texts */
     const PlaceholderSchema = {
-        token: "Token"
+        token: T("Token")
     }
 
     const {

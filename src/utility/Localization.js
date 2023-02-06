@@ -607,11 +607,15 @@ export const L10nKeys = {
 
     /* Placetel Call */
     PlacetelCall: "Placetel Call",
+    PlacetelToken: "Placetel Token",
+    SipUserId: "Sip User Id",
+    PlacetelVoIP: "Placetel VoIP",
     SearchPlacetelCall: "Search Placetel Call",
     ReceivedCalls: "Received calls",
     MissedCall: "Missed call",
     BlockedCalls: "Blocked Calls",
     VoiceMessages: "Voice messages",
+    SipUserIdIsRequired: "Sip User Id is required!",
     /* /Placetel Call */
 
     /* Dropbox */
@@ -748,7 +752,7 @@ export const L10nOrgKeys = {
             'Country', 'SaveChange', 'Update', 'Account', 'Security'
         ],
         Account: [
-            'Account', 'Change', 'Username', 'UsernameIsRequired', 'NameIsRequired', 'InvalidUsername', 'EmailIsRequired', 'StatusIsRequired', 'SelectRole', 'RoleIsRequired', 'ChangePassword', 'NewPassword', 'NewPasswordIsRequired', 'Name', 'Company', 'Language', 'SaveChange', 'LanguageLabels', 'PasswordIsRequired', 'Menu', 'Pages', 'Common', 'Errors', 'IMAPInformation', 'PasswordMustBe6Digit', 'IMAPHost', 'IMAPPort', 'Secure', 'UseSSL', 'IMAPEmail', 'NewPasswordMustBe6Digit', 'RetypeNewPasswordisrequired', 'RetypeNewPasswordMustMatchWithNewPassword', 'IMAPPassword', 'Email', 'Contact', 'TranslationIsRequired', 'CurrentPassword', 'PDFApi', 'Key', 'KeyIsRequired', 'PDF', 'APIToken', 'Dropbox', 'ClientId', 'Secret', 'Token', 'AccessType', 'SecretIsRequired', 'TokenIsRequired', 'ClientIdIsRequired'
+            'Account', 'Change', 'Username', 'UsernameIsRequired', 'NameIsRequired', 'InvalidUsername', 'EmailIsRequired', 'StatusIsRequired', 'SelectRole', 'RoleIsRequired', 'ChangePassword', 'NewPassword', 'NewPasswordIsRequired', 'Name', 'Company', 'Language', 'SaveChange', 'LanguageLabels', 'PasswordIsRequired', 'Menu', 'Pages', 'Common', 'Errors', 'IMAPInformation', 'PasswordMustBe6Digit', 'IMAPHost', 'IMAPPort', 'Secure', 'UseSSL', 'IMAPEmail', 'NewPasswordMustBe6Digit', 'RetypeNewPasswordisrequired', 'RetypeNewPasswordMustMatchWithNewPassword', 'IMAPPassword', 'Email', 'Contact', 'TranslationIsRequired', 'CurrentPassword', 'PDFApi', 'Key', 'KeyIsRequired', 'PDF', 'APIToken', 'Dropbox', 'ClientId', 'Secret', 'Token', 'AccessType', 'SecretIsRequired', 'TokenIsRequired', 'ClientIdIsRequired', 'PlacetelToken', 'PlacetelVoIP', 'SipUserId', 'SipUserIdIsRequired'
         ],
         'Email Template': [
             'Show', 'AddEmailTemplate', 'EditEmailTemplate', 'Search', 'SearchEmailTemplate',

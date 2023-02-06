@@ -36,6 +36,8 @@ import {
 import {
     deletePlacetelCall,
     getPlacetelCallList,
+    setInitiateCallItem,
+    initiatePlacetelCall,
     fetchIncomingCallsApi,
     updatePlacetelCallLoader,
     clearPlacetelCallMessage,
@@ -47,6 +49,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // ** Icons Import
 import {
+    Phone,
     Trash2,
     RefreshCw
 } from 'react-feather'
@@ -60,6 +63,9 @@ import DatatablePagination from '@components/datatable/DatatablePagination'
 // ** Third Party Components
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+
+// ** Modal
+import ModalPlacetelInitiatedCall from '../modals/ModalPlacetelInitiatedCall'
 
 // ** Default Avatar Image
 import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
@@ -175,6 +181,7 @@ const PlacetelCallList = () => {
 
     // ** States
     const [loadFirst, setLoadFirst] = useState(true)
+    const [modalOpen, setModalOpen] = useState(false)
     const [searchInput, setSearchInput] = useState('')
     const [sort, setSort] = useState('desc')
     const [sortColumn, setSortColumn] = useState('id')
@@ -227,6 +234,12 @@ const PlacetelCallList = () => {
             setLoadFirst(false)
         }
 
+        /* Opening initiated call modal */
+        // if (store && store.actionFlag && (store.actionFlag === "PLACETEL_CALL_INITIATED")) {
+        //     setModalOpen(true)
+        // }
+        /* /Opening initiated call modal */
+
         /* For blank message api called inside */
         if (store && (store.success || store.error || store.actionFlag)) {
             dispatch(clearPlacetelCallMessage())
@@ -243,6 +256,29 @@ const PlacetelCallList = () => {
         }
     }, [store.success, store.error, store.actionFlag, loadFirst])
     // console.log("store >>> ", store)
+
+    const handleInitiateCall = (item) => {
+        MySwal.fire({
+            title: item.from_number || "",
+            text: T("Are you sure want to initiate call!"),
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: T('Yes'),
+            customClass: {
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-outline-danger ms-1'
+            },
+            buttonsStyling: false
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                dispatch(setInitiateCallItem({ ...item, status: "processing" }))
+                setModalOpen(true)
+                dispatch(initiatePlacetelCall({
+                    id: item.id || ""
+                }))
+            }
+        })
+    }
 
     const handleDelete = (id) => {
         MySwal.fire({
@@ -451,11 +487,21 @@ const PlacetelCallList = () => {
             minWidth: "10%",
             cell: (row) => (
                 <div className='column-action d-flex align-items-center'>
+                    <Phone
+                        size={17}
+                        id={`pw-phone-tooltip-${row.id}`}
+                        onClick={() => handleInitiateCall(row)}
+                        className='cursor-pointer mb-0'
+                    />
+                    <UncontrolledTooltip placement="top" target={`pw-phone-tooltip-${row.id}`}>
+                        {T('Initiate Call')}
+                    </UncontrolledTooltip>
+
                     <Trash2
                         size={17}
                         id={`pw-delete-tooltip-${row.id}`}
                         onClick={() => handleDelete(row.id)}
-                        className='cursor-pointer mb-0'
+                        className='cursor-pointer mb-0 ms-50'
                     />
                     <UncontrolledTooltip placement="top" target={`pw-delete-tooltip-${row.id}`}>
                         {T('Delete')}
@@ -508,6 +554,12 @@ const PlacetelCallList = () => {
                         }
                     />
                 )}
+
+                <ModalPlacetelInitiatedCall
+                    toggleModal={() => setModalOpen(!modalOpen)}
+                    open={modalOpen}
+                    initiatedCallItem={store.initiatedCallItem}
+                />
             </Card>
         </Fragment>
     ) : null

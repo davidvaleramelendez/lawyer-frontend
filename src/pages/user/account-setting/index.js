@@ -9,7 +9,9 @@ import { T } from '@localization'
 import {
   getCompanyDetail,
   getAccountSetting,
-  clearUserMessage
+  clearUserMessage,
+  getPlacetelSipUserIdList,
+  getPlacetelSipUserIdDetail
 } from '@src/pages/user/store'
 import {
   getInquiryImapDetail
@@ -92,6 +94,8 @@ const AccountSettingApp = () => {
       dispatch(getAccountSetting({}))
       dispatch(getCompanyDetail({}))
       dispatch(getInquiryImapDetail({}))
+      dispatch(getPlacetelSipUserIdList({}))
+      dispatch(getPlacetelSipUserIdDetail({}))
       getLanguages()
       setSelLanguage(store.userItem.language)
       setLoadFirst(false)

@@ -106,6 +106,7 @@ export const getLetterTemplate = createAsyncThunk('appLetterTemplate/getLetterTe
             return {
                 id,
                 letterTemplateItem: response.data || letterTemplateItem,
+                downloadTemplatePath: null,
                 actionFlag: "EDIT_ITEM",
                 success: "",
                 error: ""
@@ -114,6 +115,7 @@ export const getLetterTemplate = createAsyncThunk('appLetterTemplate/getLetterTe
             return {
                 id,
                 letterTemplateItem: letterTemplateItem,
+                downloadTemplatePath: null,
                 actionFlag: "",
                 success: "",
                 error: ""
@@ -124,6 +126,7 @@ export const getLetterTemplate = createAsyncThunk('appLetterTemplate/getLetterTe
         return {
             id,
             letterTemplateItem: letterTemplateItem,
+            downloadTemplatePath: null,
             actionFlag: "",
             success: "",
             error: error
@@ -192,13 +195,51 @@ export const deleteLetterTemplate = createAsyncThunk('appLetterTemplate/deleteLe
     }
 })
 
+/* Letter */
+async function generateLetterTemplateDownloadRequest(payload) {
+    return axios.post(`${API_ENDPOINTS.letters.generateDownloadTemplate}`, payload).then((letters) => letters.data).catch((error) => error)
+}
+
+export const generateLetterTemplateDownload = createAsyncThunk('appLetterTemplate/generateLetterTemplateDownload', async (payload) => {
+    try {
+        const response = await generateLetterTemplateDownloadRequest(payload)
+        if (response && response.flag) {
+            return {
+                downloadTemplatePath: response.data,
+                actionFlag: "PATH_GENERATED",
+                success: response.message,
+                error: ""
+            }
+        } else {
+            return {
+                downloadTemplatePath: null,
+                actionFlag: "",
+                success: "",
+                error: response.message
+            }
+        }
+    } catch (error) {
+        console.log("generateLetterTemplateDownload catch ", error)
+        return {
+            downloadTemplatePath: null,
+            actionFlag: "",
+            success: "",
+            error: error
+        }
+    }
+})
+/* Letter */
+
 export const appLetterTemplateSlice = createSlice({
     name: 'appLetterTemplate',
     initialState: {
         params: {},
         letterTemplateItems: [],
         letterTemplateItem: letterTemplateItem,
+        sortCodeType: "",
+        sortCodeTypes: [{ id: "case", value: "Case" }, { id: "contact", value: "Contact" }, { id: "user", value: "User" }],
         sortCodes: [],
+        downloadTemplatePath: null,
         pagination: null,
         actionFlag: "",
         loading: false,
@@ -206,6 +247,67 @@ export const appLetterTemplateSlice = createSlice({
         error: ""
     },
     reducers: {
+        getSortCodes: (state, action) => {
+            const caseCode = [
+                { key: "[CaseID]", value: "Case id" },
+                { key: "[ContactID]", value: "Contact id" },
+                { key: "[LaywerID]", value: "Lawyer id" },
+                { key: "[CaseTypeID]", value: "Case type id" },
+                { key: "[CaseName]", value: "Case name" },
+                { key: "[Date]", value: "Case date" },
+                { key: "[Status]", value: "Case status" }
+            ]
+            const contactCode = [
+                { key: "[ContactID]", value: "Contact id" },
+                { key: "[ContactName]", value: "Name" },
+                { key: "[ContactEmail]", value: "Email" },
+                { key: "[Subject]", value: "Subject" },
+                { key: "[PhoneNo]", value: "Phone no" },
+                { key: "[IsCase]", value: "Iscase converted into case or not" },
+                { key: "[message_id]", value: "" }
+            ]
+
+            const userCode = [
+                { key: "[name]", value: "Name" },
+                { key: "[email]", value: "Email" },
+                { key: "[Status]", value: "Status" },
+                { key: "[Contact]", value: "Contact number" },
+                { key: "[Company]", value: "Company name" },
+                { key: "[DOB]", value: "Date of birth" },
+                { key: "[Gender]", value: "Gender" },
+                { key: "[Address]", value: "Address 1" },
+                { key: "[Address1]", value: "Address 2" },
+                { key: "[Postcode]", value: "Postal code" },
+                { key: "[City]", value: "City" },
+                { key: "[State]", value: "State" },
+                { key: "[Country]", value: "Country" }
+            ]
+
+            if (action.payload.type && (action.payload.sortCodeTypes && action.payload.sortCodeTypes.length)) {
+                const index = action.payload.sortCodeTypes.findIndex(x => x.id === action.payload.type)
+                if (index !== -1) {
+                    state.sortCodeType = action.payload.sortCodeTypes[index].value
+
+                    if (action.payload.type === action.payload.sortCodeTypes[0].id) {
+                        state.sortCodes = caseCode
+                    }
+
+                    if (action.payload.type === action.payload.sortCodeTypes[1].id) {
+                        state.sortCodes = contactCode
+                    }
+
+                    if (action.payload.type === action.payload.sortCodeTypes[2].id) {
+                        state.sortCodes = userCode
+                    }
+                }
+            }
+        },
+
+        clearSortCode: (state, action) => {
+            state.sortCodeType = ""
+            state.sortCodes = action.payload || []
+        },
+
         updateLetterTemplateLoader: (state, action) => {
             state.loading = action.payload || false
         },
@@ -236,6 +338,7 @@ export const appLetterTemplateSlice = createSlice({
             })
             .addCase(getLetterTemplate.fulfilled, (state, action) => {
                 state.letterTemplateItem = action.payload.letterTemplateItem
+                state.downloadTemplatePath = action.payload.downloadTemplatePath
                 state.actionFlag = action.payload.actionFlag
                 state.loading = true
                 state.success = action.payload.success
@@ -253,10 +356,22 @@ export const appLetterTemplateSlice = createSlice({
                 state.success = action.payload.success
                 state.error = action.payload.error
             })
+
+            /* Letter */
+            .addCase(generateLetterTemplateDownload.fulfilled, (state, action) => {
+                state.downloadTemplatePath = action.payload.downloadTemplatePath
+                state.actionFlag = action.payload.actionFlag
+                state.loading = true
+                state.success = action.payload.success
+                state.error = action.payload.error
+            })
+        /* /Letter */
     }
 })
 
 export const {
+    getSortCodes,
+    clearSortCode,
     updateLetterTemplateLoader,
     clearLetterTemplateMessage
 } = appLetterTemplateSlice.actions

@@ -558,7 +558,9 @@ const PlacetelCallList = () => {
                 <ModalPlacetelInitiatedCall
                     toggleModal={() => setModalOpen(!modalOpen)}
                     open={modalOpen}
+                    dispatch={dispatch}
                     initiatedCallItem={store.initiatedCallItem}
+                    setInitiateCallItem={setInitiateCallItem}
                 />
             </Card>
         </Fragment>

@@ -91,8 +91,8 @@ const CaseLetterEdit = () => {
 
     /* Validation schema */
     const LetterSchema = yup.object({
-        subject: yup.string().required(T('Subject is required!')),
-        best_regards: yup.string().required(T('Best Regards is required!'))
+        subject: yup.string().required(T('Subject is required!')).nullable(),
+        best_regards: yup.string().required(T('Best Regards is required!')).nullable()
     }).required()
     /* /Validation schema */
 
@@ -153,7 +153,7 @@ const CaseLetterEdit = () => {
     const handleUpdateData = async () => {
         const letterItem = { ...letterStore.letterItem }
         if (letterItem && letterItem.message) {
-            letterItem.content = await getInitialHTML(letterItem.message)
+            await getInitialHTML(letterItem.message)
         }
 
         if (letterItem && letterItem.status) {
@@ -162,6 +162,7 @@ const CaseLetterEdit = () => {
 
         letterItem.fristDate = getTransformDate(new Date(), "YYYY-MM-DD")
         letterItem.created_date = getTransformDate(new Date(), "YYYY-MM-DD")
+        letterItem.best_regards = letterItem.best_regards ?? ""
 
         if (letterItem && letterItem.frist_date) {
             letterItem.fristDate = getTransformDate(letterItem.frist_date, "YYYY-MM-DD")

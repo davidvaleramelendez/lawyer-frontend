@@ -16,11 +16,17 @@ import { T } from '@localization'
 
 const ModalPlacetelInitiatedCall = ({
     open,
+    dispatch,
     toggleModal,
-    initiatedCallItem
+    initiatedCallItem,
+    setInitiateCallItem
 }) => {
     const handleReset = () => {
         toggleModal()
+    }
+
+    const handleSidebarClosed = () => {
+        dispatch(setInitiateCallItem(null))
     }
 
     useEffect(() => {
@@ -33,6 +39,7 @@ const ModalPlacetelInitiatedCall = ({
                 isOpen={open}
                 backdrop="static"
                 toggle={handleReset}
+                onClosed={handleSidebarClosed}
                 className="modal-dialog-centered modal-md"
             >
                 <ModalHeader toggle={handleReset}>{T("Initiated call")} {(initiatedCallItem && initiatedCallItem.from_number) || ""}</ModalHeader>

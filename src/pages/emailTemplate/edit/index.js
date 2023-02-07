@@ -65,6 +65,7 @@ import withReactContent from 'sweetalert2-react-content'
 
 // ** Utils
 import {
+    htmlToString,
     isUserLoggedIn,
     getWebPreviewUrl
 } from '@utils'
@@ -106,11 +107,6 @@ const EmailTemplateEdit = () => {
 
     const EmailTemplateSchema = yup.object({
         subject: yup.string().required(T('Subject is required!')),
-        template: yup.object().shape({
-            blocks: yup.array().of(yup.object().shape({
-                text: yup.string().required(T('Content is required!'))
-            }).required(T('Content is required!')).nullable())
-        }).required(T('Content is required!')).nullable(),
         status: yup.object().required(T(`Status is required!`)).nullable()
     }).required()
 
@@ -437,7 +433,11 @@ const EmailTemplateEdit = () => {
                                     />
                                 )}
                             />
-                            <FormFeedback className="d-block">{errors.template?.message || (errors.template?.blocks && errors.template.blocks[0]?.text?.message)}</FormFeedback>
+                            {!htmlToString(editorHtmlContent.trim()) ? (
+                                <FormFeedback className="d-block">{T("Content is required!")}</FormFeedback>
+                            ) : (
+                                <FormFeedback className="d-block">{errors.template?.message}</FormFeedback>
+                            )}
                         </Col>
 
                         <Col md={6} sm={12} className="mb-1">

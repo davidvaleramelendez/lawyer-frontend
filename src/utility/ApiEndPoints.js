@@ -216,7 +216,8 @@ export const API_ENDPOINTS = {
         list: `/api/admin/letter/get_list`,
         view: `/api/admin/letter`,
         archive: `/api/admin/letter/update_archived`,
-        updateStatus: `/api/admin/letter/update_status`
+        updateStatus: `/api/admin/letter/update_status`,
+        generateDownloadTemplate: `/api/admin/case/letter/template/download/generate`
     },
     /* /Letter module */
 

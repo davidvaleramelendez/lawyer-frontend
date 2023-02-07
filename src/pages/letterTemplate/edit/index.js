@@ -16,17 +16,27 @@ import {
     CardBody,
     CardTitle,
     CardHeader,
-    FormFeedback
+    FormFeedback,
+    UncontrolledTooltip
 } from 'reactstrap'
 import { useForm, Controller } from 'react-hook-form'
 import * as yup from "yup"
 import { yupResolver } from '@hookform/resolvers/yup'
+
+// ** Icons Import
+import {
+    User,
+    Briefcase,
+    MessageSquare
+} from 'react-feather'
 
 // ** React Dropdown Import
 import Select from 'react-select'
 
 // ** Store & Actions
 import {
+    getSortCodes,
+    clearSortCode,
     getLetterTemplate,
     updateLetterTemplate,
     updateLetterTemplateLoader,
@@ -63,6 +73,9 @@ import {
     statusOptions
 } from '@constant/defaultValues'
 
+// ** Modal
+import ModalEmailSortCodes from '../modals/ModalEmailSortCodes'
+
 // ** Styles
 import '@styles/react/libs/editor/editor.scss'
 
@@ -81,6 +94,7 @@ const LetterTemplateEdit = () => {
 
     // ** States
     const [loadFirst, setLoadFirst] = useState(true)
+    const [modalOpen, setModalOpen] = useState(false)
     const [editorHtmlContent, setEditorHtmlContent] = useState("")
     const [editorStateContent, setEditorStateContent] = useState(null)
 
@@ -160,6 +174,11 @@ const LetterTemplateEdit = () => {
         setEditorHtmlContent('')
         setEditorStateContent(null)
         navigate(`${adminRoot}/letter-template`)
+    }
+
+    const handleOpenModal = (type) => {
+        setModalOpen(true)
+        dispatch(getSortCodes({ type: type, sortCodeTypes: store.sortCodeTypes }))
     }
 
     useEffect(() => {
@@ -264,7 +283,59 @@ const LetterTemplateEdit = () => {
 
                         <Col md={12} sm={12} className="mb-1">
                             <Label className="form-label w-100" for='content'>
-                                {T('Content')}
+                                <div className="d-flex justify-content-between">
+                                    <div className="me-1">{T('Content')}</div>
+                                    <div>
+                                        {T("Sort codes")} :
+
+                                        <Briefcase
+                                            size={17}
+                                            className="cursor-pointer ms-1"
+                                            id={`case-sortcodes-edit-${id}`}
+                                            onClick={() => handleOpenModal(store.sortCodeTypes[0].id || 'case')}
+                                        />
+                                        <UncontrolledTooltip
+                                            placement="top"
+                                            target={`case-sortcodes-edit-${id}`}
+                                        >
+                                            {T("Case")} {T("Sort codes")}
+                                        </UncontrolledTooltip>
+
+                                        <MessageSquare
+                                            size={17}
+                                            className="cursor-pointer ms-1"
+                                            id={`contact-sortcodes-edit-${id}`}
+                                            onClick={() => handleOpenModal(store.sortCodeTypes[1].id || 'contact')}
+                                        />
+                                        <UncontrolledTooltip
+                                            placement="top"
+                                            target={`contact-sortcodes-edit-${id}`}
+                                        >
+                                            {T("Contact")} {T("Sort codes")}
+                                        </UncontrolledTooltip>
+
+                                        <User
+                                            size={17}
+                                            className="cursor-pointer ms-1"
+                                            id={`user-sortcodes-edit-${id}`}
+                                            onClick={() => handleOpenModal(store.sortCodeTypes[2].id || 'user')}
+                                        />
+                                        <UncontrolledTooltip
+                                            placement="top"
+                                            target={`user-sortcodes-edit-${id}`}
+                                        >
+                                            {T("User")} {T("Sort codes")}
+                                        </UncontrolledTooltip>
+
+                                        <ModalEmailSortCodes
+                                            store={store}
+                                            open={modalOpen}
+                                            dispatch={dispatch}
+                                            clearSortCode={clearSortCode}
+                                            toggleModal={() => setModalOpen(!modalOpen)}
+                                        />
+                                    </div>
+                                </div>
                             </Label>
                             <Controller
                                 defaultValue={null}

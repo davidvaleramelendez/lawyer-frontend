@@ -5,13 +5,13 @@ import { useNavigate, useParams } from 'react-router-dom'
 // ** Store & Actions
 import {
     getLetterTemplate,
-    clearLetterTemplateMessage
+    clearLetterTemplateMessage,
+    updateLetterTemplateLoader,
+    generateLetterTemplateDownload
 } from '@src/pages/letterTemplate/store'
 import { getCompanyDetail } from '@src/pages/user/store'
 import {
     getCaseView,
-    createCaseLetter,
-    updateCaseLoader,
     clearCaseMessage
 } from '@src/pages/case/store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -37,7 +37,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import {
     htmlToString,
     isUserLoggedIn,
-    getTransformDate
+    getTransformDate,
+    getWebPreviewUrl
 } from '@utils'
 
 // ** Custom Components
@@ -75,7 +76,7 @@ import '@styles/react/libs/flatpickr/flatpickr.scss'
 // ** Translation
 import { T } from '@localization'
 
-const CaseLetterAdd = () => {
+const CaseLetterDownload = () => {
     // ** Hooks
     const { caseId, letterTemplateId } = useParams()
     const navigate = useNavigate()
@@ -204,6 +205,20 @@ const CaseLetterAdd = () => {
         setEditorStateContent(null)
     }
 
+    /* Rendering file preview web url */
+    const renderFileWebUrlPreview = (path) => {
+        if (path) {
+            return getWebPreviewUrl(path)
+        }
+
+        return false
+    }
+    /* /Rendering file preview web url */
+
+    const handleDownloadFile = (path = "") => {
+        window.open(renderFileWebUrlPreview(path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`, '_blank', 'noopener,noreferrer')
+    }
+
     useEffect(() => {
         /* if user not logged then navigate */
         if (isUserLoggedIn() === null) {
@@ -226,6 +241,11 @@ const CaseLetterAdd = () => {
         /* For reset form data */
         if (store && store.actionFlag && store.actionFlag === "EDIT_ITEM") {
             handleUpdateData()
+        }
+
+        if (store && store.actionFlag && store.actionFlag === "PATH_GENERATED") {
+            handleDownloadFile(store.downloadTemplatePath)
+            handleBackCase()
         }
 
         /* For blank message api called inside */
@@ -256,6 +276,7 @@ const CaseLetterAdd = () => {
         }
     }, [store.success, store.error, store.actionFlag, caseStore.success, caseStore.error, caseStore.actionFlag, loadFirst])
     // console.log("caseStore >>> ", caseStore)
+    // console.log("Store >>> ", store)
 
     const onSubmit = async (values) => {
         if (!htmlToString(editorHtmlContent.trim())) {
@@ -287,9 +308,9 @@ const CaseLetterAdd = () => {
                 letterData.created_date = getTransformDate(values.created_date, "YYYY-MM-DD")
             }
 
-            // console.log("onSubmit >>> ", values, letterData)
-            dispatch(updateCaseLoader(false))
-            dispatch(createCaseLetter(letterData))
+            console.log("onSubmit >>> ", values, letterData)
+            dispatch(updateLetterTemplateLoader(false))
+            dispatch(generateLetterTemplateDownload(letterData))
         }
     }
 
@@ -520,7 +541,7 @@ const CaseLetterAdd = () => {
                                             color="primary"
                                             disabled={!caseStore.loading}
                                         >
-                                            {T("Create Letter")}
+                                            {T("Download")}
                                         </Button>
                                     </div>
                                 </Row>
@@ -535,4 +556,4 @@ const CaseLetterAdd = () => {
     </>)
 }
 
-export default CaseLetterAdd
+export default CaseLetterDownload

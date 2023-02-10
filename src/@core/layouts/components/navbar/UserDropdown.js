@@ -86,6 +86,9 @@ const UserDropdown = () => {
 
     if (loadFirst) {
       socketIo.emit('SET_SOCKET_ID', { user_id: (userData && userData.id) || "" })
+      socketIo.on('SEND_USERID_REQUEST', () => {
+        socketIo.emit('SET_SOCKET_ID', { user_id: (userData && userData.id) || "" })
+      })
       setLoadFirst(false)
     }
 

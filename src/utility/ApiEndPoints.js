@@ -335,7 +335,9 @@ export const API_ENDPOINTS = {
         createUpdate: `/api/admin/placetel-api-sip-user/create_update`,
         detail: `/api/admin/placetel-api-sip-user/detail`,
         delete: `/api/admin/placetel-api-sip-user/delete`,
-        initiateCall: `/api/admin/placetel-api-sip-user/initiate/call`
+        initiateCall: `/api/admin/placetel-api-sip-user/initiate/call`,
+        incomingDetail: `/api/admin/placetel-api-sip-user/incoming_detail`,
+        createUpdateIncoming: `/api/admin/placetel-api-sip-user/incoming_create_update`
     }
     /* /Placetel Api Sipuid */
 }

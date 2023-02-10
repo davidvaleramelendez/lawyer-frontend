@@ -94,3 +94,6 @@ export const dropboxApiTokenItem = { id: "", client_id: "", secret: "", token: "
 
 // PlacetelSipUserId
 export const placetelSipUserIdItem = { id: "", user_id: "", sipuid: "", response: "" }
+
+// PlacetelIncomingSip
+export const placetelIncomingSipItem = { id: "", user_id: "", sipuid: "", response: "" }

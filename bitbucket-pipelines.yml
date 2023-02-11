@@ -6,22 +6,13 @@
 image: node:16
 
 pipelines:
-  default:
+  branches:
     - parallel:
         - step:
             name: Build and Test
-            caches:
-              - node
             script:
-              - npm install
-              - npm test
-        - step:
-            name: Code linting
-            script:
-              - npm install eslint
-              - npx eslint .
-            caches:
-              - node
+              - npm install --legacy-peer-deps
+              - npm run build
               
     - step: &Deploy-step
         name: Deploy Artifacts

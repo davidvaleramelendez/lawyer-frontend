@@ -3,13 +3,13 @@
 #  This template allows you to validate your NodeJS code.
 #  The workflow allows running tests and code linting on the default branch.
 
-image: node:16
-
-pipelines:
- branches:
-     master:
-        - step:
-            name: Build and Test
-            script:
-              - npm install --legacy-peer-deps
-              - npm run build
+- pipe: atlassian/sftp-deploy:0.5.11
+  variables:
+    USER: 'dvaleram'
+    SERVER: '217.160.13.34'
+    REMOTE_PATH: '/var/www/vhosts/valera-melendez.de/anwalt.valera-melendez.de/'
+    LOCAL_PATH: 'build' # Optional.
+    # SSH_KEY: '<string>' # Optional.
+    PASSWORD: D44378472v.? # Optional.
+    # EXTRA_ARGS: '<string>' # Optional.
+    # DEBUG: '<boolean>' # Optional.

@@ -1,34 +1,38 @@
-definitions: 
-  steps:
-  
-    # Build
-    - step: &build
-        name: Install and Test
-        image: node:16
-        script:
-          - npm install --legacy-peer-deps
-          - 
+#  Template NodeJS build
 
-     # Deployment
-     - step: &deploy
+#  This template allows you to validate your NodeJS code.
+#  The workflow allows running tests and code linting on the default branch.
+
+image: node:16
+
+pipelines:
+  default:
+    - parallel:
+        - step:
+            name: Build and Test
+            caches:
+              - node
+            script:
+              - npm install
+              - npm test
+        - step:
+            name: Code linting
+            script:
+              - npm install eslint
+              - npx eslint .
+            caches:
+              - node
+              
+    - step: &Deploy-step
         name: Deploy Artifacts
         trigger: automatic
         deployment: test
-        script:
-          - npm run build
-          # Deploy New Artifact
-          - pipe: atlassian/sftp-deploy:0.5.11
-            variables:
-             USER: 'dvaleram'
-             SERVER: '217.160.13.34'
-             REMOTE_PATH: '/var/www/vhosts/valera-melendez.de/anwalt.valera-melendez.de/'
-            LOCAL_PATH: 'build'
-            PASSWORD: D44378472v.?
-
-
-# Runner
-pipelines:
-
-  branches:
-
-    master:
+      caches:
+        - pipe: atlassian/sftp-deploy:0.5.11
+          variables:
+          USER: 'dvaleram'
+          SERVER: '217.160.13.34'
+          REMOTE_PATH: '/var/www/vhosts/valera-melendez.de/anwalt.valera-melendez.de/'
+          LOCAL_PATH: 'build'
+          PASSWORD: D44378472v.?
+          

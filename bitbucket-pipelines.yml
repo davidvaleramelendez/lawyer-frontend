@@ -29,16 +29,6 @@ definitions:
 # Runner
 pipelines:
 
-  # Running by tags
-  tags:
-    v*:
-      - step: *build
-      - step: 
-          <<: *deploy
-          deployment: test
-          trigger: manual
-
-  # Running by branch
   branches:
 
     master:

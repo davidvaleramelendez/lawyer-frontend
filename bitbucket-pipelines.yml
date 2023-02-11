@@ -2,8 +2,7 @@
 
 #  This template allows you to validate your NodeJS code.
 #  The workflow allows running tests and code linting on the default branch.
-image:
-  name: node
+image: node:16
 
 
 setup: &setup

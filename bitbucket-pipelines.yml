@@ -1,3 +1,4 @@
+
 #  Template NodeJS build
 
 #  This template allows you to validate your NodeJS code.
@@ -6,24 +7,18 @@
 image: node:16
 
 pipelines:
-  branches:
-    - parallel:
+ branches:
+     master:
         - step:
             name: Build and Test
+            deployment: staging
             script:
-              - npm install --legacy-peer-deps
-              - npm run build
-              
-    - step: &Deploy-step
-        name: Deploy Artifacts
-        trigger: automatic
-        deployment: test
-      caches:
-        - pipe: atlassian/sftp-deploy:0.5.11
-          variables:
-          USER: 'dvaleram'
-          SERVER: '217.160.13.34'
-          REMOTE_PATH: '/var/www/vhosts/valera-melendez.de/anwalt.valera-melendez.de/'
-          LOCAL_PATH: 'build'
-          PASSWORD: D44378472v.?
-          
+            - npm install --legacy-peer-deps
+            - npm run build
+            - pipe: atlassian/sftp-deploy:0.5.11
+              variables:
+                USER: 'dvaleram'
+                SERVER: '217.160.13.34'
+                REMOTE_PATH: '/var/www/vhosts/valera-melendez.de/anwalt.valera-melendez.de/'
+                LOCAL_PATH: 'build'
+                PASSWORD: D44378472v.?

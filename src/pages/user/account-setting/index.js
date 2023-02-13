@@ -11,8 +11,7 @@ import {
   getAccountSetting,
   clearUserMessage,
   getPlacetelSipUserIdList,
-  getPlacetelSipUserIdDetail,
-  getPlacetelIncomingSipDetail
+  getPlacetelSipUserIdDetail
 } from '@src/pages/user/store'
 import {
   getInquiryImapDetail
@@ -97,7 +96,6 @@ const AccountSettingApp = () => {
       dispatch(getInquiryImapDetail({}))
       dispatch(getPlacetelSipUserIdList({}))
       dispatch(getPlacetelSipUserIdDetail({}))
-      dispatch(getPlacetelIncomingSipDetail({}))
       getLanguages()
       setSelLanguage(store.userItem.language)
       setLoadFirst(false)

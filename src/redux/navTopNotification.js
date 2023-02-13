@@ -110,12 +110,45 @@ export const getEmailNotification = createAsyncThunk('navTopNotification/getEmai
     }
 })
 
+
+async function getAcceptedNotificationRequest(params) {
+    return axios.get(`${API_ENDPOINTS.navTopNotification.getAcceptedNotification}`, { params }).then((placetelCall) => placetelCall.data).catch((error) => error)
+}
+
+export const getAcceptedNotification = createAsyncThunk('appPlacetelCall/getAcceptedNotification', async (params) => {
+    try {
+        const response = await getAcceptedNotificationRequest(params)
+        if (response && response.flag) {
+            return {
+                actionFlag: "PLACETEL_GET_ACCEPTED_NOTIFICATION_CALLED",
+                success: response.message,
+                data: response.data,
+                error: ""
+            }
+        } else {
+            return {
+                actionFlag: "",
+                success: "",
+                error: response.message
+            }
+        }
+    } catch (error) {
+        console.log("getAcceptedNotification catch ", error)
+        return {
+            actionFlag: "",
+            success: "",
+            error: error
+        }
+    }
+})
+
 export const navTopNotificationSlice = createSlice({
     name: 'navTopNotification',
     initialState: {
         chatNotificationItems: [],
         contactNotificationItems: [],
         emailNotificationItems: [],
+        acceptedNotification: null,
         actionFlag: "",
         loading: false,
         success: "",
@@ -148,6 +181,12 @@ export const navTopNotificationSlice = createSlice({
                 state.emailNotificationItems = action.payload.emailNotificationItems
                 state.actionFlag = action.payload.actionFlag
                 state.loading = true
+                state.success = action.payload.success
+                state.error = action.payload.error
+            })
+            .addCase(getAcceptedNotification.fulfilled, (state, action) => {
+                state.acceptedNotification = action.payload.data
+                state.actionFlag = action.payload.actionFlag
                 state.success = action.payload.success
                 state.error = action.payload.error
             })

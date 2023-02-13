@@ -23,9 +23,11 @@ import Notification from '@components/toast/notification'
 
 // ** Icons Import
 import {
+  Mic,
   Mail,
   User,
   Send,
+  Phone,
   Codepen,
   FileText,
   Settings,
@@ -35,6 +37,7 @@ import {
   Codesandbox,
   CheckCircle,
   CheckSquare,
+  UploadCloud,
   MessageCircle,
   MessageSquare
 } from 'react-feather'
@@ -215,7 +218,10 @@ const LanguageLabels = () => {
       "Email Template": <Codepen size={14} />,
       "Cloud-Server": <HardDrive size={14} />,
       "Calendar Setting": <Calendar size={14} />,
-      "Letter Template": <Codesandbox size={14} />
+      "Letter Template": <Codesandbox size={14} />,
+      "Voice Recording": <Mic size={14} />,
+      "Import Letter File": <UploadCloud size={14} />,
+      "Placetel Call": <Phone size={14} />
     }
     return pageIcons[page]
   }

@@ -635,7 +635,7 @@ export const L10nOrgKeys = {
     Menu: [
         'Email', 'Cases', 'Chat', 'Task', 'Calendar',
         'Deadline', 'Outbox', 'Bills', 'Inquiry', 'User',
-        'Account', 'Email Template', 'CloudStorage', 'Calendar Setting', 'Letter Template', "Voice Recording", "Import Letter File"
+        'Account', 'Email Template', 'CloudStorage', 'Calendar Setting', 'Letter Template', "Voice Recording", "Import Letter File", "Placetel Call"
     ],
     Dashboards: [
         'Hello', 'YouHave', 'OpenCases', 'ViewAllCases', 'DashboardOverview',

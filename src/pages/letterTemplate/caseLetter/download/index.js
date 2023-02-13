@@ -308,7 +308,7 @@ const CaseLetterDownload = () => {
                 letterData.created_date = getTransformDate(values.created_date, "YYYY-MM-DD")
             }
 
-            console.log("onSubmit >>> ", values, letterData)
+            // console.log("onSubmit >>> ", values, letterData)
             dispatch(updateLetterTemplateLoader(false))
             dispatch(generateLetterTemplateDownload(letterData))
         }

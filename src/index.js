@@ -50,7 +50,7 @@ const LazyAppIntercept = lazy(() => import('./AppIntercept'))
 const container = document.getElementById('root')
 const root = createRoot(container)
 
-export const socketIo = io.connect(process.env.REACT_APP_NODE_ENDPOINT_URL)
+export const socketIo = io.connect(process.env.REACT_APP_NODE_ENDPOINT_URL, { transports: ['polling'] })
 
 root.render(
   <BrowserRouter>

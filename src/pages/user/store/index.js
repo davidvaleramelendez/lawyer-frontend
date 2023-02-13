@@ -993,43 +993,6 @@ export const getPlacetelSipUserIdDetail = createAsyncThunk('appUser/getPlacetelS
   }
 })
 
-async function getPlacetelIncomingSipDetailRequest(params) {
-  return axios.get(`${API_ENDPOINTS.placetelApiSipuids.incomingDetail}`, { params }).then((user) => user.data).catch((error) => error)
-}
-
-export const getPlacetelIncomingSipDetail = createAsyncThunk('appUser/getPlacetelIncomingSipDetail', async (params) => {
-  try {
-    const response = await getPlacetelIncomingSipDetailRequest(params)
-    const notAllowed = response?.notAllowed.map(item => item.sipuid) ?? []
-    if (response && response.flag) {
-      return {
-        placetelIncomingSipItem: response.data || placetelIncomingSipItem,
-        notAllowedIncomingItems: [...notAllowed],
-        actionFlag: "PLACETEL_INCOMING_SIP_USERID_DETAIL",
-        success: "",
-        error: ""
-      }
-    } else {
-      return {
-        placetelIncomingSipItem: placetelIncomingSipItem,
-        notAllowedIncomingItems: [...notAllowed],
-        actionFlag: "",
-        success: "",
-        error: ""
-      }
-    }
-  } catch (error) {
-    console.log("getPlacetelIncomingSipDetail catch ", error)
-    return {
-      placetelIncomingSipItem: placetelIncomingSipItem,
-      notAllowedIncomingItems: [],
-      actionFlag: "",
-      success: "",
-      error: error
-    }
-  }
-})
-
 async function createUpdatePlacetelSipUserIdRequest(payload) {
   return axios.post(`${API_ENDPOINTS.placetelApiSipuids.createUpdate}`, payload).then((user) => user.data).catch((error) => error)
 }
@@ -1062,39 +1025,6 @@ export const createUpdatePlacetelSipUserId = createAsyncThunk('appUser/createUpd
     }
   }
 })
-
-async function createUpdatePlacetelIncomingSipRequest(payload) {
-  return axios.post(`${API_ENDPOINTS.placetelApiSipuids.createUpdateIncoming}`, payload).then((user) => user.data).catch((error) => error)
-}
-
-export const createUpdatePlacetelIncomingSip = createAsyncThunk('appUser/createUpdatePlacetelIncomingSip', async (payload) => {
-  try {
-    const response = await createUpdatePlacetelIncomingSipRequest(payload)
-    if (response && response.flag) {
-      return {
-        placetelIncomingSipItem: response.data || placetelIncomingSipItem,
-        actionFlag: "PLACETEL_INCOMING_SIP_USERID_DETAIL",
-        success: response.message,
-        error: ""
-      }
-    } else {
-      return {
-        placetelIncomingSipItem: placetelIncomingSipItem,
-        actionFlag: "",
-        success: "",
-        error: response.message
-      }
-    }
-  } catch (error) {
-    console.log("createUpdatePlacetelIncomingSip catch ", error)
-    return {
-      placetelIncomingSipItem: placetelIncomingSipItem,
-      actionFlag: "",
-      success: "",
-      error: error
-    }
-  }
-})
 /* /Placetel Sip User Id */
 
 export const appUserSlice = createSlice({
@@ -1116,7 +1046,6 @@ export const appUserSlice = createSlice({
     placetelCallApiTokenItem: placetelCallApiTokenItem,
     dropboxApiTokenItem: dropboxApiTokenItem,
     placetelSipUserIdItem: placetelSipUserIdItem,
-    placetelIncomingSipItem: placetelIncomingSipItem,
     notAllowedIncomingItems: [],
     placetelSipUserIdItems: [],
     permissions: [],
@@ -1370,23 +1299,8 @@ export const appUserSlice = createSlice({
         state.success = action.payload.success
         state.error = action.payload.error
       })
-      .addCase(getPlacetelIncomingSipDetail.fulfilled, (state, action) => {
-        state.placetelIncomingSipItem = action.payload.placetelIncomingSipItem
-        state.notAllowedIncomingItems = action.payload.notAllowedIncomingItems
-        state.actionFlag = action.payload.actionFlag
-        state.loading = true
-        state.success = action.payload.success
-        state.error = action.payload.error
-      })
       .addCase(createUpdatePlacetelSipUserId.fulfilled, (state, action) => {
         state.placetelSipUserIdItem = action.payload.placetelSipUserIdItem
-        state.actionFlag = action.payload.actionFlag
-        state.loading = true
-        state.success = action.payload.success
-        state.error = action.payload.error
-      })
-      .addCase(createUpdatePlacetelIncomingSip.fulfilled, (state, action) => {
-        state.placetelIncomingSipItem = action.payload.placetelIncomingSipItem
         state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success

@@ -436,7 +436,7 @@ export const appPlacetelCallSlice = createSlice({
                 state.success = action.payload.success
                 state.error = action.payload.error
             })
-        /* /Placetel Api Sipuid */
+            /* /Placetel Api Sipuid */
     }
 })
 

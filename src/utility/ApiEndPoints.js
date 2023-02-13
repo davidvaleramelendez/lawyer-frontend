@@ -19,7 +19,8 @@ export const API_ENDPOINTS = {
     navTopNotification: {
         chatList: `/api/admin/top-notification-chat`,
         contactList: `/api/admin/top-notification-contacts`,
-        emailList: `/api/admin/top-notification-email`
+        emailList: `/api/admin/top-notification-email`,
+        getAcceptedNotification: `/api/admin/placetel-api-sip-user/accepted_notification`
     },
     /* /Navbar top notification */
 

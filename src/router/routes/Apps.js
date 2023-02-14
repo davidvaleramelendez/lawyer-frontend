@@ -75,7 +75,6 @@ const LetterTemplateAdd = lazy(() => import('@src/pages/letterTemplate/add'))
 const LetterTemplateEdit = lazy(() => import('@src/pages/letterTemplate/edit'))
 const CaseLetterTemplateAdd = lazy(() => import('@src/pages/letterTemplate/caseLetter/add'))
 const CaseLetterTemplateEdit = lazy(() => import('@src/pages/letterTemplate/caseLetter/edit'))
-const CaseLetterTemplateDownload = lazy(() => import('@src/pages/letterTemplate/caseLetter/download'))
 
 // Voice Recording
 const VoiceRecordingList = lazy(() => import('@src/pages/voiceRecording/list'))
@@ -440,15 +439,6 @@ const AppRoutes = [
   {
     path: `${adminRoot}/case/letter-template/add/:caseId/:letterTemplateId`,
     element: <CaseLetterTemplateAdd />,
-    meta: {
-      layout: "blank",
-      id: "letterTemplateApp",
-      restrictRole: [11]
-    }
-  },
-  {
-    path: `${adminRoot}/case/letter-template/download/:caseId/:letterTemplateId`,
-    element: <CaseLetterTemplateDownload />,
     meta: {
       layout: "blank",
       id: "letterTemplateApp",

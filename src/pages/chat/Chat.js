@@ -198,19 +198,21 @@ const ChatLog = (props) => {
                 {chat.time ? (<div style={{ textAlign: 'right', fontSize: '10px' }}>
                   {chat.time}
                 </div>) : null}
-                <div className='action-buttons'>
-                  {chat.is_important === 0 && (
-                    <span className='action-button-item' onClick={handleMarkImportant(chat.id)}>
-                      <Star size={17} />
+                {item.senderId === userProfile.id &&
+                  <div className='action-buttons'>
+                    {chat.is_important === 0 && (
+                      <span className='action-button-item' onClick={handleMarkImportant(chat.id)}>
+                        <Star size={17} />
+                      </span>
+                    )}
+                    <span className='action-button-item'>
+                      <Edit size={17} />
                     </span>
-                  )}
-                  <span className='action-button-item'>
-                    <Edit size={17} />
-                  </span>
-                  <span className='action-button-item'>
-                    <Trash size={17} />
-                  </span>
-                </div>
+                    <span className='action-button-item'>
+                      <Trash size={17} />
+                    </span>
+                  </div>
+                }
               </div>
             ))}
           </div>

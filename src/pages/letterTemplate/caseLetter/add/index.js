@@ -5,7 +5,9 @@ import { useNavigate, useParams } from 'react-router-dom'
 // ** Store & Actions
 import {
     getLetterTemplate,
-    clearLetterTemplateMessage
+    clearLetterTemplateMessage,
+    updateLetterTemplateLoader,
+    generateLetterTemplateDownload
 } from '@src/pages/letterTemplate/store'
 import { getCompanyDetail } from '@src/pages/user/store'
 import {
@@ -37,7 +39,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import {
     htmlToString,
     isUserLoggedIn,
-    getTransformDate
+    getTransformDate,
+    getWebPreviewUrl
 } from '@utils'
 
 // ** Custom Components
@@ -204,6 +207,20 @@ const CaseLetterAdd = () => {
         setEditorStateContent(null)
     }
 
+    /* Rendering file preview web url */
+    const renderFileWebUrlPreview = (path) => {
+        if (path) {
+            return getWebPreviewUrl(path)
+        }
+
+        return false
+    }
+    /* /Rendering file preview web url */
+
+    const handleDownloadFile = (path = "") => {
+        window.open(renderFileWebUrlPreview(path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`, '_blank', 'noopener,noreferrer')
+    }
+
     useEffect(() => {
         /* if user not logged then navigate */
         if (isUserLoggedIn() === null) {
@@ -226,6 +243,11 @@ const CaseLetterAdd = () => {
         /* For reset form data */
         if (store && store.actionFlag && store.actionFlag === "EDIT_ITEM") {
             handleUpdateData()
+        }
+
+        if (store && store.actionFlag && store.actionFlag === "PATH_GENERATED") {
+            handleDownloadFile(store.downloadTemplatePath)
+            handleBackCase()
         }
 
         /* For blank message api called inside */
@@ -263,7 +285,10 @@ const CaseLetterAdd = () => {
             return
         }
 
+
         if (values) {
+            const submitType = values?.submitType || ""
+
             const letterData = {
                 case_id: caseId,
                 letter_template_id: values.letter_template_id,
@@ -288,8 +313,13 @@ const CaseLetterAdd = () => {
             }
 
             // console.log("onSubmit >>> ", values, letterData)
-            dispatch(updateCaseLoader(false))
-            dispatch(createCaseLetter(letterData))
+            if (submitType === "download") {
+                dispatch(updateLetterTemplateLoader(false))
+                dispatch(generateLetterTemplateDownload(letterData))
+            } else {
+                dispatch(updateCaseLoader(false))
+                dispatch(createCaseLetter(letterData))
+            }
         }
     }
 
@@ -506,19 +536,33 @@ const CaseLetterAdd = () => {
                                 <Row className="my-2 text-end">
                                     <div className='px-md-5'>
                                         <Button
+                                            type="submit"
+                                            id="download"
+                                            name="download"
+                                            color="primary"
+                                            className="float-start"
+                                            disabled={!store.loading || !caseStore.loading}
+                                            onClick={handleSubmit((data) => onSubmit({ ...data, submitType: "download" }))}
+                                        >
+                                            {T("Download")}
+                                        </Button>
+
+                                        <Button
                                             type="button"
                                             color="secondary"
                                             className="me-1"
-                                            disabled={!caseStore.loading}
+                                            disabled={!store.loading || !caseStore.loading}
                                             onClick={() => handleBackCase()}
                                         >
                                             {T("Back")}
                                         </Button>
 
                                         <Button
-                                            type='submit'
+                                            type="submit"
+                                            id="submit"
+                                            name="submit"
                                             color="primary"
-                                            disabled={!caseStore.loading}
+                                            disabled={!store.loading || !caseStore.loading}
                                         >
                                             {T("Create Letter")}
                                         </Button>

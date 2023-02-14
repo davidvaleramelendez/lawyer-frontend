@@ -12,7 +12,8 @@ import {
   sendMessage,
   getChatHistory,
   getChatContacts,
-  clearChatMessage
+  clearChatMessage,
+  markImportant
 } from '@src/pages/chat/store'
 import {
   getChatNotification
@@ -28,7 +29,10 @@ import {
   Menu,
   Send,
   MoreVertical,
-  MessageSquare
+  MessageSquare,
+  Star,
+  Edit,
+  Trash
 } from 'react-feather'
 
 // ** Reactstrap Imports
@@ -138,7 +142,9 @@ const ChatLog = (props) => {
     chatLog.forEach((msg, index) => {
       if (chatMessageSenderId === msg.sender_id) {
         msgGroup.messages.push({
+          id: msg.id,
           msg: msg.message,
+          is_important: msg.is_important,
           time: getTransformDate(msg.created_at, "DD-MM-YYYY hh:mm a")
         })
       } else {
@@ -148,7 +154,9 @@ const ChatLog = (props) => {
           senderId: msg.sender_id,
           messages: [
             {
+              id: msg.id,
               msg: msg.message,
+              is_important: msg.is_important,
               time: getTransformDate(msg.created_at, "DD-MM-YYYY hh:mm a")
             }
           ]
@@ -158,6 +166,11 @@ const ChatLog = (props) => {
     })
     return formattedChatLog
   }
+
+  // ** Mark the chat item important
+  const handleMarkImportant = (id) => (() => {
+    dispatch(markImportant(id))
+  })
 
   // ** Renders user chat
   const renderChats = () => {
@@ -182,9 +195,22 @@ const ChatLog = (props) => {
             {item && item.messages.map((chat, index) => (
               <div key={`${index}_${chat.msg}`} className='chat-content'>
                 <p className="text-break">{chat.msg}</p>
-                {chat.time ? (<span style={{ float: 'right', fontSize: '10px' }}>
+                {chat.time ? (<div style={{ textAlign: 'right', fontSize: '10px' }}>
                   {chat.time}
-                </span>) : null}
+                </div>) : null}
+                <div className='action-buttons'>
+                  {chat.is_important === 0 && (
+                    <span className='action-button-item' onClick={handleMarkImportant(chat.id)}>
+                      <Star size={17} />
+                    </span>
+                  )}
+                  <span className='action-button-item'>
+                    <Edit size={17} />
+                  </span>
+                  <span className='action-button-item'>
+                    <Trash size={17} />
+                  </span>
+                </div>
               </div>
             ))}
           </div>

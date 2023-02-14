@@ -86,7 +86,8 @@ export const API_ENDPOINTS = {
         list: `/api/admin/chat/get_users`,
         getChats: `/api/admin/chat/get_chat`,
         chatHistory: `/api/admin/chat/history`,
-        sendMessage: `/api/admin/chat/send_chat`
+        sendMessage: `/api/admin/chat/send_chat`,
+        markImportant: `/api/admin/chat/mark_important`
     },
     /* /Chat module */
 

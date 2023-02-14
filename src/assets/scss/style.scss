@@ -275,3 +275,33 @@ $email-dark-background-font-color: #ffffff;
     justify-content: center;
 	width: 170%;
 }
+
+/* Chat module */
+.chat-app-window .chat {
+	.action-buttons {
+		padding-top: 6px;
+		text-align: right;
+		height: 0px;
+		overflow: hidden;
+		transition: .4s all;
+
+		.action-button-item {
+			cursor: pointer;
+			margin: 0px 7px;
+			&:first-child {
+				margin-left: 0px;
+			}
+			&:last-child {
+				margin-right: 0px;
+			}
+		}
+	}
+
+	.chat-content:hover {
+		.action-buttons {
+			height: 27px;
+			transition-delay: .3s;
+		}
+	}
+}
+/* /Chat module */

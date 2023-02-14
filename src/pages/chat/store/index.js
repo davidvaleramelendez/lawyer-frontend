@@ -188,6 +188,39 @@ export const sendMessage = createAsyncThunk('appContact/sendMessage', async (pay
   }
 })
 
+async function markImportantRequest(id) {
+  return axios.get(`${API_ENDPOINTS.chats.markImportant}/${id}`).then((chat) => chat.data).catch((error) => error)
+}
+
+export const markImportant = createAsyncThunk('appContact/markImportant', async (id) => { //dispatch, getState
+  try {
+    const response = await markImportantRequest(id)
+    if (response && response.flag) {
+      return {
+        actionFlag: "MESSAGE_MARKED_AS_IMPORTANT",
+        success: "",
+        error: "",
+        data: id
+      }
+    } else {
+      return {
+        actionFlag: "",
+        success: "",
+        error: "",
+        data: null
+      }
+    }
+  } catch (error) {
+    console.log("markImportant catch ", error)
+    return {
+      actionFlag: "",
+      success: "",
+      error: error,
+      data: null
+    }
+  }
+})
+
 export const appChatSlice = createSlice({
   name: 'appChat',
   initialState: {
@@ -260,6 +293,20 @@ export const appChatSlice = createSlice({
         state.loading = true
         state.success = action.payload.success
         state.error = action.payload.error
+      })
+      .addCase(markImportant.fulfilled, (state, action) => {
+        if (action.payload.data) {
+          const chatIndex = state.chats.findIndex(item => item.id === action.payload.data)
+          const newChats = [...state.chats]
+          newChats[chatIndex] = {
+            ...state.chats[chatIndex],
+            is_important: 1
+          }
+          state.chats = newChats
+          state.loading = true
+          state.success = action.payload.success
+          state.error = action.payload.error
+        }
       })
   }
 })

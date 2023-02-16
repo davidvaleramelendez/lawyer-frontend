@@ -83,10 +83,6 @@ const TerminalVoiceRecording = ({
         setAudioDetails(data)
     }
 
-    const handleAudioStart = () => {
-        setIsRecording(true)
-    }
-
     const handleAudioUpload = (file) => {
         if (!isRecording) {
             const recordingData = {
@@ -144,7 +140,6 @@ const TerminalVoiceRecording = ({
                                 audioURL={(audioDetails && audioDetails.url) || null}
                                 handleReset={() => handleReset()}
                                 handleAudioStop={(data) => handleAudioStop(data)}
-                                handleAudioStart={(data) => handleAudioStart(data)}
                                 handleAudioUpload={(data) => handleAudioUpload(data)}
                                 // handleCountDown={(data) => handleCountDown(data)}
                                 mimeTypeToUseWhenRecording={`audio/webm`}

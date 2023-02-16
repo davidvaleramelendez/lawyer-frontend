@@ -305,3 +305,31 @@ $email-dark-background-font-color: #ffffff;
 	}
 }
 /* /Chat module */
+
+/* Speech to text transcript */
+.react-audio-voice-recorder {
+	ul {
+		list-style: none;
+		border-radius: 5px;
+	}
+
+	li, ul {
+		padding: 10px;
+	}
+
+	li {
+		font-size: 1rem;
+		background: rgba(0,0,0,.02);
+	}
+}
+/* /Speech to text transcript */
+
+.react-audio-voice-recorder {
+	.audio-recorder-mic {
+		pointer-events: none;
+	}
+
+	.audio-recorder-options[data-testid="ar_pause"] {
+		display: none;
+	}
+}

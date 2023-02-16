@@ -78,6 +78,7 @@ const CaseLetterTemplateEdit = lazy(() => import('@src/pages/letterTemplate/case
 
 // Voice Recording
 const VoiceRecordingList = lazy(() => import('@src/pages/voiceRecording/list'))
+const CaseVoiceTranscript = lazy(() => import('@src/pages/voiceRecording/caseVoice/transcript'))
 
 // Import Letter File
 const ImportLetterFileList = lazy(() => import('@src/pages/importLetterFile/list'))
@@ -461,6 +462,15 @@ const AppRoutes = [
     path: `${adminRoot}/voice-recording`,
     element: <VoiceRecordingList />,
     meta: {
+      id: "voiceRecordingApp",
+      restrictRole: [11]
+    }
+  },
+  {
+    path: `${adminRoot}/case/voice/transcript/:caseId`,
+    element: <CaseVoiceTranscript />,
+    meta: {
+      layout: "blank",
       id: "voiceRecordingApp",
       restrictRole: [11]
     }

@@ -237,6 +237,7 @@ export const appVoiceRecordingSlice = createSlice({
         voiceRecordingItem: voiceRecordingItem,
         voiceRecordingItems: [],
         pagination: null,
+        transcriptResult: "",
         actionFlag: "",
         loading: false,
         success: "",
@@ -250,6 +251,10 @@ export const appVoiceRecordingSlice = createSlice({
 
         resetVoiceRecordItem: (state) => {
             state.voiceRecordingItem = voiceRecordingItem
+        },
+
+        setTranscriptResult: (state, action) => {
+            state.transcriptResult = action.payload || ""
         },
 
         clearVoiceRecordingMessage: (state) => {
@@ -305,6 +310,7 @@ export const appVoiceRecordingSlice = createSlice({
 })
 
 export const {
+    setTranscriptResult,
     resetVoiceRecordItem,
     createVoiceRecordItem,
     clearVoiceRecordingMessage

@@ -1,0 +1,78 @@
+.app-form-builder {
+    .draggable-btn  {
+        cursor: pointer;
+        border: 1px solid #7367f0 !important;
+        background: white;
+        padding: 0.786rem 1.5rem;
+        border-radius: 0.358rem;
+        color: #7367f0;
+        font-weight: 500;
+        &:hover {
+            background: rgba(115, 103, 240, 0.04);
+        }
+    }
+    
+    .form-preview-wrapper {
+        height: 600px;
+        padding: 0px 20px 0px 25px;
+        margin: 25px 10px;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        &::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            background: #9890ef;
+            border-radius: 10px;
+        }
+        
+        &::-webkit-scrollbar-thumb:hover {
+            background: #867cf0;
+        }
+    }
+    
+    .form-row-item {
+        border: 1px dashed #dadada;
+        padding: 10px;
+        border-radius: 6px;
+
+        .form-col-item {
+            min-height: 50px;
+            height: 100%;
+            border: 1px dashed #dadada;
+            margin: 5px;
+            padding: 7px;
+            border-radius: 6px;
+
+            .form-preview-item {
+                min-height: 50px;
+            }
+
+            .form-check {
+                margin: 10px 20px 10px 0px;
+            }
+
+            &.dragging-over {
+                border: 1px solid rgb(196, 196, 196);
+                // .nodragging {
+                //     .form-preview-item {
+                //         display: none;
+                //     }
+                // }
+            }
+        }
+    }
+}
+
+.edit-form-modal {
+    .edit-form-item {
+        margin: 20px;
+    }
+}

@@ -97,3 +97,6 @@ export const placetelSipUserIdItem = { id: "", user_id: "", sipuid: "", response
 
 // PlacetelIncomingSip
 export const placetelIncomingSipItem = { id: "", user_id: "", sipuid: "", response: "" }
+
+// Form Builder DeleteItem
+export const formBuilderDeleteItem = { rowIndex: null, colIndex: null }

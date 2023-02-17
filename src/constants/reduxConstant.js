@@ -78,7 +78,7 @@ export const inquiryImapItem = { id: "", imap_host: "", imap_email: "", imap_pas
 export const pdfApiItem = { id: "", key: "", created_at: "", updated_at: "" }
 
 // Voice Recording
-export const voiceRecordingItem = { id: "", case_id: "", name: "", subject: "", path: "" }
+export const voiceRecordingItem = { id: "", case_id: "", name: "", subject: "", path: "", transcript_json: null }
 
 // Import Letter File
 export const importLetterFileItem = { id: "", user_id: "", case_id: "", name: "", subject: "", frist_date: "", file_name: "", file_path: "", isErledigt: 0 }

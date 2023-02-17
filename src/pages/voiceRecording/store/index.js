@@ -115,6 +115,7 @@ export const createVoiceRecording = createAsyncThunk('appVoiceRecording/createVo
         const response = await createVoiceRecordingRequest(payload)
         if (response && response.flag) {
             await dispatch(getVoiceRecordingList(getState().voiceRecording.params))
+
             return {
                 actionFlag: "RECORDING_CREATED",
                 success: response.message,
@@ -146,6 +147,7 @@ export const updateVoiceRecording = createAsyncThunk('appVoiceRecording/updateVo
         const response = await updateVoiceRecordingRequest(payload)
         if (response && response.flag) {
             await dispatch(getVoiceRecordingList(getState().voiceRecording.params))
+
             return {
                 actionFlag: "RECORDING_UPDATED",
                 success: response.message,
@@ -237,24 +239,27 @@ export const appVoiceRecordingSlice = createSlice({
         voiceRecordingItem: voiceRecordingItem,
         voiceRecordingItems: [],
         pagination: null,
-        transcriptResult: "",
         actionFlag: "",
         loading: false,
         success: "",
         error: ""
     },
     reducers: {
+        updateVoiceRecordingLoader: (state, action) => {
+            state.loading = action.payload || false
+        },
+
         createVoiceRecordItem: (state, action) => {
             state.voiceRecordingItem = (action.payload && action.payload.data) || voiceRecordingItem
             state.actionFlag = (action.payload && action.payload.message) || ""
         },
 
-        resetVoiceRecordItem: (state) => {
-            state.voiceRecordingItem = voiceRecordingItem
+        setVoiceRecordingItem: (state, action) => {
+            state.voiceRecordingItem = action.payload || voiceRecordingItem
         },
 
-        setTranscriptResult: (state, action) => {
-            state.transcriptResult = action.payload || ""
+        resetVoiceRecordItem: (state) => {
+            state.voiceRecordingItem = voiceRecordingItem
         },
 
         clearVoiceRecordingMessage: (state) => {
@@ -310,9 +315,10 @@ export const appVoiceRecordingSlice = createSlice({
 })
 
 export const {
-    setTranscriptResult,
     resetVoiceRecordItem,
+    setVoiceRecordingItem,
     createVoiceRecordItem,
+    updateVoiceRecordingLoader,
     clearVoiceRecordingMessage
 } = appVoiceRecordingSlice.actions
 

@@ -340,6 +340,13 @@ export const API_ENDPOINTS = {
         initiateCall: `/api/admin/placetel-api-sip-user/initiate/call`,
         incomingDetail: `/api/admin/placetel-api-sip-user/incoming_detail`,
         createUpdateIncoming: `/api/admin/placetel-api-sip-user/incoming_create_update`
-    }
+    },
     /* /Placetel Api Sipuid */
+
+    /* Form Builder */
+    formBuilder: {
+        getPreviewList: `/api/admin/form-builder`,
+        updatePreviewList: `/api/admin/form-builder`
+    }
+    /* /Form Builder */
 }

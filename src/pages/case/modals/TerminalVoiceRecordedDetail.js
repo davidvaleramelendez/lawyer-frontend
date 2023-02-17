@@ -41,6 +41,20 @@ const TerminalVoiceRecordedDetail = ({
         setDraggable(status)
     }
 
+    const renderTranscriptContent = (transcript_json) => {
+        if (JSON.parse(transcript_json)) {
+            const results = JSON.parse(transcript_json)
+            return results && results.length ? (
+                <ul>
+                    {results.map((result) => (
+                        <li key={result.timestamp}>{(result && result.transcript) || ""}</li>
+                    ))}
+                </ul>
+            ) : null
+        }
+        return null
+    }
+
     const renderTerminal = () => {
         return (
             <div className={`voice-recording-terminal ${open ? '' : 'd-none'}`}>
@@ -83,6 +97,12 @@ const TerminalVoiceRecordedDetail = ({
                                 <div className="w-75">
                                     {getTransformDate(recordedVoiceItem.created_at, "DD.MM.YYYY")}
                                 </div>
+                            </Row>
+                        ) : null}
+
+                        {recordedVoiceItem && recordedVoiceItem.transcript_json ? (
+                            <Row className="mt-2 react-audio-voice-recorder">
+                                {renderTranscriptContent(recordedVoiceItem.transcript_json)}
                             </Row>
                         ) : null}
 

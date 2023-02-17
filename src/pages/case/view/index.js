@@ -238,6 +238,11 @@ const CaseView = () => {
   }
 
   /* Detail view of case voice recording in terminal */
+  const closeRecordedDetailViewTerminal = () => {
+    setVoiceRecordedTerminalOpen(false)
+    setCaseRecordedVoice()
+  }
+
   const terminalDetailVoiceRecording = (data) => {
     setIsCollapseOpen('')
     setCaseRecordedVoice({ ...data, terminal: "DETAIL_VIEW" })
@@ -252,11 +257,6 @@ const CaseView = () => {
     }
 
     return false
-  }
-
-  const closeRecordedDetailViewTerminal = () => {
-    setVoiceRecordedTerminalOpen(false)
-    setCaseRecordedVoice()
   }
   /* /Detail view of case voice recording in terminal */
 

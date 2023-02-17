@@ -66,10 +66,12 @@ import {
   ListGroup,
   CardTitle,
   CardHeader,
+  DropdownItem,
   DropdownMenu,
   ListGroupItem,
   DropdownToggle,
-  UncontrolledDropdown
+  UncontrolledDropdown,
+  UncontrolledButtonDropdown
 } from 'reactstrap'
 
 // ** Icons Import
@@ -236,6 +238,11 @@ const CaseView = () => {
   }
 
   /* Detail view of case voice recording in terminal */
+  const closeRecordedDetailViewTerminal = () => {
+    setVoiceRecordedTerminalOpen(false)
+    setCaseRecordedVoice()
+  }
+
   const terminalDetailVoiceRecording = (data) => {
     setIsCollapseOpen('')
     setCaseRecordedVoice({ ...data, terminal: "DETAIL_VIEW" })
@@ -250,11 +257,6 @@ const CaseView = () => {
     }
 
     return false
-  }
-
-  const closeRecordedDetailViewTerminal = () => {
-    setVoiceRecordedTerminalOpen(false)
-    setCaseRecordedVoice()
   }
   /* /Detail view of case voice recording in terminal */
 
@@ -1263,9 +1265,32 @@ const CaseView = () => {
                         setDocumentRowData={setDocumentRowData}
                       />
 
-                      <Button className="ms-50 mt-50" color="primary" onClick={() => setVoiceRecordingModalOpen(true)}>
+                      <UncontrolledButtonDropdown className="ms-50 mt-50">
+                        <DropdownToggle
+                          color="primary"
+                          className="rounded-2"
+                        >
+                          {T("Voice Recording")}
+                        </DropdownToggle>
+                        <DropdownMenu>
+                          <DropdownItem
+                            className="w-100"
+                            onClick={() => setVoiceRecordingModalOpen(true)}
+                          >
+                            {T("Voice")}
+                          </DropdownItem>
+                          <DropdownItem
+                            className="w-100"
+                            onClick={() => navigate(`${adminRoot}/case/voice/transcript/${id}`)}
+                          >
+                            {T("Transcript")}
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </UncontrolledButtonDropdown>
+
+                      {/* <Button className="ms-50 mt-50" color="primary" onClick={() => setVoiceRecordingModalOpen(true)}>
                         {T("Voice Recording")}
-                      </Button>
+                      </Button> */}
 
                       <ModalCaseVoiceRecording
                         open={voiceRecordingModalOpen}

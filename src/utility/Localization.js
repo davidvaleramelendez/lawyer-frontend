@@ -492,6 +492,7 @@ export const L10nKeys = {
     Sortcodes: 'Sort codes',
     Case: 'Case',
     Back: 'Back',
+    Reset: 'Reset',
     Attachment: 'Attachment',
     //** /Email Template App
 
@@ -595,6 +596,10 @@ export const L10nKeys = {
     /* Voice Recording */
     VoiceRecording: "Voice Recording",
     SearchVoiceRecording: 'Search Voice Recording',
+    Transcript: 'Transcript',
+    StartRecording: 'Start Recording',
+    PauseRecording: 'Pause Recording',
+    ResumeRecording: 'Resume Recording',
     /* /Voice Recording */
 
     /* Import Letter File */
@@ -779,7 +784,7 @@ export const L10nOrgKeys = {
             'Action', 'Edit', 'Delete', 'SubjectIsRequired', 'StatusIsRequired', 'ContentIsRequired', 'SelectStatus', 'Content', 'Submit', 'Back', 'LetterTemplateIsRequired', 'ContentHeadingIsRequired', 'BestRegardsIsRequired', 'WriteALetter', 'CreateLetter', 'UpdateLetter'
         ],
         "Voice Recording": [
-            "CaseID", "Subject", "VoiceRecording", "SearchVoiceRecording"
+            "CaseID", "Subject", "VoiceRecording", "SearchVoiceRecording", "Transcript", "Reset", "StartRecording", "PauseRecording", "ResumeRecording"
         ],
         "Import Letter File": [
             "ImportFile", "ImportLetterFile", "MoveToLetter", "DeadlineDateIsRequired", "SearchImportLetterFile"

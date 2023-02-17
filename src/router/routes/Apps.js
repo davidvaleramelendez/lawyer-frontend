@@ -54,6 +54,9 @@ const Timeline = lazy(() => import('@src/pages/timeline'))
 // Letter
 const LetterList = lazy(() => import('@src/pages/letter/list'))
 
+// FormBuilder
+const FormBuilder = lazy(() => import('@src/pages/formBuilder'))
+
 // Invoice
 const InvoiceList = lazy(() => import('@src/pages/invoice/list'))
 const InvoiceAdd = lazy(() => import('@src/pages/invoice/add'))
@@ -486,8 +489,18 @@ const AppRoutes = [
       id: "placetelCallApp",
       restrictRole: [11]
     }
-  }
+  },
   /* /Import Letter File */
+
+  /* Form BUilder */
+  {
+    path: `${adminRoot}/form-builder`,
+    element: <FormBuilder />,
+    meta: {
+      id: "formBuilder"
+    }
+  }
+  /* /Form BUilder */
 ]
 
 export default AppRoutes

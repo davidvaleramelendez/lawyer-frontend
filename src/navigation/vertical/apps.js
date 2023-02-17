@@ -16,7 +16,8 @@ import {
   CheckSquare,
   UploadCloud,
   MessageCircle,
-  MessageSquare
+  MessageSquare,
+  Layers
 } from 'react-feather'
 
 // Constant
@@ -57,6 +58,12 @@ export default [
     title: 'Chat',
     icon: <MessageCircle size={20} />,
     navLink: `${adminRoot}/chat`
+  },
+  {
+    id: 'formBuilder',
+    title: 'FormBuilder',
+    icon: <Layers size={20} />,
+    navLink: `${adminRoot}/form-builder`
   },
   {
     id: 'taskApp',

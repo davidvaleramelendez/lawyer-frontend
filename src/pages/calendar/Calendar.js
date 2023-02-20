@@ -136,23 +136,25 @@ const Calendar = (props) => {
         const events_in_clicked_day = store.eventItems.filter(item => {
           return item.start <= end_clicked_time && item.end >= start_clicked_time
         })
+
         if (events_in_clicked_day.length >= 2) {
           calendarRef.current.getApi().changeView('timeGridDay', selected_date)
-        } else {
-          let evntData = { ...store.eventItem }
-          if (clickedEvent && clickedEvent.id) {
-            if (store.eventItems && store.eventItems.length) {
-              const index = store.eventItems.findIndex(x => JSON.stringify(x.id) === clickedEvent.id)
-              if (index !== -1) {
-                evntData = { ...store.eventItems[index] }
-              }
-            }
-          }
-
-          dispatch(getEventItem(evntData))
-          setAddEventModalOpen(true)
+          return
         }
       }
+
+      let evntData = { ...store.eventItem }
+      if (clickedEvent && clickedEvent.id) {
+        if (store.eventItems && store.eventItems.length) {
+          const index = store.eventItems.findIndex(x => JSON.stringify(x.id) === clickedEvent.id)
+          if (index !== -1) {
+            evntData = { ...store.eventItems[index] }
+          }
+        }
+      }
+
+      dispatch(getEventItem(evntData))
+      setAddEventModalOpen(true)
 
 
       // * Only grab required field otherwise it goes in infinity loop
@@ -180,6 +182,7 @@ const Calendar = (props) => {
       const events_in_clicked_day = store.eventItems.filter(item => {
         return item.start <= end_clicked_time && item.end >= start_clicked_time
       })
+
       if (events_in_clicked_day.length >= 2 || info.view.type === 'dayGridMonth') {
         calendarRef.current.getApi().changeView('timeGridDay', info.dateStr)
       } else {
@@ -202,7 +205,6 @@ const Calendar = (props) => {
         dispatch(getEventItem(evntData))
         setAddEventModalOpen(true)
       }
-
     },
 
     /*

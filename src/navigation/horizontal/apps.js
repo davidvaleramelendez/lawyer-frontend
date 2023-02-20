@@ -130,16 +130,23 @@ export default [
         navLink: `${adminRoot}/account-setting`
       },
       {
-        id: 'emailTemplateApp',
-        title: 'Email Template',
-        icon: <Codepen size={20} />,
-        navLink: `${adminRoot}/email-template`
-      },
-      {
-        id: 'letterTemplateApp',
-        title: 'Letter Template',
+        id: 'templateApp',
+        title: 'Template',
         icon: <Codesandbox size={20} />,
-        navLink: `${adminRoot}/letter-template`
+        children: [
+          {
+            id: 'emailTemplateApp',
+            title: 'Email Template',
+            icon: <Codepen size={20} />,
+            navLink: `${adminRoot}/email-template`
+          },
+          {
+            id: 'letterTemplateApp',
+            title: 'Letter Template',
+            icon: <Codesandbox size={20} />,
+            navLink: `${adminRoot}/letter-template`
+          }
+        ]
       },
       {
         id: 'cloudServerApp',

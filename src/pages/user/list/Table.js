@@ -57,6 +57,9 @@ import {
     root,
     TN_USER,
     adminRoot,
+    adminRoleId,
+    lawyerRoleId,
+    partnerRoleId,
     perPageRowItems,
     defaultPerPageRow
 } from '@constant/defaultValues'
@@ -348,11 +351,11 @@ const UsersList = () => {
 
     const handleNavigationRole = (user, type = "view") => {
         if (user && user.id) {
-            if (user.role_id === 10) {
+            if (user.role_id === adminRoleId) {
                 return `${adminRoot}/user/admin/${type}/${user.id}`
-            } else if (user.role_id === 14) {
+            } else if (user.role_id === lawyerRoleId) {
                 return `${adminRoot}/user/lawyer/${type}/${user.id}`
-            } else if (user.role_id === 12) {
+            } else if (user.role_id === partnerRoleId) {
                 return `${adminRoot}/user/partner/${type}/${user.id}`
             } else {
                 return `${adminRoot}/user/customer/${type}/${user.id}`
@@ -386,7 +389,7 @@ const UsersList = () => {
                     initials
                     className="me-50"
                     color={getRandColorClass()}
-                    content={row.name || "John Doe"}
+                    content={row.name || ""}
                 />
             )
         } else {
@@ -625,6 +628,7 @@ const UsersList = () => {
                 open={detailModalOpen}
                 userRowData={userRowData}
                 setUserRowData={setUserRowData}
+                handleNavigationRole={handleNavigationRole}
             />
         </Fragment>
     )

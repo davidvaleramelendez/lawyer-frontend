@@ -55,7 +55,9 @@ const Timeline = lazy(() => import('@src/pages/timeline'))
 const LetterList = lazy(() => import('@src/pages/letter/list'))
 
 // FormBuilder
-const FormBuilder = lazy(() => import('@src/pages/formBuilder'))
+const FormBuilderList = lazy(() => import('@src/pages/formBuilder/list'))
+const FormBuilderView = lazy(() => import('@src/pages/formBuilder/view'))
+const FormBuilderPublish = lazy(() => import('@src/pages/formBuilder/publish'))
 
 // Invoice
 const InvoiceList = lazy(() => import('@src/pages/invoice/list'))
@@ -505,7 +507,21 @@ const AppRoutes = [
   /* Form BUilder */
   {
     path: `${adminRoot}/form-builder`,
-    element: <FormBuilder />,
+    element: <FormBuilderList />,
+    meta: {
+      id: "formBuilder"
+    }
+  },
+  {
+    path: `${adminRoot}/form-builder/view/:stepId`,
+    element: <FormBuilderView />,
+    meta: {
+      id: "formBuilder"
+    }
+  },
+  {
+    path: `${adminRoot}/form-builder/publish`,
+    element: <FormBuilderPublish />,
     meta: {
       id: "formBuilder"
     }

@@ -1,4 +1,24 @@
 .app-form-builder {
+
+    .add-row-btn {
+        cursor: pointer;
+        border: 1px solid #7367f0 !important;
+        background: white;
+        padding: 0.786rem 1.5rem;
+        border-radius: 0.358rem;
+        color: #7367f0;
+        font-weight: 500;
+        margin-bottom: 1rem;
+        
+        &:first-child{
+            margin-top: .5rem;
+        }
+
+        &:hover {
+            background: rgba(115, 103, 240, 0.04);
+        }
+    }
+
     .draggable-btn  {
         cursor: pointer;
         border: 1px solid #7367f0 !important;
@@ -74,5 +94,21 @@
 .edit-form-modal {
     .edit-form-item {
         margin: 20px;
+    }
+}
+
+.publish-form-wizard {
+    .form-check {
+        margin: 10px 20px 10px 0px;
+        &:first-child {
+            margin-top: 0;
+        }
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+    
+    .d-flex .form-check{
+        margin: 10px 20px 10px 0px;
     }
 }

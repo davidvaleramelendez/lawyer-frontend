@@ -38,11 +38,11 @@ const CustomHeader = ({
     handleStatusFilter
 }) => {
     return (<div className="w-100 py-2">
-          <Card className="overflow-hidden">
+        <Card className="overflow-hidden">
             <CardHeader className="border-bottom">
                 <CardTitle tag="h4">{T('Cases')}</CardTitle>
             </CardHeader>
-            </Card>
+        </Card>
         <Row>
             <Col lg={6} className="d-flex align-items-center px-0 px-lg-1">
                 <div className="d-flex align-items-center me-2">

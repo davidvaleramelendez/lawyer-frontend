@@ -6,7 +6,7 @@ import { Draggable, Droppable } from "react-beautiful-dnd"
 
 // ** Redux Import
 import { useDispatch } from "react-redux"
-import { setDeleteItem } from "./store"
+import { setDeleteItem } from "../store"
 
 // ** Icon Import
 import { Edit3, Trash } from "react-feather"

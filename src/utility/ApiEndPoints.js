@@ -345,8 +345,12 @@ export const API_ENDPOINTS = {
 
     /* Form Builder */
     formBuilder: {
-        getPreviewList: `/api/admin/form-builder`,
-        updatePreviewList: `/api/admin/form-builder`
+        getStepList: `/api/admin/form-builder`,
+        addStepItem: `/api/admin/form-builder/create`,
+        deleteStepItem: `/api/admin/form-builder/delete`,
+        getStepDetails: `/api/admin/form-builder/details`,
+        updateStepDetails: `/api/admin/form-builder/update`,
+        reorderStepItem: `/api/admin/form-builder/reorder`
     }
     /* /Form Builder */
 }

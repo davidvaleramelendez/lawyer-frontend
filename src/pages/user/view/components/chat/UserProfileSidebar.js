@@ -56,7 +56,10 @@ const UserProfileSidebar = (props) => {
           <span className='user-post'>{user && user.role && user.role.RoleName}</span>
         </div>
       </header>
-      <PerfectScrollbar className='user-profile-sidebar-area' options={{ wheelPropagation: false }}>
+      <PerfectScrollbar
+        className='user-profile-sidebar-area'
+      // options={{ wheelPropagation: false }}
+      >
         <div className='personal-info'>
           <h6 className='section-label mb-1 mt-3'>{T('Personal Information')}</h6>
           <ul className='list-unstyled'>

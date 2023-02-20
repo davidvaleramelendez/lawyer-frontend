@@ -45,7 +45,8 @@ const ModalCaseDetail = ({
   open,
   toggleModal,
   caseRowData,
-  setCaseRowData
+  setCaseRowData,
+  handleNavigationRole
 }) => {
   const handleReset = () => {
     setCaseRowData(caseItem)
@@ -111,7 +112,9 @@ const ModalCaseDetail = ({
                   <td>
                     <div className='d-flex justify-content-left align-items-center'>
                       {renderCase(caseRowData.user)}
-                      <Link to={`${adminRoot}/user/view/${caseRowData.user && caseRowData.user.id}`}>
+                      <Link
+                        to={handleNavigationRole(caseRowData.user, "view")}
+                      >
                         <div className='d-flex flex-column'>
                           <span className='fw-bolder'>{caseRowData.user && caseRowData.user.name}</span>
                           <small className='text-truncate text-muted mb-0'>{caseRowData.user && caseRowData.user.email}</small>
@@ -124,7 +127,9 @@ const ModalCaseDetail = ({
                 <tr>
                   <td>Lawyer:</td>
                   <td>
-                    <Link to={`${adminRoot}/user/view/${caseRowData.laywer && caseRowData.laywer.id}`}>
+                    <Link
+                      to={handleNavigationRole(caseRowData.laywer, "view")}
+                    >
                       <span className='fw-bolder'>{caseRowData.laywer && caseRowData.laywer.name}</span>
                     </Link>
                   </td>

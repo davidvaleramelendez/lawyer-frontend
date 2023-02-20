@@ -1,4 +1,5 @@
 /* eslint-disable object-shorthand */
+/* eslint-disable no-unneeded-ternary */
 
 // ** React Imports
 import { useState, useEffect, Fragment } from 'react'
@@ -310,7 +311,10 @@ const ImportLetterFileList = () => {
         let selectedItemArr = []
         if (checked) {
             if (store && store.importLetterFileItems && store.importLetterFileItems.length) {
-                selectedItemArr = store.importLetterFileItems.map((t) => t.id)
+                let importLetterFileItems = [...store.importLetterFileItems]
+                importLetterFileItems = importLetterFileItems.filter((x) => x.cases !== null)
+
+                selectedItemArr = importLetterFileItems.map((t) => t.id)
             }
         } else {
             selectedItemArr = []
@@ -394,6 +398,7 @@ const ImportLetterFileList = () => {
                         type="checkbox"
                         id={`import-item-action-${row.id}`}
                         name={`import-item-action-${row.id}`}
+                        disabled={row && row.cases && row.cases.CaseID ? false : true}
                         onChange={() => onSelectImportItem(row)}
                         checked={handleSelectedImportChecked(row)}
                     />
@@ -457,24 +462,26 @@ const ImportLetterFileList = () => {
             minWidth: "18%",
             sortField: "isErledigt",
             cell: (row) => (
-                <div className="form-switch form-check-primary">
-                    <Input
-                        type="switch"
-                        checked={row.isErledigt}
-                        id={`invoice_${row.id}_${row.isErledigt}`}
-                        name={`invoice_${row.id}_${row.isErledigt}`}
-                        className="cursor-pointer"
-                        onChange={() => handleMarkDone(row.id)}
-                    />
-                    <Label className="form-check-label" htmlFor="icon-primary">
-                        <span className="switch-icon-left">
-                            <Check size={14} />
-                        </span>
-                        <span className="switch-icon-right">
-                            <X size={14} />
-                        </span>
-                    </Label>
-                </div>
+                row && row.cases && row.cases.CaseID ? (
+                    <div className="form-switch form-check-primary">
+                        <Input
+                            type="switch"
+                            checked={row.isErledigt}
+                            id={`invoice_${row.id}_${row.isErledigt}`}
+                            name={`invoice_${row.id}_${row.isErledigt}`}
+                            className="cursor-pointer"
+                            onChange={() => handleMarkDone(row.id)}
+                        />
+                        <Label className="form-check-label" htmlFor="icon-primary">
+                            <span className="switch-icon-left">
+                                <Check size={14} />
+                            </span>
+                            <span className="switch-icon-right">
+                                <X size={14} />
+                            </span>
+                        </Label>
+                    </div>
+                ) : null
             ),
             /* Custom placeholder vars */
             contentExtraStyles: {

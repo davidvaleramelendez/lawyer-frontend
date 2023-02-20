@@ -89,7 +89,7 @@ const ModalSendInvoice = ({
       dispatch(clearInvoiceMessage())
     }
   }, [store.success, store.error, store.actionFlag])
-  console.log("ModalSendInvoice >>>> ", invoiceData)
+  // console.log("ModalSendInvoice >>>> ", invoiceData)
 
   const handleModalOpened = () => {
     setValue('to', (invoiceData && invoiceData.customer && invoiceData.customer.email) || "")

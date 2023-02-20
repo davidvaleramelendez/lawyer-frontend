@@ -179,7 +179,7 @@ const Sidebar = (props) => {
 
             <PerfectScrollbar
               className="sidebar-list"
-              options={{ wheelPropagation: false }}
+              // options={{ wheelPropagation: false }}
               containerRef={ref => {
                 if (ref) {
                   ref._getBoundingClientRect = ref.getBoundingClientRect

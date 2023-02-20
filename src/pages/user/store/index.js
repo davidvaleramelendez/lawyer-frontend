@@ -240,7 +240,7 @@ export const getUserPermission = createAsyncThunk('appUser/getUserPermission', a
       }
     }
   } catch (error) {
-    console.log("getUserView catch ", error)
+    console.log("getUserPermission catch ", error)
     return {
       permissions: [],
       actionFlag: "",

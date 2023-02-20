@@ -1,12 +1,7 @@
 /* eslint-disable object-shorthand */
 
 // ** React Imports
-import { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-
-// ** Store & Actions
-import { clearUserMessage } from '@src/pages/user/store'
-import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 // ** Reactstrap Imports
 import {
@@ -37,10 +32,7 @@ import {
   getRandColorClass
 } from '@utils'
 
-// Constant
-import {
-  adminRoot
-} from '@constant/defaultValues'
+// ** Constant
 import {
   userItem
 } from '@constant/reduxConstant'
@@ -58,26 +50,14 @@ const ModalUserDetail = ({
   open,
   toggleModal,
   userRowData,
-  setUserRowData
+  setUserRowData,
+  handleNavigationRole
 }) => {
-
-  // ** Store vars
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const store = useSelector((state) => state.user)
-
   const handleReset = () => {
     setUserRowData(userItem)
     toggleModal()
   }
 
-  // ** Get contact on mount based on id
-  useEffect(() => {
-    /* For blank message api called inside */
-    if (store && (store.success || store.error || store.actionFlag)) {
-      dispatch(clearUserMessage())
-    }
-  }, [store.success, store.error, store.actionFlag])
   // console.log("userItem Model >>>> ", userRowData)
 
   /* Rendering file preview web url */
@@ -107,7 +87,7 @@ const ModalUserDetail = ({
           initials
           className='me-1'
           color={getRandColorClass()}
-          content={row.name || 'John Doe'}
+          content={row.name || ''}
         />
       )
     }
@@ -132,7 +112,7 @@ const ModalUserDetail = ({
                       {renderUser(userRowData)}
                       <div className='d-flex flex-column'>
                         <Link
-                          to={`${adminRoot}/user/view/${userRowData && userRowData.id}`}
+                          to={handleNavigationRole(userRowData, "view")}
                           className='user_name text-truncate text-body'
                         >
                           <span className='fw-bolder'>{userRowData && userRowData.name}</span>
@@ -142,18 +122,22 @@ const ModalUserDetail = ({
                     </div>
                   </td>
                 </tr>
+
                 <tr>
                   <td>{T('Email')}:</td>
                   <td>{userRowData && userRowData.email}</td>
                 </tr>
+
                 <tr>
                   <td>{T('Role')}:</td>
                   <td>{userRowData && userRowData.role && userRowData.role.RoleName}</td>
                 </tr>
+
                 <tr>
                   <td>{T('Contact')}:</td>
                   <td>{userRowData && userRowData.Contact}</td>
                 </tr>
+
                 <tr>
                   <td>{T('Status')}:</td>
                   <td>
@@ -162,6 +146,7 @@ const ModalUserDetail = ({
                     </Badge>
                   </td>
                 </tr>
+
                 <tr>
                   <td>{T('Actions')}:</td>
                   <td>
@@ -170,11 +155,18 @@ const ModalUserDetail = ({
                         <MoreVertical size={18} />
                       </DropdownToggle>
                       <DropdownMenu>
-                        <DropdownItem href={`${adminRoot}/user/view/${userRowData && userRowData.id}`} tag='a' onClick={e => { e.preventDefault(); navigate(`${adminRoot}/user/view/${userRowData && userRowData.id}`) }}>
+                        <DropdownItem
+                          tag={Link}
+                          to={handleNavigationRole(userRowData, "view")}
+                        >
                           <Eye size={18} className='mb-0 me-1' />
                           <span className='me-2'>View</span>
                         </DropdownItem>
-                        <DropdownItem href={`${adminRoot}/user/edit/${userRowData && userRowData.id}`} tag='a' onClick={e => { e.preventDefault(); navigate(`${adminRoot}/user/edit/${userRowData && userRowData.id}`) }}>
+
+                        <DropdownItem
+                          tag={Link}
+                          to={handleNavigationRole(userRowData, "edit")}
+                        >
                           <Archive size={18} className='mb-0 me-1' />
                           <span className='me-2'>Edit</span>
                         </DropdownItem>

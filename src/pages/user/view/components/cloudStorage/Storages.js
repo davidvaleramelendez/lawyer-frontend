@@ -164,8 +164,8 @@ const Storages = (props) => {
   const renderFolderFiles = () => {
     return store ? (
       <PerfectScrollbar
+        // options={{ wheelPropagation: false }}
         className={`file-manager-content-body ${store.cloudStorageItems && store.cloudStorageItems.breadcrumbs && store.cloudStorageItems.breadcrumbs.length ? 'has-breadcrumb' : ''}`}
-        options={{ wheelPropagation: false }}
         containerRef={ref => {
           if (ref) {
             ref._getBoundingClientRect = ref.getBoundingClientRect

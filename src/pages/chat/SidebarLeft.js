@@ -159,6 +159,7 @@ const SidebarLeft = (props) => {
                 imgHeight='42'
                 imgWidth='42'
                 img={renderFileWebUrlPreview(item.profile_photo_path) || avatarBlank}
+                status={item.has_chat_status_exists ? 'online' : 'offline'}
               />
               <div className='chat-info flex-grow-1'>
                 <h5 className='mb-0'>{item.name}</h5>
@@ -231,10 +232,13 @@ const SidebarLeft = (props) => {
                 imgWidth='42'
                 imgHeight='42'
                 img={renderFileWebUrlPreview(item.profile_photo_path) || avatarBlank}
+                status={item.has_chat_status_exists ? 'online' : 'offline'}
               />
               <div className='chat-info flex-grow-1'>
                 <h5 className='mb-0'>{item.name}</h5>
-                {/* <CardText className='text-truncate'>{item.about}</CardText> */}
+                {item && item.role ? (
+                  <CardText className='text-truncate'>{(item.role && item.role.RoleName) || ""}</CardText>
+                ) : null}
               </div>
             </li>
           )

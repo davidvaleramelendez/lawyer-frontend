@@ -1,3 +1,5 @@
+/* eslint-disable object-shorthand */
+
 // ** React Imports
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
@@ -9,16 +11,15 @@ import {
     Card,
     Input,
     Button,
-    UncontrolledTooltip,
-    Spinner
+    Spinner,
+    UncontrolledTooltip
 } from 'reactstrap'
 
 // ** Utils
 import {
     isUserLoggedIn,
     getTotalNumber,
-    getWebPreviewUrl,
-    getRandColorClass,
+    getTransformDate,
     getCurrentPageNumber
 } from '@utils'
 
@@ -50,13 +51,9 @@ import {
 import ModalAddContact from '../modals/ModalAddContact'
 
 // ** Custom Components
-import Avatar from '@components/avatar'
 import DotPulse from '@components/dotpulse'
 import Notification from '@components/toast/notification'
 import DatatablePagination from '@components/datatable/DatatablePagination'
-
-// ** Default Avatar Image
-import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
 
 // ** Translation
 import { T } from '@localization'
@@ -151,58 +148,38 @@ const ContactList = () => {
     const dispatch = useDispatch()
     const store = useSelector((state) => state.contact)
 
-    const handlePerPage = (value) => {
-        setRowsPerPage(parseInt(value))
+    const handleContactLists = (sorting = sort, search = searchInput, sortCol = sortColumn, page = currentPage, perPage = rowsPerPage) => {
         dispatch(
             getContactList({
-                sort,
-                search: searchInput,
-                sortColumn,
-                page: currentPage,
-                perPage: parseInt(value)
+                sort: sorting,
+                search: search,
+                sortColumn: sortCol,
+                page: page,
+                perPage: perPage
             })
         )
     }
 
+    const handlePerPage = (value) => {
+        setRowsPerPage(parseInt(value))
+        handleContactLists(sort, searchInput, sortColumn, currentPage, parseInt(value))
+    }
+
     const handleSearch = (val) => {
         setSearchInput(val)
-        dispatch(
-            getContactList({
-                sort,
-                search: val,
-                sortColumn,
-                page: currentPage,
-                perPage: rowsPerPage
-            })
-        )
+        handleContactLists(sort, val, sortColumn, currentPage, rowsPerPage)
     }
 
     const handleSort = (column, sortDirection) => {
         setSort(sortDirection)
         setSortColumn(column.sortField)
-        dispatch(
-            getContactList({
-                search: searchInput,
-                page: currentPage,
-                sort: sortDirection,
-                perPage: rowsPerPage,
-                sortColumn: column.sortField
-            })
-        )
+        handleContactLists(sortDirection, searchInput, column.sortField, currentPage, rowsPerPage)
     }
 
     const handlePagination = (page) => {
         // console.log("handlePagination >>>>>>> ", page)
         setCurrentPage(page + 1)
-        dispatch(
-            getContactList({
-                sort,
-                search: searchInput,
-                sortColumn,
-                perPage: rowsPerPage,
-                page: page + 1
-            })
-        )
+        handleContactLists(sort, searchInput, sortColumn, page + 1, rowsPerPage)
     }
 
     useEffect(() => {
@@ -212,13 +189,7 @@ const ContactList = () => {
         }
 
         if (loadFirst) {
-            dispatch(getContactList({
-                sort,
-                search: searchInput,
-                sortColumn,
-                page: currentPage,
-                perPage: rowsPerPage
-            }))
+            handleContactLists()
             setLoadFirst(false)
         }
 
@@ -239,47 +210,16 @@ const ContactList = () => {
     }, [store.success, store.error, store.actionFlag, sort, searchInput, sortColumn, currentPage, rowsPerPage, loadFirst])
     // console.log("store >>> ", store)
 
-    /* Rendering file preview web url */
-    const renderFileWebUrlPreview = (path) => {
-        if (path) {
-            return getWebPreviewUrl(path)
-        }
-
-        return false
-    }
-    /* /Rendering file preview web url */
-
-    // ** renders contact column
-    const renderContact = (row) => {
-        if (row.image && row.image.length) {
-            return (
-                <Avatar
-                    width='32'
-                    height='32'
-                    className='me-50'
-                    img={renderFileWebUrlPreview(row.image) || defaultAvatar}
-                />
-            )
-        } else {
-            return (
-                <Avatar
-                    initials
-                    className='me-50'
-                    color={getRandColorClass()}
-                    content={row ? row.Name : 'John Doe'}
-                />
-            )
-        }
-    }
-
     /* Columns */
     const columns = [
         {
             name: `${T('Ticket')}#`,
             sortable: true,
-            minWidth: "20%",
+            minWidth: "15%",
             sortField: "ContactID",
-            cell: (row) => <Link to={`${adminRoot}/contact/view/${row.ContactID}`}>{`#${row.ContactID}`}</Link>,
+            cell: (row) => (
+                <Link to={`${adminRoot}/contact/view/${row.ContactID}`}>{`#${row.ContactID}`}</Link>
+            ),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '90px'
@@ -292,13 +232,12 @@ const ContactList = () => {
         {
             name: T("Name"),
             sortable: true,
-            minWidth: "30%",
+            minWidth: "25%",
             sortField: "Name",
             cell: (row) => {
-                const name = row ? row.Name : "John Doe"
+                const name = (row && row.Name) || ""
                 return (
                     <div className="d-flex justify-content-left align-items-center">
-                        {renderContact(row)}
                         <div className="d-flex flex-column">
                             <h6 className="user-name text-truncate mb-0">{name}</h6>
                         </div>
@@ -307,9 +246,9 @@ const ContactList = () => {
             },
             /* Custom placeholder vars */
             contentExtraStyles: {
-                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '120px'
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '150px'
             },
-            customLoadingWithIcon: "User",
+            customLoadingWithIcon: "",
             customLoaderCellClass: "",
             customLoaderContentClass: "d-flex align-items-center"
             /* /Custom placeholder vars */
@@ -317,12 +256,26 @@ const ContactList = () => {
         {
             name: T("Email"),
             sortable: true,
-            minWidth: "40%",
+            minWidth: "30%",
             sortField: "Email",
             cell: row => row.Email,
             /* Custom placeholder vars */
             contentExtraStyles: {
-                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '210px'
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '190px'
+            },
+            customLoaderCellClass: "",
+            customLoaderContentClass: ""
+            /* /Custom placeholder vars */
+        },
+        {
+            name: T("Created Date"),
+            sortable: true,
+            minWidth: "20%",
+            sortField: "CreatedAt",
+            cell: row => row.CreatedAt && getTransformDate(row.CreatedAt, "DD.MM.YYYY"),
+            /* Custom placeholder vars */
+            contentExtraStyles: {
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '90px'
             },
             customLoaderCellClass: "",
             customLoaderContentClass: ""

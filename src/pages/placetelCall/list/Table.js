@@ -367,6 +367,13 @@ const PlacetelCallList = () => {
     }
     /* /Select placetel call item checkbox event */
 
+    const renderCallType = (type = "") => {
+        if (type.includes("accepted")) {
+            return "received"
+        }
+        return type
+    }
+
     /* Rendering file preview web url */
     const renderFileWebUrlPreview = (path) => {
         if (path) {
@@ -379,7 +386,7 @@ const PlacetelCallList = () => {
 
     // ** renders case column
     const renderPlacetelCallUser = (row) => {
-        if (row && row.profile_photo_path && row.profile_photo_path.length) {
+        if (row && row.profile_photo_path) {
             return (
                 <Avatar
                     width="32"
@@ -458,7 +465,9 @@ const PlacetelCallList = () => {
             sortable: true,
             sortField: "type",
             minWidth: "25%",
-            cell: (row) => (<div className="text-capitalize">{row.type}</div>),
+            cell: (row) => (
+                <div className="text-capitalize">{renderCallType(row.type)}</div>
+            ),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '75px'

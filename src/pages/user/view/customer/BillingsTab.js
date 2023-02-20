@@ -248,7 +248,9 @@ const BillingsTab = ({
             sortable: true,
             sortField: "invoice_no",
             minWidth: "22%",
-            cell: (row) => <Link to={`${adminRoot}/invoice/view/${row.id}`}>{`#${row.invoice_no}`}</Link>,
+            cell: (row) => (
+                <Link to={`${adminRoot}/invoice/view/${row.id}`}>{`#${row.invoice_no}`}</Link>
+            ),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '90px'
@@ -291,7 +293,9 @@ const BillingsTab = ({
             sortable: true,
             sortField: "total_price",
             minWidth: "18%",
-            cell: (row) => `€ ${row && row.total_price && getDecimalFormat(row.total_price)}`,
+            cell: (row) => (
+                `€ ${row && row.total_price && getDecimalFormat(row.total_price)}`
+            ),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '65px'
@@ -305,7 +309,9 @@ const BillingsTab = ({
             sortable: true,
             sortField: "invoice_due_date",
             minWidth: "25%",
-            cell: (row) => row.invoice_due_date && getTransformDate(row.invoice_due_date, "DD MMM YYYY"),
+            cell: (row) => (
+                row.invoice_due_date && getTransformDate(row.invoice_due_date, "DD MMM YYYY")
+            ),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'

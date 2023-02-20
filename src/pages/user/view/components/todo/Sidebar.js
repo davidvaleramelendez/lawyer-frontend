@@ -92,7 +92,10 @@ const TodoSidebar = (props) => {
               ) : null}
             </div>
 
-            <PerfectScrollbar className='sidebar-menu-list' options={{ wheelPropagation: false }}>
+            <PerfectScrollbar
+              className='sidebar-menu-list'
+            // options={{ wheelPropagation: false }}
+            >
               <ListGroup tag='div' className='list-group-filters'>
                 <ListGroupItem
                   action

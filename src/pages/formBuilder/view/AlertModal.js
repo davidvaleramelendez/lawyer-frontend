@@ -1,6 +1,9 @@
 // ** Redux Import
 import { useDispatch, useSelector } from "react-redux"
-import { setDeleteItem, updatePreviewList } from "./store"
+import { setDeleteItem, updateStepDetails } from "../store"
+
+// ** Route Import
+import { useParams } from "react-router-dom"
 
 // ** Reactstrap Import
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap"
@@ -8,16 +11,21 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap"
 // ** Third Party Module Import
 import _ from "lodash"
 
+// ** Icon Import
+import { AlertCircle } from "react-feather"
+
 // ** Translation
 import { T } from "@localization"
-import { AlertCircle } from "react-feather"
 
 const AlertModal = () => {
 
   // ** Store Vars
   const dispatch = useDispatch()
   const deleteItem = useSelector((state) => state.formBuilder.deleteItem)
-  const formPreviewList = useSelector((state) => state.formBuilder.formPreviewList)
+  const stepDetails = useSelector((state) => state.formBuilder.stepDetails)
+
+  // ** Hook
+  const stepId = useParams()
 
   const toggleModal = () => {
     dispatch(setDeleteItem())
@@ -28,14 +36,18 @@ const AlertModal = () => {
     if (rowIndex === null) return
     if (colIndex === null) {
       // Delete Row
-      const newFormPreviewList = [...formPreviewList]
-      newFormPreviewList.splice(rowIndex, 1)
-      dispatch(updatePreviewList(newFormPreviewList))
+      const newStepDetails = [...stepDetails]
+      newStepDetails.splice(rowIndex, 1)
+      dispatch(updateStepDetails({
+        data: newStepDetails, id: stepId
+      }))
     } else {
       // Delete Item
-      const newFormPreviewList = _.cloneDeep(formPreviewList)
-      newFormPreviewList[rowIndex][colIndex] = {}
-      dispatch(updatePreviewList(newFormPreviewList))
+      const newStepDetails = _.cloneDeep(stepDetails)
+      newStepDetails[rowIndex][colIndex] = {}
+      dispatch(updateStepDetails({
+        data: newStepDetails, id: stepId
+      }))
     }
     dispatch(setDeleteItem())
   }

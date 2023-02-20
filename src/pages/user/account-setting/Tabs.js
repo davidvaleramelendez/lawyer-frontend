@@ -31,6 +31,12 @@ import {
     getWebPreviewUrl
 } from '@utils'
 
+// ** Constant
+import {
+    adminRoleId,
+    customerRoleId
+} from "@constant/defaultValues"
+
 /* User tab view components */
 import AccountTab from './AccountTab'
 import SecurityTab from './SecurityTab'
@@ -92,7 +98,7 @@ const Tabs = ({
                     </NavLink>
                 </NavItem>
 
-                {denyTabPermissionAccess(11) ? (
+                {denyTabPermissionAccess(customerRoleId) ? (
                     <NavItem>
                         <NavLink active={active === "3"} onClick={() => toggleTab("3")}>
                             <Settings size={14} className="me-50" />
@@ -101,7 +107,7 @@ const Tabs = ({
                     </NavItem>
                 ) : null}
 
-                {denyTabPermissionAccess(11) ? (
+                {denyTabPermissionAccess(customerRoleId) ? (
                     <NavItem>
                         <NavLink active={active === "4"} onClick={() => toggleTab("4")}>
                             <Info size={14} className="me-50" />
@@ -110,7 +116,7 @@ const Tabs = ({
                     </NavItem>
                 ) : null}
 
-                {denyTabPermissionAccess(11) ? (
+                {denyTabPermissionAccess(customerRoleId) ? (
                     <NavItem>
                         <NavLink active={active === "5"} onClick={() => toggleTab("5")}>
                             <Info size={14} className="me-50" />
@@ -119,7 +125,7 @@ const Tabs = ({
                     </NavItem>
                 ) : null}
 
-                {tabPermissionAccess(10) ? (
+                {tabPermissionAccess(adminRoleId) ? (
                     <NavItem>
                         <NavLink active={active === "6"} onClick={() => toggleTab("6")}>
                             <Key size={14} className="me-50" />
@@ -128,7 +134,7 @@ const Tabs = ({
                     </NavItem>
                 ) : null}
 
-                {tabPermissionAccess(10) ? (
+                {tabPermissionAccess(adminRoleId) ? (
                     <NavItem>
                         <NavLink active={active === "7"} onClick={() => toggleTab("7")}>
                             <Phone size={14} className="me-50" />
@@ -157,7 +163,7 @@ const Tabs = ({
                     />
                 </TabPane>
 
-                {denyTabPermissionAccess(11) ? (
+                {denyTabPermissionAccess(customerRoleId) ? (
                     <TabPane tabId="3">
                         <CompanySettingTab
                             userData={userData}
@@ -165,25 +171,25 @@ const Tabs = ({
                     </TabPane>
                 ) : null}
 
-                {denyTabPermissionAccess(11) ? (
+                {denyTabPermissionAccess(customerRoleId) ? (
                     <TabPane tabId="4">
                         <LanguageLabels />
                     </TabPane>
                 ) : null}
 
-                {denyTabPermissionAccess(11) ? (
+                {denyTabPermissionAccess(customerRoleId) ? (
                     <TabPane tabId="5">
                         <ImapTab />
                     </TabPane>
                 ) : null}
 
-                {tabPermissionAccess(10) ? (
+                {tabPermissionAccess(adminRoleId) ? (
                     <TabPane tabId="6">
                         <ApiTokenTab />
                     </TabPane>
                 ) : null}
 
-                {denyTabPermissionAccess(11) ? (
+                {tabPermissionAccess(adminRoleId) ? (
                     <TabPane tabId="7">
                         <PlacetelSipUserIdVoIP />
                     </TabPane>

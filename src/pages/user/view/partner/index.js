@@ -19,7 +19,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // Constant
 import {
-  adminRoot
+  adminRoot,
+  partnerRoleId
 } from '@constant/defaultValues'
 
 // ** Reactstrap Imports
@@ -101,8 +102,8 @@ const UserView = () => {
       setLoadFirst(false)
     }
 
-    if (store && store.userItem) {
-      onCheckRoleAccess(12)
+    if (store && store.actionFlag && store.actionFlag === "EDIT_USER") {
+      onCheckRoleAccess(partnerRoleId)
     }
 
     /* For blank message api called inside */
@@ -188,29 +189,6 @@ const UserView = () => {
         </Col>
       </Row>
     </div>
-
-    {/* <div className="app-user-view">
-      <Row>
-        <Col xl={4} lg={5} xs={{ order: 1 }} md={{ order: 0, size: 5 }}>
-          <UserInfoCard
-            id={id}
-            userItem={store.userItem}
-            onDeleteUser={onDeleteUser}
-            authUserItem={store.authUserItem}
-          />
-        </Col>
-
-        <Col xl={8} lg={7} xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
-          <UserTabs
-            id={id}
-            active={active}
-            toggleTab={toggleTab}
-            authUserItem={store.authUserItem}
-            getCurrentUser={getCurrentUser}
-          />
-        </Col>
-      </Row>
-    </div> */}
   </Fragment>) : null
 }
 

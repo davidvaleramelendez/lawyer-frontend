@@ -252,8 +252,8 @@ const Tasks = (props) => {
 
     return (
       <PerfectScrollbar
+        // options={{ wheelPropagation: false }}
         className="list-group todo-task-list-wrapper"
-        options={{ wheelPropagation: false }}
         containerRef={ref => {
           if (ref) {
             ref._getBoundingClientRect = ref.getBoundingClientRect

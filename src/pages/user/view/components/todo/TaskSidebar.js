@@ -63,6 +63,7 @@ import { T } from '@localization'
 const ModalHeader = (props) => {
   // ** Props
   const {
+    folder,
     dispatch,
     todoItem,
     children,
@@ -85,15 +86,17 @@ const ModalHeader = (props) => {
       <h5 className='modal-title'>{children}</h5>
       <div className='todo-item-action d-flex align-items-center'>
         {onCheckUserPermission(13) ? (
-          <span className='todo-item-favorite cursor-pointer mx-75'>
-            <Star
-              size={16}
-              onClick={() => handleImportant()}
-              className={classnames({
-                'text-warning': important === true
-              })}
-            />
-          </span>
+          folder !== "completed" && folder !== "deleted" ? (
+            <span className='todo-item-favorite cursor-pointer mx-75'>
+              <Star
+                size={16}
+                onClick={() => handleImportant()}
+                className={classnames({
+                  'text-warning': important === true
+                })}
+              />
+            </span>
+          ) : null
         ) : null}
         <X className='fw-normal mt-25 cursor-pointer' size={16} onClick={handleTaskSidebar} />
       </div>
@@ -113,6 +116,8 @@ const TaskSidebar = (props) => {
     userOptions,
     getTaskItem,
     trashTodoItem,
+    deleteTodoItem,
+    restoreTodoItem,
     createUpdateTodo,
     updateTaskLoader,
     completeTodoItem,
@@ -199,17 +204,45 @@ const TaskSidebar = (props) => {
     )
   }
 
+  // ** Function to restore task
+  const handleRestoreTask = (todoId) => {
+    MySwal.fire({
+      title: T('Are you sure?'),
+      text: T("You can also revert this!"),
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: T('Yes, restore it!'),
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-danger ms-1'
+      },
+      buttonsStyling: false
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        dispatch(restoreTodoItem(todoId))
+      }
+    })
+  }
+
   // ** Returns sidebar title
   const handleSidebarTitle = () => {
     if (store && store.todoItem && store.todoItem.id) {
-      return (
+      return folder !== 'deleted' ? (
         <Button
           outline
           size='sm'
           onClick={() => dispatch(completeTodoItem(store.todoItem.id))}
-          color={store.todoItem.is_completed === 1 ? 'success' : 'secondary'}
+          color={store.todoItem.is_completed ? 'success' : 'secondary'}
         >
-          {store.todoItem.is_completed === 1 ? T('Completed') : T('Mark Complete')}
+          {store.todoItem.is_completed ? T('Completed') : T('Complete')}
+        </Button>
+      ) : (
+        <Button
+          outline
+          size='sm'
+          onClick={() => handleRestoreTask(store.todoItem.id)}
+        >
+          {T('Restore')}
         </Button>
       )
     } else {
@@ -259,29 +292,60 @@ const TaskSidebar = (props) => {
     })
   }
 
+  // ** Function to delete task
+  const handleDeleteTask = (todoId) => {
+    MySwal.fire({
+      title: T('Are you sure?'),
+      text: T("You won't be able to revert this!"),
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: T('Yes, delete it!'),
+      customClass: {
+        confirmButton: 'btn btn-primary',
+        cancelButton: 'btn btn-outline-danger ms-1'
+      },
+      buttonsStyling: false
+    }).then(function (result) {
+      if (result.isConfirmed) {
+        dispatch(deleteTodoItem(todoId))
+      }
+    })
+  }
+
   // ** Renders Footer Buttons
   const renderFooterButtons = () => {
     if (store && store.todoItem && store.todoItem.id) {
       return (
         <Fragment>
-          <Button
-            color="primary"
-            disabled={!store.loading}
-            className="update-btn update-todo-item"
-          >
-            {T('Update')}
-          </Button>
-
           {folder !== 'deleted' ? (
             <Button
-              color="danger"
-              className="ms-1"
+              color="primary"
               disabled={!store.loading}
-              outline onClick={handleTrashTask}
+              className="update-btn update-todo-item me-1"
+            >
+              {T('Update')}
+            </Button>
+          ) : null}
+
+          {store.todoItem.is_deleted ? (
+            <Button
+              outline
+              color="danger"
+              disabled={!store.loading}
+              onClick={() => handleDeleteTask(store.todoItem.id)}
             >
               {T('Delete')}
             </Button>
-          ) : null}
+          ) : (
+            <Button
+              outline
+              color="danger"
+              disabled={!store.loading}
+              onClick={() => handleTrashTask(store.todoItem.id)}
+            >
+              {T('Delete')}
+            </Button>
+          )}
         </Fragment>
       )
     } else {
@@ -369,6 +433,7 @@ const TaskSidebar = (props) => {
       <Form id='form-modal-todo' className='todo-modal' onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <ModalHeader
           store={store}
+          folder={folder}
           dispatch={dispatch}
           todoItem={store.todoItem}
           important={important}

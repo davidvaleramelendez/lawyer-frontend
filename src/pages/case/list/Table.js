@@ -1,17 +1,29 @@
 /* eslint-disable object-shorthand */
 /* eslint-disable no-confusing-arrow */
 
-import {useState, useEffect, useCallback } from "react"
-import {useNavigate, Link } from "react-router-dom"
-import {Col, Row, Card, CardHeader, CardTitle, Input, Button} from "reactstrap"
+import { useState, useEffect, useCallback } from "react"
+import { useNavigate, Link } from "react-router-dom"
+import { Col, Row, Card, CardHeader, CardTitle, Input, Button } from "reactstrap"
 import Select from "react-select"
-import {isUserLoggedIn, getTotalNumber, getWebPreviewUrl, getTransformDate, getRandColorClass, getCurrentPageNumber} from "@utils"
-import {root, TN_CASES, adminRoot, perPageRowItems, defaultPerPageRow} from "@constant/defaultValues"
-import {caseItem } from "@constant/reduxConstant"
-import {getCaseList, clearCaseMessage} from "../store"
+import { isUserLoggedIn, getTotalNumber, getWebPreviewUrl, getTransformDate, getRandColorClass, getCurrentPageNumber } from "@utils"
+
+// ** Constant
+import {
+    root,
+    TN_CASES,
+    adminRoot,
+    adminRoleId,
+    lawyerRoleId,
+    partnerRoleId,
+    perPageRowItems,
+    defaultPerPageRow
+} from "@constant/defaultValues"
+import { caseItem } from "@constant/reduxConstant"
+
+import { getCaseList, clearCaseMessage } from "../store"
 import { useDispatch, useSelector } from "react-redux"
 import ModalCaseDetail from "../modals/ModalCaseDetail"
-import {Eye, PlusCircle } from "react-feather"
+import { Eye, PlusCircle } from "react-feather"
 import Avatar from "@components/avatar"
 import DotPulse from "@components/dotpulse"
 import Notification from '@components/toast/notification'
@@ -38,11 +50,11 @@ const CustomHeader = ({
     handleStatusFilter
 }) => {
     return (<div className="w-100 py-2">
-          <Card className="overflow-hidden">
+        <Card className="overflow-hidden">
             <CardHeader className="border-bottom">
                 <CardTitle tag="h4">{T('Cases')}</CardTitle>
             </CardHeader>
-            </Card>
+        </Card>
         <Row>
             <Col lg={6} className="d-flex align-items-center px-0 px-lg-1">
                 <div className="d-flex align-items-center me-2">
@@ -61,7 +73,7 @@ const CustomHeader = ({
                         </>) : null}
                     </Input>
                     <label className="entries"> entries </label>
-                </div>  
+                </div>
             </Col>
 
             <Col lg={6} className="actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0">
@@ -90,7 +102,7 @@ const CustomHeader = ({
                     />
                 </div>
             </Col>
-            
+
         </Row>
     </div>)
 }
@@ -258,6 +270,21 @@ const CaseList = () => {
     }
     /* /Rendering file preview web url */
 
+    const handleNavigationRole = (user, type = "view") => {
+        if (user && user.id) {
+            if (user.role_id === adminRoleId) {
+                return `${adminRoot}/user/admin/${type}/${user.id}`
+            } else if (user.role_id === lawyerRoleId) {
+                return `${adminRoot}/user/lawyer/${type}/${user.id}`
+            } else if (user.role_id === partnerRoleId) {
+                return `${adminRoot}/user/partner/${type}/${user.id}`
+            } else {
+                return `${adminRoot}/user/customer/${type}/${user.id}`
+            }
+        }
+        return `${adminRoot}/user`
+    }
+
     // ** renders case column
     const renderCase = (row) => {
         if (row && row.profile_photo_path && row.profile_photo_path.length) {
@@ -327,12 +354,14 @@ const CaseList = () => {
             minWidth: "23%",
             sortField: "Name",
             cell: (row) => {
-                const name = row ? row.user && row.user.name : "John Doe"
+                const name = (row && row.user && row.user.name) || ""
                 return (
                     <div className="d-flex justify-content-left align-items-center">
                         {renderCase(row.user)}
                         <div className="d-flex flex-column">
-                            <Link to={`${adminRoot}/user/view/${row.user && row.user.id}`}>
+                            <Link
+                                to={handleNavigationRole(row.user, "view")}
+                            >
                                 <h6 className="user-name text-truncate mb-0">{name}</h6>
                                 <small className="text-truncate text-muted text-wrap mb-0">{(row && row.user && row.user.email) || ""}</small>
                             </Link>
@@ -358,7 +387,13 @@ const CaseList = () => {
             sortable: true,
             sortField: "LaywerID",
             minWidth: "15%",
-            cell: (row) => row && row.laywer && row.laywer.id ? (<Link to={`${adminRoot}/user/view/${row.laywer.id}`}>{row.laywer.name}</Link>) : null,
+            cell: (row) => row && row.laywer && row.laywer.id ? (
+                <Link
+                    to={handleNavigationRole(row.laywer, "view")}
+                >
+                    {row.laywer.name}
+                </Link>
+            ) : null,
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
@@ -468,6 +503,7 @@ const CaseList = () => {
                 open={detailModalOpen}
                 caseRowData={caseRowData}
                 setCaseRowData={setCaseRowData}
+                handleNavigationRole={handleNavigationRole}
             />
         </Card>
     </>)

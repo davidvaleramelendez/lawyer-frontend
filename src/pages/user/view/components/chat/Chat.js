@@ -150,7 +150,7 @@ const ChatLog = (props) => {
               imgWidth={36}
               imgHeight={36}
               className='box-shadow-1 cursor-pointer'
-              img={item.senderId === selectedUser.id ? renderFileWebUrlPreview(selectedUser.profile_photo_path) : renderFileWebUrlPreview(userProfile.profile_photo_path)}
+              img={item.senderId === selectedUser.id ? renderFileWebUrlPreview(selectedUser.profile_photo_path) || defaultAvatar : renderFileWebUrlPreview(userProfile.profile_photo_path) || defaultAvatar}
             />
           </div>
 
@@ -262,7 +262,11 @@ const ChatLog = (props) => {
             </header>
           </div>
 
-          <ChatWrapper ref={chatArea} className='user-chats' options={{ wheelPropagation: false }}>
+          <ChatWrapper
+            ref={chatArea}
+            className='user-chats'
+          // options={{ wheelPropagation: false }}
+          >
             {chats && chats.length ? <div className='chats'>{renderChats()}</div> : null}
           </ChatWrapper>
 

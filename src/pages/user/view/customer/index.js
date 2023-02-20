@@ -6,6 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import {
   deleteUser,
   getUserView,
+  updateUserLoader,
   getUserPermission,
   clearUserMessage
 } from '@src/pages/user/store'
@@ -17,9 +18,12 @@ import {
 } from '@src/pages/invoice/store'
 import { useDispatch, useSelector } from 'react-redux'
 
-// Constant
+// ** Constant
 import {
-  adminRoot
+  adminRoot,
+  adminRoleId,
+  lawyerRoleId,
+  partnerRoleId
 } from '@constant/defaultValues'
 
 // ** Reactstrap Imports
@@ -94,13 +98,14 @@ const UserView = () => {
 
     /* Calling first time */
     if (loadFirst) {
+      dispatch(updateUserLoader(false))
       dispatch(getUserView(id))
       dispatch(getUserPermission(id))
       setLoadFirst(false)
     }
 
-    if (store && store.userItem) {
-      onCheckRoleAccess([10, 12, 14])
+    if (store && store.actionFlag && store.actionFlag === "EDIT_USER") {
+      onCheckRoleAccess([adminRoleId, partnerRoleId, lawyerRoleId])
     }
 
     /* For blank message api called inside */

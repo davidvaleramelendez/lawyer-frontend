@@ -29,12 +29,16 @@ import {
 // Constant
 import {
     root,
-    TN_PLACETEL_CALL
+    TN_PLACETEL_CALL,
+    perPageRowItems,
+    defaultPerPageRow
 } from '@constant/defaultValues'
 
 // ** Store & Actions
 import {
     deletePlacetelCall,
+    updatePlacetelCall,
+    setPlacetelCallItem,
     getPlacetelCallList,
     setInitiateCallItem,
     initiatePlacetelCall,
@@ -50,6 +54,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // ** Icons Import
 import {
     Phone,
+    Edit2,
     Trash2,
     RefreshCw
 } from 'react-feather'
@@ -66,6 +71,7 @@ import withReactContent from 'sweetalert2-react-content'
 
 // ** Modal
 import ModalPlacetelInitiatedCall from '../modals/ModalPlacetelInitiatedCall'
+import ModalPlacetelUpdateNote from '../modals/ModalPlacetelUpdateNote'
 
 // ** Default Avatar Image
 import defaultAvatar from '@src/assets/images/avatars/avatar-blank.png'
@@ -118,9 +124,11 @@ const CustomHeader = ({
                             onChange={(event) => handlePerPage(event.target.value)}
                             className="form-control ms-50 pe-3"
                         >
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
+                            {perPageRowItems && perPageRowItems.length ? (<>
+                                {perPageRowItems.map((item, index) => (
+                                    <option key={`row-${index}`} value={item.value}>{item.label}</option>
+                                ))}
+                            </>) : null}
                         </Input>
                     </div>
 
@@ -182,11 +190,12 @@ const PlacetelCallList = () => {
     // ** States
     const [loadFirst, setLoadFirst] = useState(true)
     const [modalOpen, setModalOpen] = useState(false)
+    const [noteModalOpen, setNoteModalOpen] = useState(false)
     const [searchInput, setSearchInput] = useState('')
     const [sort, setSort] = useState('desc')
     const [sortColumn, setSortColumn] = useState('id')
     const [currentPage, setCurrentPage] = useState(1)
-    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [rowsPerPage, setRowsPerPage] = useState(defaultPerPageRow)
 
     const handlePlacetelCallLists = (sorting = sort, search = searchInput, sortCol = sortColumn, page = currentPage, perPage = rowsPerPage) => {
         dispatch(
@@ -299,6 +308,13 @@ const PlacetelCallList = () => {
             }
         })
     }
+
+    /* Placetel note modal events */
+    const handleOpenNoteModal = (item) => {
+        dispatch(setPlacetelCallItem({ ...item }))
+        setNoteModalOpen(true)
+    }
+    /* /Placetel note modal events */
 
     /* Select placetel call item checkbox event */
     const onSelectAllPlacetelCalls = (checked) => {
@@ -498,19 +514,29 @@ const PlacetelCallList = () => {
                 <div className='column-action d-flex align-items-center'>
                     <Phone
                         size={17}
+                        className='cursor-pointer mb-0'
                         id={`pw-phone-tooltip-${row.id}`}
                         onClick={() => handleInitiateCall(row)}
-                        className='cursor-pointer mb-0'
                     />
                     <UncontrolledTooltip placement="top" target={`pw-phone-tooltip-${row.id}`}>
                         {T('Initiate Call')}
                     </UncontrolledTooltip>
 
+                    <Edit2
+                        size={17}
+                        className='cursor-pointer mb-0 ms-50'
+                        id={`pw-edit-note-tooltip-${row.id}`}
+                        onClick={() => handleOpenNoteModal(row)}
+                    />
+                    <UncontrolledTooltip placement="top" target={`pw-edit-note-tooltip-${row.id}`}>
+                        {T('Update Note')}
+                    </UncontrolledTooltip>
+
                     <Trash2
                         size={17}
+                        className='cursor-pointer mb-0 ms-50'
                         id={`pw-delete-tooltip-${row.id}`}
                         onClick={() => handleDelete(row.id)}
-                        className='cursor-pointer mb-0 ms-50'
                     />
                     <UncontrolledTooltip placement="top" target={`pw-delete-tooltip-${row.id}`}>
                         {T('Delete')}
@@ -519,7 +545,7 @@ const PlacetelCallList = () => {
             ),
             /* Custom placeholder vars */
             contentExtraStyles: {
-                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '30px'
+                height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '60px'
             },
             customLoaderCellClass: "text-center",
             customLoaderContentClass: ""
@@ -570,6 +596,18 @@ const PlacetelCallList = () => {
                     dispatch={dispatch}
                     initiatedCallItem={store.initiatedCallItem}
                     setInitiateCallItem={setInitiateCallItem}
+                />
+
+                <ModalPlacetelUpdateNote
+                    toggleModal={() => setNoteModalOpen(!noteModalOpen)}
+                    open={noteModalOpen}
+                    dispatch={dispatch}
+                    loading={store.loading}
+                    actionFlag={store.actionFlag}
+                    updatePlacetelCall={updatePlacetelCall}
+                    placetelCallItem={store.placetelCallItem}
+                    setPlacetelCallItem={setPlacetelCallItem}
+                    updatePlacetelCallLoader={updatePlacetelCallLoader}
                 />
             </Card>
         </Fragment>

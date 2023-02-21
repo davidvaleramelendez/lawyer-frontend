@@ -82,7 +82,10 @@ const Sidebar = (props) => {
               ) : null}
             </div>
 
-            <PerfectScrollbar className='sidebar-menu-list' options={{ wheelPropagation: false }}>
+            <PerfectScrollbar
+              className='sidebar-menu-list'
+            // options={{ wheelPropagation: false }}
+            >
               <ListGroup className='list-group-messages'>
                 <ListGroupItem
                   tag="a"

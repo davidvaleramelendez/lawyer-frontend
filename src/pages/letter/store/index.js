@@ -97,7 +97,7 @@ export const archiveLetter = createAsyncThunk('appLetter/archiveLetter', async (
 })
 
 async function updatePrintStatusRequest(id, params) {
-  return axios.get(`${API_ENDPOINTS.letters.archive}/${id}`, { params }).then((letter) => letter.data).catch((error) => error)
+  return axios.get(`${API_ENDPOINTS.letters.updateStatus}/${id}`, { params }).then((letter) => letter.data).catch((error) => error)
 }
 
 export const updatePrintStatus = createAsyncThunk('appLetter/updatePrintStatus', async (params, { dispatch, getState }) => {

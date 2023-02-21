@@ -435,7 +435,10 @@ const MailDetails = (props) => {
             </div>
           </div>
 
-          <PerfectScrollbar className="email-scroll-area" options={{ wheelPropagation: false }}>
+          <PerfectScrollbar
+            className="email-scroll-area"
+          // options={{ wheelPropagation: false }}
+          >
             <Row>
               <Col sm={12}>
                 <div className="email-label">{mailItem && mailItem.mail && mailItem.mail.label ? renderLabels(mailItem.mail.label.split(",")) : null}</div>

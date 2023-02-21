@@ -32,7 +32,9 @@ import {
 import {
     root,
     adminRoot,
-    TN_IMPORT_LETTER_FILE
+    TN_IMPORT_LETTER_FILE,
+    perPageRowItems,
+    defaultPerPageRow
 } from '@constant/defaultValues'
 
 // ** Store & Actions
@@ -121,9 +123,11 @@ const CustomHeader = ({
                             onChange={(event) => handlePerPage(event.target.value)}
                             className="form-control ms-50 pe-3"
                         >
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
+                            {perPageRowItems && perPageRowItems.length ? (<>
+                                {perPageRowItems.map((item, index) => (
+                                    <option key={`row-${index}`} value={item.value}>{item.label}</option>
+                                ))}
+                            </>) : null}
                         </Input>
                     </div>
 
@@ -198,7 +202,7 @@ const ImportLetterFileList = () => {
     const [sort, setSort] = useState('desc')
     const [sortColumn, setSortColumn] = useState('id')
     const [currentPage, setCurrentPage] = useState(1)
-    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [rowsPerPage, setRowsPerPage] = useState(defaultPerPageRow)
 
     const handleImportLetterFileLists = (sorting = sort, search = searchInput, sortCol = sortColumn, page = currentPage, perPage = rowsPerPage) => {
         dispatch(

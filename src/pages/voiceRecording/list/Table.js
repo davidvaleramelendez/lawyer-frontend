@@ -2,9 +2,9 @@
 
 import { useState, useEffect, Fragment } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Col, Row, Card, Input, Label, CardHeader, CardTitle} from 'reactstrap'
-import {isUserLoggedIn, getTotalNumber, getTransformDate, getCurrentPageNumber} from '@utils'
-import { root, adminRoot, TN_VOICE_RECORDING } from '@constant/defaultValues'
+import { Col, Row, Card, Input, Label, CardHeader, CardTitle } from 'reactstrap'
+import { isUserLoggedIn, getTotalNumber, getTransformDate, getCurrentPageNumber } from '@utils'
+import { root, adminRoot, TN_VOICE_RECORDING, perPageRowItems, defaultPerPageRow } from '@constant/defaultValues'
 import { getVoiceRecordingList, markDoneVoiceRecording, clearVoiceRecordingMessage } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 import { X, Check } from 'react-feather'
@@ -34,9 +34,11 @@ const CustomHeader = ({
                             onChange={(event) => handlePerPage(event.target.value)}
                             className="form-control ms-50 pe-3"
                         >
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
+                            {perPageRowItems && perPageRowItems.length ? (<>
+                                {perPageRowItems.map((item, index) => (
+                                    <option key={`row-${index}`} value={item.value}>{item.label}</option>
+                                ))}
+                            </>) : null}
                         </Input>
                         <label className="entries"> entries </label>
                     </div>
@@ -75,7 +77,7 @@ const VoiceRecordingList = () => {
     const [sort, setSort] = useState('desc')
     const [sortColumn, setSortColumn] = useState('id')
     const [currentPage, setCurrentPage] = useState(1)
-    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [rowsPerPage, setRowsPerPage] = useState(defaultPerPageRow)
 
     const handleVoiceRecordingLists = (sorting = sort, search = searchInput, sortCol = sortColumn, page = currentPage, perPage = rowsPerPage) => {
         dispatch(

@@ -28,7 +28,9 @@ import {
 // Constant
 import {
     root,
-    TN_OUTBOX
+    TN_OUTBOX,
+    perPageRowItems,
+    defaultPerPageRow
 } from '@constant/defaultValues'
 
 // ** Store & Actions
@@ -78,9 +80,11 @@ const CustomHeader = ({
                             onChange={(event) => handlePerPage(event.target.value)}
                             className="form-control ms-50 pe-3"
                         >
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
+                            {perPageRowItems && perPageRowItems.length ? (<>
+                                {perPageRowItems.map((item, index) => (
+                                    <option key={`row-${index}`} value={item.value}>{item.label}</option>
+                                ))}
+                            </>) : null}
                         </Input>
                     </div>
                 </Col>
@@ -118,7 +122,7 @@ const LetterList = () => {
     const [sort, setSort] = useState('desc')
     const [sortColumn, setSortColumn] = useState('id')
     const [currentPage, setCurrentPage] = useState(1)
-    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [rowsPerPage, setRowsPerPage] = useState(defaultPerPageRow)
 
     const handleLetterLists = (sorting = sort, search = searchInput, sortCol = sortColumn, page = currentPage, perPage = rowsPerPage) => {
         dispatch(
@@ -211,9 +215,16 @@ const LetterList = () => {
         })
     }
 
-    const onLetterPrint = (row) => {
+    const onLetterPrint = async (row) => {
         dispatch(updatePrintStatus({ id: row.id, payload: { status: true } }))
-        window.open(renderFileWebUrlPreview(row.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`, '_blank', 'noopener,noreferrer')
+
+        const myWindow = window.open(renderFileWebUrlPreview(row.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`, '_blank', 'popup')
+        // console.log("myWindow >>> ", myWindow)
+        if (myWindow) {
+            //     // myWindow.onload = () => {
+            //     myWindow.print()
+            //     // }
+        }
     }
 
     /* Columns */
@@ -223,7 +234,9 @@ const LetterList = () => {
             sortable: true,
             sortField: "case_id",
             minWidth: "17%",
-            cell: (row) => row.case_id,
+            cell: (row) => (
+                row.case_id
+            ),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '90px'
@@ -237,7 +250,9 @@ const LetterList = () => {
             sortable: true,
             sortField: "created_date",
             minWidth: "18%",
-            cell: (row) => row.created_date && getTransformDate(row.created_date, "DD-MM-YYYY"),
+            cell: (row) => (
+                row.created_date && getTransformDate(row.created_date, "DD-MM-YYYY")
+            ),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
@@ -251,7 +266,9 @@ const LetterList = () => {
             sortable: true,
             minWidth: "30%",
             sortField: "subject",
-            cell: (row) => row.subject,
+            cell: (row) => (
+                row.subject
+            ),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '210px'
@@ -315,12 +332,20 @@ const LetterList = () => {
             name: T("View"),
             center: true,
             minWidth: "10%",
-            cell: (row) => <a href={renderFileWebUrlPreview(row.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`} target="_blank" className="d-flex align-items-center" onClick={(event) => {
-                event.preventDefault()
-                onLetterPrint(row)
-            }} rel="noopener noreferrer">
-                <Eye size={14} />
-            </a>,
+            cell: (row) => (
+                <a
+                    // target="_blank"
+                    className="d-flex align-items-center"
+                    href={renderFileWebUrlPreview(row.pdf_path) || `${process.env.REACT_APP_BACKEND_REST_API_URL_ENDPOINT}`}
+                    onClick={(event) => {
+                        event.preventDefault()
+                        onLetterPrint(row)
+                    }}
+                // rel="noopener noreferrer"
+                >
+                    <Eye size={14} />
+                </a>
+            ),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '30px'

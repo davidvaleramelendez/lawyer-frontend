@@ -8,7 +8,7 @@ image: node:16
 
 pipelines:
  branches:
-     master:
+     development:
         - step:
             name: Build and Test
             deployment: staging

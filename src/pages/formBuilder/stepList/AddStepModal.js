@@ -6,12 +6,18 @@ import { Button, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from
 
 // ** Translation
 import { T } from "@localization"
+
+// ** Redux Import
 import { useDispatch } from "react-redux"
 import { addStepItem } from "../store"
 
-const EditStepModal = ({modalOpen, setModalOpen}) => {
+import { useParams } from "react-router-dom"
+
+const AddStepModal = ({modalOpen, setModalOpen}) => {
 
   const dispatch = useDispatch()
+
+  const { formId } = useParams()
 
   // ** State Vars
   const [name, setName] = useState('')
@@ -22,7 +28,7 @@ const EditStepModal = ({modalOpen, setModalOpen}) => {
   }
 
   const handleCreateStep = () => {
-    dispatch(addStepItem({name, description}))
+    dispatch(addStepItem({name, description, formId}))
     setName("")
     setDescription("")
     setModalOpen(false)
@@ -62,11 +68,11 @@ const EditStepModal = ({modalOpen, setModalOpen}) => {
       </ModalBody>
       <ModalFooter>
         <Button.Ripple color="primary" onClick={handleCreateStep}>
-          Update
+          Create
         </Button.Ripple>
       </ModalFooter>
     </Modal>
   )
 }
 
-export default EditStepModal
+export default AddStepModal

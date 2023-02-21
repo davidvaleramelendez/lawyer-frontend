@@ -55,7 +55,7 @@ const FormBuilderView = () => {
 
   // ** Store Vars
   const dispatch = useDispatch()
-  const stepDetails = useSelector((state) => state.formBuilder.stepDetails)
+  const {stepDetails, stepInfo} = useSelector((state) => state.formBuilder)
   const loading = useSelector((state) => state.formBuilder.loading)
 
   // ** Route Param
@@ -167,12 +167,14 @@ const FormBuilderView = () => {
               <CardHeader className="border-bottom">
                 <div className="d-flex align-items-center w-100">
                   <CardTitle tag="h4">
-                    <span>{T("Form Preview")}</span>
+                    <span>
+                      {stepInfo.name ?? T("Step Design")}
+                    </span>
                   </CardTitle>
                   <Link
                     className='ms-auto btn btn-outline-primary btn-sm'
                     color='primary'
-                    to='/apps/form-builder'
+                    to={`/apps/form-builder/steps/${stepInfo.formId}`}
                   >
                     <ChevronsLeft size={17} /> Back
                   </Link>

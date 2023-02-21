@@ -2,10 +2,10 @@ import React from "react"
 import { ArrowLeft, ArrowRight } from "react-feather"
 import { useSelector } from "react-redux"
 import { Button, Col, Form, FormText, Label, Row } from "reactstrap"
-import FormItem from "../view/FormItem"
+import FormItem from "../stepView/FormItem"
 
 const StepForm = ({stepDetails, stepper}) => {
-  const formList = stepDetails.content
+  const stepContent = stepDetails.content
   
   const stepList = useSelector(state => state.formBuilder.stepList)
 
@@ -19,7 +19,7 @@ const StepForm = ({stepDetails, stepper}) => {
         <small className='text-muted'>{stepDetails.description}</small>
       </div>
       <Form onSubmit={e => e.preventDefault()}>
-        {formList.map((rowItem, rowIndex) => (
+        {stepContent.map((rowItem, rowIndex) => (
           <div key={rowIndex}>
             <Row className="match-height">
               {rowItem.map((colItem, colIndex) => (

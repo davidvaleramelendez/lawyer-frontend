@@ -6,25 +6,31 @@ import { Button, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from
 
 // ** Translation
 import { T } from "@localization"
-import { useDispatch } from "react-redux"
-import { addStepItem } from "../store"
 
-const AddStepModal = ({modalOpen, setModalOpen}) => {
+// ** Redux Import
+import { useDispatch } from "react-redux"
+import { createForm } from "../store"
+
+const AddFormModal = ({modalOpen, setModalOpen}) => {
 
   const dispatch = useDispatch()
 
   // ** State Vars
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
+  const [link, setLink] = useState('')
+  const [type, setType] = useState(false)
 
   const toggleModal = () => {
     setModalOpen(!modalOpen)
   }
 
-  const handleCreateStep = () => {
-    dispatch(addStepItem({name, description}))
+  const handleCreateForm = () => {
+    dispatch(createForm({name, description, link, type}))
     setName("")
     setDescription("")
+    setLink("")
+    setType(false)
     setModalOpen(false)
   }
 
@@ -35,6 +41,14 @@ const AddStepModal = ({modalOpen, setModalOpen}) => {
   const handleChangeDescription = (e) => {
     setDescription(e.target.value)
   }
+
+  const handleChangeLink = (e) => {
+    setLink(e.target.value)
+  }
+
+  const handleChangeType = (e) => {
+    setType(e.target.checked)
+  }
   
   return (
     <Modal
@@ -44,7 +58,7 @@ const AddStepModal = ({modalOpen, setModalOpen}) => {
       size="md"
     >
       <ModalHeader toggle={toggleModal}>
-        {T("Add Step")}
+        {T("Add Form")}
       </ModalHeader>
       <ModalBody>
         <div className="mt-2">
@@ -59,9 +73,21 @@ const AddStepModal = ({modalOpen, setModalOpen}) => {
           </Label>
           <Input type='text' value={description} onChange={handleChangeDescription} />
         </div>
+        <div className="my-2">
+          <Label className='form-label me-auto'>
+              Link
+          </Label>
+          <Input type='text' value={link} onChange={handleChangeLink} />
+        </div>
+        <div className='form-check my-2'>
+          <Input type='checkbox' id="is_public" checked={type} onChange={handleChangeType} />
+          <Label className='form-check-label' for="is_public">
+            Public
+          </Label>
+        </div>
       </ModalBody>
       <ModalFooter>
-        <Button.Ripple color="primary" onClick={handleCreateStep}>
+        <Button.Ripple color="primary" onClick={handleCreateForm}>
           Create
         </Button.Ripple>
       </ModalFooter>
@@ -69,4 +95,4 @@ const AddStepModal = ({modalOpen, setModalOpen}) => {
   )
 }
 
-export default AddStepModal
+export default AddFormModal

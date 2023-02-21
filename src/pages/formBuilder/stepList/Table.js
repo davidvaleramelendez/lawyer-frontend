@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { deleteStepItem, getStepList, reorderStepItem, setLoading } from "../store"
 
 // ** Router Import
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 
 // ** Reactstrap Import
 import { Button, Card, CardHeader, CardTitle } from "reactstrap"
@@ -15,6 +15,7 @@ import { Button, Card, CardHeader, CardTitle } from "reactstrap"
 import DatatablePagination from "@components/datatable/DatatablePagination"
 import DotPulse from "@components/dotpulse"
 import AddStepModal from "./AddStepModal"
+import EditStepModal from "./EditStepModal"
 
 // ** Utils Import
 import { getTransformDate } from "@utils"
@@ -23,7 +24,7 @@ import { getTransformDate } from "@utils"
 import { T } from '@localization'
 
 // ** Icon Import
-import { CornerLeftUp, CornerRightDown, Edit, ExternalLink, Eye, Plus, Trash } from "react-feather"
+import { ChevronsLeft, CornerLeftUp, CornerRightDown, Edit, ExternalLink, Eye, Plus, Trash } from "react-feather"
 
 // ** Default Values
 import { adminRoot } from "@constant/defaultValues"
@@ -45,15 +46,18 @@ const StepList = () => {
 
   // ** State
   const [modalOpen, setModalOpen] = useState(false)
+  const [editStep, setEditStep] = useState(null)
 
   // ** Hook
-  const handleStepList = useCallback(() => {
+  const { formId } = useParams()
+
+  const handleStepList = useCallback((id) => {
     dispatch(setLoading(false))
-    dispatch(getStepList())
+    dispatch(getStepList(id))
   }, [])
 
   useEffect(() => {
-    handleStepList()
+    handleStepList(formId)
   }, [])
 
   const handleOpenModal = () => {
@@ -64,9 +68,9 @@ const StepList = () => {
     dispatch(deleteStepItem(stepId))
   }
 
-  // const handleEdit = (stepId) => () => {
-  //   console.log(stepId)
-  // }
+  const handleEdit = (step) => () => {
+    setEditStep(step)
+  }
 
   const handleReorder = (stepId1, isUp) => () => {
     const rowIndex = store.stepList.findIndex(item => item.id === stepId1)
@@ -93,8 +97,8 @@ const StepList = () => {
     },
     {
         name: T("Step Title"),
-        minWidth: "20%",
-        maxWidth: "20%",
+        minWidth: "17%",
+        maxWidth: "17%",
         cell: (row) => <span>{row.name}</span>,
         /* Custom placeholder vars */
         contentExtraStyles: { ...placeholderStyle, minWidth: '100px' },
@@ -104,8 +108,8 @@ const StepList = () => {
     },
     {
       name: T("Step Description"),
-      minWidth: "25%",
-      maxWidth: "25%",
+      minWidth: "23%",
+      maxWidth: "23%",
       cell: (row) => <span>{row.description}</span>,
       /* Custom placeholder vars */
       contentExtraStyles: { ...placeholderStyle, minWidth: '150px' },
@@ -151,8 +155,8 @@ const StepList = () => {
     },
     {
       name: T('Action'),
-      minWidth: "15%",
-      maxWidth: "15%",
+      minWidth: "20%",
+      maxWidth: "20%",
       center: true,
       cell: (row) => (
         <div className="column-action d-flex align-items-center">
@@ -161,9 +165,9 @@ const StepList = () => {
           >
             <Eye size={17} className="mx-1" />
           </Link>
-          {/* <span className="cursor-pointer" onClick={handleEdit(row.id)}>
+          <span className="cursor-pointer" onClick={handleEdit(row)}>
             <Edit size={17} className="mx-1" />
-          </span> */}
+          </span>
           <span className="cursor-pointer" onClick={handleDelete(row.id)}>
             <Trash size={17} className="mx-1" />
           </span>
@@ -181,18 +185,31 @@ const StepList = () => {
     <Card>
       <CardHeader className="border-bottom py-75">
         <div className="d-flex align-items-center w-100">
-          <CardTitle tag="h4">{T("Form Builder")}</CardTitle>
+          <CardTitle tag="h4">
+            {store.formDetails?.name ? store.formDetails.name : T("Form Details")}
+          </CardTitle>
           <div className="ms-auto">
-            <Button.Ripple color="primary" outline className="ms-75" onClick={handleOpenModal}>
+            {/* {store.formDetails?.link && (
+              <a
+                className='btn btn-outline-primary'
+                color='primary'
+                href={`/apps/form-builder/publish/${store.formDetails?.link ?? ''}`}
+                target='_blank'
+              >
+                <ExternalLink size={14} /> 
+                <span className="align-middle ms-75">Publish</span>
+              </a>
+            )} */}
+            <Button.Ripple color="primary" outline className="ms-2" onClick={handleOpenModal}>
               <Plus size={14} />
               <span className="align-middle ms-75">New Step</span>
             </Button.Ripple>
             <Link
               className='btn btn-outline-primary ms-2'
               color='primary'
-              to='/apps/form-builder/publish'
+              to='/apps/form-builder'
             >
-              <ExternalLink size={14} /> Publish
+              <ChevronsLeft size={14} /> Back
             </Link>
           </div>
         </div>
@@ -215,6 +232,10 @@ const StepList = () => {
         <AddStepModal 
           modalOpen={modalOpen} 
           setModalOpen={setModalOpen} 
+        />
+        <EditStepModal
+          item={editStep}
+          setEditStep={setEditStep}
         />
     </Card>
   )

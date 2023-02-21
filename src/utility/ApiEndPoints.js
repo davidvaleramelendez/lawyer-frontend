@@ -345,12 +345,20 @@ export const API_ENDPOINTS = {
 
     /* Form Builder */
     formBuilder: {
-        getStepList: `/api/admin/form-builder`,
-        addStepItem: `/api/admin/form-builder/create`,
-        deleteStepItem: `/api/admin/form-builder/delete`,
-        getStepDetails: `/api/admin/form-builder/details`,
-        updateStepDetails: `/api/admin/form-builder/update`,
-        reorderStepItem: `/api/admin/form-builder/reorder`
+        getFormList: `/api/admin/form-builder/form`,
+        createForm: `/api/admin/form-builder/form/create`,
+        publishForm: `/api/admin/form-builder/form/publish`,
+        updateForm: `/api/admin/form-builder/form/update`,
+        deleteForm: `/api/admin/form-builder/form/delete`,
+
+        getStepList: `/api/admin/form-builder/step`,
+        getStepListByLink: `/api/form-builder/link`,
+        addStepItem: `/api/admin/form-builder/step/create`,
+        deleteStepItem: `/api/admin/form-builder/step/delete`,
+        getStepDetails: `/api/admin/form-builder/step/details`,
+        updateStepItem: `/api/admin/form-builder/step/update`,
+        updateStepContent: `/api/admin/form-builder/step/update_content`,
+        reorderStepItem: `/api/admin/form-builder/step/reorder`
     }
     /* /Form Builder */
 }

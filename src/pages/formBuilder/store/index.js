@@ -15,22 +15,198 @@ import axios from 'axios'
 // ** Third Party Module Import
 import _ from "lodash"
 
-async function getStepListRequest() {
-  return axios.get(`${API_ENDPOINTS.formBuilder.getStepList}`).then((response) => response.data).catch((error) => error)
+async function getFormListRequest() {
+  return axios.get(`${API_ENDPOINTS.formBuilder.getFormList}`).then((response) => response.data).catch((error) => error)
 }
 
-export const getStepList = createAsyncThunk('appFormBuilderSlice/getStepList', async () => {
+export const getFormList = createAsyncThunk('appFormBuilderSlice/getFormList', async () => {
   try {
-    const response = await getStepListRequest()
+    const response = await getFormListRequest()
     if (response && response.flag) {
       return {
-        stepList: response.data,
+        formList: response.data,
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        formList: [],
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("getFormList catch ", error)
+    return {
+      formList: [],
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function createFormRequest(params) {
+  return axios
+    .post(`${API_ENDPOINTS.formBuilder.createForm}`, params)
+    .then((response) => response.data)
+    .catch((error) => error)
+}
+
+export const createForm = createAsyncThunk('appFormBuilderSlice/createForm', async (params) => {
+  try {
+    const response = await createFormRequest(params)
+    if (response && response.flag) {
+      return {
+        newForm: response.data,
+        actionFlag: "CREATE_FORM",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        newForm: null,
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("createForm catch ", error)
+    return {
+      newForm: null,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function updateFormRequest(params) {
+  return axios
+    .post(`${API_ENDPOINTS.formBuilder.updateForm}/${params.id}`, params)
+    .then((response) => response.data)
+    .catch((error) => error)
+}
+
+export const updateForm = createAsyncThunk('appFormBuilderSlice/updateForm', async (params) => {
+  try {
+    const response = await updateFormRequest(params)
+    if (response && response.flag) {
+      return {
+        data: response.data,
+        actionFlag: "UPDATE_FORM",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        data: null,
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("updateForm catch ", error)
+    return {
+      data: null,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function publishFormRequest(params) {
+  return axios
+    .post(`${API_ENDPOINTS.formBuilder.publishForm}/${params.id}`, params)
+    .then((response) => response.data)
+    .catch((error) => error)
+}
+
+export const publishForm = createAsyncThunk('appFormBuilderSlice/publishForm', async (params) => {
+  try {
+    const response = await publishFormRequest(params)
+    if (response && response.flag) {
+      return {
+        data: response.data,
+        actionFlag: "PUBLISH_FORM",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        data: null,
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("publishForm catch ", error)
+    return {
+      data: null,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function deleteFormRequest(formId) {
+  return axios
+    .delete(`${API_ENDPOINTS.formBuilder.deleteForm}/${formId}`)
+    .then((response) => response.data)
+    .catch((error) => error)
+}
+
+export const deleteForm = createAsyncThunk('appFormBuilderSlice/deleteForm', async (formId) => {
+  try {
+    const response = await deleteFormRequest(formId)
+    if (response && response.flag) {
+      return {
+        data: formId,
+        actionFlag: "DELETE_FORM",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        data: null,
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("deleteForm catch ", error)
+    return {
+      data: null,
+      actionFlag: "",
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function getStepListRequest(form_id) {
+  return axios.get(`${API_ENDPOINTS.formBuilder.getStepList}/${form_id}`).then((response) => response.data).catch((error) => error)
+}
+
+export const getStepList = createAsyncThunk('appFormBuilderSlice/getStepList', async (form_id) => {
+  try {
+    const response = await getStepListRequest(form_id)
+    if (response && response.flag) {
+      return {
+        stepList: response.data.stepList,
+        formDetails: response.data.form,
         success: response.message,
         error: ""
       }
     } else {
       return {
         stepList: [],
+        formDetails: null,
         success: "",
         error: response.message
       }
@@ -39,6 +215,40 @@ export const getStepList = createAsyncThunk('appFormBuilderSlice/getStepList', a
     console.log("getStepList catch ", error)
     return {
       stepList: [],
+      formDetails: null,
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function getStepListByLinkRequest(link) {
+  return axios.get(`${API_ENDPOINTS.formBuilder.getStepListByLink}/${link}`).then((response) => response.data).catch((error) => error)
+}
+
+export const getStepListByLink = createAsyncThunk('appFormBuilderSlice/getStepListByLink', async (link) => {
+  try {
+    const response = await getStepListByLinkRequest(link)
+    if (response && response.flag) {
+      return {
+        stepList: response.data.stepList,
+        formDetails: response.data.form,
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        stepList: [],
+        formDetails: null,
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("getStepListByLink catch ", error)
+    return {
+      stepList: [],
+      formDetails: null,
       success: "",
       error: error
     }
@@ -47,7 +257,7 @@ export const getStepList = createAsyncThunk('appFormBuilderSlice/getStepList', a
 
 async function addStepItemRequest(params) {
   return axios
-    .post(`${API_ENDPOINTS.formBuilder.addStepItem}`, params)
+    .post(`${API_ENDPOINTS.formBuilder.addStepItem}/${params.formId}`, params)
     .then((response) => response.data)
     .catch((error) => error)
 }
@@ -162,13 +372,18 @@ export const getStepDetails = createAsyncThunk('appFormBuilderSlice/getStepDetai
     const response = await getStepDetailsRequest(id)
     if (response) {
       return {
-        stepDetails: response.data,
+        stepDetails: response.data.content,
+        stepInfo: {
+          formId: response.data.formId,
+          name: response.data.name
+        },
         success: response.message,
         error: ""
       }
     } else {
       return {
         stepDetails: [],
+        stepInfo: {},
         success: "",
         error: response.message
       }
@@ -177,6 +392,43 @@ export const getStepDetails = createAsyncThunk('appFormBuilderSlice/getStepDetai
     console.log("getStepDetails catch ", error)
     return {
       stepDetails: [],
+      stepInfo: {},
+      success: "",
+      error: error
+    }
+  }
+})
+
+async function updateStepRequest(params) {
+  return axios
+    .post(`${API_ENDPOINTS.formBuilder.updateStepItem}/${params.id}`, params)
+    .then((response) => response.data)
+    .catch((error) => error)
+}
+
+export const updateStep = createAsyncThunk('appFormBuilderSlice/updateStep', async (params) => {
+  try {
+    const response = await updateStepRequest(params)
+    if (response && response.flag) {
+      return {
+        data: response.data,
+        actionFlag: "UPDATE_STEP_ITEM",
+        success: response.message,
+        error: ""
+      }
+    } else {
+      return {
+        data: null,
+        actionFlag: "",
+        success: "",
+        error: response.message
+      }
+    }
+  } catch (error) {
+    console.log("updateStep catch ", error)
+    return {
+      data: null,
+      actionFlag: "",
       success: "",
       error: error
     }
@@ -185,12 +437,12 @@ export const getStepDetails = createAsyncThunk('appFormBuilderSlice/getStepDetai
 
 async function updateStepDetailsRequest(params) {
   return axios
-    .post(`${API_ENDPOINTS.formBuilder.updateStepDetails}/${params.id}`, {content: JSON.stringify(params.data)})
+    .post(`${API_ENDPOINTS.formBuilder.updateStepContent}/${params.id}`, {content: JSON.stringify(params.data)})
     .then((response) => response.data)
     .catch((error) => error)
 }
 
-export const updateStepDetails = createAsyncThunk('appFormBuilderSlice/updateStepDetails', async (params, { dispatch, getState }) => {
+export const updateStepDetails = createAsyncThunk('appFormBuilderSlice/updateStepContent', async (params, { dispatch, getState }) => {
   
   const prevStepDetails = getState().formBuilder.stepDetails
   try {
@@ -200,7 +452,7 @@ export const updateStepDetails = createAsyncThunk('appFormBuilderSlice/updateSte
     if (response && response.flag) {
       return {
         stepDetails: params.data,
-        actionFlag: "UPDATE_PREVIEW_LIST",
+        actionFlag: "UPDATE_STEP_CONTENT",
         success: response.message,
         error: ""
       }
@@ -226,8 +478,11 @@ export const updateStepDetails = createAsyncThunk('appFormBuilderSlice/updateSte
 export const appFormBuilderSlice = createSlice({
   name: 'appFormBuilder',
   initialState: {
+    formList: [],
+    formDetails: {},
     stepList: [],
-    stepDetails: [],
+    stepInfo: {}, // Step Name & Form ID
+    stepDetails: [], // Step Content
     selectedItem: {},
     deleteItem: formBuilderDeleteItem,
     success: "",
@@ -251,8 +506,59 @@ export const appFormBuilderSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getFormList.fulfilled, (state, action) => {
+        state.formList = action.payload.formList
+        state.success = action.payload.success
+        state.error = action.payload.error
+        state.loading = true
+      })
+      .addCase(createForm.fulfilled, (state, action) => {
+        if (action.payload.newForm) {
+          state.formList = [...state.formList, action.payload.newForm]
+        }
+        state.success = action.payload.success
+        state.error = action.payload.error
+        state.loading = true
+      })
+      .addCase(updateForm.fulfilled, (state, action) => {
+        const {data} = action.payload
+        if (data) {
+          const index = state.formList.findIndex(item => item.id === data.id)
+          state.formList[index] = data
+        }
+        state.success = action.payload.success
+        state.error = action.payload.error
+        state.loading = true
+      })
+      .addCase(publishForm.fulfilled, (state, action) => {
+        const {data} = action.payload
+        if (data) {
+          const index = state.formList.findIndex(item => item.id === data.id)
+          state.formList[index] = data
+        }
+        state.success = action.payload.success
+        state.error = action.payload.error
+        state.loading = true
+      })
+      .addCase(deleteForm.fulfilled, (state, action) => {
+        const {data} = action.payload
+        if (data) {
+          state.formList = state.formList.filter(item => item.id !== data)
+        }
+        state.success = action.payload.success
+        state.error = action.payload.error
+        state.loading = true
+      })
       .addCase(getStepList.fulfilled, (state, action) => {
         state.stepList = action.payload.stepList
+        state.formDetails = action.payload.formDetails
+        state.success = action.payload.success
+        state.error = action.payload.error
+        state.loading = true
+      })
+      .addCase(getStepListByLink.fulfilled, (state, action) => {
+        state.stepList = action.payload.stepList
+        state.formDetails = action.payload.formDetails
         state.success = action.payload.success
         state.error = action.payload.error
         state.loading = true
@@ -299,6 +605,7 @@ export const appFormBuilderSlice = createSlice({
       })
       .addCase(getStepDetails.fulfilled, (state, action) => {
         state.stepDetails = action.payload.stepDetails
+        state.stepInfo = action.payload.stepInfo
         state.success = action.payload.success
         state.error = action.payload.error
         state.loading = true
@@ -306,6 +613,16 @@ export const appFormBuilderSlice = createSlice({
       .addCase(updateStepDetails.fulfilled, (state, action) => {
         state.actionFlag = action.payload.actionFlag
         state.stepDetails = action.payload.stepDetails
+        state.success = action.payload.success
+        state.error = action.payload.error
+      })
+      .addCase(updateStep.fulfilled, (state, action) => {
+        const {data} = action.payload
+        if (data) {
+          const index = state.stepList.findIndex(item => item.id === data.id)
+          state.stepList[index] = data
+        }
+        state.actionFlag = action.payload.actionFlag
         state.success = action.payload.success
         state.error = action.payload.error
       })

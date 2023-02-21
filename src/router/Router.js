@@ -25,6 +25,7 @@ const Error = lazy(() => import('@src/pages/auth/Error'))
 const ForgotPassword = lazy(() => import('@src/pages/auth/ForgotPassword'))
 const NotAuthorized = lazy(() => import('@src/pages/auth/NotAuthorized'))
 const Forbidden = lazy(() => import('@src/pages/auth/Forbidden'))
+const FormBuilderPublish = lazy(() => import('@src/pages/formBuilder/publish'))
 
 let Login = lazy(() => import('@src/pages/auth/login/LoginCover'))
 if (authenticationConfig && authenticationConfig.LoginTemplate) {
@@ -85,6 +86,11 @@ const Router = () => {
       path: '/forbidden',
       element: <BlankLayout />,
       children: [{ path: '/forbidden', element: <Forbidden /> }]
+    },
+    {
+      path: '/form/:formLink',
+      element: <BlankLayout />,
+      children: [{ path: '/form/:formLink', element: <FormBuilderPublish status={true} />}]
     },
     ...allRoutes
   ])

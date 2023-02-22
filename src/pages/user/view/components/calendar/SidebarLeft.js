@@ -12,7 +12,7 @@ import {
   CardBody
 } from 'reactstrap'
 
-// Constant
+// ** Constant
 import {
   calendarFilter
 } from '@constant/defaultValues'
@@ -43,55 +43,56 @@ const SidebarLeft = props => {
 
   return (
     <Fragment>
-      <div className='sidebar-wrapper'>
-        <CardBody className='card-body d-flex justify-content-center my-sm-0 mb-3'>
+      <div className="sidebar-wrapper">
+        <CardBody className="card-body d-flex justify-content-center my-sm-0 mb-3">
           {onCheckUserPermission(15) ? (
-            <Button color='primary' block onClick={handleAddEventClick}>
-              <span className='align-middle'>{T('Register')}</span>
+            <Button color="primary" block onClick={handleAddEventClick}>
+              <span className="align-middle">{T("Register")}</span>
             </Button>
           ) : null}
         </CardBody>
+
         <CardBody>
-          <h5 className='section-label mb-1'>
-            <span className='align-middle'>{T('Filter')}</span>
+          <h5 className="section-label mb-1">
+            <span className="align-middle">{T("Filter")}</span>
           </h5>
 
-          <div className='form-check mb-1'>
+          <div className="form-check mb-1">
             <Input
-              id='view-all'
-              type='checkbox'
-              label='View All'
-              className='select-all'
+              id="view-all"
+              type="checkbox"
+              label="View All"
+              className="select-all"
               checked={store.selectedCalendars.length === calendarFilter.length}
               onChange={(event) => dispatch(updateAllFilters(event.target.checked))}
             />
-            <Label className='form-check-label' for='view-all'>
-              {T('View All')}
+            <Label className="form-check-label" for="view-all">
+              {T("View All")}
             </Label>
           </div>
 
-          <div className='calendar-events-filter'>
+          <div className="calendar-events-filter">
             {calendarFilter.length &&
               calendarFilter.map(filter => {
                 return (
                   <div
                     key={`${filter.value}-key`}
-                    className={classnames('form-check', {
+                    className={classnames("form-check", {
                       [filter.className]: filter.className
                     })}
                   >
                     <Input
-                      type='checkbox'
+                      type="checkbox"
                       key={filter.value}
                       label={filter.label}
-                      className='input-filter'
+                      className="input-filter"
                       id={`${filter.value}-event`}
                       checked={store.selectedCalendars.includes(filter.value)}
                       onChange={() => {
                         dispatch(updateFilter(filter.value))
                       }}
                     />
-                    <Label className='form-check-label' for={`${filter.value}-event`}>
+                    <Label className="form-check-label" for={`${filter.value}-event`}>
                       {T(filter.label)}
                     </Label>
                   </div>
@@ -100,8 +101,9 @@ const SidebarLeft = props => {
           </div>
         </CardBody>
       </div>
+
       <div>
-        <img className='img-fluid' src={illustration} alt='illustration' />
+        <img className="img-fluid" src={illustration} alt="illustration" />
       </div>
     </Fragment>
   )

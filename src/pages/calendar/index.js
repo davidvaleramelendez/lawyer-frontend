@@ -43,7 +43,7 @@ import {
 import Notification from '@components/toast/notification'
 import DotPulse from '@components/dotpulse'
 
-// Constant
+// ** Constant
 import {
   root,
   calendarFilterColor
@@ -63,20 +63,25 @@ const CalendarApp = () => {
   // ** Store vars
   const dispatch = useDispatch()
   const store = useSelector(state => state.calendar)
+  const authStore = useSelector(state => state.auth)
 
   const MySwal = withReactContent(Swal)
 
   // ** states
   const [loadFirst, setLoadFirst] = useState(true)
   const [calendarApi, setCalendarApi] = useState(null)
-  const [loadingCalendar, setLoadingCalendar] = useState(true)
   const [addEventModalOpen, setAddEventModalOpen] = useState(false)
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false)
-  const [userOptions, setuserOptions] = useState([])
-
+  const [userOptions, setUserOptions] = useState([])
+  const [filterUserOptions, setFilterUserOptions] = useState([])
+  const [selectedUserFilter, setSelectedUserFilter] = useState(null)
 
   // ** LeftSidebar Toggle Function
   const toggleSidebar = (val) => setLeftSidebarOpen(val)
+
+  const handleEventLists = (params) => {
+    dispatch(getEventList(params))
+  }
 
   // ** refetchEvents
   const refetchEvents = () => {
@@ -94,7 +99,7 @@ const CalendarApp = () => {
     }
 
     if (loadFirst) {
-      dispatch(getEventList({ filter: JSON.stringify(store.selectedCalendars) }))
+      handleEventLists({ search: "", filter: JSON.stringify(store.selectedCalendars) })
       dispatch(getUserList({}))
       setLoadFirst(false)
     }
@@ -109,7 +114,19 @@ const CalendarApp = () => {
         }
       })
     }
-    setuserOptions(list1)
+    setUserOptions(list1)
+
+    let list2 = []
+    if (store.filterUsers && store.filterUsers.length) {
+      list2 = store.filterUsers.map(user => {
+        return {
+          value: user.id,
+          label: user.name,
+          img: user.profile_photo_path ? user.profile_photo_path : 'images/avatars/avatar-blank.png'
+        }
+      })
+    }
+    setFilterUserOptions(list2)
 
     /* For blank message api called inside */
     if (store.success || store.error || store.actionFlag) {
@@ -148,7 +165,11 @@ const CalendarApp = () => {
               dispatch={dispatch}
               updateFilter={updateFilter}
               toggleSidebar={toggleSidebar}
+              handleEventLists={handleEventLists}
               updateAllFilters={updateAllFilters}
+              filterUserOptions={filterUserOptions}
+              selectedUserFilter={selectedUserFilter}
+              setSelectedUserFilter={setSelectedUserFilter}
               setAddEventModalOpen={setAddEventModalOpen}
             />
           </Col>
@@ -166,10 +187,8 @@ const CalendarApp = () => {
                 getEventItem={getEventItem}
                 toggleSidebar={toggleSidebar}
                 setCalendarApi={setCalendarApi}
-                loadingCalendar={loadingCalendar}
                 getTransformDate={getTransformDate}
                 calendarsColor={calendarFilterColor}
-                setLoadingCalendar={setLoadingCalendar}
                 setAddEventModalOpen={setAddEventModalOpen}
                 increaseCustomDateFormat={increaseCustomDateFormat}
               />
@@ -190,6 +209,7 @@ const CalendarApp = () => {
         store={store}
         MySwal={MySwal}
         dispatch={dispatch}
+        authStore={authStore}
         open={addEventModalOpen}
         createEvent={createEvent}
         updateEvent={updateEvent}
@@ -201,6 +221,7 @@ const CalendarApp = () => {
         getTransformDate={getTransformDate}
         calendarsColor={calendarFilterColor}
         selectThemeColors={selectThemeColors}
+        selectedUserFilter={selectedUserFilter}
         underscoreCapitalizeWord={underscoreCapitalizeWord}
         toggleAddEventModal={() => setAddEventModalOpen(!addEventModalOpen)}
       />

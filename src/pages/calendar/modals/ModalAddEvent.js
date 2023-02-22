@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 // ** Custom Components
 import Avatar from '@components/avatar'
 
-// Constant
+// ** Constant
 import {
   calendarFilter
 } from '@constant/defaultValues'
@@ -53,6 +53,7 @@ const ModalAddEvent = (props) => {
     store,
     MySwal,
     dispatch,
+    authStore,
     calendarApi,
     createEvent,
     updateEvent,
@@ -63,6 +64,7 @@ const ModalAddEvent = (props) => {
     calendarsColor,
     getTransformDate,
     selectThemeColors,
+    selectedUserFilter,
     toggleAddEventModal,
     underscoreCapitalizeWord
   } = props
@@ -79,6 +81,8 @@ const ModalAddEvent = (props) => {
       reset,
       watch,
       control,
+      setValue,
+      clearErrors,
       handleSubmit,
       formState: { errors }
     } = useForm({
@@ -126,6 +130,31 @@ const ModalAddEvent = (props) => {
       required: false
     }
   }
+
+  /* Assign to self */
+  const handleAssignSelf = () => {
+    let selfItem = []
+    if (selectedUserFilter && selectedUserFilter.value) {
+      selfItem = selectedUserFilter
+    } else {
+      const currentUser = { ...authStore.userItem }
+      selfItem = []
+      if (currentUser && currentUser.id) {
+        selfItem = {
+          value: currentUser.id,
+          label: currentUser.name,
+          img: currentUser.profile_photo_path ? currentUser.profile_photo_path : 'images/avatars/avatar-blank.png'
+        }
+      }
+    }
+
+    if (selfItem && selfItem.value) {
+      clearErrors('guestIds')
+    }
+
+    setValue('guestIds', [selfItem])
+  }
+  /* /Assign to self */
 
   /* Rendering file preview web url */
   const renderFileWebUrlPreview = (path) => {
@@ -220,6 +249,10 @@ const ModalAddEvent = (props) => {
         description: values.Description
       }
 
+      if (selectedUserFilter && selectedUserFilter.value) {
+        eventData.user_id = selectedUserFilter.value
+      }
+
       if (values.businessLbl && values.businessLbl.value) {
         eventData.business = values.businessLbl.value
       }
@@ -284,13 +317,13 @@ const ModalAddEvent = (props) => {
   }
 
   // ** Close BTN
-  const CloseBtn = <X className='cursor-pointer' size={15} onClick={toggleAddEventModal} />
+  const CloseBtn = <X className="cursor-pointer" size={15} onClick={toggleAddEventModal} />
 
   return (
     <Modal
       isOpen={open}
       backdrop="static"
-      className='sidebar-lg'
+      className="sidebar-lg"
       toggle={toggleAddEventModal}
       onOpened={handleSidebarOpened}
       onClosed={handleSidebarClosed}
@@ -313,7 +346,7 @@ const ModalAddEvent = (props) => {
           >
             <div className="mb-1">
               <Label className="form-label" for="title">
-                {T('Title')} <span className="text-danger">*</span>
+                {T("Title")} <span className="text-danger">*</span>
               </Label>
               <Controller
                 defaultValue=""
@@ -361,7 +394,7 @@ const ModalAddEvent = (props) => {
 
             <div className="mb-1">
               <Label className="form-label" for="start_date">
-                {T('Start Date')} <span className="text-danger">*</span>
+                {T("Start Date")} <span className="text-danger">*</span>
               </Label>
               <Controller
                 defaultValue=""
@@ -386,7 +419,7 @@ const ModalAddEvent = (props) => {
 
             <div className="mb-1">
               <Label className="form-label" for="end_date">
-                {T('End Date')} <span className="text-danger">*</span>
+                {T("End Date")} <span className="text-danger">*</span>
               </Label>
               <Controller
                 defaultValue=""
@@ -412,7 +445,7 @@ const ModalAddEvent = (props) => {
 
             <div className="mb-1">
               <Label className="form-label" for="guestIds">
-                {T('Guests')} <span className="text-danger">*</span>
+                {T("Guests")} <span className="text-danger">*</span>
               </Label>
               <Controller
                 defaultValue={guestDefaultDropdown}
@@ -437,6 +470,15 @@ const ModalAddEvent = (props) => {
                 )}
               />
               {errors.guestIds && <FormFeedback className="d-block">{errors.guestIds?.message}</FormFeedback>}
+
+              <Button.Ripple
+                type="button"
+                color="transparent"
+                className="btn px-0 text-primary"
+                onClick={handleAssignSelf}
+              >
+                Assign to me
+              </Button.Ripple>
             </div>
 
             <div className="form-switch mb-1">
@@ -457,13 +499,13 @@ const ModalAddEvent = (props) => {
                 )}
               />
               <Label className="form-label" for="allDay">
-                {T('All Day')}
+                {T("All Day")}
               </Label>
             </div>
 
             <div className="mb-1">
               <Label className="form-label" for="event_url">
-                {T('Appointment URL')}
+                {T("Appointment URL")}
               </Label>
               <Controller
                 defaultValue={(eventItem && eventItem.event_url) || ""}
@@ -484,7 +526,7 @@ const ModalAddEvent = (props) => {
 
             <div className="mb-1">
               <Label className="form-label" for="location">
-                {T('Add Location')}
+                {T("Add Location")}
               </Label>
               <Controller
                 defaultValue={(eventItem && eventItem.location) || ""}
@@ -505,7 +547,7 @@ const ModalAddEvent = (props) => {
 
             <div className="mb-1">
               <Label className="form-label" for="Description">
-                {T('Appointment Description')}
+                {T("Appointment Description")}
               </Label>
               <Controller
                 defaultValue={(eventItem && eventItem.description) || ""}

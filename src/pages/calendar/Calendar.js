@@ -38,7 +38,6 @@ const Calendar = (props) => {
     setCalendarApi,
     calendarsColor,
     getTransformDate,
-    setLoadingCalendar,
     setAddEventModalOpen,
     increaseCustomDateFormat
   } = props
@@ -49,6 +48,7 @@ const Calendar = (props) => {
       setCalendarApi(calendarRef.current.getApi())
     }
   }, [calendarApi])
+  // console.log("calendarApi >>> ", calendarApi)
 
   // ** calendarOptions(Props)
   const calendarOptions = {
@@ -101,8 +101,7 @@ const Calendar = (props) => {
     navLinks: true,
 
     /* Calendar loading */
-    loading(bool) {
-      setLoadingCalendar(bool)
+    loading() {
     },
     /* /Calendar loading */
 
@@ -298,9 +297,9 @@ const Calendar = (props) => {
   }
 
   return (
-    <Card className='shadow-none border-0 mb-0 rounded-0'>
-      <CardBody className='pb-0'>
-        <FullCalendar {...calendarOptions} />{' '}
+    <Card className="shadow-none border-0 mb-0 rounded-0">
+      <CardBody className="pb-0">
+        <FullCalendar {...calendarOptions} />{" "}
       </CardBody>
     </Card>
   )

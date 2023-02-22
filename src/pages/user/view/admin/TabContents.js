@@ -137,6 +137,7 @@ const TabContents = ({
                         {/* User Calendars */}
                         <CalendarComponent
                             userId={id}
+                            userItem={userItem}
                             onCheckUserPermission={onCheckUserPermission}
                         />
                         {/* /User Calendars */}

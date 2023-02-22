@@ -205,8 +205,23 @@ $file-manager-fs-xl: ($font-size-base + 0.5);
             }
 
             .file-date {
-              flex-grow: 1;
+              // flex-grow: 1;
               margin-bottom: 0;
+              margin-right: 65px;
+              width: 160px;
+            }
+            
+            .file-status {
+              // flex-grow: 1;
+              margin-bottom: 0;
+              margin-right: 45px;
+              width: 150px;
+            }
+
+            .file-shareuser {
+              margin-bottom: 0;
+              margin-right: 45px;
+              width: 150px;
             }
 
             &.selected {
@@ -247,8 +262,12 @@ $file-manager-fs-xl: ($font-size-base + 0.5);
 
               .file-last-modified,
               .file-item-size {
-                // margin-right: 3rem;
-                margin-right: 9rem;
+                margin-right: 5.7rem;
+              }
+
+              .file-status {
+                margin-right: 6.7rem;
+                width: 100px;
               }
             }
 
@@ -343,6 +362,62 @@ $file-manager-fs-xl: ($font-size-base + 0.5);
         }
       }
     }
+  }
+}
+
+.pg-viewer-wrapper {
+  max-height: 700px;
+  overflow-y: auto!important;
+  .photo-viewer-container {
+    height: auto!important;
+    width: 500px!important;
+    margin: auto;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    img {
+      width: 100%!important;
+      height: auto!important;
+    }
+  }
+
+  .video-container {
+    width: 750px!important;
+    margin: auto;
+    video {
+      width: 100%;
+    }
+  }
+
+  .react-grid-Container {
+    height: 500px;
+    .react-grid-Main {
+      height: 100%;
+    }
+    .react-grid-Grid {
+      height: 100%;
+    }
+
+    .react-grid-Canvas {
+      height: 100%;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #9890ef;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #867cf0;
   }
 }
 

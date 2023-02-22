@@ -14,7 +14,8 @@ import {
   InputGroupText,
   DropdownToggle,
   UncontrolledTooltip,
-  UncontrolledButtonDropdown
+  UncontrolledButtonDropdown,
+  Badge
 } from 'reactstrap'
 
 // ** Icons Import
@@ -32,7 +33,8 @@ import {
   ArrowDown,
   RefreshCw,
   ChevronRight,
-  MoreVertical
+  MoreVertical,
+  Share2
 } from 'react-feather'
 
 // ** Third Party Components
@@ -58,6 +60,7 @@ const Storages = (props) => {
   const {
     sort,
     store,
+    shared,
     navigate,
     hashParam,
     handleSort,
@@ -66,6 +69,8 @@ const Storages = (props) => {
     handleSearch,
     onTrashFolder,
     handleFileItem,
+    handleViewFile,
+    handleMarkShare,
     handleDeleteFile,
     getTransformDate,
     handleFolderItem,
@@ -121,12 +126,22 @@ const Storages = (props) => {
         <div className="file-manager-content-header d-flex justify-content-between align-items-center breadcrumb p-1">
           <div className="d-inline-flex">
             <div className="d-flex">
-              <h5
-                className="cursor-pointer"
-                onClick={() => handleBreadcrumbNavigate("", true)}
-              >
-                {T('My Drive')}
-              </h5>
+              
+              {store.cloudStorageItems.shared ? (
+                <h5
+                  className="cursor-pointer"
+                  onClick={(e) => handleNavigateItem(e, "shared")}
+                >
+                  {T('Shared Folder')}
+                </h5>
+              ) : (
+                <h5
+                  className="cursor-pointer"
+                  onClick={() => handleBreadcrumbNavigate("", true)}
+                >
+                  {T('My Drive')}
+                </h5>
+              )}
               <ChevronRight
                 className="ms-1 me-1"
                 size={17}
@@ -182,6 +197,9 @@ const Storages = (props) => {
           <div className="files-header">
             <h6 className="fw-bold mb-0">{T('Filename')}</h6>
             <div>
+              <h6 className="fw-bold file-status d-inline-block mb-0">
+                {shared ? T('Shared By') : T('Status')}
+              </h6>
               <h6 className="fw-bold file-last-modified d-inline-block mb-0">{T('Created')}
               </h6>
               <h6 className="fw-bold d-inline-block me-1 mb-0">{T('Actions')}</h6>
@@ -228,6 +246,15 @@ const Storages = (props) => {
                       </DropdownToggle>
                       <DropdownMenu end>
                         {folder && !folder.deleted_at ? (<>
+                          {!shared &&
+                            <DropdownItem
+                              className="w-100"
+                              onClick={() => handleMarkShare(folder)}
+                            >
+                              <Share2 size={17} className="me-50" />
+                              <span className="align-middle">{T("Share")}</span>
+                            </DropdownItem>
+                          }
                           <DropdownItem
                             className="w-100"
                             onClick={() => handleFolderItem(folder)}
@@ -314,6 +341,31 @@ const Storages = (props) => {
                       </UncontrolledTooltip>
                     </CardText>
 
+                    {!shared && folder.shared_user_id !== null && (
+                      <CardText
+                        className="file-status"
+                        id={`cs-tooltip-folder-status-${folder.id}`}
+                      >
+                        <Badge color='info'>
+                          <Share2 size={12} className='align-middle me-25' />
+                          <span className='align-middle'>{T("Shared")}</span>
+                        </Badge>
+                      </CardText>
+                    )}
+                    {!shared && folder.shared_user_id === null && (
+                        <CardText
+                          className="file-status"
+                          id={`cs-tooltip-folder-status-${folder.id}`}
+                        >&nbsp;</CardText>
+                      )}
+                    {shared && (
+                      <CardText
+                        className="file-shareuser"
+                        id={`cs-tooltip-folder-shareuser-${folder.id}`}
+                      >
+                        {folder.user.name}
+                      </CardText>
+                    )}
                     <CardText
                       className="file-date"
                       id={`cs-tooltip-folder-date-${folder.id}`}
@@ -364,6 +416,15 @@ const Storages = (props) => {
                         </DropdownToggle>
                         <DropdownMenu end>
                           {file && !file.deleted_at ? (<>
+                            {!shared && (
+                              <DropdownItem
+                                className="w-100"
+                                onClick={() => handleMarkShare(file)}
+                              >
+                                <Share2 size={17} className="me-50" />
+                                <span className="align-middle">{T("Share")}</span>
+                              </DropdownItem>
+                            )}
                             <DropdownItem
                               className="w-100"
                               onClick={() => handleFileItem(file)}
@@ -424,6 +485,7 @@ const Storages = (props) => {
 
                     <div
                       className="d-flex align-items-center justify-content-center w-100"
+                      onClick={() => file && !file.deleted_at && handleViewFile(file)}
                     >
                       <Avatar
                         img={SvgIcon}
@@ -450,7 +512,32 @@ const Storages = (props) => {
                           {file.name}
                         </UncontrolledTooltip>
                       </CardText>
-
+                      {!shared && file.shared_user_id !== null && (
+                        <CardText
+                          className="file-status"
+                          id={`cs-tooltip-file-status-${file.id}`}
+                        >
+                          
+                          <Badge color='info'>
+                            <Share2 size={12} className='align-middle me-25' />
+                            <span className='align-middle'>{T("Shared")}</span>
+                          </Badge>
+                        </CardText>
+                      )}
+                      {!shared && file.shared_user_id === null && (
+                        <CardText
+                          className="file-status"
+                          id={`cs-tooltip-file-status-${file.id}`}
+                        >&nbsp;</CardText>
+                      )}
+                      {shared && (
+                        <CardText
+                          className="file-shareuser"
+                          id={`cs-tooltip-file-shareuser-${file.id}`}
+                        >
+                          {file.user.name}
+                        </CardText>
+                      )}
                       <CardText
                         className="file-date"
                         id={`cs-tooltip-file-date-${file.id}`}

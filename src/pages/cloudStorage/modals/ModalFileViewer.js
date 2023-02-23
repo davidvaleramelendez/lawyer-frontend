@@ -53,15 +53,17 @@ const ModalFileViewer = ({
             />
           </div>
           <div className="text-end">
-            <a
-              href={renderFileWebUrlPreview(fileViewInfo?.path)}
-              className="btn btn-primary me-2"
-              target="_blank"
-            >
-              <div className="d-flex align-items-center">
-                <ExternalLink size={17} className="me-1" /> {T("View")}
-              </div>
-            </a>
+            {renderFileWebUrlPreview(fileViewInfo?.path) !== false && (
+              <a
+                href={renderFileWebUrlPreview(fileViewInfo?.path)}
+                className="btn btn-primary me-2"
+                target="_blank"
+              >
+                <div className="d-flex align-items-center">
+                  <ExternalLink size={17} className="me-1" /> {T("View")}
+                </div>
+              </a>
+            )}
             <Button color="primary" onClick={handleShare}>
               <div className="d-flex align-items-center">
                 <Share2 size={17} className="me-1" /> {T("Share")}

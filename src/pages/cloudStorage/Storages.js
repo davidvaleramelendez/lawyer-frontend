@@ -489,6 +489,8 @@ const Storages = (props) => {
                     >
                       <Avatar
                         img={SvgIcon}
+                        imgHeight="20"
+                        imgWidth="auto"
                         imgClassName="rounded-0"
                         className="bg-transparent"
                       />

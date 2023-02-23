@@ -29,8 +29,11 @@ import {
 } from 'reactstrap'
 
 import { useForm, Controller } from 'react-hook-form'
-import * as yup from "yup"
-import { yupResolver } from '@hookform/resolvers/yup'
+
+// ** Utils
+import {
+  htmlToString
+} from '@utils'
 
 // ** Custom Components
 import DotPulse from '@components/dotpulse'
@@ -39,6 +42,8 @@ import DotPulse from '@components/dotpulse'
 import { Editor } from 'react-draft-wysiwyg'
 import { convertToRaw } from 'draft-js'
 import draftToHtml from 'draftjs-to-html'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 // ** Styles
 import '@styles/base/pages/app-invoice.scss'
@@ -52,19 +57,12 @@ const ModalAddNotes = ({
   ContactID,
   toggleModal
 }) => {
+  // ** Hooks
+  const MySwal = withReactContent(Swal)
 
   // ** Store vars
   const dispatch = useDispatch()
   const store = useSelector((state) => state.contact)
-
-  /* Yup validation schema */
-  const NoteSchema = yup.object({
-    Notes: yup.object().shape({
-      blocks: yup.array().of(yup.object().shape({
-        text: yup.string().required(T(`Notes is required!`))
-      }).required(`Notes is required!`).nullable()).required(`Notes is required!`).nullable()
-    }).required(`Notes is required!`).nullable()
-  }).required()
 
   const {
     reset,
@@ -73,12 +71,28 @@ const ModalAddNotes = ({
     formState: { errors }
   } = useForm({
     mode: 'all',
-    defaultValues: contactNoteItem,
-    resolver: yupResolver(NoteSchema)
+    defaultValues: contactNoteItem
   })
 
   // ** States
   const [editorHtmlContent, setEditorHtmlContent] = useState("")
+
+  const onAlertMessage = (message, title, icon) => {
+    MySwal.fire({
+      title: title || 'Warning',
+      text: message || 'Something went wrong!',
+      icon: icon || 'warning',
+      showCancelButton: false,
+      confirmButtonText: 'Okay',
+      customClass: {
+        confirmButton: 'btn btn-primary'
+      },
+      buttonsStyling: false
+    }).then(function (result) {
+      if (result.isConfirmed) {
+      }
+    })
+  }
 
   const handleReset = () => {
     setEditorHtmlContent("")
@@ -106,10 +120,14 @@ const ModalAddNotes = ({
 
   /* Submitting data */
   const onSubmit = async (values) => {
+    if (!htmlToString(editorHtmlContent.trim())) {
+      onAlertMessage("Content is required!", "Warning", 'warning')
+      return
+    }
+
     if (values) {
       const noteData = {
         ContactID: ContactID
-        // Notes: values.Notes
       }
 
       if (editorHtmlContent) {
@@ -165,7 +183,11 @@ const ModalAddNotes = ({
                   />
                 )}
               />
-              <FormFeedback className="d-block">{errors.Notes?.message || (errors.Notes?.blocks && errors.Notes.blocks[0]?.text?.message)}</FormFeedback>
+              {!htmlToString(editorHtmlContent.trim()) ? (
+                <FormFeedback className="d-block">{T(`Notes is required!`)}</FormFeedback>
+              ) : (
+                <FormFeedback className="d-block">{errors.Notes?.message}</FormFeedback>
+              )}
             </div>
 
             <Row className="mt-2 mb-2">

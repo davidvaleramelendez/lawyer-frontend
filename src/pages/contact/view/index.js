@@ -300,8 +300,10 @@ const ContactView = () => {
               {/* /Header */}
             </CardBody>
           </Card>
+        </Col>
 
-          {/* News */}
+        {/* News */}
+        <Col xl={7} lg={12} md={12}>
           <Card>
             <CardHeader>
               <CardTitle>{T("News")}</CardTitle>
@@ -310,13 +312,13 @@ const ContactView = () => {
             <CardBody>
               <Row>
                 <span style={newsBodyStyle}>
-                  {store.contactItem && store.contactItem.ContactID ? (<>
+                  {store.contactItem && store.contactItem.ContactID ? (<Fragment>
                     {store.contactItem && isHtml(store.contactItem.message) ? (
                       setInnerHtml(store.contactItem.message)
                     ) : (
                       store.contactItem.message
                     )}
-                  </>) : (
+                  </Fragment>) : (
                     <LoadingPlaceHolder
                       extraStyles={{
                         height: "21px",
@@ -329,46 +331,46 @@ const ContactView = () => {
               </Row>
             </CardBody>
           </Card>
-          {/* /News */}
+        </Col>
+        {/* /News */}
 
-          {/* Notes */}
+        {/* Notes */}
+        <Col xl={5} lg={12} md={12}>
           <Card>
             <CardHeader>
               <CardTitle>{T("Notes")}</CardTitle>
             </CardHeader>
 
-            <CardBody
-              className={`${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder-glow'}`}
-            >
-              {store.noteItems && store.noteItems.length ? <>
-                <ul className="timeline">
-                  {store.noteItems.map((note, index) => (<Fragment key={`note_${index}`}>
-                    <li className="timeline-item">
-                      <span className="timeline-point">
-                        <MessageSquare size={14} />
-                      </span>
-
-                      <div className="timeline-event">
-                        <Row
-                          className={`flex-column align-items-center justify-content-between ${store.contactItem && store.contactItem.ContactID ? '' : 'placeholder'}`}
-                        >
-                          {setInnerHtml(note.Notes)}
-                          <span
-                            className="timeline-event-time"
-                          >
-                            {getTransformDate(note.CreatedAt, "DD.MM.YYYY HH:MM")}
+            <CardBody>
+              {store.noteItems && store.noteItems.length ? (
+                <Fragment>
+                  <ul className="timeline">
+                    {store.noteItems.map((note, index) => (
+                      <Fragment key={`note_${index}`}>
+                        <li className="timeline-item">
+                          <span className="timeline-point">
+                            <MessageSquare size={14} />
                           </span>
-                        </Row>
-                        <hr />
-                      </div>
-                    </li>
-                  </Fragment>))}
-                </ul>
-              </> : null}
+
+                          <div className="timeline-event">
+                            <Row className={`flex-column align-items-center justify-content-between`}>
+                              {(note.Notes && setInnerHtml(note.Notes)) || null}
+                              <span className="timeline-event-time">
+                                {(note.created_at && getTransformDate(note.created_at, "MMM DD, YYYY HH:MM")) || null}
+                              </span>
+                            </Row>
+                            <hr />
+                          </div>
+                        </li>
+                      </Fragment>
+                    ))}
+                  </ul>
+                </Fragment>
+              ) : null}
             </CardBody>
           </Card>
-          {/* /Notes */}
         </Col>
+        {/* /Notes */}
       </Row>
     </div>
   ) : null

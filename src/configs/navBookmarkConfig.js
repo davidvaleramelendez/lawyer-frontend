@@ -124,7 +124,7 @@ export const bookmarks = [
         target: 'importLetterFileApp',
         is_bookmarked: 0,
         title: 'Import Letter File',
-        icon: "Mic",
+        icon: "UploadCloud",
         link: "import-letter-file"
     },
     {

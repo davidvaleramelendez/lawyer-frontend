@@ -11,7 +11,7 @@ export const bookmarks = [
         bookmark_id: 2,
         target: 'documentApp',
         is_bookmarked: 0,
-        title: 'Documents',
+        title: 'Cases',
         icon: "Briefcase",
         link: "case"
     },
@@ -43,7 +43,7 @@ export const bookmarks = [
         bookmark_id: 6,
         target: 'respiteApp',
         is_bookmarked: 0,
-        title: 'Respites',
+        title: 'Deadline',
         icon: "CheckCircle",
         link: "timeline"
     },
@@ -99,7 +99,7 @@ export const bookmarks = [
         bookmark_id: 13,
         target: 'cloudServerApp',
         is_bookmarked: 0,
-        title: 'Cloud Server',
+        title: 'Cloud-Storage',
         icon: "HardDrive",
         link: "cloud-storage"
     },

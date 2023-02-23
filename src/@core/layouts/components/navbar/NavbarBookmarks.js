@@ -248,12 +248,14 @@ const NavbarBookmarks = (props) => {
                   show: openSearch
                 })}
                 className='form-control'
-                suggestions={!searchInput.length ? renderTranslateBookmarkItems(store.bookmarkItems) : renderTranslateBookmarkItems(store.suggestionItems)}
+                suggestions={renderTranslateBookmarkItems(store.suggestionItems)}
+                // suggestions={!searchInput.length ? renderTranslateBookmarkItems(store.bookmarkItems) : renderTranslateBookmarkItems(store.suggestionItems)}
                 filterKey='title'
                 autoFocus={true}
                 adminRoot={adminRoot}
                 defaultSuggestions
-                suggestionLimit={!searchInput.length ? store.bookmarkItems.length : 6}
+                suggestionLimit={store.suggestionItems.length}
+                // suggestionLimit={!searchInput.length ? store.bookmarkItems.length : 6}
                 placeholder='Search...'
                 externalClick={handleExternalClick}
                 clearInput={(userInput, setUserInput) => handleClearInput(setUserInput)}
@@ -293,6 +295,7 @@ const NavbarBookmarks = (props) => {
                           <span className='text-truncate'>{t(item.title)}</span>
                         </div>
                       </Link>
+
                       <Icon.Star
                         size={17.5}
                         className={classnames('bookmark-icon float-end', {

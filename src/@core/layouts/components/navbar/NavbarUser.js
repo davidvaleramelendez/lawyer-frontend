@@ -1,6 +1,12 @@
 // ** React Imports
 import { React, useEffect, useState } from 'react'
 
+// ** Store & Actions
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  handleCustomizerOpen
+} from '@store/layout'
+
 // ** Dropdowns Imports
 import UserDropdown from './UserDropdown'
 import NavbarSearch from './NavbarSearch'
@@ -9,23 +15,38 @@ import EmailDropdown from './EmailDropdown'
 import NotificationDropdown from './NotificationDropdown'
 import PhoneNotification from './PhoneNotification'
 
+// ** Reactstrap Imports
+import {
+  Modal,
+  ModalBody,
+  ModalHeader
+} from 'reactstrap'
+
+// ** Icons Import
+import { Settings } from 'react-feather'
+
+// ** Utils Import
+import { getWebPreviewUrl } from '@utils'
+
+// ** Custom Components
+import Avatar from '@components/avatar'
+
 // ** Third Party Components
 import { socketIo } from '@src/index'
 
 // ** Translation
 import { T } from '@localization'
-import { Modal, ModalBody, ModalHeader } from 'reactstrap'
-
-// ** Custom Components
-import Avatar from '@components/avatar'
 
 // ** Default Avatar Image
 import defaultAvatar from '@src/assets/images/avatars/avatar-default.jpg'
 
-// ** Utils Import
-import { getWebPreviewUrl } from '@utils'
-
 const NavbarUser = () => {
+
+  // ** Vars
+  const dispatch = useDispatch()
+  const layoutStore = useSelector(state => state.layout)
+
+  const { openCustomizer } = layoutStore
 
   // ** States
   const [modalVisible, setModalVisible] = useState(false)
@@ -38,8 +59,14 @@ const NavbarUser = () => {
     photo: defaultAvatar
   })
 
+  // ** Toggles Customizer
+  const handleToggle = (event) => {
+    event.preventDefault()
+    dispatch(handleCustomizerOpen(!openCustomizer))
+  }
+
   useEffect(() => {
-    socketIo.on('CHAT_IMPORTANT', ({operator, msg, photo, time}) => {
+    socketIo.on('CHAT_IMPORTANT', ({ operator, msg, photo, time }) => {
       setMessage(msg)
       setMarkedAt(new Date(time))
       setUser({
@@ -68,8 +95,8 @@ const NavbarUser = () => {
     clearInterval(timer)
     setTimer(null)
   }
-  
-  
+
+
   const getTimeString = () => {
     const seconds = Math.floor((current.getTime() - marked_at.getTime()) / 1000)
     if (seconds === 1) return `A second ago`
@@ -86,6 +113,11 @@ const NavbarUser = () => {
       <NotificationDropdown />
       <PhoneNotification />
       <UserDropdown />
+
+      <a href="/" className="ms-50" onClick={handleToggle}>
+        <Settings size={21} />
+      </a>
+
       <Modal
         isOpen={modalVisible}
         backdrop="static"

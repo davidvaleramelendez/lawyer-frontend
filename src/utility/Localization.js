@@ -544,6 +544,9 @@ export const L10nKeys = {
     FullWidth: 'Full Width',
     Boxed: 'Boxed',
     MenuCollapsed: 'Menu Collapsed',
+    MenuLayout: 'Menu Layout',
+    Vertical: 'Vertical',
+    Horizontal: 'Horizontal',
     MenuHidden: 'Menu Hidden',
     NavbarColor: 'Navbar Color',
     NavbarType: 'Navbar Type',
@@ -794,10 +797,7 @@ export const L10nOrgKeys = {
         ]
     },
     'UI Setting': [
-        'ThemeCustomizer', 'CusomizePreviewInRealTime', 'Skin', 'Light', 'Bordered',
-        'Dark', 'SemiDark', 'ContentWidth', 'FullWidth', 'Boxed',
-        'MenuCollapsed', 'MenuHidden', 'NavbarColor', 'NavbarType', 'Floating',
-        'Sticky', 'Static', 'Hidden', 'FooterType', 'ApplySave'
+        'ThemeCustomizer', 'CusomizePreviewInRealTime', 'Skin', 'Light', 'Bordered', 'Dark', 'SemiDark', 'ContentWidth', 'FullWidth', 'Boxed', 'MenuCollapsed', 'MenuHidden', 'NavbarColor', 'NavbarType', 'Floating', 'Sticky', 'Static', 'Hidden', 'FooterType', 'ApplySave', "MenuLayout", "Vertical", "Horizontal"
     ],
     Common: [
         'AppsMenu', 'RequestSettings', 'Profile', 'Logout', 'FileLimitExceeded', 'FileUploadingSizeExceeded', 'Okay', 'PleaseUploadMax', 'files', 'Showing', 'to', 'of', 'entries', 'Cloud'

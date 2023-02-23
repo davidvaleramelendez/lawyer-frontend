@@ -1,11 +1,22 @@
 // You can customize the template with the help of this file
+// Template config options
 
-//Template config options
+// ** Constant
 import {
   storageSiteSetting
 } from '@constant/defaultValues'
 
 const _siteSettingLayout = localStorage.getItem(storageSiteSetting) !== null ? JSON.parse(localStorage.getItem(storageSiteSetting)) : null
+
+/* Check initial values */
+const getThemeInitialValue = (id) => {
+  if (_siteSettingLayout && _siteSettingLayout[id]) {
+    return _siteSettingLayout[id]
+  }
+
+  return null
+}
+/* Check initial values */
 
 const themeConfig = {
   app: {
@@ -14,20 +25,20 @@ const themeConfig = {
   },
   layout: {
     isRTL: false,
-    skin: _siteSettingLayout ? _siteSettingLayout.skin : 'semi-dark', // light, dark, bordered, semi-dark
-    type: 'vertical', // vertical, horizontal
+    skin: getThemeInitialValue('skin') ?? 'semi-dark', // light, dark, bordered, semi-dark
+    type: getThemeInitialValue('layout') ?? 'vertical', // vertical, horizontal
     contentWidth: _siteSettingLayout ? _siteSettingLayout.contentWidth : 'boxed', // full, boxed
     menu: {
-      isHidden: _siteSettingLayout ? _siteSettingLayout.menuHidden : false,
-      isCollapsed: _siteSettingLayout ? _siteSettingLayout.menuCollapsed : false
+      isHidden: getThemeInitialValue('menuHidden') ?? false,
+      isCollapsed: getThemeInitialValue('menuCollapsed') ?? false
     },
     navbar: {
       // ? For horizontal menu, navbar type will work for navMenu type
-      type: _siteSettingLayout ? _siteSettingLayout.navbarType : 'floating', // static , sticky , floating, hidden
-      backgroundColor: _siteSettingLayout ? _siteSettingLayout.navbarColor : 'white' // BS color options [primary, success, etc]
+      type: getThemeInitialValue('navbarType') ?? 'floating', // static , sticky , floating, hidden
+      backgroundColor: getThemeInitialValue('navbarColor') ?? 'white' // BS color options [primary, success, etc]
     },
     footer: {
-      type: _siteSettingLayout ? _siteSettingLayout.footerType : 'hidden' // static, sticky, hidden
+      type: getThemeInitialValue('footerType') ?? 'hidden' // static, sticky, hidden
     },
     customizer: true,
     scrollTop: true, // Enable scroll to top button

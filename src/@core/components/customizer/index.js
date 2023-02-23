@@ -1,10 +1,13 @@
 // ** React Imports
-import { useState } from 'react'
 
 // ** Third Party Components
 import classnames from 'classnames'
-import { Settings, X } from 'react-feather'
 import PerfectScrollbar from 'react-perfect-scrollbar'
+
+// ** Icons Import
+import {
+  X
+} from 'react-feather'
 
 // ** Reactstrap Imports
 import { Button, Input, Label } from 'reactstrap'
@@ -23,31 +26,32 @@ const Customizer = (props) => {
     layout,
     setSkin,
     // setIsRtl,
-    isHidden,
-    // setLayout,
+    menuHidden,
     navbarType,
     footerType,
     navbarColor,
-    setIsHidden,
+    handleToggle,
     contentWidth,
+    setMenuHidden,
     menuCollapsed,
-    // setLastLayout,
     setNavbarType,
     setFooterType,
+    openCustomizer,
     setNavbarColor,
     setContentWidth,
     setMenuCollapsed,
+    handleMenuLayout,
     onThemeSettingSubmit
   } = props
 
   // ** State
-  const [openCustomizer, setOpenCustomizer] = useState(false)
+  // const [openCustomizer, setOpenCustomizer] = useState(false)
 
   // ** Toggles Customizer
-  const handleToggle = e => {
-    e.preventDefault()
-    setOpenCustomizer(!openCustomizer)
-  }
+  // const handleToggle = (event) => {
+  //   event.preventDefault()
+  //   dispatch(handleCustomizerOpen(!openCustomizer))
+  // }
 
   // ** Render Layout Skin Options
   const renderSkinsRadio = () => {
@@ -196,9 +200,10 @@ const Customizer = (props) => {
         open: openCustomizer
       })}
     >
-      <a href='/' className='customizer-toggle d-flex align-items-center justify-content-center' onClick={handleToggle}>
+      {/* <a href='/' className='customizer-toggle d-flex align-items-center justify-content-center' onClick={handleToggle}>
         <Settings size={14} className='spinner' />
-      </a>
+      </a> */}
+
       <PerfectScrollbar className='customizer-content' options={{ wheelPropagation: false }}>
         <div className='customizer-header px-2 pt-1 pb-0 position-relative'>
           <h4 className='mb-0'>{T('Theme Customizer')}</h4>
@@ -256,7 +261,7 @@ const Customizer = (props) => {
         <hr />
 
         <div className='px-2'>
-          {/* <p className='fw-bold'>Menu Layout</p>
+          <p className='fw-bold'>{T("Menu Layout")}</p>
           <div className='mb-2'>
             <div className='d-flex align-items-center'>
               <div className='form-check me-1'>
@@ -264,13 +269,10 @@ const Customizer = (props) => {
                   type='radio'
                   id='vertical-layout'
                   checked={layout === 'vertical'}
-                  onChange={() => {
-                    setLayout('vertical')
-                    setLastLayout('vertical')
-                  }}
+                  onChange={() => handleMenuLayout('vertical')}
                 />
                 <Label className='form-check-label' for='vertical-layout'>
-                  Vertical
+                  {T("Vertical")}
                 </Label>
               </div>
 
@@ -279,17 +281,14 @@ const Customizer = (props) => {
                   type='radio'
                   id='horizontal-layout'
                   checked={layout === 'horizontal'}
-                  onChange={() => {
-                    setLayout('horizontal')
-                    setLastLayout('horizontal')
-                  }}
+                  onChange={() => handleMenuLayout('horizontal')}
                 />
                 <Label className='form-check-label' for='horizontal-layout'>
-                  Horizontal
+                  {T("Horizontal")}
                 </Label>
               </div>
             </div>
-          </div> */}
+          </div>
 
           {layout !== 'horizontal' ? (
             <div className='form-switch mb-2 ps-0'>
@@ -313,8 +312,8 @@ const Customizer = (props) => {
                 type='switch'
                 id='menu-hidden'
                 name='menu-hidden'
-                checked={isHidden}
-                onChange={() => setIsHidden(!isHidden)}
+                checked={menuHidden}
+                onChange={() => setMenuHidden(!menuHidden)}
               />
             </div>
           </div>

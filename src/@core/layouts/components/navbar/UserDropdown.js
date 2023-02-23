@@ -1,5 +1,5 @@
 // ** React Imports
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 // ** Custom Components
@@ -28,6 +28,9 @@ import {
   updateAuthLoader,
   cleanAuthMessage
 } from '@src/pages/auth/store'
+import {
+  getSiteSetting
+} from '@store/layout'
 
 // ** Reactstrap Imports
 import {
@@ -89,6 +92,8 @@ const UserDropdown = () => {
       socketIo.on('SEND_USERID_REQUEST', () => {
         socketIo.emit('SET_SOCKET_ID', { user_id: (userData && userData.id) || "" })
       })
+
+      dispatch(getSiteSetting())
       setLoadFirst(false)
     }
 
@@ -135,44 +140,46 @@ const UserDropdown = () => {
   //** Vars
   const userAvatar = renderUserProfilePicture() || defaultAvatar
 
-  return (<>
-    <UncontrolledDropdown tag='li' className='dropdown-user nav-item'>
-      <DropdownToggle href='/' tag='a' className='nav-link dropdown-user-link' onClick={e => e.preventDefault()}>
-        <div className='user-nav d-sm-flex d-none'>
-          <span className='user-name fw-bold'>{(userData && userData.name) || 'John Doe'}</span>
-          <span className='user-status'>{(userData && userData.role && userData.role.RoleName) || ''}</span>
-        </div>
-        <Avatar img={userAvatar} imgHeight='40' imgWidth='40' status='online' />
-      </DropdownToggle>
-      <DropdownMenu end>
-        <DropdownItem tag={Link} to={`${adminRoot}/account-setting`}>
-          <User size={14} className='me-75' />
-          <span className='align-middle'>{T('Profile')}</span>
-        </DropdownItem>
+  return (
+    <Fragment>
+      <UncontrolledDropdown tag='li' className='dropdown-user nav-item'>
+        <DropdownToggle href='/' tag='a' className='nav-link dropdown-user-link' onClick={(event) => event.preventDefault()}>
+          <div className='user-nav d-sm-flex d-none'>
+            <span className='user-name fw-bold'>{(userData && userData.name) || 'John Doe'}</span>
+            <span className='user-status'>{(userData && userData.role && userData.role.RoleName) || ''}</span>
+          </div>
+          <Avatar img={userAvatar} imgHeight='40' imgWidth='40' status='online' />
+        </DropdownToggle>
+        <DropdownMenu end>
+          <DropdownItem tag={Link} to={`${adminRoot}/account-setting`}>
+            <User size={14} className='me-75' />
+            <span className='align-middle'>{T('Profile')}</span>
+          </DropdownItem>
 
-        <DropdownItem tag={Link} to={`${adminRoot}/email`}>
-          <Mail size={14} className='me-75' />
-          <span className='align-middle'>{T('Inbox')}</span>
-        </DropdownItem>
+          <DropdownItem tag={Link} to={`${adminRoot}/email`}>
+            <Mail size={14} className='me-75' />
+            <span className='align-middle'>{T('Inbox')}</span>
+          </DropdownItem>
 
-        <DropdownItem tag={Link} to={`${adminRoot}/todo`}>
-          <CheckSquare size={14} className='me-75' />
-          <span className='align-middle'>{T('Tasks')}</span>
-        </DropdownItem>
+          <DropdownItem tag={Link} to={`${adminRoot}/todo`}>
+            <CheckSquare size={14} className='me-75' />
+            <span className='align-middle'>{T('Tasks')}</span>
+          </DropdownItem>
 
-        <DropdownItem tag={Link} to={`${adminRoot}/chat`}>
-          <MessageSquare size={14} className='me-75' />
-          <span className='align-middle'>{T('Chats')}</span>
-        </DropdownItem>
+          <DropdownItem tag={Link} to={`${adminRoot}/chat`}>
+            <MessageSquare size={14} className='me-75' />
+            <span className='align-middle'>{T('Chats')}</span>
+          </DropdownItem>
 
-        <DropdownItem divider />
-        <DropdownItem tag={Link} to='/login' onClick={(event) => onLogoutHandle(event)}>
-          <Power size={14} className='me-75' />
-          <span className='align-middle'>{T('Logout')}</span>
-        </DropdownItem>
-      </DropdownMenu>
-    </UncontrolledDropdown>
-  </>)
+          <DropdownItem divider />
+          <DropdownItem tag={Link} to='/login' onClick={(event) => onLogoutHandle(event)}>
+            <Power size={14} className='me-75' />
+            <span className='align-middle'>{T('Logout')}</span>
+          </DropdownItem>
+        </DropdownMenu>
+      </UncontrolledDropdown>
+    </Fragment>
+  )
 }
 
 export default UserDropdown

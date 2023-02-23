@@ -7,12 +7,12 @@ import { useLocation } from 'react-router-dom'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
 import {
-  getSiteSetting,
   handleMenuHidden,
   createSiteSetting,
   handleContentWidth,
   clearLayoutMessage,
-  handleMenuCollapsed
+  handleMenuCollapsed,
+  handleCustomizerOpen
 } from '@store/layout'
 
 // ** Third Party Components
@@ -43,6 +43,12 @@ import { useNavbarType } from '@hooks/useNavbarType'
 import { useFooterType } from '@hooks/useFooterType'
 import { useNavbarColor } from '@hooks/useNavbarColor'
 
+// ** SiteSetting in utils
+import {
+  getSiteLayoutSetting,
+  setSiteLayoutSetting
+} from '@utils'
+
 // ** Styles
 import '@styles/base/core/menu/menu-types/vertical-menu.scss'
 import '@styles/base/core/menu/menu-types/vertical-overlay-menu.scss'
@@ -63,7 +69,6 @@ const VerticalLayout = (props) => {
   const { layout, setLayout, setLastLayout } = useLayout()
 
   // ** States
-  const [loadFirst, setLoadFirst] = useState(true)
   const [isMounted, setIsMounted] = useState(false)
   const [menuVisibility, setMenuVisibility] = useState(false)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
@@ -79,11 +84,21 @@ const VerticalLayout = (props) => {
 
   // ** Vars
   const location = useLocation()
-  const isHidden = layoutStore.menuHidden
-  const contentWidth = layoutStore.contentWidth
-  const menuCollapsed = layoutStore.menuCollapsed
+  const {
+    openCustomizer,
+    contentWidth,
+    menuCollapsed,
+    menuHidden
+  } = layoutStore
 
-  // console.log("layoutStore >>> ", layoutStore)
+  // ** Toggles Customizer
+  const handleToggle = (event) => {
+    if (event) {
+      event.preventDefault()
+    }
+
+    dispatch(handleCustomizerOpen(!openCustomizer))
+  }
 
   // ** Toggles Menu Collapsed
   const setMenuCollapsed = (val) => dispatch(handleMenuCollapsed(val))
@@ -92,7 +107,26 @@ const VerticalLayout = (props) => {
   const setContentWidth = (val) => dispatch(handleContentWidth(val))
 
   // ** Handles Content Width
-  const setIsHidden = (val) => dispatch(handleMenuHidden(val))
+  const setMenuHidden = (val) => dispatch(handleMenuHidden(val))
+
+  // ** Handles Menu Layouts
+  const handleMenuLayout = (val = "vertical") => {
+    const setting = getSiteLayoutSetting()
+    setSiteLayoutSetting({
+      ...setting,
+      layout: val,
+      skin: skin,
+      contentWidth: contentWidth,
+      menuCollapsed: menuCollapsed,
+      footerType: footerType,
+      navbarType: navbarType,
+      navbarColor: navbarColor,
+      menuHidden: menuHidden
+    })
+
+    setLayout(val)
+    setLastLayout(val)
+  }
 
   const onThemeSettingSubmit = () => {
     const siteSettingData = {
@@ -101,7 +135,7 @@ const VerticalLayout = (props) => {
       navbarType: navbarType,
       contentWidth: contentWidth,
       menuCollapsed: menuCollapsed,
-      menuHidden: isHidden,
+      menuHidden: menuHidden,
       navbarColor: navbarColor,
       footerType: footerType
     }
@@ -131,9 +165,9 @@ const VerticalLayout = (props) => {
   }, [])
 
   useEffect(() => {
-    if (loadFirst) {
-      dispatch(getSiteSetting())
-      setLoadFirst(false)
+    /* Close customizer sidebar */
+    if (layoutStore.actionFlag && layoutStore.actionFlag === "CREATED_ITEM") {
+      handleToggle()
     }
 
     /* For blank message api called inside */
@@ -150,7 +184,7 @@ const VerticalLayout = (props) => {
     if (layoutStore && layoutStore.error) {
       Notification(T("Error"), layoutStore.error, "warning")
     }
-  }, [layoutStore.success, layoutStore.error, layoutStore.actionFlag, loadFirst])
+  }, [layoutStore.success, layoutStore.error, layoutStore.actionFlag])
   // console.log("layoutStore >>> ", layoutStore)
 
   // ** Vars
@@ -179,6 +213,7 @@ const VerticalLayout = (props) => {
   if (!isMounted) {
     return null
   }
+
   return (
     <div
       className={classnames(
@@ -196,9 +231,9 @@ const VerticalLayout = (props) => {
           'menu-open': menuVisibility && windowWidth < 1200
         }
       )}
-      {...(isHidden ? { 'data-col': '1-column' } : {})}
+      {...(menuHidden ? { 'data-col': '1-column' } : {})}
     >
-      {!isHidden ? (
+      {!menuHidden ? (
         <SidebarComponent
           skin={skin}
           menu={menu}
@@ -246,24 +281,26 @@ const VerticalLayout = (props) => {
           layout={layout}
           setSkin={setSkin}
           setIsRtl={setIsRtl}
-          isHidden={isHidden}
-          setLayout={setLayout}
+          menuHidden={menuHidden}
           footerType={footerType}
           navbarType={navbarType}
-          setIsHidden={setIsHidden}
           themeConfig={themeConfig}
           navbarColor={navbarColor}
+          handleToggle={handleToggle}
           contentWidth={contentWidth}
           setFooterType={setFooterType}
           setNavbarType={setNavbarType}
-          setLastLayout={setLastLayout}
           menuCollapsed={menuCollapsed}
+          setMenuHidden={setMenuHidden}
+          openCustomizer={openCustomizer}
           setNavbarColor={setNavbarColor}
           setContentWidth={setContentWidth}
           setMenuCollapsed={setMenuCollapsed}
+          handleMenuLayout={handleMenuLayout}
           onThemeSettingSubmit={onThemeSettingSubmit}
         />
       ) : null}
+
       <footer
         className={classnames(`footer footer-light ${footerClasses[footerType] || 'footer-static'}`, {
           'd-none': footerType === 'hidden'

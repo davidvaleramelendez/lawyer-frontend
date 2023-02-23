@@ -31,8 +31,8 @@ async function getSiteSettingRequest(params) {
 
 export const getSiteSetting = createAsyncThunk('layout/getSiteSetting', async (params) => {
   const isRTL = themeConfig.layout.isRTL
-  const layout = themeConfig.layout.type
   const _siteSettingLayout = getSiteLayoutSetting()
+  let layout = _siteSettingLayout ? _siteSettingLayout.layout : themeConfig.layout.type
   let skin = _siteSettingLayout ? _siteSettingLayout.skin : themeConfig.layout.skin
   let footerType = _siteSettingLayout ? _siteSettingLayout.footerType : themeConfig.layout.footer.type
   let navbarType = _siteSettingLayout ? _siteSettingLayout.navbarType : themeConfig.layout.navbar.type
@@ -40,13 +40,17 @@ export const getSiteSetting = createAsyncThunk('layout/getSiteSetting', async (p
   let navbarColor = _siteSettingLayout ? _siteSettingLayout.navbarColor : themeConfig.layout.navbar.backgroundColor
   let contentWidth = _siteSettingLayout ? _siteSettingLayout.contentWidth : themeConfig.layout.contentWidth
   let menuCollapsed = _siteSettingLayout ? _siteSettingLayout.menuCollapsed : themeConfig.layout.menu.isCollapsed
+
   try {
     const response = await getSiteSettingRequest(params)
     if (response && response.flag) {
-
       if (response.data) {
         if (response.data.value) {
           await setSiteLayoutSetting(response.data.value)
+          if (response.data.value.layout) {
+            layout = response.data.value.layout
+          }
+
           if (response.data.value.skin) {
             skin = response.data.value.skin
           }
@@ -133,12 +137,12 @@ async function createSiteSettingRequest(payload) {
   return axios.post(`${API_ENDPOINTS.layout.createSiteSetting}`, payload).then((layout) => layout.data).catch((error) => error)
 }
 
-export const createSiteSetting = createAsyncThunk('layout/createSiteSetting', async (payload) => {
+export const createSiteSetting = createAsyncThunk('layout/createSiteSetting', async (payload, { dispatch }) => {
   try {
     const response = await createSiteSettingRequest(payload)
-    console.log(JSON.parse(response.data.value))
-    await setSiteLayoutSetting(JSON.parse(response.data.value))
     if (response && response.flag) {
+      await setSiteLayoutSetting(response.data.value)
+      await dispatch(getSiteSetting({}))
       return {
         siteSettingItem: response.data,
         actionFlag: "CREATED_ITEM",
@@ -167,6 +171,7 @@ export const createSiteSetting = createAsyncThunk('layout/createSiteSetting', as
 export const layoutSlice = createSlice({
   name: 'layout',
   initialState: {
+    openCustomizer: false,
     skin: themeConfig.layout.skin,
     isRTL: themeConfig.layout.isRTL,
     layout: themeConfig.layout.type,
@@ -184,6 +189,10 @@ export const layoutSlice = createSlice({
     error: ""
   },
   reducers: {
+    handleCustomizerOpen: (state, action) => {
+      state.openCustomizer = action.payload || false
+    },
+
     handleRTL: (state, action) => {
       state.isRTL = action.payload
     },
@@ -267,8 +276,9 @@ export const {
   handleFooterType,
   handleNavbarColor,
   handleContentWidth,
+  clearLayoutMessage,
   handleMenuCollapsed,
-  clearLayoutMessage
+  handleCustomizerOpen
 } = layoutSlice.actions
 
 export default layoutSlice.reducer

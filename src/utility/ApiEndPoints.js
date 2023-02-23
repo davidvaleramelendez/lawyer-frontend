@@ -151,8 +151,10 @@ export const API_ENDPOINTS = {
         updateFile: `/api/admin/file/update`,
         trashFile: `/api/admin/file/trash`,
         deleteFile: `/api/admin/file/delete`,
+        userList: `/api/admin/cloud/get_users`,
         markImportant: `/api/admin/cloud/mark-important`,
-        markRestore: `/api/admin/cloud/mark-restore`
+        markRestore: `/api/admin/cloud/mark-restore`,
+        markShare: `/api/admin/cloud/mark-share`
     },
     /* /Cloud storage module */
 

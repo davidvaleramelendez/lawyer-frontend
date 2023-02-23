@@ -214,7 +214,7 @@ const CaseVoiceTranscript = () => {
                             <CardHeader>
                                 <CardTitle tag="h4">{T('Voice Recording')} & {T("Transcript")}</CardTitle>
 
-                                <div className="text-end" >
+                                <div className="text-end">
                                     <Button
                                         type="button"
                                         onClick={() => handleBackCase()}

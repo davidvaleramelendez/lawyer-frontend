@@ -24,7 +24,10 @@ import Autocomplete from '@components/autocomplete/custom'
 
 // Constant
 import {
-  adminRoot
+  adminRoot,
+  adminRoleId,
+  lawyerRoleId,
+  partnerRoleId
 } from '@constant/defaultValues'
 
 const NavbarSearch = () => {
@@ -45,6 +48,21 @@ const NavbarSearch = () => {
     }
   }, [store.success, store.error, store.actionFlag])
   // console.log("store >>> ", store)
+
+  const handleNavigationRole = (user, type = "view") => {
+    if (user && user.id) {
+      if (user.role_id === adminRoleId) {
+        return `${adminRoot}/user/admin/${type}/${user.id}`
+      } else if (user.role_id === lawyerRoleId) {
+        return `${adminRoot}/user/lawyer/${type}/${user.id}`
+      } else if (user.role_id === partnerRoleId) {
+        return `${adminRoot}/user/partner/${type}/${user.id}`
+      } else {
+        return `${adminRoot}/user/customer/${type}/${user.id}`
+      }
+    }
+    return `${adminRoot}/user`
+  }
 
   // ** Removes query in store
   const handleClearQueryInStore = () => dispatch(handleSearchQuery(''))
@@ -113,7 +131,7 @@ const NavbarSearch = () => {
         className={classnames("suggestion-item", {
           active: filteredData.indexOf(item) === activeSuggestion
         })}
-        onClick={(event) => handleListItemClick(onSuggestionItemClick, `${adminRoot}/user/view/${item.id}`, event)}
+        onClick={(event) => handleListItemClick(onSuggestionItemClick, handleNavigationRole(item, "view"), event)}
         onMouseEnter={() => onSuggestionItemHover(filteredData.indexOf(item))}
       >
         <div className="">

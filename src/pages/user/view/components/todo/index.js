@@ -142,7 +142,7 @@ const TodoApp = ({
     }
 
     /* For reset form data and closing modal */
-    if (store.actionFlag && (store.actionFlag === "CREATED_UPDATED" || store.actionFlag === "DELETED" || store.actionFlag === "COMPLETED" || store.actionFlag === "IMPORTANT")) {
+    if (store.actionFlag && (store.actionFlag === "CREATED_UPDATED" || store.actionFlag === "DELETED" || store.actionFlag === "COMPLETED" || store.actionFlag === "IMPORTANT" || store.actionFlag === "RESTORED")) {
       setOpenTaskSidebar(false)
     }
 
@@ -237,6 +237,8 @@ const TodoApp = ({
               getTaskItem={getTaskItem}
               userOptions={userOptions}
               trashTodoItem={trashTodoItem}
+              deleteTodoItem={deleteTodoItem}
+              restoreTodoItem={restoreTodoItem}
               createUpdateTodo={createUpdateTodo}
               completeTodoItem={completeTodoItem}
               updateTaskLoader={updateTaskLoader}

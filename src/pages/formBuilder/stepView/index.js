@@ -4,12 +4,15 @@ import React, { useEffect, useState } from "react"
 // ** Redux Import
 import { useDispatch, useSelector } from "react-redux"
 import { 
-  getPreviewList,
+  getStepDetails,
   setDeleteItem,
   setLoading,
   setSelectedItem, 
-  updatePreviewList
-} from "./store"
+  updateStepDetails
+} from "../store"
+
+// ** Router Import
+import { Link, useParams } from "react-router-dom"
 
 // ** Reactstrap Import
 import {
@@ -18,18 +21,17 @@ import {
   CardHeader,
   CardTitle,
   Col,
-  Row,
-  Button
+  Row
 } from "reactstrap"
 
 // ** Icon Import
-import { Plus } from "react-feather"
+import { ChevronsLeft } from "react-feather"
 
 // ** Translation
 import { T } from "@localization"
 
 // ** Constants Import
-import { formAddItems } from "./constants"
+import { formAddItems } from "../constants"
 
 // ** Drag and Drop
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
@@ -49,19 +51,22 @@ import "@styles/base/pages/app-form-builder.scss"
 import _ from "lodash"
 import { v4 as uuidv4 } from "uuid"
 
-const FormBuilder = () => {
+const FormBuilderView = () => {
 
   // ** Store Vars
   const dispatch = useDispatch()
-  const formPreviewList = useSelector((state) => state.formBuilder.formPreviewList)
+  const {stepDetails, stepInfo} = useSelector((state) => state.formBuilder)
   const loading = useSelector((state) => state.formBuilder.loading)
+
+  // ** Route Param
+  const { stepId } = useParams()
 
   // ** State
   const [formAddList, setFormAddList] = useState(formAddItems)
   
   useEffect(() => {
     dispatch(setLoading(false))
-    dispatch(getPreviewList())
+    dispatch(getStepDetails(stepId))
   }, [])
 
   const onDragEnd = (result) => {
@@ -78,11 +83,13 @@ const FormBuilder = () => {
     } else if (sourceId === "form-preview" && destinationId === "form-preview") {
 
       // Change order of row
-      const newItem = formPreviewList[result.source.index]
-      const newFormPreviewList = [...formPreviewList]
-      newFormPreviewList.splice(result.source.index, 1)
-      newFormPreviewList.splice(result.destination.index, 0, newItem)
-      dispatch(updatePreviewList(newFormPreviewList))
+      const newItem = stepDetails[result.source.index]
+      const newStepDetails = [...stepDetails]
+      newStepDetails.splice(result.source.index, 1)
+      newStepDetails.splice(result.destination.index, 0, newItem)
+      dispatch(updateStepDetails({
+        data: newStepDetails, id: stepId
+      }))
     
     } else if (sourceId === "add-form" && destinationId.startsWith("colpreview")) {
 
@@ -90,15 +97,17 @@ const FormBuilder = () => {
       const rowIndex = Number(destinationId.split('-')[1])
       const colIndex = Number(destinationId.split('-')[2])
       const item = formAddList.find(item => item.handle === result.draggableId)
-      const newFormPreviewList = _.cloneDeep(formPreviewList)
+      const newStepDetails = _.cloneDeep(stepDetails)
       
-      newFormPreviewList[rowIndex][colIndex] = {
+      newStepDetails[rowIndex][colIndex] = {
         id: uuidv4(),
         ...item.default,
         handle: item.handle,
         name: uuidv4()
       }
-      dispatch(updatePreviewList(newFormPreviewList))
+      dispatch(updateStepDetails({
+        data: newStepDetails, id: stepId
+      }))
 
     } else if (sourceId.startsWith("colpreview") && destinationId.startsWith("colpreview")) {
 
@@ -107,13 +116,15 @@ const FormBuilder = () => {
       const sColIndex = Number(sourceId.split('-')[2])
       const dRowIndex = Number(destinationId.split('-')[1])
       const dColIndex = Number(destinationId.split('-')[2])
-      const sItem = formPreviewList[sRowIndex][sColIndex]
-      const dItem = formPreviewList[dRowIndex][dColIndex]
+      const sItem = stepDetails[sRowIndex][sColIndex]
+      const dItem = stepDetails[dRowIndex][dColIndex]
       
-      const newFormPreviewList = _.cloneDeep(formPreviewList)
-      newFormPreviewList[dRowIndex][dColIndex] = sItem
-      newFormPreviewList[sRowIndex][sColIndex] = dItem
-      dispatch(updatePreviewList(newFormPreviewList))
+      const newStepDetails = _.cloneDeep(stepDetails)
+      newStepDetails[dRowIndex][dColIndex] = sItem
+      newStepDetails[sRowIndex][sColIndex] = dItem
+      dispatch(updateStepDetails({
+        data: newStepDetails, id: stepId
+      }))
 
     } else if (sourceId === "form-preview" && result.destination === null) {
 
@@ -133,10 +144,12 @@ const FormBuilder = () => {
     }
   }
   
-  const handleAddRow = (number) => () => {
+  const handleAddRow = (number) => {
     const newRow = Array.apply(null, Array(number)).map(() => ({}))
-    const newFormPreviewList = [newRow, ...formPreviewList]
-    dispatch(updatePreviewList(newFormPreviewList))
+    const newStepDetails = [newRow, ...stepDetails]
+    dispatch(updateStepDetails({
+      data: newStepDetails, id: stepId
+    }))
   }
 
   const handleEditItem = (rowIndex, colIndex) => {
@@ -153,21 +166,18 @@ const FormBuilder = () => {
             <Card className="overflow-hidden">
               <CardHeader className="border-bottom">
                 <div className="d-flex align-items-center w-100">
-                  <CardTitle tag="h4">{T("Form Preview")}</CardTitle>
-                  <div className="ms-auto">
-                    <Button.Ripple color="secondary" outline className="ms-75" size="sm" onClick={handleAddRow(1)}>
-                      <Plus size={14} />
-                      <span className="align-middle ms-75">Row - 1</span>
-                    </Button.Ripple>
-                    <Button.Ripple color="secondary" outline className="ms-75" size="sm" onClick={handleAddRow(2)}>
-                      <Plus size={14} />
-                      <span className="align-middle ms-75">Row - 2</span>
-                    </Button.Ripple>
-                    <Button.Ripple color="secondary" outline className="ms-75" size="sm" onClick={handleAddRow(3)}>
-                      <Plus size={14} />
-                      <span className="align-middle ms-75">Row - 3</span>
-                    </Button.Ripple>
-                  </div>
+                  <CardTitle tag="h4">
+                    <span>
+                      {stepInfo.name ?? T("Step Design")}
+                    </span>
+                  </CardTitle>
+                  <Link
+                    className='ms-auto btn btn-outline-primary btn-sm'
+                    color='primary'
+                    to={`/apps/form-builder/steps/${stepInfo.formId}`}
+                  >
+                    <ChevronsLeft size={17} /> Back
+                  </Link>
                 </div>
               </CardHeader>
               <CardBody className="p-0">
@@ -175,7 +185,7 @@ const FormBuilder = () => {
                   <Droppable droppableId="form-preview" type="droppableContainer">
                     {(provided) => (
                       <div ref={provided.innerRef} {...provided.droppableProps} className="form-preview">
-                        {formPreviewList.map((rowItem, rowIndex) => (
+                        {stepDetails.map((rowItem, rowIndex) => (
                           <Draggable
                             key={`row_${rowIndex}`}
                             draggableId={`row_${rowIndex}`}
@@ -220,7 +230,7 @@ const FormBuilder = () => {
             </Card>
           </Col>
           <Col xl={3} lg={4} md={4} xs={12}>
-            <AddFormComponent formAddList={formAddList} />
+            <AddFormComponent formAddList={formAddList} onAddRow={handleAddRow} />
           </Col>
         </Row>
       </DragDropContext>
@@ -230,4 +240,4 @@ const FormBuilder = () => {
   )
 }
 
-export default FormBuilder
+export default FormBuilderView

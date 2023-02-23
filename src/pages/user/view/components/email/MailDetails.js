@@ -237,9 +237,9 @@ const MailDetails = (props) => {
   // ** Renders Messages
   const renderMessage = (obj, index) => {
     return (
-      <Row className={`${index % 2 === 1 ? 'odd-even-reply' : ''}`}>
+      <Row>
         <Col sm={12}>
-          <Card>
+          <Card className={`${index % 2 === 1 ? 'odd-even-reply' : ''}`}>
             <CardHeader className='email-detail-head'>
               <div className='user-details d-flex justify-content-between align-items-center flex-wrap'>
                 <div className='mail-items'>
@@ -427,7 +427,7 @@ const MailDetails = (props) => {
             <div className="email-header-right ms-2 ps-1">
               <ul className="list-inline m-0">
                 {mailItem && mailItem.mail && mailItem.mail.id && !mailItem.mail.type ? (<li className="list-inline-item">
-                  <Link to={`${adminRoot}/email/view/${mailItem.mail.id}`} target="_blank">
+                  <Link to={`${adminRoot}/email/view/${mailItem.mail.id}?emailGroupId=${mailItem.mail.email_group_id}`} target="_blank">
                     <Eye size={18} className="mx-1" />
                   </Link>
                 </li>) : null}
@@ -435,7 +435,10 @@ const MailDetails = (props) => {
             </div>
           </div>
 
-          <PerfectScrollbar className="email-scroll-area" options={{ wheelPropagation: false }}>
+          <PerfectScrollbar
+            className="email-scroll-area"
+          // options={{ wheelPropagation: false }}
+          >
             <Row>
               <Col sm={12}>
                 <div className="email-label">{mailItem && mailItem.mail && mailItem.mail.label ? renderLabels(mailItem.mail.label.split(",")) : null}</div>

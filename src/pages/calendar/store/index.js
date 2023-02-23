@@ -25,7 +25,8 @@ export const getUserList = createAsyncThunk('appCalendar/getUserList', async (pa
     const response = await getUserListRequest(params)
     if (response && response.flag) {
       return {
-        userItems: response.data,
+        userItems: (response.data && response.data.users) || [],
+        filterUsers: (response.data && response.data.filterUsers) || [],
         actionFlag: "",
         success: "",
         error: ""
@@ -33,6 +34,7 @@ export const getUserList = createAsyncThunk('appCalendar/getUserList', async (pa
     } else {
       return {
         userItems: [],
+        filterUsers: [],
         actionFlag: "",
         success: "",
         error: response.message
@@ -42,6 +44,7 @@ export const getUserList = createAsyncThunk('appCalendar/getUserList', async (pa
     console.log("getUserList catch ", error)
     return {
       userItems: [],
+      filterUsers: [],
       actionFlag: "",
       success: "",
       error: error
@@ -179,24 +182,27 @@ export const deleteEvent = createAsyncThunk('appCalendar/deleteEvent', async (id
 })
 
 export const updateFilter = createAsyncThunk('appCalendar/updateFilter', async (filter, { dispatch, getState }) => {
+  let params = getState().calendar.params
   if (getState().calendar.selectedCalendars.includes(filter)) {
-    await dispatch(getEventList({ filter: JSON.stringify(getState().calendar.selectedCalendars.filter(i => i !== filter)) }))
+    params = { ...params, filter: JSON.stringify(getState().calendar.selectedCalendars.filter(i => i !== filter)) }
+    await dispatch(getEventList(params))
   } else {
-    await dispatch(getEventList({ filter: JSON.stringify([...getState().calendar.selectedCalendars, filter]) }))
+    params = { ...params, filter: JSON.stringify([...getState().calendar.selectedCalendars, filter]) }
+    await dispatch(getEventList(params))
   }
   return filter
 })
 
-export const updateAllFilters = createAsyncThunk('appCalendar/updateAllFilters', async (value, { dispatch }) => {
+export const updateAllFilters = createAsyncThunk('appCalendar/updateAllFilters', async (value, { dispatch, getState }) => {
+  let params = getState().calendar.params
   if (value === true) {
-    await dispatch(getEventList({
-      filter: JSON.stringify(
-        ['my_appointments', 'court_date', 'holiday']
-      )
-    }))
+    params = { ...params, filter: JSON.stringify(['my_appointments', 'court_date', 'holiday']) }
+    await dispatch(getEventList(params))
   } else {
-    await dispatch(getEventList({ filter: "[]" }))
+    params = { ...params, filter: "[]" }
+    await dispatch(getEventList(params))
   }
+
   return value
 })
 
@@ -207,6 +213,7 @@ export const appCalendarSlice = createSlice({
     events: [],
     eventItems: [],
     userItems: [],
+    filterUsers: [],
     eventItem: addEventItem,
     selectedCalendars: [
       'my_appointments',
@@ -237,6 +244,7 @@ export const appCalendarSlice = createSlice({
     builder
       .addCase(getUserList.fulfilled, (state, action) => {
         state.userItems = action.payload.userItems
+        state.filterUsers = action.payload.filterUsers
         state.actionFlag = action.payload.actionFlag
         state.loading = true
         state.success = action.payload.success

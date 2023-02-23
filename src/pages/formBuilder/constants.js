@@ -3,7 +3,7 @@ import {
     CheckSquare, 
     Edit, 
     List, 
-    Target, 
+    Disc, 
     Type 
 } from "react-feather"
 
@@ -35,7 +35,7 @@ export const formAddItems = [
     {
         title: 'Radio',
         handle: 'radio',
-        icon: <Target size={14} />,
+        icon: <Disc size={14} />,
         default: {
             title: 'Radio',
             value: '0',

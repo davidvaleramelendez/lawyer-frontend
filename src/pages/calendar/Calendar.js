@@ -38,7 +38,6 @@ const Calendar = (props) => {
     setCalendarApi,
     calendarsColor,
     getTransformDate,
-    setLoadingCalendar,
     setAddEventModalOpen,
     increaseCustomDateFormat
   } = props
@@ -49,6 +48,7 @@ const Calendar = (props) => {
       setCalendarApi(calendarRef.current.getApi())
     }
   }, [calendarApi])
+  // console.log("calendarApi >>> ", calendarApi)
 
   // ** calendarOptions(Props)
   const calendarOptions = {
@@ -101,8 +101,7 @@ const Calendar = (props) => {
     navLinks: true,
 
     /* Calendar loading */
-    loading(bool) {
-      setLoadingCalendar(bool)
+    loading() {
     },
     /* /Calendar loading */
 
@@ -136,23 +135,25 @@ const Calendar = (props) => {
         const events_in_clicked_day = store.eventItems.filter(item => {
           return item.start <= end_clicked_time && item.end >= start_clicked_time
         })
+
         if (events_in_clicked_day.length >= 2) {
           calendarRef.current.getApi().changeView('timeGridDay', selected_date)
-        } else {
-          let evntData = { ...store.eventItem }
-          if (clickedEvent && clickedEvent.id) {
-            if (store.eventItems && store.eventItems.length) {
-              const index = store.eventItems.findIndex(x => JSON.stringify(x.id) === clickedEvent.id)
-              if (index !== -1) {
-                evntData = { ...store.eventItems[index] }
-              }
-            }
-          }
-
-          dispatch(getEventItem(evntData))
-          setAddEventModalOpen(true)
+          return
         }
       }
+
+      let evntData = { ...store.eventItem }
+      if (clickedEvent && clickedEvent.id) {
+        if (store.eventItems && store.eventItems.length) {
+          const index = store.eventItems.findIndex(x => JSON.stringify(x.id) === clickedEvent.id)
+          if (index !== -1) {
+            evntData = { ...store.eventItems[index] }
+          }
+        }
+      }
+
+      dispatch(getEventItem(evntData))
+      setAddEventModalOpen(true)
 
 
       // * Only grab required field otherwise it goes in infinity loop
@@ -180,6 +181,7 @@ const Calendar = (props) => {
       const events_in_clicked_day = store.eventItems.filter(item => {
         return item.start <= end_clicked_time && item.end >= start_clicked_time
       })
+
       if (events_in_clicked_day.length >= 2 || info.view.type === 'dayGridMonth') {
         calendarRef.current.getApi().changeView('timeGridDay', info.dateStr)
       } else {
@@ -202,7 +204,6 @@ const Calendar = (props) => {
         dispatch(getEventItem(evntData))
         setAddEventModalOpen(true)
       }
-
     },
 
     /*
@@ -296,9 +297,9 @@ const Calendar = (props) => {
   }
 
   return (
-    <Card className='shadow-none border-0 mb-0 rounded-0'>
-      <CardBody className='pb-0'>
-        <FullCalendar {...calendarOptions} />{' '}
+    <Card className="shadow-none border-0 mb-0 rounded-0">
+      <CardBody className="pb-0">
+        <FullCalendar {...calendarOptions} />{" "}
       </CardBody>
     </Card>
   )

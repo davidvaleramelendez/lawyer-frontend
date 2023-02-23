@@ -33,14 +33,26 @@ export default [
     icon: <Box />,
     children: [
       {
+        id: 'calendarApp',
+        title: 'Calendar',
+        icon: <Calendar size={20} />,
+        navLink: `${adminRoot}/calendar`
+      },
+      {
+        id: 'userApp',
+        title: 'User',
+        icon: <User size={20} />,
+        navLink: `${adminRoot}/user`
+      },
+      {
         id: 'emailApp',
-        title: 'E-Mail',
+        title: 'Email',
         icon: <Mail size={20} />,
         navLink: `${adminRoot}/email`
       },
       {
         id: 'documentApp',
-        title: 'Documents',
+        title: 'Cases',
         icon: <Briefcase size={20} />,
         navLink: `${adminRoot}/case`
       },
@@ -58,25 +70,19 @@ export default [
       },
       {
         id: 'taskApp',
-        title: 'Aufgaben',
+        title: 'Task',
         icon: <CheckSquare size={20} />,
         navLink: `${adminRoot}/todo`
       },
       {
-        id: 'calendarApp',
-        title: 'Calendar',
-        icon: <Calendar size={20} />,
-        navLink: `${adminRoot}/calendar`
-      },
-      {
         id: 'respiteApp',
-        title: 'Fristen',
+        title: 'Deadline',
         icon: <CheckCircle size={20} />,
         navLink: `${adminRoot}/timeline`
       },
       {
         id: 'outboxApp',
-        title: 'Postausgang',
+        title: 'Outbox',
         icon: <Send size={20} />,
         navLink: `${adminRoot}/letter`
       },
@@ -94,7 +100,7 @@ export default [
       },
       {
         id: 'billsApp',
-        title: 'Rechnungen',
+        title: 'Bills',
         icon: <FileText size={20} />,
         navLink: `${adminRoot}/invoice`
       }
@@ -107,7 +113,7 @@ export default [
     children: [
       {
         id: 'contactApp',
-        title: 'Anfrage',
+        title: 'Inquiry',
         icon: <MessageSquare size={20} />,
         navLink: `${adminRoot}/contact`
       },
@@ -118,32 +124,33 @@ export default [
         navLink: `${adminRoot}/placetel-call`
       },
       {
-        id: 'userApp',
-        title: 'User',
-        icon: <User size={20} />,
-        navLink: `${adminRoot}/user`
-      },
-      {
         id: 'accountApp',
         title: 'Account',
         icon: <Settings size={20} />,
         navLink: `${adminRoot}/account-setting`
       },
       {
-        id: 'emailTemplateApp',
-        title: 'Email Template',
-        icon: <Codepen size={20} />,
-        navLink: `${adminRoot}/email-template`
-      },
-      {
-        id: 'letterTemplateApp',
-        title: 'Letter Template',
+        id: 'templateApp',
+        title: 'Template',
         icon: <Codesandbox size={20} />,
-        navLink: `${adminRoot}/letter-template`
+        children: [
+          {
+            id: 'emailTemplateApp',
+            title: 'Email Template',
+            icon: <Codepen size={20} />,
+            navLink: `${adminRoot}/email-template`
+          },
+          {
+            id: 'letterTemplateApp',
+            title: 'Letter Template',
+            icon: <Codesandbox size={20} />,
+            navLink: `${adminRoot}/letter-template`
+          }
+        ]
       },
       {
         id: 'cloudServerApp',
-        title: 'Cloud Server',
+        title: 'Cloud-Storage',
         icon: <HardDrive size={20} />,
         navLink: `${adminRoot}/cloud-storage`
       },

@@ -411,6 +411,74 @@ export const markRestoreCloudItem = createAsyncThunk('appCloudStorage/markRestor
         }
     }
 })
+
+async function markShareCloudItemRequest(params) {
+    return axios.get(`${API_ENDPOINTS.cloudStorage.markShare}`, { params }).then((cloudStorage) => cloudStorage.data).catch((error) => error)
+}
+
+export const markShareCloudItem = createAsyncThunk(
+    'appCloudStorage/markShareCloudItem', 
+    async (params, { dispatch, getState }) => {
+        try {
+            const response = await markShareCloudItemRequest(params)
+            if (response && response.flag) {
+                await dispatch(getTreeFolderList())
+                await dispatch(getCloudStorageList(getState().cloudStorage.params))
+                return {
+                    actionFlag: "SHARE_MARKED",
+                    success: response.message,
+                    error: ""
+                }
+            } else {
+                return {
+                    actionFlag: "",
+                    success: "",
+                    error: response.message
+                }
+            }
+        } catch (error) {
+            console.log("markShareCloudItem catch ", error)
+            return {
+                actionFlag: "",
+                success: "",
+                error: error
+            }
+        }
+    }
+)
+
+async function getUserListRequest(params) {
+    return axios.get(`${API_ENDPOINTS.cloudStorage.userList}`, { params }).then((todo) => todo.data).catch((error) => error)
+}
+  
+export const getUserList = createAsyncThunk('appTodo/getUserList', async (params) => {
+    try {
+        const response = await getUserListRequest(params)
+        if (response && response.flag) {
+            return {
+                userItems: response.data,
+                actionFlag: "",
+                success: "",
+                error: ""
+            }
+        } else {
+            return {
+                userItems: [],
+                actionFlag: "",
+                success: "",
+                error: ""
+            }
+        }
+    } catch (error) {
+        console.log("getUserList catch ", error)
+        return {
+            userItems: [],
+            actionFlag: "",
+            success: "",
+            error: error
+        }
+    }
+})
 /* /Common */
 
 export const appCloudStorageSlice = createSlice({
@@ -422,6 +490,7 @@ export const appCloudStorageSlice = createSlice({
         cloudStorageItem: cloudStorageItem,
         treeFolderItems: [],
         expandTreeFolder: [],
+        userItems: [],
         actionFlag: "",
         loading: false,
         success: "",
@@ -474,6 +543,13 @@ export const appCloudStorageSlice = createSlice({
                 state.error = action.payload.error
             })
             .addCase(markRestoreCloudItem.fulfilled, (state, action) => {
+                state.actionFlag = action.payload.actionFlag
+                state.loading = true
+                state.success = action.payload.success
+                state.error = action.payload.error
+            })
+            .addCase(getUserList.fulfilled, (state, action) => {
+                state.userItems = action.payload.userItems
                 state.actionFlag = action.payload.actionFlag
                 state.loading = true
                 state.success = action.payload.success

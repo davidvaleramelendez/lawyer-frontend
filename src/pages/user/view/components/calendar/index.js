@@ -43,7 +43,7 @@ import {
 import Notification from '@components/toast/notification'
 import DotPulse from '@components/dotpulse'
 
-// Constant
+// ** Constant
 import {
   root,
   calendarFilterColor
@@ -57,6 +57,7 @@ import { T } from '@localization'
 
 const CalendarApp = ({
   userId,
+  userItem,
   onCheckUserPermission
 }) => {
   // ** Hooks
@@ -72,7 +73,6 @@ const CalendarApp = ({
   // ** states
   const [loadFirst, setLoadFirst] = useState(true)
   const [calendarApi, setCalendarApi] = useState(null)
-  const [loadingCalendar, setLoadingCalendar] = useState(true)
   const [addEventModalOpen, setAddEventModalOpen] = useState(false)
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false)
   const [userOptions, setuserOptions] = useState([])
@@ -80,6 +80,10 @@ const CalendarApp = ({
 
   // ** LeftSidebar Toggle Function
   const toggleSidebar = (val) => setLeftSidebarOpen(val)
+
+  const handleEventLists = (params) => {
+    dispatch(getEventList(params))
+  }
 
   // ** refetchEvents
   const refetchEvents = () => {
@@ -97,7 +101,7 @@ const CalendarApp = ({
     }
 
     if (loadFirst) {
-      dispatch(getEventList({ user_id: userId || "", filter: JSON.stringify(store.selectedCalendars) }))
+      handleEventLists({ user_id: userId || "", search: "", filter: JSON.stringify(store.selectedCalendars) })
       dispatch(getUserList({ user_id: userId || "" }))
       setLoadFirst(false)
     }
@@ -151,6 +155,7 @@ const CalendarApp = ({
               dispatch={dispatch}
               updateFilter={updateFilter}
               toggleSidebar={toggleSidebar}
+              handleEventLists={handleEventLists}
               updateAllFilters={updateAllFilters}
               setAddEventModalOpen={setAddEventModalOpen}
               onCheckUserPermission={onCheckUserPermission}
@@ -170,10 +175,8 @@ const CalendarApp = ({
                 getEventItem={getEventItem}
                 toggleSidebar={toggleSidebar}
                 setCalendarApi={setCalendarApi}
-                loadingCalendar={loadingCalendar}
                 getTransformDate={getTransformDate}
                 calendarsColor={calendarFilterColor}
-                setLoadingCalendar={setLoadingCalendar}
                 setAddEventModalOpen={setAddEventModalOpen}
                 onCheckUserPermission={onCheckUserPermission}
                 increaseCustomDateFormat={increaseCustomDateFormat}
@@ -196,6 +199,7 @@ const CalendarApp = ({
         userId={userId}
         MySwal={MySwal}
         dispatch={dispatch}
+        userItem={userItem}
         open={addEventModalOpen}
         createEvent={createEvent}
         updateEvent={updateEvent}

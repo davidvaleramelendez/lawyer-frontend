@@ -22,8 +22,14 @@ import {
   getTransformDate
 } from '@utils'
 
+// ** Custom Components
+import Notification from '@components/toast/notification'
+
 // ** Third Party Components
 import PerfectScrollbar from 'react-perfect-scrollbar'
+import { socketIo } from '@src/index'
+
+// ** Icons Import
 import {
   Bell
 } from 'react-feather'
@@ -54,6 +60,22 @@ const NotificationDropdown = () => {
   // ** States
   const [loadFirst, setLoadFirst] = useState(true)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+
+  const handleChatMessageNotification = (data) => {
+    if (data && data.msg) {
+      Notification((data && data.name) || "", data.msg, "primary")
+    }
+    dispatch(getChatNotification({}))
+  }
+
+  useEffect(() => {
+    socketIo.on('CHAT_MESSAGE_NOTIFICATION', (data) => {
+      handleChatMessageNotification(data)
+    })
+    return () => {
+      socketIo.off('CHAT_MESSAGE_NOTIFICATION')
+    }
+  })
 
   useEffect(() => {
     if (loadFirst) {

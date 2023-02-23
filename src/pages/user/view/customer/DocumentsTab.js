@@ -45,6 +45,9 @@ import {
 import {
     TN_CASES,
     adminRoot,
+    adminRoleId,
+    lawyerRoleId,
+    partnerRoleId,
     perPageRowItems,
     defaultPerPageRow
 } from '@constant/defaultValues'
@@ -265,6 +268,21 @@ const DocumentsTab = ({
         }
     }, [loadFirst])
 
+    const handleNavigationRole = (user, type = "view") => {
+        if (user && user.id) {
+            if (user.role_id === adminRoleId) {
+                return `${adminRoot}/user/admin/${type}/${user.id}`
+            } else if (user.role_id === lawyerRoleId) {
+                return `${adminRoot}/user/lawyer/${type}/${user.id}`
+            } else if (user.role_id === partnerRoleId) {
+                return `${adminRoot}/user/partner/${type}/${user.id}`
+            } else {
+                return `${adminRoot}/user/customer/${type}/${user.id}`
+            }
+        }
+        return `${adminRoot}/user`
+    }
+
     const onCaseDetail = (row) => {
         setCaseRowData(row)
         setDetailModalOpen(true)
@@ -296,7 +314,9 @@ const DocumentsTab = ({
             sortable: true,
             sortField: "CaseID",
             minWidth: "20%",
-            cell: row => <Link to={`${adminRoot}/case/view/${row.CaseID}`}>{`#${row.CaseID}`}</Link>,
+            cell: row => (
+                <Link to={`${adminRoot}/case/view/${row.CaseID}`}>{`#${row.CaseID}`}</Link>
+            ),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '90px'
@@ -310,7 +330,13 @@ const DocumentsTab = ({
             sortable: true,
             sortField: "LaywerID",
             minWidth: "20%",
-            cell: (row) => <>{row && row.laywer && row.laywer.id ? (<Link to={`${adminRoot}/user/view/${row.laywer.id}`}>{row.laywer.name}</Link>) : null}</>,
+            cell: (row) => <>{row && row.laywer && row.laywer.id ? (
+                <Link
+                    to={handleNavigationRole(row.laywer, "view")}
+                >
+                    {row.laywer.name}
+                </Link>
+            ) : null}</>,
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '140px'
@@ -324,7 +350,9 @@ const DocumentsTab = ({
             sortable: true,
             sortField: "Date",
             minWidth: "15%",
-            cell: (row) => row.Date && getTransformDate(row.Date, "DD MMM YYYY"),
+            cell: (row) => (
+                row.Date && getTransformDate(row.Date, "DD MMM YYYY")
+            ),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
@@ -352,7 +380,9 @@ const DocumentsTab = ({
             sortable: true,
             sortField: "Status",
             minWidth: "20%",
-            cell: (row) => row && row.type && row.type.CaseTypeName,
+            cell: (row) => (
+                (row && row.type && row.type.CaseTypeName) || ""
+            ),
             /* Custom placeholder vars */
             contentExtraStyles: {
                 height: '15px', width: 'auto', borderRadius: '10px', display: 'inline-block', minWidth: '100px'
@@ -426,6 +456,7 @@ const DocumentsTab = ({
                     open={detailModalOpen}
                     caseRowData={caseRowData}
                     setCaseRowData={setCaseRowData}
+                    handleNavigationRole={handleNavigationRole}
                 />
             </Card>
             {/* /Case listing */}

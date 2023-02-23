@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 
 // ** Redux Import
 import { useDispatch, useSelector } from "react-redux"
-import { setFormPreviewList, setSelectedItem } from "./store"
+import { setStepDetails, setSelectedItem } from "../store"
 
 // ** Reactstrap Import
 import { Alert, Button, Col, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Row } from "reactstrap"
@@ -11,16 +11,18 @@ import { Alert, Button, Col, Input, Label, Modal, ModalBody, ModalFooter, ModalH
 // ** Translation
 import { T } from "@localization"
 
+// ** Icon Import
+import { AlertCircle, Plus, Trash } from "react-feather"
+
 // ** Third Party Module Import
 import _ from "lodash"
-import { AlertCircle, Plus, Trash } from "react-feather"
 
 const EditFormModal = () => {
 
   // ** Store Vars
   const dispatch = useDispatch()
   const store = useSelector((state) => state.formBuilder)
-  const {formPreviewList, selectedItem} = store
+  const {stepDetails, selectedItem} = store
 
   // ** State Vars
   const [title, setTitle] = useState('')
@@ -32,7 +34,7 @@ const EditFormModal = () => {
 
   let formDetails = {}
   if (selectedItem.rowIndex !== undefined) {
-    formDetails = formPreviewList[selectedItem.rowIndex][selectedItem.colIndex]
+    formDetails = stepDetails[selectedItem.rowIndex][selectedItem.colIndex]
   }
 
   useEffect(() => {
@@ -49,7 +51,7 @@ const EditFormModal = () => {
   }
 
   const getErrorMessage = () => {
-    const flattenPreviewList = formPreviewList.flat(1)
+    const flattenPreviewList = stepDetails.flat(1)
     if (title.trim() === "") {
       return 'The title is required.'
     } else if (flattenPreviewList.find(item => item.title === title && item.id !== formDetails.id)) {
@@ -80,9 +82,9 @@ const EditFormModal = () => {
       return
     }
     setAlert(null)
-    const newFormPreviewList = _.cloneDeep(formPreviewList)
+    const newStepDetails = _.cloneDeep(stepDetails)
     const {rowIndex, colIndex} = selectedItem
-    let newForm = newFormPreviewList[rowIndex][colIndex]
+    let newForm = newStepDetails[rowIndex][colIndex]
     newForm = {
       ...newForm,
       title,
@@ -91,8 +93,8 @@ const EditFormModal = () => {
       placeholder,
       list
     }
-    newFormPreviewList[rowIndex][colIndex] = newForm
-    dispatch(setFormPreviewList(newFormPreviewList))
+    newStepDetails[rowIndex][colIndex] = newForm
+    dispatch(setStepDetails(newStepDetails))
     dispatch(setSelectedItem({}))
   }
 

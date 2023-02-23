@@ -154,7 +154,7 @@ const TimelineApp = () => {
                     <h6 className="font-weight-bolder text-dark">
                       R.-Nr.# <Link to={`${adminRoot}/invoice/view/${invoice.id}`} target="_blank">{invoice.invoice_no}</Link>
                     </h6>
-                    <span className="timeline-event-time" align="right">{T("First anniversary")} : {invoice.invoice_date && getTransformDate(invoice.invoice_date, "DD.MM.YYYY")} </span>
+                    <span className="timeline-event-time" align="right">{T("Created Date")} : {invoice.invoice_date && getTransformDate(invoice.invoice_date, "DD.MM.YYYY")} </span>
                   </div>
 
                   <div className="d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1">

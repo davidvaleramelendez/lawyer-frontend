@@ -15,9 +15,9 @@ import {
     Calendar,
     HardDrive,
     Briefcase,
+    UserCheck,
     CheckSquare,
-    MessageCircle,
-    UserCheck
+    MessageCircle
 } from 'react-feather'
 
 // ** Translation

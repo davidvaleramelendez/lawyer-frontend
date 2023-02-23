@@ -54,14 +54,15 @@ import Notification from '@components/toast/notification'
 // ** Modal
 import ModalCloudFolder from './modals/ModalCloudFolder'
 import ModalCloudUploadFile from './modals/ModalCloudUploadFile'
+import ModalCloudShare from './modals/ModalCloudShare'
 
 // ** Styles
-// import 'antd/dist/antd.css'
 import '@src/assets/scss/antd.css'
 import '@styles/base/pages/app-file-manager.scss'
 
 // ** Translation
 import { T } from '@localization'
+import ModalFileViewer from './modals/ModalFileViewer'
 
 const CloudStorageApp = () => {
     // ** Hooks
@@ -80,6 +81,8 @@ const CloudStorageApp = () => {
     const [folderModalOpen, setFolderModalOpen] = useState(false)
     const [fileModalOpen, setFileModalOpen] = useState(false)
     const [movItemFlag, setMoveItemFlag] = useState(false)
+    const [sharedInfo, setSharedInfo] = useState(null)
+    const [fileViewInfo, setFileViewInfo] = useState(null)
 
     // ** Function to handle Left sidebar & cloud sidebar
     const handleMainSidebar = () => setMainSidebar(!mainSidebar)
@@ -264,6 +267,12 @@ const CloudStorageApp = () => {
     }
     /* /Getting file object for move */
 
+    /* Marking shared cloud item */
+    const handleMarkShare = (item) => {
+        setSharedInfo(item)
+    }
+    /* /Marking shared cloud item */
+
     /* Entering on folder click */
     const handleNavigateItem = (event, slug) => {
         // console.log("handleNavigateItem ", event, slug)
@@ -289,9 +298,12 @@ const CloudStorageApp = () => {
     }
     /* /Navigate from breadcrumb click */
 
+    const shared = params.slug === 'shared' || store.cloudStorageItems?.shared
+
     return store ? (<Fragment>
         <Sidebar
             store={store}
+            shared={shared}
             params={params}
             dispatch={dispatch}
             mainSidebar={mainSidebar}
@@ -320,6 +332,7 @@ const CloudStorageApp = () => {
                     <Storages
                         sort={sort}
                         store={store}
+                        shared={shared}
                         navigate={navigate}
                         hashParam={hashParam}
                         handleSort={handleSort}
@@ -328,6 +341,8 @@ const CloudStorageApp = () => {
                         handleSearch={handleSearch}
                         onTrashFolder={onTrashFolder}
                         handleFileItem={handleFileItem}
+                        handleViewFile={setFileViewInfo}
+                        handleMarkShare={handleMarkShare}
                         getTransformDate={getTransformDate}
                         handleFolderItem={handleFolderItem}
                         handleDeleteFile={handleDeleteFile}
@@ -372,6 +387,17 @@ const CloudStorageApp = () => {
                         defaultCloudStorageItem={defaultCloudStorageItem}
                         updateCloudStorageLoader={updateCloudStorageLoader}
                         clearCloudStorageMessage={clearCloudStorageMessage}
+                    />
+                    
+                    <ModalCloudShare
+                        closeModal={() => setSharedInfo(null)}
+                        sharedInfo={sharedInfo}
+                    />
+
+                    <ModalFileViewer
+                        closeModal={() => setFileViewInfo(null)}
+                        handleMarkShare={handleMarkShare}
+                        fileViewInfo={fileViewInfo}
                     />
                 </div>
             </div>

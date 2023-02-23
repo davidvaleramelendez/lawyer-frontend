@@ -7,11 +7,11 @@ import { useState, useEffect } from 'react'
 // ** Store & Actions
 import { useSelector, useDispatch } from 'react-redux'
 import {
-  getSiteSetting,
   handleMenuHidden,
   createSiteSetting,
   clearLayoutMessage,
-  handleContentWidth
+  handleContentWidth,
+  handleCustomizerOpen
 } from '@store/layout'
 
 // ** Third Party Components
@@ -42,6 +42,12 @@ import { useNavbarType } from '@hooks/useNavbarType'
 import { useFooterType } from '@hooks/useFooterType'
 import { useNavbarColor } from '@hooks/useNavbarColor'
 
+// ** SiteSetting in utils
+import {
+  getSiteLayoutSetting,
+  setSiteLayoutSetting
+} from '@utils'
+
 // ** Styles
 import '@styles/base/core/menu/menu-types/horizontal-menu.scss'
 
@@ -61,7 +67,6 @@ const HorizontalLayout = (props) => {
   const { layout, setLayout, setLastLayout } = useLayout()
 
   // ** States
-  const [loadFirst, setLoadFirst] = useState(true)
   const [isMounted, setIsMounted] = useState(false)
   const [navbarScrolled, setNavbarScrolled] = useState(false)
 
@@ -70,15 +75,46 @@ const HorizontalLayout = (props) => {
   const layoutStore = useSelector(state => state.layout)
 
   // ** Vars
-  const contentWidth = layoutStore.contentWidth
-  const isHidden = layoutStore.menuHidden
-  const menuCollapsed = layoutStore.menuCollapsed
+  const {
+    openCustomizer,
+    contentWidth,
+    menuCollapsed,
+    menuHidden
+  } = layoutStore
+
+  // ** Toggles Customizer
+  const handleToggle = (event) => {
+    if (event) {
+      event.preventDefault()
+    }
+
+    dispatch(handleCustomizerOpen(!openCustomizer))
+  }
 
   // ** Handles Content Width
   const setContentWidth = (val) => dispatch(handleContentWidth(val))
 
   // ** Handles Content Width
-  const setIsHidden = (val) => dispatch(handleMenuHidden(val))
+  const setMenuHidden = (val) => dispatch(handleMenuHidden(val))
+
+  // ** Handles Menu Layouts
+  const handleMenuLayout = (val = "vertical") => {
+    const setting = getSiteLayoutSetting()
+    setSiteLayoutSetting({
+      ...setting,
+      layout: val,
+      skin: skin,
+      contentWidth: contentWidth,
+      menuCollapsed: menuCollapsed,
+      footerType: footerType,
+      navbarType: navbarType,
+      navbarColor: navbarColor,
+      menuHidden: menuHidden
+    })
+
+    setLayout(val)
+    setLastLayout(val)
+  }
 
   const onThemeSettingSubmit = () => {
     const siteSettingData = {
@@ -87,7 +123,7 @@ const HorizontalLayout = (props) => {
       navbarType: navbarType,
       contentWidth: contentWidth,
       menuCollapsed: menuCollapsed,
-      menuHidden: isHidden,
+      menuHidden: menuHidden,
       navbarColor: navbarColor,
       footerType: footerType
     }
@@ -117,9 +153,9 @@ const HorizontalLayout = (props) => {
   }, [])
 
   useEffect(() => {
-    if (loadFirst) {
-      dispatch(getSiteSetting())
-      setLoadFirst(false)
+    /* Close customizer sidebar */
+    if (layoutStore.actionFlag && layoutStore.actionFlag === "CREATED_ITEM") {
+      handleToggle()
     }
 
     /* For blank message api called inside */
@@ -136,7 +172,7 @@ const HorizontalLayout = (props) => {
     if (layoutStore && layoutStore.error) {
       Notification(T("Error"), layoutStore.error, "warning")
     }
-  }, [layoutStore.success, layoutStore.error, layoutStore.actionFlag, loadFirst])
+  }, [layoutStore.success, layoutStore.error, layoutStore.actionFlag])
 
   // ** Vars
   const footerClasses = {
@@ -168,7 +204,7 @@ const HorizontalLayout = (props) => {
         `wrapper horizontal-layout horizontal-menu ${navbarWrapperClasses[navbarType] || 'navbar-floating'} ${footerClasses[footerType] || 'footer-static'
         } menu-expanded`
       )}
-      {...(isHidden ? { 'data-col': '1-column' } : {})}
+      {...(menuHidden ? { 'data-col': '1-column' } : {})}
     >
       <Navbar
         expand='lg'
@@ -196,7 +232,8 @@ const HorizontalLayout = (props) => {
           {navbar ? navbar({ skin, setSkin }) : <NavbarComponent skin={skin} setSkin={setSkin} />}
         </div>
       </Navbar>
-      {!isHidden ? (
+
+      {!menuHidden ? (
         <div className='horizontal-menu-wrapper'>
           <Navbar
             tag='div'
@@ -221,22 +258,24 @@ const HorizontalLayout = (props) => {
           layout={layout}
           setSkin={setSkin}
           setIsRtl={setIsRtl}
-          isHidden={isHidden}
-          setLayout={setLayout}
+          menuHidden={menuHidden}
           footerType={footerType}
           navbarType={navbarType}
-          setIsHidden={setIsHidden}
           themeConfig={themeConfig}
           navbarColor={navbarColor}
+          handleToggle={handleToggle}
           contentWidth={contentWidth}
+          setMenuHidden={setMenuHidden}
           setFooterType={setFooterType}
           setNavbarType={setNavbarType}
-          setLastLayout={setLastLayout}
+          openCustomizer={openCustomizer}
           setNavbarColor={setNavbarColor}
           setContentWidth={setContentWidth}
+          handleMenuLayout={handleMenuLayout}
           onThemeSettingSubmit={onThemeSettingSubmit}
         />
       ) : null}
+
       <footer
         className={classnames(`footer footer-light ${footerClasses[footerType] || 'footer-static'}`, {
           'd-none': footerType === 'hidden'

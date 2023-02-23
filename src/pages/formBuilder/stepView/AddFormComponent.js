@@ -2,18 +2,30 @@
 import { Draggable, Droppable } from "react-beautiful-dnd"
 
 // ** Reactstrap Import
-import { Card, CardBody, CardHeader, CardTitle } from "reactstrap"
+import { Button, Card, CardBody, CardHeader, CardTitle } from "reactstrap"
 
 // ** Translation
 import { T } from "@localization"
 
-const AddFormComponent = ({formAddList}) => {
+const AddFormComponent = ({formAddList, onAddRow}) => {
+
+  const handleAddRow = (number) => () => {
+    onAddRow(number)
+  }
+
   return (
     <Card className="overflow-hidden">
       <CardHeader className="border-bottom">
         <CardTitle tag="h4" className="m-25">{T("Add Form")}</CardTitle>
       </CardHeader>
       <CardBody className="p-2">
+        <div>Add Row</div>
+        <div className="pb-75 mb-75">
+          <div className="add-row-btn" onClick={handleAddRow(1)}>Row with 1 Column</div>
+          <div className="add-row-btn" onClick={handleAddRow(2)}>Row with 2 Columns</div>
+          <div className="add-row-btn" onClick={handleAddRow(3)}>Row with 3 Columns</div>
+        </div>
+        <div>Add Form Item</div>
         <Droppable droppableId="add-form" type="droppableItem" isDropDisabled={true}>
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>

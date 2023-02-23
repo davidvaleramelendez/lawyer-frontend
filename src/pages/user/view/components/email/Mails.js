@@ -322,7 +322,7 @@ const Mails = (props) => {
 
         <PerfectScrollbar
           className="email-user-list"
-          options={{ wheelPropagation: false }}
+          // options={{ wheelPropagation: false }}
           onScrollDown={(container) => onScrollDown(container, rowsPerPage)}
         >
           {folder !== "draft" && mails && mails.length ? (

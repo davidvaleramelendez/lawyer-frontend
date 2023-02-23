@@ -1,7 +1,7 @@
 export const root = '/'
 export const adminRoot = '/apps'
 
-// Local storage variables
+/* Local storage variables */
 export const storageUserKeyName = 'userData'
 export const storageTokenKeyName = 'accessToken'
 export const storageRefreshTokenKeyName = 'refreshToken'
@@ -13,10 +13,19 @@ export const storageTimeCounter = "timecounter"
 export const storageRememberMeAuth = "LWY_KP_329"
 export const storageLanguageLabels = "languageLabels"
 export const storageRecordedItemKeyName = "caseRecodedVoice"
+/* /Local storage variables */
 
 /* Hexadecimal key for encryption */
 export const cryptoKey = '731fc6d09baf51f8361fa6408f306ca9'
 export const cryptoIv = '676d073fdac3ebc550290f58c6f9d0b7'
+/* /Hexadecimal key for encryption */
+
+/* Default role ids */
+export const adminRoleId = 10
+export const customerRoleId = 11
+export const lawyerRoleId = 14
+export const partnerRoleId = 12
+/* /Default role ids */
 
 /* Loader color */
 export const loaderColor = "primary"

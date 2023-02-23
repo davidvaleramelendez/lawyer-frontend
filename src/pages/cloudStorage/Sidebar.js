@@ -29,6 +29,7 @@ const Sidebar = (props) => {
   // ** Props
   const {
     store,
+    shared,
     params,
     dispatch,
     mainSidebar,
@@ -135,6 +136,7 @@ const Sidebar = (props) => {
   const Server = Icon['Server']
   const Trash2 = Icon['Trash2']
   const Folder = Icon['Folder']
+  const Share = Icon['Share']
   const UploadCloud = Icon['UploadCloud']
 
   return store ? (
@@ -194,7 +196,16 @@ const Sidebar = (props) => {
                 {store.treeFolderItems && store.treeFolderItems.length ? (
                   renderTreeFolderStructure(store.treeFolderItems, 0)
                 ) : null}
-
+                <ListGroupItem
+                  active={shared}
+                  onClick={(event) => handleNavigateItem(event, 'shared')}
+                >
+                  <Share
+                    size={17}
+                    className="me-50 cursor-pointer"
+                  />
+                  <span className="align-middle cursor-pointer">{T("Shared")}</span>
+                </ListGroupItem>
                 <ListGroupItem
                   active={params.slug === 'important'}
                   onClick={(event) => handleNavigateItem(event, 'important')}

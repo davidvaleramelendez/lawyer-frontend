@@ -151,8 +151,10 @@ export const API_ENDPOINTS = {
         updateFile: `/api/admin/file/update`,
         trashFile: `/api/admin/file/trash`,
         deleteFile: `/api/admin/file/delete`,
+        userList: `/api/admin/cloud/get_users`,
         markImportant: `/api/admin/cloud/mark-important`,
-        markRestore: `/api/admin/cloud/mark-restore`
+        markRestore: `/api/admin/cloud/mark-restore`,
+        markShare: `/api/admin/cloud/mark-share`
     },
     /* /Cloud storage module */
 
@@ -345,8 +347,20 @@ export const API_ENDPOINTS = {
 
     /* Form Builder */
     formBuilder: {
-        getPreviewList: `/api/admin/form-builder`,
-        updatePreviewList: `/api/admin/form-builder`
+        getFormList: `/api/admin/form-builder/form`,
+        createForm: `/api/admin/form-builder/form/create`,
+        publishForm: `/api/admin/form-builder/form/publish`,
+        updateForm: `/api/admin/form-builder/form/update`,
+        deleteForm: `/api/admin/form-builder/form/delete`,
+
+        getStepList: `/api/admin/form-builder/step`,
+        getStepListByLink: `/api/form-builder/link`,
+        addStepItem: `/api/admin/form-builder/step/create`,
+        deleteStepItem: `/api/admin/form-builder/step/delete`,
+        getStepDetails: `/api/admin/form-builder/step/details`,
+        updateStepItem: `/api/admin/form-builder/step/update`,
+        updateStepContent: `/api/admin/form-builder/step/update_content`,
+        reorderStepItem: `/api/admin/form-builder/step/reorder`
     }
     /* /Form Builder */
 }

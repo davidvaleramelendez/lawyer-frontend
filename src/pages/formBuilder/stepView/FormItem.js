@@ -74,12 +74,8 @@ const SelectItem = (props) => {
   )
 }
 
-const DefaultFormItem = ({item}) => {
-  return (
-    <Button outline color="primary">
-      {item.title}
-    </Button>
-  )
+const DefaultFormItem = () => {
+  return null
 }
 
 const FormItem = ({item, width}) => {
